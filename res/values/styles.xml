@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="Actionbar">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">@dimen/actionbar_height</item>
+		<item name="android:background">@color/actionbar_background</item>
+	</style>
+
+	<style name="ActionbarTitle">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_centerVertical">true</item>
+		<item name="android:layout_alignParentLeft">true</item>
+		<item name="android:singleLine">true</item>
+		<item name="android:paddingLeft">@dimen/actionbar_title_text_left_padding</item>
+		<item name="android:textColor">@color/actionbar_title_text</item>
+		<item name="android:textSize">@dimen/actionbar_title_text_size</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="ActionbarButtons">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_alignParentRight">true</item>
+		<!-- Common background is separator color -->
+		<item name="android:background">@android:drawable/divider_horizontal_bright</item>
+		<item name="android:orientation">horizontal</item>
+	</style>
+
+	<style name="ActionbarButton">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<!-- 1 dp on the left for viewing separator -->
+		<item name="android:layout_marginLeft">@dimen/actionbar_items_separator_width</item>
+		<!-- Common background is separator, so use own one -->
+		<item name="android:background">@drawable/actionbar_item_background</item>
+	</style>
+
+	<style name="BodyLinearLayout">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:orientation">vertical</item>
+		<item name="android:padding">@dimen/body_layout_padding</item>
+	</style>
+
+	<style name="BodyLinearLayoutItem">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+	</style>
+
+	<style name="BodyListView">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:orientation">vertical</item>
+	</style>
+
+	<style name="BodyEmptyListViewSign">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_centerHorizontal">true</item>
+		<item name="android:layout_centerVertical">true</item>
+	</style>
+
+</resources>

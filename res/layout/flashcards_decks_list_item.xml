@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="?android:attr/listPreferredItemHeight"
+	android:padding="@dimen/list_item_padding" >
+
+	<TextView
+		android:id="@+id/description"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:singleLine="true"
+		android:textColor="@color/secondary_text" />
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/description"
+		android:layout_alignParentTop="true"
+		android:singleLine="true"
+		android:textColor="@color/primary_text" />
+
+</RelativeLayout>

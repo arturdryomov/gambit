@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+	<!-- Actionbar -->
+
+	<RelativeLayout
+		android:id="@+id/actionbar"
+		style="@style/Actionbar" >
+
+		<TextView
+			style="@style/ActionbarTitle"
+			android:text="Flashcard Editing" />
+	</RelativeLayout>
+
+	<!-- Main view -->
+
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@id/actionbar" >
+
+		<LinearLayout style="@style/BodyLinearLayout" >
+
+			<TextView
+				style="@style/BodyLinearLayoutItem"
+				android:text="Front side" />
+
+			<EditText
+				android:id="@+id/frondSideEdit"
+				style="@style/BodyLinearLayoutItem"
+				android:inputType="text" />
+
+			<TextView
+				style="@style/BodyLinearLayoutItem"
+				android:text="Back side" />
+
+			<EditText
+				android:id="@+id/backSideEdit"
+				style="@style/BodyLinearLayoutItem"
+				android:inputType="text" />
+
+			<Button
+				android:id="@+id/confirmButton"
+				style="@style/BodyLinearLayoutItem"
+				android:layout_marginTop="@dimen/confirm_button_top_margin"
+				android:text="Confirm" />
+		</LinearLayout>
+	</ScrollView>
+
+</RelativeLayout>

@@ -8,8 +8,9 @@
 
 	<application
 		android:icon="@drawable/icon"
-		android:label="@string/applicationName" >
-		<activity android:name=".HelloAndroidActivity" >
+		android:label="@string/applicationName"
+		android:theme="@android:style/Theme.Light.NoTitleBar" >
+		<activity android:name=".FlashcardsDecksListActivity" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 

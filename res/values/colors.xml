@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<color name="actionbar_title_text">#ffffff</color>
+	<color name="actionbar_background">#0099cc</color>
+	<color name="actionbar_item_background_pressed_start">#ffb218</color>
+	<color name="actionbar_item_background_pressed_end">#ffb639</color>
+	<color name="actionbar_item_background_focused_start">#f78e18</color>
+	<color name="actionbar_item_background_focused_end">#ef8a18</color>
+
+	<color name="primary_text">?android:textColorPrimary</color>
+	<color name="secondary_text">?android:textColorSecondary</color>
+
+</resources>

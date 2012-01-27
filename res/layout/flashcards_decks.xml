@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+	<!-- Actionbar -->
+
+	<RelativeLayout
+		android:id="@+id/actionbar"
+		style="@style/Actionbar" >
+
+		<TextView
+			style="@style/ActionbarTitle"
+			android:text="Flashcards Decks" />
+
+		<LinearLayout
+			android:id="@+id/actions"
+			style="@style/ActionbarButtons" >
+
+			<ImageButton
+				android:id="@+id/updateButton"
+				style="@style/ActionbarButton"
+				android:src="@drawable/actionbar_update_icon" />
+
+			<ImageButton
+				android:id="@+id/newItemCreationButton"
+				style="@style/ActionbarButton"
+				android:src="@drawable/actionbar_add_new_item_icon" />
+      >
+		</LinearLayout>
+	</RelativeLayout>
+
+	<!-- Main view -->
+
+	<ListView
+		android:id="@android:id/list"
+		style="@style/BodyListView"
+		android:layout_below="@id/actionbar" />
+
+	<TextView
+		android:id="@android:id/empty"
+		style="@style/BodyEmptyListViewSign"
+		android:text="You have no flashcards decks." />
+
+</RelativeLayout>
