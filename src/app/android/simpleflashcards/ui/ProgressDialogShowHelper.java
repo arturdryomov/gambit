@@ -1,4 +1,4 @@
-package app.android.simpleflashcards;
+package app.android.simpleflashcards.ui;
 
 
 import android.app.ProgressDialog;

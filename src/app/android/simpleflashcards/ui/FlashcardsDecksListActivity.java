@@ -1,4 +1,4 @@
-package app.android.simpleflashcards;
+package app.android.simpleflashcards.ui;
 
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import app.android.simpleflashcards.R;
 
 
 public class FlashcardsDecksListActivity extends ListActivity

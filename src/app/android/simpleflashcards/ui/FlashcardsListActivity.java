@@ -1,4 +1,4 @@
-package app.android.simpleflashcards;
+package app.android.simpleflashcards.ui;
 
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import app.android.simpleflashcards.R;
 
 
 public class FlashcardsListActivity extends ListActivity
@@ -26,7 +27,7 @@ public class FlashcardsListActivity extends ListActivity
 	public FlashcardsListActivity() {
 		super();
 		
-		flashcardsData = new ArrayList<HashMap<String,Object>>();
+		flashcardsData = new ArrayList<HashMap<String, Object>>();
 	}
 	
 	@Override

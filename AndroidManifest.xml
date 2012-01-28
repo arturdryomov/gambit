@@ -10,18 +10,18 @@
 		android:icon="@drawable/icon"
 		android:label="@string/applicationName"
 		android:theme="@android:style/Theme.Light.NoTitleBar" >
-		<activity android:name=".FlashcardsDecksListActivity" >
+		<activity android:name=".ui.FlashcardsDecksListActivity" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".FlashcardsDeckCreationActivity" >
+		<activity android:name=".ui.FlashcardsDeckCreationActivity" >
 		</activity>
-		<activity android:name=".FlashcardsListActivity" >
+		<activity android:name=".ui.FlashcardsListActivity" >
 		</activity>
-		<activity android:name=".FlashcardCreationActivity" >
+		<activity android:name=".ui.FlashcardCreationActivity" >
 		</activity>
 	</application>
 

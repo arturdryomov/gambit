@@ -1,4 +1,5 @@
-package app.android.simpleflashcards;
+package app.android.simpleflashcards.ui;
+
 
 import android.content.Context;
 import android.widget.Toast;

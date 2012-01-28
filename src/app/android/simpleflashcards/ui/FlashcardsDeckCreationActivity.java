@@ -1,4 +1,4 @@
-package app.android.simpleflashcards;
+package app.android.simpleflashcards.ui;
 
 
 import android.app.Activity;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import app.android.simpleflashcards.R;
 
 
 public class FlashcardsDeckCreationActivity extends Activity
