@@ -8,7 +8,4 @@
 	<color name="actionbar_item_background_focused_start">#f78e18</color>
 	<color name="actionbar_item_background_focused_end">#ef8a18</color>
 
-	<color name="primary_text">?android:textColorPrimary</color>
-	<color name="secondary_text">?android:textColorSecondary</color>
-
 </resources>

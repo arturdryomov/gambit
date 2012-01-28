@@ -9,7 +9,7 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:singleLine="true"
-		android:textColor="@color/primary_text" />
+		android:textColor="?android:attr/textColorSecondaryInverse" />
 
 	<TextView
 		android:id="@+id/title"
@@ -18,6 +18,6 @@
 		android:layout_above="@id/description"
 		android:layout_alignParentTop="true"
 		android:singleLine="true"
-		android:textColor="@color/primary_text" />
+		android:textColor="?android:attr/textColorPrimary" />
 
 </RelativeLayout>
