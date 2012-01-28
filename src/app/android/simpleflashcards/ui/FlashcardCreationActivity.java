@@ -13,7 +13,7 @@ import app.android.simpleflashcards.R;
 
 public class FlashcardCreationActivity extends Activity
 {
-	private Context activityContext = this;
+	private final Context activityContext = this;
 	
 	private String frontSideText;
 	private String backSideText;
