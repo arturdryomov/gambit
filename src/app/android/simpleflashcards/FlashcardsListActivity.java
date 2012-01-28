@@ -9,12 +9,12 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 
 
-public class FlashcardsDecksListActivity extends ListActivity
+public class FlashcardsListActivity extends ListActivity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flashcards_decks);
+		setContentView(R.layout.flashcards);
 		
 		initializeActionbar();
 	}
@@ -24,7 +24,7 @@ public class FlashcardsDecksListActivity extends ListActivity
 		updateButton.setOnClickListener(updateListener);
 		
 		ImageButton newItemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
-		newItemCreationButton.setOnClickListener(deckCreationListener);
+		newItemCreationButton.setOnClickListener(flashcardCreationListener);
 	}
 	
 	private OnClickListener updateListener = new OnClickListener() {
@@ -34,10 +34,10 @@ public class FlashcardsDecksListActivity extends ListActivity
 		}
 	};
 	
-	private OnClickListener deckCreationListener = new OnClickListener() {
+	private OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			callActivity(FlashcardsDeckCreationActivity.class);
+			callActivity(FlashcardCreationActivity.class);
 		}
 	};
 	

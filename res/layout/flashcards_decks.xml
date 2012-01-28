@@ -23,7 +23,7 @@
 				android:src="@drawable/actionbar_update_icon" />
 
 			<ImageButton
-				android:id="@+id/newItemCreationButton"
+				android:id="@+id/itemCreationButton"
 				style="@style/ActionbarButton"
 				android:src="@drawable/actionbar_add_new_item_icon" />
       >

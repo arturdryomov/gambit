@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="Flashcards Deck Creation" />
+			android:text="Flashcard Creation" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -25,13 +25,21 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="Flashcards deck name" />
+				android:text="Front side" />
 
 			<EditText
-				android:id="@+id/flashcardDeckNameEdit"
+				android:id="@+id/frondSideEdit"
 				style="@style/BodyLinearLayoutItem"
-				android:inputType="text"
-				android:singleLine="true" />
+				android:inputType="text" />
+
+			<TextView
+				style="@style/BodyLinearLayoutItem"
+				android:text="Back side" />
+
+			<EditText
+				android:id="@+id/backSideEdit"
+				style="@style/BodyLinearLayoutItem"
+				android:inputType="text" />
 
 			<Button
 				android:id="@+id/confirmButton"
