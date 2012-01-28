@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="Flashcards Deck Creation" />
+			android:text="@string/flashcardsDeckCreationTitle" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -25,7 +25,7 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="Flashcards deck name" />
+				android:text="@string/flashcardsDeckName" />
 
 			<EditText
 				android:id="@+id/flashcardDeckNameEdit"
@@ -37,7 +37,7 @@
 				android:id="@+id/confirmButton"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="Create" />
+				android:text="@string/create" />
 		</LinearLayout>
 	</ScrollView>
 

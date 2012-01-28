@@ -65,7 +65,7 @@ public class FlashcardCreationActivity extends Activity
 	
 	private boolean isFrontSideTextCorrect() {
 		if (frontSideText.isEmpty()) {
-			UserAlerter.alert(activityContext, "Enter text for the front side of flashcard.");
+			UserAlerter.alert(activityContext, getString(R.string.enterFrontText));
 			
 			return false;
 		}
@@ -75,7 +75,7 @@ public class FlashcardCreationActivity extends Activity
 	
 	private boolean isBackSideTextCorrect() {
 		if (backSideText.isEmpty()) {
-			UserAlerter.alert(activityContext, "Enter text for the back side of flashcard.");
+			UserAlerter.alert(activityContext, getString(R.string.enterBackText));
 			
 			return false;
 		}

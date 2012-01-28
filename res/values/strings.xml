@@ -2,5 +2,18 @@
 <resources>
 
 	<string name="applicationName">Simple Flashcards</string>
+	<string name="flashcardsDecksTitle">Flashcards Decks</string>
+	<string name="noFlashcardsDecks">You have no flashcards decks.</string>
+	<string name="enterDeckName">Enter deck name.</string>
+	<string name="flashcardsDeckCreationTitle">Flashcards Deck Creation</string>
+	<string name="flashcardsDeckName">Flashcards deck name</string>
+	<string name="create">Create</string>
+	<string name="flashcardsTitle">Flashcards</string>
+	<string name="noFlashcards">You have no flashcards.</string>
+	<string name="enterFrontText">Enter text for the front side of flashcard.</string>
+	<string name="enterBackText">Enter text for the back side of flashcard.</string>
+	<string name="flashcardsCreationTitle">Flashcard Creation</string>
+	<string name="frontText">Front side text</string>
+	<string name="backText">Back side text</string>
 
 </resources>

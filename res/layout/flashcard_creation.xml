@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="Flashcard Creation" />
+			android:text="@string/flashcardsCreationTitle" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -25,7 +25,7 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="Front side" />
+				android:text="@string/frontText" />
 
 			<EditText
 				android:id="@+id/frondSideEdit"
@@ -34,7 +34,7 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="Back side" />
+				android:text="@string/backText" />
 
 			<EditText
 				android:id="@+id/backSideEdit"
@@ -45,7 +45,7 @@
 				android:id="@+id/confirmButton"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="Create" />
+				android:text="@string/create" />
 		</LinearLayout>
 	</ScrollView>
 

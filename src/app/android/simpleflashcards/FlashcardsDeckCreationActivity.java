@@ -60,7 +60,7 @@ public class FlashcardsDeckCreationActivity extends Activity
 	
 	private boolean isDeckNameCurrect() {
 		if (deckName.isEmpty()) {
-			UserAlerter.alert(activityContext, "Enter deck name.");
+			UserAlerter.alert(activityContext, getString(R.string.enterDeckName));
 			
 			return false;
 		}

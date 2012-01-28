@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="Flashcards" />
+			android:text="@string/flashcardsTitle" />
 
 		<LinearLayout
 			android:id="@+id/actions"
@@ -40,6 +40,6 @@
 	<TextView
 		android:id="@android:id/empty"
 		style="@style/BodyEmptyListViewSign"
-		android:text="You have no flashcards." />
+		android:text="@string/noFlashcards" />
 
 </RelativeLayout>
