@@ -2,17 +2,18 @@ package app.android.simpleflashcards;
 
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
 public class FlashcardsDeckCreationActivity extends Activity
 {
+	private Context activityContext = this;
+	
 	private String deckName;
 	
 	@Override
@@ -36,7 +37,7 @@ public class FlashcardsDeckCreationActivity extends Activity
 			if (isUserDataCurrect()) {
 				// TODO: Call creation task
 				
-				callActivity(FlashcardsListActivity.class);
+				ActivityStarter.start(activityContext, FlashcardsListActivity.class);
 				
 				finish();
 			}
@@ -59,7 +60,7 @@ public class FlashcardsDeckCreationActivity extends Activity
 	
 	private boolean isDeckNameCurrect() {
 		if (deckName.isEmpty()) {
-			alertUser("Enter deck name");
+			UserAlerter.alert(activityContext, "Enter deck name.");
 			
 			return false;
 		}
@@ -67,14 +68,5 @@ public class FlashcardsDeckCreationActivity extends Activity
 		// TODO: Call task to check existing decks on server
 		
 		return true;
-	}
-	
-	private void alertUser(String text) {
-		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-	}
-	
-	private void callActivity(Class<?> cls) {
-		Intent callIntent = new Intent(getApplicationContext(), cls);
-		startActivity(callIntent);
 	}
 }

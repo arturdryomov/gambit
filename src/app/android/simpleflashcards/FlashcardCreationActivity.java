@@ -2,16 +2,18 @@ package app.android.simpleflashcards;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
 public class FlashcardCreationActivity extends Activity
 {
+	private Context activityContext = this;
+	
 	private String frontSideText;
 	private String backSideText;
 	
@@ -63,7 +65,7 @@ public class FlashcardCreationActivity extends Activity
 	
 	private boolean isFrontSideTextCorrect() {
 		if (frontSideText.isEmpty()) {
-			alertUser("Enter text for the front side of flashcard.");
+			UserAlerter.alert(activityContext, "Enter text for the front side of flashcard.");
 			
 			return false;
 		}
@@ -73,15 +75,11 @@ public class FlashcardCreationActivity extends Activity
 	
 	private boolean isBackSideTextCorrect() {
 		if (backSideText.isEmpty()) {
-			alertUser("Enter text for the back side of flashcard");
+			UserAlerter.alert(activityContext, "Enter text for the back side of flashcard.");
 			
 			return false;
 		}
 		
 		return true;
-	}
-	
-	private void alertUser(String text) {
-		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 	}
 }

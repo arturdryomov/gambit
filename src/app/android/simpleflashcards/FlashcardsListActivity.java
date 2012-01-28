@@ -2,7 +2,7 @@ package app.android.simpleflashcards;
 
 
 import android.app.ListActivity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 
 public class FlashcardsListActivity extends ListActivity
 {
+	private Context activityContext = this;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,12 +39,7 @@ public class FlashcardsListActivity extends ListActivity
 	private OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			callActivity(FlashcardCreationActivity.class);
+			ActivityStarter.start(activityContext, FlashcardCreationActivity.class);
 		}
 	};
-	
-	private void callActivity(Class<?> cls) {
-		Intent callIntent = new Intent(getApplicationContext(), cls);
-		startActivity(callIntent);
-	}
 }
