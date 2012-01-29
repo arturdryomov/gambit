@@ -17,11 +17,11 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(buildCreateDecksQuery());
-		db.execSQL(buildCreateCardsQuery());
+		db.execSQL(buildDecksTableCreationQuery());
+		db.execSQL(buildCardsTableCreationQuery());
 	}
 
-	private String buildCreateDecksQuery() {
+	private String buildDecksTableCreationQuery() {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("Create table %s ", DbTableNames.DECKS));
@@ -34,7 +34,7 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 		return builder.toString();
 	}
 
-	private String buildCreateCardsQuery() {
+	private String buildCardsTableCreationQuery() {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("Create table %s ", DbTableNames.CARDS));
