@@ -24,7 +24,7 @@ public class Decks
 	}
 
 	private String buildDecksCountSelectionQuery() {
-		return String.format("select count(*) from %s", DbConstants.TABLE_DECKS);
+		return String.format("select count(*) from %s", DbTableNames.DECKS);
 	}
 
 	public List<Deck> getDecksList() {
@@ -47,10 +47,9 @@ public class Decks
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
-		builder
-			.append(String.format("%s, %s ", DbConstants.FIELD_ID, DbConstants.FIELD_DECK_TITLE));
-		builder.append(String.format("from %s ", DbConstants.TABLE_DECKS));
-		builder.append(String.format("order by %s", DbConstants.FIELD_DECK_TITLE));
+		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
+		builder.append(String.format("from %s ", DbTableNames.DECKS));
+		builder.append(String.format("order by %s", DbFieldNames.DECK_TITLE));
 
 		return builder.toString();
 	}
@@ -58,11 +57,11 @@ public class Decks
 	private ContentValues contentValuesFromCursor(Cursor cursor) {
 		ContentValues values = new ContentValues(cursor.getCount());
 
-		int id = cursor.getInt(cursor.getColumnIndexOrThrow(DbConstants.FIELD_ID));
-		values.put(DbConstants.FIELD_ID, id);
+		int id = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
+		values.put(DbFieldNames.ID, id);
 
-		String title = cursor.getString(cursor.getColumnIndexOrThrow(DbConstants.FIELD_DECK_TITLE));
-		values.put(DbConstants.FIELD_DECK_TITLE, title);
+		String title = cursor.getString(cursor.getColumnIndexOrThrow(DbFieldNames.DECK_TITLE));
+		values.put(DbFieldNames.DECK_TITLE, title);
 
 		return values;
 	}
@@ -78,8 +77,8 @@ public class Decks
 	private String buildDeckInsertionQuery(String deckTitle) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("insert into %s ", DbConstants.TABLE_DECKS));
-		builder.append(String.format("(%s) ", DbConstants.FIELD_DECK_TITLE));
+		builder.append(String.format("insert into %s ", DbTableNames.DECKS));
+		builder.append(String.format("(%s) ", DbFieldNames.DECK_TITLE));
 		builder.append(String.format("values ('%s') ", deckTitle));
 
 		return builder.toString();
@@ -92,8 +91,8 @@ public class Decks
 	private String buildDeckDeletingQuery(Deck deck) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("delete from %s ", DbConstants.TABLE_DECKS));
-		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, deck.getId()));
+		builder.append(String.format("delete from %s ", DbTableNames.DECKS));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, deck.getId()));
 
 		return builder.toString();
 	}
@@ -108,8 +107,8 @@ public class Decks
 	private String buildDeckWithTitlePresenceQuery(String title) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("select count(*) from %s ", DbConstants.TABLE_DECKS));
-		builder.append(String.format("where upper(%s) = upper('%s')", DbConstants.FIELD_DECK_TITLE,
+		builder.append(String.format("select count(*) from %s ", DbTableNames.DECKS));
+		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE,
 			title));
 
 		return builder.toString();

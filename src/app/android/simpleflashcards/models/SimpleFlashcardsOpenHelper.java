@@ -24,14 +24,11 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 	private String buildCreateDecksQuery() {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("Create table %s ", DbConstants.TABLE_DECKS));
+		builder.append(String.format("Create table %s ", DbTableNames.DECKS));
 
 		builder.append("(");
-
-		builder.append(String.format(" %s %s, ", DbConstants.FIELD_ID, DbConstants.FIELD_PARAM_ID));
-		builder.append(String.format(" %s %s ", DbConstants.FIELD_DECK_TITLE,
-			DbConstants.FIELD_PARAM_DECK_TITLE));
-
+		builder.append(String.format(" %s %s, ", DbFieldNames.ID, DbFieldParams.ID));
+		builder.append(String.format(" %s %s ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
 		builder.append(")");
 
 		return builder.toString();
@@ -40,19 +37,19 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 	private String buildCreateCardsQuery() {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("Create table %s ", DbConstants.TABLE_CARDS));
+		builder.append(String.format("Create table %s ", DbTableNames.CARDS));
 
 		builder.append("(");
 
-		builder.append(String.format(" %s %s, ", DbConstants.FIELD_ID, DbConstants.FIELD_PARAM_ID));
-		builder.append(String.format(" %s %s, ", DbConstants.FIELD_CARD_DECK_ID,
-			DbConstants.FIELD_PARAM_CARD_DECK_ID));
-		builder.append(String.format(" %s %s, ", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT,
-			DbConstants.FIELD_PARAM_CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format(" %s %s, ", DbConstants.FIELD_CARD_BACK_SIDE_TEXT,
-			DbConstants.FIELD_PARAM_CARD_BACK_SIDE_TEXT));
-		builder.append(String.format(" %s %s ", DbConstants.FIELD_CARD_ORDER_INDEX,
-			DbConstants.FIELD_PARAM_CARD_ORDER_INDEX));
+		builder.append(String.format(" %s %s, ", DbFieldNames.ID, DbFieldParams.ID));
+		builder.append(String.format(" %s %s, ", DbFieldNames.CARD_DECK_ID,
+			DbFieldParams.CARD_DECK_ID));
+		builder.append(String.format(" %s %s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT,
+			DbFieldParams.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format(" %s %s, ", DbFieldNames.CARD_BACK_SIDE_TEXT,
+			DbFieldParams.CARD_BACK_SIDE_TEXT));
+		builder.append(String.format(" %s %s ", DbFieldNames.CARD_ORDER_INDEX,
+			DbFieldParams.CARD_ORDER_INDEX));
 
 		builder.append(")");
 

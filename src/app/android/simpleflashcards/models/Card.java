@@ -21,19 +21,19 @@ public class Card
 	}
 
 	private void setValues(ContentValues values) {
-		Integer idAsInteger = values.getAsInteger(DbConstants.FIELD_ID);
+		Integer idAsInteger = values.getAsInteger(DbFieldNames.ID);
 		if (idAsInteger == null) {
 			throw new ModelsException();
 		}
 		id = idAsInteger;
 
-		String frontSideAsString = values.getAsString(DbConstants.FIELD_CARD_FRONT_SIDE_TEXT);
+		String frontSideAsString = values.getAsString(DbFieldNames.CARD_FRONT_SIDE_TEXT);
 		if (frontSideAsString == null) {
 			throw new ModelsException();
 		}
 		frontSideText = frontSideAsString;
 
-		String backSideAsString = values.getAsString(DbConstants.FIELD_CARD_BACK_SIDE_TEXT);
+		String backSideAsString = values.getAsString(DbFieldNames.CARD_BACK_SIDE_TEXT);
 		if (backSideAsString == null) {
 			throw new ModelsException();
 		}
@@ -56,9 +56,9 @@ public class Card
 	private String buildFrontSideTextUpdatingQuery(String text) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("update %s set ", DbConstants.TABLE_CARDS));
-		builder.append(String.format("%s = '%s' ", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT, text));
-		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, id));
+		builder.append(String.format("update %s set ", DbTableNames.CARDS));
+		builder.append(String.format("%s = '%s' ", DbFieldNames.CARD_FRONT_SIDE_TEXT, text));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
 
 		return builder.toString();
 	}
@@ -79,9 +79,9 @@ public class Card
 	private String buildBackSideTextUpdatingQuery(String text) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("update %s set ", DbConstants.TABLE_CARDS));
-		builder.append(String.format("%s = '%s' ", DbConstants.FIELD_CARD_BACK_SIDE_TEXT, text));
-		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, id));
+		builder.append(String.format("update %s set ", DbTableNames.CARDS));
+		builder.append(String.format("%s = '%s' ", DbFieldNames.CARD_BACK_SIDE_TEXT, text));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
 
 		return builder.toString();
 	}

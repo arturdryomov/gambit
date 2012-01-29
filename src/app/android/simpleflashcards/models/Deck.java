@@ -24,13 +24,13 @@ public class Deck
 	}
 
 	private void setValues(ContentValues values) {
-		Integer idAsInteger = values.getAsInteger(DbConstants.FIELD_ID);
+		Integer idAsInteger = values.getAsInteger(DbFieldNames.ID);
 		if (idAsInteger == null) {
 			throw new ModelsException();
 		}
 		id = idAsInteger;
 
-		String titleAsString = values.getAsString(DbConstants.FIELD_DECK_TITLE);
+		String titleAsString = values.getAsString(DbFieldNames.DECK_TITLE);
 		if (titleAsString == null) {
 			throw new ModelsException();
 		}
@@ -58,9 +58,9 @@ public class Deck
 	private String buildTitleUpdatingQuery(String newTitle) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("update %s set ", DbConstants.TABLE_DECKS));
-		builder.append(String.format("%s = '%s' ", DbConstants.FIELD_DECK_TITLE, newTitle));
-		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, id));
+		builder.append(String.format("update %s set ", DbTableNames.DECKS));
+		builder.append(String.format("%s = '%s' ", DbFieldNames.DECK_TITLE, newTitle));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
 
 		return builder.toString();
 	}
@@ -76,7 +76,7 @@ public class Deck
 	}
 
 	private String buildCardsCountSelectionQuery() {
-		return String.format("select count(*) from %s", DbConstants.TABLE_CARDS);
+		return String.format("select count(*) from %s", DbTableNames.CARDS);
 	}
 
 	public List<Card> getCardsList() {
@@ -100,19 +100,19 @@ public class Deck
 
 		builder.append("select ");
 
-		builder.append(String.format("%s, ", DbConstants.FIELD_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbConstants.FIELD_CARD_ORDER_INDEX));
+		builder.append(String.format("%s, ", DbFieldNames.ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
+		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
 
-		builder.append(String.format("from %s ", DbConstants.TABLE_CARDS));
+		builder.append(String.format("from %s ", DbTableNames.CARDS));
 
 		builder.append("where ");
 
-		builder.append(String.format("%s = %d ", DbConstants.FIELD_CARD_DECK_ID, id));
+		builder.append(String.format("%s = %d ", DbFieldNames.CARD_DECK_ID, id));
 
-		builder.append(String.format("order by %s", DbConstants.FIELD_CARD_ORDER_INDEX));
+		builder.append(String.format("order by %s", DbFieldNames.CARD_ORDER_INDEX));
 
 		return builder.toString();
 	}
@@ -120,23 +120,22 @@ public class Deck
 	private ContentValues contentValuesFromCursor(Cursor cursor) {
 		ContentValues values = new ContentValues(cursor.getCount());
 
-		int id = cursor.getInt(cursor.getColumnIndexOrThrow(DbConstants.FIELD_ID));
-		values.put(DbConstants.FIELD_ID, id);
+		int id = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
+		values.put(DbFieldNames.ID, id);
 
-		int deckId = cursor.getInt(cursor.getColumnIndexOrThrow(DbConstants.FIELD_CARD_DECK_ID));
-		values.put(DbConstants.FIELD_CARD_DECK_ID, deckId);
+		int deckId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.CARD_DECK_ID));
+		values.put(DbFieldNames.CARD_DECK_ID, deckId);
 
 		String frontSideText = cursor.getString(cursor
-			.getColumnIndexOrThrow(DbConstants.FIELD_CARD_FRONT_SIDE_TEXT));
-		values.put(DbConstants.FIELD_CARD_FRONT_SIDE_TEXT, frontSideText);
+			.getColumnIndexOrThrow(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		values.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, frontSideText);
 
 		String backSideText = cursor.getString(cursor
-			.getColumnIndexOrThrow(DbConstants.FIELD_CARD_BACK_SIDE_TEXT));
-		values.put(DbConstants.FIELD_CARD_BACK_SIDE_TEXT, backSideText);
+			.getColumnIndexOrThrow(DbFieldNames.CARD_BACK_SIDE_TEXT));
+		values.put(DbFieldNames.CARD_BACK_SIDE_TEXT, backSideText);
 
-		int orderIndex = cursor.getInt(cursor
-			.getColumnIndexOrThrow(DbConstants.FIELD_CARD_ORDER_INDEX));
-		values.put(DbConstants.FIELD_CARD_ORDER_INDEX, orderIndex);
+		int orderIndex = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.CARD_ORDER_INDEX));
+		values.put(DbFieldNames.CARD_ORDER_INDEX, orderIndex);
 
 		return values;
 	}
@@ -151,13 +150,13 @@ public class Deck
 
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("insert into %s ", DbConstants.TABLE_CARDS));
+		builder.append(String.format("insert into %s ", DbTableNames.CARDS));
 
 		builder.append("( ");
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbConstants.FIELD_CARD_ORDER_INDEX));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
+		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
 		builder.append(") ");
 
 		builder.append("values ( ");
@@ -177,8 +176,8 @@ public class Deck
 	private String buildCardDeletingQuery(Card card) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("delete from %s ", DbConstants.TABLE_CARDS));
-		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, card.getId()));
+		builder.append(String.format("delete from %s ", DbTableNames.CARDS));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, card.getId()));
 
 		return builder.toString();
 	}
@@ -192,7 +191,7 @@ public class Deck
 		CardsOrderIndexGenerator generator = new CardsOrderIndexGenerator(cursor.getCount());
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbConstants.FIELD_ID));
+			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
 			setCardOrderIndex(cardId, generator.generate());
 			cursor.moveToNext();
 		}
@@ -207,7 +206,7 @@ public class Deck
 		int index = 0;
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbConstants.FIELD_ID));
+			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
 			setCardOrderIndex(cardId, index);
 			index++;
 			cursor.moveToNext();
@@ -219,19 +218,19 @@ public class Deck
 
 		builder.append("select ");
 
-		builder.append(String.format("%s, ", DbConstants.FIELD_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbConstants.FIELD_CARD_ORDER_INDEX));
+		builder.append(String.format("%s, ", DbFieldNames.ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
+		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
 
-		builder.append(String.format("from %s ", DbConstants.TABLE_CARDS));
+		builder.append(String.format("from %s ", DbTableNames.CARDS));
 
 		builder.append("where ");
 
-		builder.append(String.format("%s = %d ", DbConstants.FIELD_CARD_DECK_ID, id));
+		builder.append(String.format("%s = %d ", DbFieldNames.CARD_DECK_ID, id));
 
-		builder.append(String.format("order by %s", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("order by %s", DbFieldNames.CARD_FRONT_SIDE_TEXT));
 
 		return builder.toString();
 	}
@@ -243,9 +242,9 @@ public class Deck
 	private String buildCardOrderIndexSettingQuery(int cardId, int index) {
 		StringBuilder builder = new StringBuilder();
 
-		builder.append(String.format("update %s ", DbConstants.TABLE_CARDS));
-		builder.append(String.format("set %s = %d ", DbConstants.FIELD_CARD_ORDER_INDEX, index));
-		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, cardId));
+		builder.append(String.format("update %s ", DbTableNames.CARDS));
+		builder.append(String.format("set %s = %d ", DbFieldNames.CARD_ORDER_INDEX, index));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, cardId));
 
 		return builder.toString();
 	}
