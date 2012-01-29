@@ -28,7 +28,7 @@ public class DbConstants
 	public static final String FIELD_PARAM_CARD_FRONT_SIDE_TEXT = "text not null";
 	public static final String FIELD_PARAM_CARD_BACK_SIDE_TEXT = "text not null";
 
-	// NOTE: OrderIndex field should actually be unique, but it is hard to shuffle and
+	// OrderIndex field should actually be unique, but it is hard to shuffle and
 	// reset indexes if the db strictly takes care of this. So, uniqueness should be
 	// guaranteed by the algorithm.
 	public static final String FIELD_PARAM_CARD_ORDER_INDEX = "int not null";

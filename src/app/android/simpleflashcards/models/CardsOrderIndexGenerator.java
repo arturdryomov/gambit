@@ -10,7 +10,7 @@ public class CardsOrderIndexGenerator
 {
 	private int cardsCount;
 	private List<Integer> unusedIndexes = new ArrayList<Integer>();
-	Random random = new Random();
+	private Random random = new Random();
 
 	public CardsOrderIndexGenerator(int cardsCount) {
 		setCardsCount(cardsCount);
