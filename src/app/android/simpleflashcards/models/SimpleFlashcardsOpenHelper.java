@@ -19,8 +19,6 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(buildCreateDecksQuery());
 		db.execSQL(buildCreateCardsQuery());
-		db.execSQL(buildCreateNextCardIndexQuery());
-		db.execSQL(initNextCardIndexQuery());
 	}
 
 	private String buildCreateDecksQuery() {
@@ -57,33 +55,6 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 			DbConstants.FIELD_PARAM_CARD_ORDER_INDEX));
 
 		builder.append(")");
-
-		return builder.toString();
-	}
-
-	private String buildCreateNextCardIndexQuery() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("Create table %s ", DbConstants.TABLE_NEXT_CARD_INDEX));
-
-		builder.append("(");
-
-		builder.append(String.format(" %s %s, ", DbConstants.FIELD_ID, DbConstants.FIELD_PARAM_ID));
-		builder.append(String.format(" %s %s ", DbConstants.FIELD_NEXT_CARD_INDEX,
-			DbConstants.FIELD_PARAM_NEXT_CARD_INDEX));
-
-		builder.append(")");
-
-		return builder.toString();
-	}
-
-	private String initNextCardIndexQuery() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("Insert into %s ", DbConstants.TABLE_NEXT_CARD_INDEX));
-
-		builder.append(String.format("(%s) ", DbConstants.FIELD_NEXT_CARD_INDEX));
-		builder.append(String.format("values (%d) ", DbConstants.INVALID_NEXT_CARD_INDEX_VALUE));
 
 		return builder.toString();
 	}

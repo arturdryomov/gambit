@@ -143,11 +143,6 @@ public class Deck
 
 	public void addNewCard(String frontSideText, String backSideText) {
 		database.execSQL(buildInsertCardQuery(frontSideText, backSideText));
-		if (getCardsCount() == 1) {
-			// We need to update current index. There were no cards before
-			// and it was set to DbConstants.INVALID_NEXT_CARD_INDEX_VALUE
-			setNextCardIndex(0);
-		}
 	}
 
 	private String buildInsertCardQuery(String frontSideText, String backSideText) {
@@ -177,10 +172,6 @@ public class Deck
 
 	public void deleteCard(Card card) {
 		database.execSQL(buildDeleteCardQuery(card));
-		if (getCardsCount() == 0) {
-			// Invalidate next card index
-			setNextCardIndex(DbConstants.INVALID_NEXT_CARD_INDEX_VALUE);
-		}
 	}
 
 	private String buildDeleteCardQuery(Card card) {
@@ -205,7 +196,6 @@ public class Deck
 			setCardOrderIndex(cardId, generator.generate());
 			cursor.moveToNext();
 		}
-		setNextCardIndex(0);
 	}
 
 	public void resetCardsOrder() {
@@ -219,10 +209,9 @@ public class Deck
 		while (!cursor.isAfterLast()) {
 			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbConstants.FIELD_ID));
 			setCardOrderIndex(cardId, index);
-			++index;
+			index++;
 			cursor.moveToNext();
 		}
-		setNextCardIndex(0);
 	}
 
 	private String buildSelectCardsAlphabeticallyQuery() {
@@ -257,93 +246,6 @@ public class Deck
 		builder.append(String.format("update %s ", DbConstants.TABLE_CARDS));
 		builder.append(String.format("set %s = %d ", DbConstants.FIELD_CARD_ORDER_INDEX, index));
 		builder.append(String.format("where %s = %d", DbConstants.FIELD_ID, cardId));
-
-		return builder.toString();
-	}
-
-	public Card getNextCard() {
-		int nextCardIndex = getNextCardIndex();
-		int cardsCount = getCardsCount();
-		int newNextCardIndex = (nextCardIndex + 1) % cardsCount;
-
-		setNextCardIndex(newNextCardIndex);
-
-		return selectCardByIndex(nextCardIndex);
-	}
-
-	public Card getPreviousCard() {
-		int nextCardIndex = getNextCardIndex();
-		int cardsCount = getCardsCount();
-
-		int previousCardIndex = (nextCardIndex - 2) % cardsCount;
-		if (previousCardIndex < 0) {
-			previousCardIndex += cardsCount;
-		}
-
-		int newNextCardIndex = (nextCardIndex - 1) % cardsCount;
-		if (newNextCardIndex < 0) {
-			newNextCardIndex += cardsCount;
-		}
-
-		setNextCardIndex(newNextCardIndex);
-
-		return selectCardByIndex(previousCardIndex);
-	}
-
-	private int getNextCardIndex() {
-		Cursor cursor = database.rawQuery(buildSelectNextCardIndexQuery(), null);
-		cursor.moveToFirst();
-		if (cursor.getCount() > 0) {
-			return cursor.getInt(0);
-		}
-		else {
-			throw new ModelsException();
-		}
-	}
-
-	private String buildSelectNextCardIndexQuery() {
-		return String.format("select %s from %s", DbConstants.FIELD_NEXT_CARD_INDEX,
-			DbConstants.TABLE_NEXT_CARD_INDEX);
-	}
-
-	private void setNextCardIndex(int index) {
-		database.execSQL(buildSetNextCardIndexQuery(index));
-	}
-
-	private String buildSetNextCardIndexQuery(int index) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("update %s ", DbConstants.TABLE_NEXT_CARD_INDEX));
-		builder.append(String.format("set %s = %d ", DbConstants.FIELD_NEXT_CARD_INDEX, index));
-
-		return builder.toString();
-	}
-
-	private Card selectCardByIndex(int index) {
-		Cursor cursor = database.rawQuery(buildSelectCardByIndexValue(index), null);
-		cursor.moveToFirst();
-		ContentValues values = contentValuesFromCursor(cursor);
-		return new Card(database, values);
-	}
-
-	private String buildSelectCardByIndexValue(int index) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("select ");
-
-		builder.append(String.format("%s, ", DbConstants.FIELD_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbConstants.FIELD_CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbConstants.FIELD_CARD_ORDER_INDEX));
-
-		builder.append(String.format("from %s ", DbConstants.TABLE_CARDS));
-
-		builder.append("where");
-
-		builder.append(String.format("(%s = %d) ", DbConstants.FIELD_CARD_DECK_ID, id));
-		builder.append("AND ");
-		builder.append(String.format("(%s = %d) ", DbConstants.FIELD_CARD_ORDER_INDEX, index));
 
 		return builder.toString();
 	}
