@@ -49,11 +49,11 @@ public class Card
 			return;
 		}
 
-		database.execSQL(buildUpdateFrontSideTextQuery(text));
+		database.execSQL(buildFrontSideTextUpdatingQuery(text));
 		frontSideText = text;
 	}
 
-	private String buildUpdateFrontSideTextQuery(String text) {
+	private String buildFrontSideTextUpdatingQuery(String text) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s set ", DbConstants.TABLE_CARDS));
@@ -72,11 +72,11 @@ public class Card
 			return;
 		}
 
-		database.execSQL(buildUpdateBackSideTextQuery(text));
+		database.execSQL(buildBackSideTextUpdatingQuery(text));
 		backSideText = text;
 	}
 
-	private String buildUpdateBackSideTextQuery(String text) {
+	private String buildBackSideTextUpdatingQuery(String text) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s set ", DbConstants.TABLE_CARDS));

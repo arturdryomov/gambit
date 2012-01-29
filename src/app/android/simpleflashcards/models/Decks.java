@@ -18,19 +18,19 @@ public class Decks
 	}
 
 	public int getDecksCount() {
-		Cursor cursor = database.rawQuery(buildSelectDecksCountQuery(), null);
+		Cursor cursor = database.rawQuery(buildDecksCountSelectionQuery(), null);
 		cursor.moveToFirst();
 		return cursor.getInt(0);
 	}
 
-	private String buildSelectDecksCountQuery() {
+	private String buildDecksCountSelectionQuery() {
 		return String.format("select count(*) from %s", DbConstants.TABLE_DECKS);
 	}
 
 	public List<Deck> getDecksList() {
 		List<Deck> decksList = new ArrayList<Deck>();
 
-		Cursor cursor = database.rawQuery(buildSelectDecksQuery(), null);
+		Cursor cursor = database.rawQuery(buildDecksSelectionQuery(), null);
 
 		cursor.moveToFirst();
 
@@ -43,7 +43,7 @@ public class Decks
 		return decksList;
 	}
 
-	private String buildSelectDecksQuery() {
+	private String buildDecksSelectionQuery() {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
@@ -72,10 +72,10 @@ public class Decks
 			throw new ModelsException(String.format("There is already a deck with title '%s'",
 				title));
 		}
-		database.execSQL(buildInsertDeckQuery(title));
+		database.execSQL(buildDeckInsertionQuery(title));
 	}
 
-	private String buildInsertDeckQuery(String deckTitle) {
+	private String buildDeckInsertionQuery(String deckTitle) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("insert into %s ", DbConstants.TABLE_DECKS));
@@ -86,10 +86,10 @@ public class Decks
 	}
 
 	public void deleteDeck(Deck deck) {
-		database.execSQL(buildDeleteDeckQuery(deck));
+		database.execSQL(buildDeckDeletingQuery(deck));
 	}
 
-	private String buildDeleteDeckQuery(Deck deck) {
+	private String buildDeckDeletingQuery(Deck deck) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("delete from %s ", DbConstants.TABLE_DECKS));
@@ -99,13 +99,13 @@ public class Decks
 	}
 
 	public boolean containsDeckWithTitle(String title) {
-		Cursor cursor = database.rawQuery(buildContainsDeckWithTitleQuery(title), null);
+		Cursor cursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
 		cursor.moveToFirst();
 
 		return cursor.getInt(0) > 0;
 	}
 
-	private String buildContainsDeckWithTitleQuery(String title) {
+	private String buildDeckWithTitlePresenceQuery(String title) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("select count(*) from %s ", DbConstants.TABLE_DECKS));

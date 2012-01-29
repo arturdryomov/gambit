@@ -51,11 +51,11 @@ public class Deck
 				title));
 		}
 
-		database.execSQL(buildUpdateTitleQuery(title));
+		database.execSQL(buildTitleUpdatingQuery(title));
 		this.title = title;
 	}
 
-	private String buildUpdateTitleQuery(String newTitle) {
+	private String buildTitleUpdatingQuery(String newTitle) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s set ", DbConstants.TABLE_DECKS));
@@ -70,19 +70,19 @@ public class Deck
 	}
 
 	public int getCardsCount() {
-		Cursor cursor = database.rawQuery(buildSelectCardsCountQuery(), null);
+		Cursor cursor = database.rawQuery(buildCardsCountSelectionQuery(), null);
 		cursor.moveToFirst();
 		return cursor.getInt(0);
 	}
 
-	private String buildSelectCardsCountQuery() {
+	private String buildCardsCountSelectionQuery() {
 		return String.format("select count(*) from %s", DbConstants.TABLE_CARDS);
 	}
 
 	public List<Card> getCardsList() {
 		List<Card> cardsList = new ArrayList<Card>();
 
-		Cursor cursor = database.rawQuery(buildSelectCardsQuery(), null);
+		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(), null);
 
 		cursor.moveToFirst();
 
@@ -95,7 +95,7 @@ public class Deck
 		return cardsList;
 	}
 
-	private String buildSelectCardsQuery() {
+	private String buildCardsSelectionQuery() {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
@@ -142,10 +142,10 @@ public class Deck
 	}
 
 	public void addNewCard(String frontSideText, String backSideText) {
-		database.execSQL(buildInsertCardQuery(frontSideText, backSideText));
+		database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
 	}
 
-	private String buildInsertCardQuery(String frontSideText, String backSideText) {
+	private String buildCardInsertionQuery(String frontSideText, String backSideText) {
 		// Append to the end
 		int newCardOrderIndex = getCardsCount();
 
@@ -171,10 +171,10 @@ public class Deck
 	}
 
 	public void deleteCard(Card card) {
-		database.execSQL(buildDeleteCardQuery(card));
+		database.execSQL(buildCardDeletingQuery(card));
 	}
 
-	private String buildDeleteCardQuery(Card card) {
+	private String buildCardDeletingQuery(Card card) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("delete from %s ", DbConstants.TABLE_CARDS));
@@ -184,7 +184,7 @@ public class Deck
 	}
 
 	public void shuffleCards() {
-		Cursor cursor = database.rawQuery(buildSelectCardsAlphabeticallyQuery(), null);
+		Cursor cursor = database.rawQuery(buildCardsAlphabeticalSelectionQuery(), null);
 		if (cursor.getCount() == 0) {
 			return;
 		}
@@ -199,7 +199,7 @@ public class Deck
 	}
 
 	public void resetCardsOrder() {
-		Cursor cursor = database.rawQuery(buildSelectCardsAlphabeticallyQuery(), null);
+		Cursor cursor = database.rawQuery(buildCardsAlphabeticalSelectionQuery(), null);
 		if (cursor.getCount() == 0) {
 			return;
 		}
@@ -214,7 +214,7 @@ public class Deck
 		}
 	}
 
-	private String buildSelectCardsAlphabeticallyQuery() {
+	private String buildCardsAlphabeticalSelectionQuery() {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
@@ -237,10 +237,10 @@ public class Deck
 	}
 
 	private void setCardOrderIndex(int cardId, int index) {
-		database.execSQL(buildSetCardOrderIndexQuery(cardId, index));
+		database.execSQL(buildCardOrderIndexSettingQuery(cardId, index));
 	}
 
-	private String buildSetCardOrderIndexQuery(int cardId, int index) {
+	private String buildCardOrderIndexSettingQuery(int cardId, int index) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s ", DbConstants.TABLE_CARDS));
