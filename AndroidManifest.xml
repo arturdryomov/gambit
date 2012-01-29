@@ -23,6 +23,8 @@
 		</activity>
 		<activity android:name=".ui.FlashcardCreationActivity" >
 		</activity>
+		<activity android:name=".ui.FlashcardsTrainingActivity" >
+		</activity>
 	</application>
 
 </manifest>
