@@ -155,24 +155,11 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 				return true;
 				
 			case R.id.delete:
-				// TODO: Call delete
-				
-				deleteDeck(itemInfo.position);
-
+				new DeleteDeckTask(itemInfo.position).execute();
 				return true;
 
 			default:
 				return super.onContextItemSelected(item);
-		}
-	}
-	
-	private void deleteDeck(int adapterPosition) {
-		new DeleteDeckFromDatabaseTask(getDeck(adapterPosition)).execute();
-
-		listData.remove(adapterPosition);
-		updateList();
-		if (listData.isEmpty()) {
-			setEmptyListText(getString(R.string.noFlashcardsDecks));
 		}
 	}
 	
@@ -185,16 +172,16 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 
-	private class DeleteDeckFromDatabaseTask extends AsyncTask<Void, Void, String>
+	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 		
-		private Deck deck;
+		private int deckAdapterPosition;
 		
-		public DeleteDeckFromDatabaseTask(Deck deck) {
+		public DeleteDeckTask(int deckAdapterPosition) {
 			super();
 			
-			this.deck = deck;
+			this.deckAdapterPosition = deckAdapterPosition;
 		}
 
 		@Override
@@ -205,6 +192,8 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		
 		@Override
 		protected String doInBackground(Void... params) {
+			Deck deck = getDeck(deckAdapterPosition);
+
 			try {
 				SimpleFlashcardsApplication.getInstance().getDecks().deleteDeck(deck);
 			}
@@ -212,11 +201,18 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 				return getString(R.string.someError);
 			}
 			
+			listData.remove(deckAdapterPosition);
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
+			updateList();
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.noFlashcardsDecks));
+			}
+
 			progressDialogHelper.hide();
 			
 			if (!result.isEmpty()) {
