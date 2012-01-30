@@ -21,7 +21,7 @@ public class FlashcardsDeckEditingActivity extends Activity
 	private final Context activityContext = this;
 
 	private Deck deck;
-
+	private int deckId;
 	private String deckName;
 
 	@Override
@@ -29,16 +29,15 @@ public class FlashcardsDeckEditingActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.flashcards_deck_editing);
 
-		getMessage();
+		processActivityMessage();
 
 		initializeBodyControls();
 
-		new OldDeckNameSettingTask().execute();
+		new SetupReceivedDeckTask().execute();
 	}
 
-	private void getMessage() {
-		int deckId = ActivityMessager.getMessageFromActivity(this);
-		deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+	private void processActivityMessage() {
+		deckId = ActivityMessager.getMessageFromActivity(this);
 	}
 
 	private void initializeBodyControls() {
@@ -82,7 +81,7 @@ public class FlashcardsDeckEditingActivity extends Activity
 		return new String();
 	}
 
-	private class OldDeckNameSettingTask extends AsyncTask<Void, Void, String>
+	private class SetupReceivedDeckTask extends AsyncTask<Void, Void, String>
 	{
 		ProgressDialogShowHelper progressDialogHelper;
 
@@ -95,6 +94,7 @@ public class FlashcardsDeckEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
+				deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
 				deckName = deck.getTitle();
 			}
 			catch (ModelsException e) {
