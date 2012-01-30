@@ -32,5 +32,6 @@
 	<string name="deletingCard">Deleting flashcard…</string>
 	<string name="cardEditing">Flashcard Editing</string>
 	<string name="updatingCard">Updating flashcard…</string>
+	<string name="gettingCardInfo">Getting flashcard information…</string>
 
 </resources>
