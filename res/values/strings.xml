@@ -27,5 +27,6 @@
 	<string name="gettingDeckName">Getting deck old name…</string>
 	<string name="updatingDeck">Updating deck…</string>
 	<string name="deckAlreadyExists">Deck with such name already exists.</string>
+	<string name="creatingCard">Creating card…</string>
 
 </resources>

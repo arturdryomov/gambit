@@ -18,13 +18,21 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	private static final String LIST_ITEM_FRONT_TEXT = "front_text";
 	private static final String LIST_ITEM_BACK_TEXT = "back_text";
 
+	private int deckId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cards);
 
+		processActivityMessage();
+
 		initializeActionbar();
 		initializeList();
+	}
+
+	private void processActivityMessage() {
+		deckId = ActivityMessager.getMessageFromActivity(this);
 	}
 
 	private void initializeActionbar() {
@@ -45,7 +53,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	private OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			ActivityStarter.start(activityContext, CardCreationActivity.class);
+			ActivityMessager
+				.startActivityWithMessage(activityContext, CardCreationActivity.class, deckId);
 		}
 	};
 
