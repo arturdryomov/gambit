@@ -20,13 +20,14 @@
 	<string name="creatingDeck">Creating deck…</string>
 	<string name="delete">Delete</string>
 	<string name="edit">Edit</string>
-	<string name="editContents">Edit contents</string>
+	<string name="editCards">Edit flashcards</string>
 	<string name="deletingDeck">Deleting deck…</string>
 	<string name="deckEditingTitle">Deck Editing</string>
 	<string name="save">Save</string>
 	<string name="gettingDeckName">Getting deck old name…</string>
 	<string name="updatingDeck">Updating deck…</string>
 	<string name="deckAlreadyExists">Deck with such name already exists.</string>
-	<string name="creatingCard">Creating card…</string>
+	<string name="creatingCard">Creating flashcard…</string>
+	<string name="loadingCards">Loading flashcards…</string>
 
 </resources>

@@ -83,8 +83,6 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	private class LoadDecksTask extends AsyncTask<Void, Void, String>
 	{
-		private Decks decks = null;
-
 		@Override
 		protected void onPreExecute() {
 			setEmptyListText(getString(R.string.loadingDecks));
@@ -95,7 +93,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				decks = SimpleFlashcardsApplication.getInstance().getDecks();
+				Decks decks = SimpleFlashcardsApplication.getInstance().getDecks();
 				addItemsToList(decks.getDecksList());
 			}
 			catch (ModelsException e) {
@@ -137,7 +135,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		super.onCreateContextMenu(menu, v, menuInfo);
 
 		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.flashcards_decks_context_menu, menu);
+		menuInflater.inflate(R.menu.decks_context_menu, menu);
 	}
 
 	@Override
@@ -146,11 +144,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		int itemPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.editItem:
+			case R.id.edit:
 				new EditDeckTask(itemPosition).execute();
 				return true;
 
-			case R.id.editItemContents:
+			case R.id.editCards:
 				new EditDeckContentsTask(itemPosition).execute();
 				return true;
 
