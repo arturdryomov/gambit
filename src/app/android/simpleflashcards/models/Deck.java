@@ -47,8 +47,7 @@ public class Deck
 		}
 
 		if (parent.containsDeckWithTitle(title)) {
-			throw new ModelsException(String.format("There is already a deck with title '%s'",
-				title));
+			throw new AlreadyExistsException();
 		}
 
 		database.execSQL(buildTitleUpdatingQuery(title));

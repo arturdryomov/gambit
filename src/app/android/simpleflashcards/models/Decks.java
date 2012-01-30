@@ -68,8 +68,7 @@ public class Decks
 
 	public void addNewDeck(String title) {
 		if (containsDeckWithTitle(title)) {
-			throw new ModelsException(String.format("There is already a deck with title '%s'",
-				title));
+			throw new AlreadyExistsException();
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
 	}
