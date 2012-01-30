@@ -59,4 +59,10 @@ public class FlashcardsListActivity extends SimpleAdapterListActivity
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
+	
+	@Override
+	protected void addItemToList(Object itemData) {
+		// TODO Auto-generated method stub
+		
+	}
 }

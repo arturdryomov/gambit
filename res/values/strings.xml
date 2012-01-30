@@ -15,5 +15,12 @@
 	<string name="flashcardsCreationTitle">Flashcard Creation</string>
 	<string name="frontText">Front side text</string>
 	<string name="backText">Back side text</string>
+	<string name="loadingFlashcardsDecks">Loading flashcards decks…</string>
+	<string name="someError">Ooops, some error just happend.</string>
+	<string name="creatingFlashcardsDeck">Creating flashcards deck…</string>
+	<string name="delete">Delete</string>
+	<string name="edit">Edit</string>
+	<string name="editContents">Edit contents</string>
+	<string name="deletingFlashcardsDeck">Deleting flashcards deck…</string>
 
 </resources>
