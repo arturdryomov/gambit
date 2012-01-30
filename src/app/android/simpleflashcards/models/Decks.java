@@ -72,7 +72,7 @@ public class Decks
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
 
-		return readDeckById(lastInsertedId());
+		return getDeckById(lastInsertedId());
 	}
 
 	private String buildDeckInsertionQuery(String deckTitle) {
@@ -103,11 +103,11 @@ public class Decks
 		return builder.toString();
 	}
 
-	private Deck readDeckById(int id) {
+	public Deck getDeckById(int id) {
 		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(
-				String.format("There's no decks with id = %d in database", id));
+			throw new ModelsException(String.format("There's no a deck with id = %d in database",
+				id));
 		}
 
 		return new Deck(database, this, contentValuesFromCursor(cursor));
@@ -120,6 +120,34 @@ public class Decks
 		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
 		builder.append(String.format("from %s ", DbTableNames.DECKS));
 		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
+
+		return builder.toString();
+	}
+
+	public Deck getDeckByCardId(int cardId) {
+		Cursor cursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
+		if (!cursor.moveToFirst()) {
+			throw new ModelsException(String.format(
+				"There's no a deck that is a parent for card with id = %d", cardId));
+		}
+
+		return new Deck(database, this, contentValuesFromCursor(cursor));
+	}
+
+	private String buildDeckByCardIdSelectionQuery(int cardId) {
+		StringBuilder innerSelectBuilder = new StringBuilder();
+
+		innerSelectBuilder.append(String.format("select %s from %s ", DbFieldNames.CARD_DECK_ID,
+			DbTableNames.CARDS));
+		innerSelectBuilder.append(String.format("where %s = %d", DbFieldNames.ID, cardId));
+
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("select ");
+		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
+		builder.append(String.format("from %s ", DbTableNames.DECKS));
+		builder.append(String.format("where %s = (%s)", DbFieldNames.ID,
+			innerSelectBuilder.toString()));
 
 		return builder.toString();
 	}

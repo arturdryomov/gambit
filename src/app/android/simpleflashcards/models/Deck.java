@@ -141,7 +141,7 @@ public class Deck
 
 	public Card addNewCard(String frontSideText, String backSideText) {
 		database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
-		return readCardById(lastInsertedId());
+		return getCardById(lastInsertedId());
 	}
 
 	private int lastInsertedId() {
@@ -162,11 +162,11 @@ public class Deck
 		return builder.toString();
 	}
 
-	private Card readCardById(int id) {
+	public Card getCardById(int id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
 			throw new ModelsException(
-				String.format("There's no decks with id = %d in database", id));
+				String.format("There's no a card with id = %d in database", id));
 		}
 
 		return new Card(database, contentValuesFromCursor(cursor));
