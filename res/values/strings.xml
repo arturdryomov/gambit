@@ -30,5 +30,7 @@
 	<string name="creatingCard">Creating flashcard…</string>
 	<string name="loadingCards">Loading flashcards…</string>
 	<string name="deletingCard">Deleting flashcard…</string>
+	<string name="cardEditing">Flashcard Editing</string>
+	<string name="updatingCard">Updating flashcard…</string>
 
 </resources>
