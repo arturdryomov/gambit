@@ -36,10 +36,14 @@ public class FlashcardCreationActivity extends Activity
 		public void onClick(View v) {
 			readUserData();
 
-			if (isUserDataCorrect()) {
+			String userDataErrorMessage = getUserDataErrorMessage();
+
+			if (userDataErrorMessage.isEmpty()) {
 				// TODO: Call flashcard creation task
 
 				finish();
+			} else {
+				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
 		}
 	};
@@ -52,35 +56,35 @@ public class FlashcardCreationActivity extends Activity
 		backSideText = backSideEdit.getText().toString().trim();
 	}
 
-	private boolean isUserDataCorrect() {
-		if (!isFrontSideTextCorrect()) {
-			return false;
+	private String getUserDataErrorMessage() {
+		String errorMesage;
+
+		errorMesage = getFrontSideTextErrorMessage();
+		if (!errorMesage.isEmpty()) {
+			return errorMesage;
+		}
+		
+		errorMesage = getBackSideTextErrorMessage();
+		if (!errorMesage.isEmpty()) {
+			return errorMesage;
 		}
 
-		if (!isBackSideTextCorrect()) {
-			return false;
-		}
-
-		return true;
+		return errorMesage;
 	}
 
-	private boolean isFrontSideTextCorrect() {
+	private String getFrontSideTextErrorMessage() {
 		if (frontSideText.isEmpty()) {
-			UserAlerter.alert(activityContext, getString(R.string.enterFrontText));
-
-			return false;
+			return getString(R.string.enterFrontText);
 		}
 
-		return true;
+		return new String();
 	}
 
-	private boolean isBackSideTextCorrect() {
+	private String getBackSideTextErrorMessage() {
 		if (backSideText.isEmpty()) {
-			UserAlerter.alert(activityContext, getString(R.string.enterBackText));
-
-			return false;
+			return getString(R.string.enterBackText);
 		}
 
-		return true;
+		return new String();
 	}
 }

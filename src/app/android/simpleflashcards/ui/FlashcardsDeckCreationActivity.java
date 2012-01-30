@@ -37,9 +37,13 @@ public class FlashcardsDeckCreationActivity extends Activity
 		@Override
 		public void onClick(View v) {
 			readUserData();
-
-			if (isUserDataCurrect()) {
-				new CreateFlashcardsDeckTask().execute();
+			
+			String userDataErrorMessage = getUserDataErrorMessage();
+			
+			if (userDataErrorMessage.isEmpty()) {
+				new FlashcardsDeckCreationTask().execute();
+			} else {
+				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
 		}
 	};
@@ -50,27 +54,21 @@ public class FlashcardsDeckCreationActivity extends Activity
 		deckName = deckNameEdit.getText().toString().trim();
 	}
 
-	private boolean isUserDataCurrect() {
-		if (!isDeckNameCurrect()) {
-			return false;
-		}
-
-		return true;
+	private String getUserDataErrorMessage() {
+		return getDeckNameErrorMessage();
 	}
 
-	private boolean isDeckNameCurrect() {
+	private String getDeckNameErrorMessage() {
 		if (deckName.isEmpty()) {
-			UserAlerter.alert(activityContext, getString(R.string.enterDeckName));
-
-			return false;
+			return getString(R.string.enterDeckName);
 		}
 
 		// TODO: Call task to check existing decks on server
 
-		return true;
+		return new String();
 	}
 	
-	private class CreateFlashcardsDeckTask extends AsyncTask<Void, Void, String>
+	private class FlashcardsDeckCreationTask extends AsyncTask<Void, Void, String>
 	{
 		ProgressDialogShowHelper progressDialogHelper;
 
