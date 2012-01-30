@@ -144,6 +144,31 @@ public class Deck
 		return getCardById(lastInsertedId());
 	}
 
+	private String buildCardInsertionQuery(String frontSideText, String backSideText) {
+		// Append to the end
+		int newCardOrderIndex = getCardsCount();
+
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(String.format("insert into %s ", DbTableNames.CARDS));
+
+		builder.append("( ");
+		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
+		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
+		builder.append(") ");
+
+		builder.append("values ( ");
+		builder.append(String.format("%d, ", id));
+		builder.append(String.format("'%s', ", frontSideText));
+		builder.append(String.format("'%s', ", backSideText));
+		builder.append(String.format("%d ", newCardOrderIndex));
+		builder.append(")");
+
+		return builder.toString();
+	}
+
 	private int lastInsertedId() {
 		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
 		if (!cursor.moveToFirst()) {
@@ -186,31 +211,6 @@ public class Deck
 		builder.append(String.format("from %s ", DbTableNames.CARDS));
 
 		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return builder.toString();
-	}
-
-	private String buildCardInsertionQuery(String frontSideText, String backSideText) {
-		// Append to the end
-		int newCardOrderIndex = getCardsCount();
-
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("insert into %s ", DbTableNames.CARDS));
-
-		builder.append("( ");
-		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
-		builder.append(") ");
-
-		builder.append("values ( ");
-		builder.append(String.format("%d, ", id));
-		builder.append(String.format("'%s', ", frontSideText));
-		builder.append(String.format("'%s', ", backSideText));
-		builder.append(String.format("%d ", newCardOrderIndex));
-		builder.append(")");
 
 		return builder.toString();
 	}

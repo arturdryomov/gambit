@@ -33,7 +33,6 @@ public class Decks
 		Cursor cursor = database.rawQuery(buildDecksSelectionQuery(), null);
 
 		cursor.moveToFirst();
-
 		while (!cursor.isAfterLast()) {
 			ContentValues values = contentValuesFromCursor(cursor);
 			decksList.add(new Deck(database, this, values));

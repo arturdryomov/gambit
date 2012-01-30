@@ -58,5 +58,7 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		throw new ModelsException(String.format(
+			"'%s' database is currently not intended to be upgraded", DATABASE_NAME));
 	}
 }
