@@ -156,7 +156,7 @@ public class Deck
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
-		builder.append(String.format("max(%s) ", DbFieldNames.ID, DbFieldNames.ID));
+		builder.append(String.format("max(%s) ", DbFieldNames.ID));
 		builder.append(String.format("from %s ", DbTableNames.CARDS));
 
 		return builder.toString();
@@ -293,6 +293,15 @@ public class Deck
 		builder.append(String.format("where %s = %d", DbFieldNames.ID, cardId));
 
 		return builder.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
 	}
 
 	@Override

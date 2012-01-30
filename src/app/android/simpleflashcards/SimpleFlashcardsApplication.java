@@ -18,6 +18,10 @@ public class SimpleFlashcardsApplication extends Application
 	public void onCreate() {
 		super.onCreate();
 
+		if (instance != null) {
+			throw new RuntimeException(String.format("%s can have only one instance",
+				SimpleFlashcardsApplication.class.toString()));
+		}
 		instance = this;
 
 		SQLiteOpenHelper openHelper = new SimpleFlashcardsOpenHelper(this);
