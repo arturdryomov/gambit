@@ -2,6 +2,7 @@ package app.android.simpleflashcards.ui;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -215,8 +216,8 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 	private Deck getDeck(int adapterPosition) {
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
 		
-		HashMap<String, Object> adapterItem = (HashMap<String, Object>) listAdapter
-			.getItem(adapterPosition);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
 		
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
