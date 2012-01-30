@@ -24,5 +24,8 @@
 	<string name="deletingFlashcardsDeck">Deleting flashcards deck…</string>
 	<string name="flashcardsDeckEditingTitle">Flashcards Deck Editing</string>
 	<string name="save">Save</string>
-
+	<string name="gettingFlashcardDeckName">Getting flashcards deck old name…</string>
+	<string name="updatingFlashcardsDeck">Updating flashcards deck…</string>
+	<string name="flashcardsDeckAlreadyExists">Flashcards deck with such name already exists.</string>
+	
 </resources>

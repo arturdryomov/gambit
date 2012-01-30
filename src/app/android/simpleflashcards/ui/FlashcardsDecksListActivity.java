@@ -146,8 +146,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 
 		switch (item.getItemId()) {
 			case R.id.editItem:
-				// TODO: Call edit
-
+				new EditDeckTask(itemInfo.position).execute();
 				return true;
 				
 			case R.id.editItemContents:
@@ -220,5 +219,48 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
 		
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
+	}
+	
+	private class EditDeckTask extends AsyncTask<Void, Void, String>
+	{
+		private ProgressDialogShowHelper progressDialogHelper;
+		
+		private int deckId;
+		
+		private int deckAdapterPosition;
+		
+		public EditDeckTask(int deckAdapterPosition) {
+			this.deckAdapterPosition = deckAdapterPosition;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			progressDialogHelper = new ProgressDialogShowHelper();
+			progressDialogHelper.show(activityContext, getString(R.string.gettingFlashcardDeckName));
+		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+				deckId = getDeck(deckAdapterPosition).getId();
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+			
+			return new String();
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			progressDialogHelper.hide();
+
+			if (result.isEmpty()) {
+				ActivityMessager.startActivityWithMessage(activityContext,
+					FlashcardsDeckEditingActivity.class, deckId);
+			} else {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
 	}
 }
