@@ -29,5 +29,6 @@
 	<string name="deckAlreadyExists">Deck with such name already exists.</string>
 	<string name="creatingCard">Creating flashcard…</string>
 	<string name="loadingCards">Loading flashcards…</string>
+	<string name="deletingCard">Deleting flashcard…</string>
 
 </resources>

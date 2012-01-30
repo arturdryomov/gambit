@@ -2,6 +2,7 @@ package app.android.simpleflashcards.ui;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -87,7 +88,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		setListAdapter(flashcardsAdapter);
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
+
 		registerForContextMenu(getListView());
 	}
 
@@ -161,12 +162,72 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				return true;
 
 			case R.id.delete:
-				// TODO: Call deletion task
-
+				new DeleteCardTask(itemPosition).execute();
 				return true;
 
 			default:
 				return super.onContextItemSelected(item);
 		}
+	}
+
+	private class DeleteCardTask extends AsyncTask<Void, Void, String>
+	{
+		private ProgressDialogShowHelper progressDialogHelper;
+
+		private int cardAdapterPosition;
+
+		public DeleteCardTask(int cardAdapterPosition) {
+			super();
+
+			this.cardAdapterPosition = cardAdapterPosition;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			progressDialogHelper = new ProgressDialogShowHelper();
+			progressDialogHelper.show(activityContext, getString(R.string.deletingCard));
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			Card card = getCard(cardAdapterPosition);
+
+			try {
+				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				deck.deleteCard(card);
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+
+			listData.remove(cardAdapterPosition);
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			updateList();
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.noCards));
+			}
+
+			progressDialogHelper.hide();
+
+			if (!result.isEmpty()) {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
+
+	}
+
+	// TODO: Move to super class
+	private Card getCard(int adapterPosition) {
+		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
+
+		return (Card) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 }
