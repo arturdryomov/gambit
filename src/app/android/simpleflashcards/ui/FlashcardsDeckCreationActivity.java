@@ -37,12 +37,13 @@ public class FlashcardsDeckCreationActivity extends Activity
 		@Override
 		public void onClick(View v) {
 			readUserData();
-			
+
 			String userDataErrorMessage = getUserDataErrorMessage();
-			
+
 			if (userDataErrorMessage.isEmpty()) {
 				new FlashcardsDeckCreationTask().execute();
-			} else {
+			}
+			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
 		}
@@ -67,7 +68,7 @@ public class FlashcardsDeckCreationActivity extends Activity
 
 		return new String();
 	}
-	
+
 	private class FlashcardsDeckCreationTask extends AsyncTask<Void, Void, String>
 	{
 		ProgressDialogShowHelper progressDialogHelper;
@@ -77,7 +78,7 @@ public class FlashcardsDeckCreationActivity extends Activity
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.creatingFlashcardsDeck));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
@@ -86,17 +87,18 @@ public class FlashcardsDeckCreationActivity extends Activity
 			catch (ModelsException e) {
 				return e.getMessage();
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
-			
+
 			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
-			} else {
+			}
+			else {
 				// TODO: Put deck as parameter
 				ActivityStarter.start(activityContext, FlashcardsListActivity.class);
 				finish();

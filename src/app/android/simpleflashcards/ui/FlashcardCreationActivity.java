@@ -42,7 +42,8 @@ public class FlashcardCreationActivity extends Activity
 				// TODO: Call flashcard creation task
 
 				finish();
-			} else {
+			}
+			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
 		}
@@ -63,7 +64,7 @@ public class FlashcardCreationActivity extends Activity
 		if (!errorMesage.isEmpty()) {
 			return errorMesage;
 		}
-		
+
 		errorMesage = getBackSideTextErrorMessage();
 		if (!errorMesage.isEmpty()) {
 			return errorMesage;

@@ -32,10 +32,10 @@ public class FlashcardsDeckEditingActivity extends Activity
 		getMessage();
 
 		initializeBodyControls();
-		
+
 		new OldDeckNameSettingTask().execute();
 	}
-	
+
 	private void getMessage() {
 		int deckId = ActivityMessager.getMessageFromActivity(this);
 		deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
@@ -50,12 +50,13 @@ public class FlashcardsDeckEditingActivity extends Activity
 		@Override
 		public void onClick(View v) {
 			readUserData();
-			
+
 			String userDataErrorMessage = getUserDataErrorMessage();
-			
+
 			if (userDataErrorMessage.isEmpty()) {
 				new DeckUpdatingTask().execute();
-			} else {
+			}
+			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
 		}
@@ -80,11 +81,11 @@ public class FlashcardsDeckEditingActivity extends Activity
 
 		return new String();
 	}
-	
+
 	private class OldDeckNameSettingTask extends AsyncTask<Void, Void, String>
 	{
 		ProgressDialogShowHelper progressDialogHelper;
-		
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
@@ -99,37 +100,37 @@ public class FlashcardsDeckEditingActivity extends Activity
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			updateDeckName();
 
 			progressDialogHelper.hide();
-			
+
 			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
 			}
 		}
 	}
-	
+
 	private void updateDeckName() {
 		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
 		deckNameEdit.setText(deckName);
 	}
-	
+
 	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
 	{
 		ProgressDialogShowHelper progressDialogHelper;
-		
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.updatingFlashcardsDeck));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
@@ -144,14 +145,15 @@ public class FlashcardsDeckEditingActivity extends Activity
 
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
-			
+
 			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
-			} else {
+			}
+			else {
 				finish();
 			}
 		}

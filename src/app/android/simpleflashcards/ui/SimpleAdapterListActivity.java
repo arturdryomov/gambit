@@ -33,10 +33,10 @@ public abstract class SimpleAdapterListActivity extends ListActivity
 	protected void updateList() {
 		((SimpleAdapter) getListAdapter()).notifyDataSetChanged();
 	}
-	
+
 	protected void setEmptyListText(String text) {
 		TextView textView = (TextView) getListView().getEmptyView();
-		
+
 		textView.setText(text);
 	}
 }

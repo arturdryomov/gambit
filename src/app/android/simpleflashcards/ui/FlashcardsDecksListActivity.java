@@ -39,7 +39,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		initializeActionbar();
 		initializeList();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -78,21 +78,21 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		setListAdapter(decksAdapter);
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
+
 		registerForContextMenu(getListView());
 	}
-	
+
 	private class LoadDecksTask extends AsyncTask<Void, Void, String>
 	{
 		private Decks decks = null;
-		
+
 		@Override
 		protected void onPreExecute() {
 			setEmptyListText(getString(R.string.loadingFlashcardsDecks));
-			
+
 			listData.clear();
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
@@ -102,44 +102,45 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noFlashcardsDecks));
-			} else {
+			}
+			else {
 				updateList();
 			}
-			
+
 			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
 			}
 		}
 	}
-	
+
 	@Override
 	protected void addItemToList(Object itemData) {
 		Deck deck = (Deck) itemData;
-		
+
 		HashMap<String, Object> deckItem = new HashMap<String, Object>();
-		
+
 		deckItem.put(LIST_ITEM_TEXT_ID, deck.getTitle());
 		deckItem.put(LIST_ITEM_OBJECT_ID, deck);
-		
+
 		listData.add(deckItem);
 	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		
+
 		MenuInflater menuInflater = getMenuInflater();
 		menuInflater.inflate(R.menu.flashcards_decks_context_menu, menu);
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -148,12 +149,12 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			case R.id.editItem:
 				new EditDeckTask(itemInfo.position).execute();
 				return true;
-				
+
 			case R.id.editItemContents:
 				// TODO: Call edit contents
-				
+
 				return true;
-				
+
 			case R.id.delete:
 				new DeleteDeckTask(itemInfo.position).execute();
 				return true;
@@ -162,16 +163,16 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 				return super.onContextItemSelected(item);
 		}
 	}
-	
+
 	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
-		
+
 		private int deckAdapterPosition;
-		
+
 		public DeleteDeckTask(int deckAdapterPosition) {
 			super();
-			
+
 			this.deckAdapterPosition = deckAdapterPosition;
 		}
 
@@ -180,7 +181,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.deletingFlashcardsDeck));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			Deck deck = getDeck(deckAdapterPosition);
@@ -191,7 +192,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			listData.remove(deckAdapterPosition);
 
 			return new String();
@@ -205,40 +206,40 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			}
 
 			progressDialogHelper.hide();
-			
+
 			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
 			}
 		}
 	}
-	
+
 	private Deck getDeck(int adapterPosition) {
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-		
+
 		@SuppressWarnings("unchecked")
 		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
-		
+
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
-	
+
 	private class EditDeckTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
-		
+
 		private int deckId;
-		
+
 		private int deckAdapterPosition;
-		
+
 		public EditDeckTask(int deckAdapterPosition) {
 			this.deckAdapterPosition = deckAdapterPosition;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.gettingFlashcardDeckName));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
@@ -247,10 +248,10 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
@@ -258,7 +259,8 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 			if (result.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext,
 					FlashcardsDeckEditingActivity.class, deckId);
-			} else {
+			}
+			else {
 				UserAlerter.alert(activityContext, result);
 			}
 		}
