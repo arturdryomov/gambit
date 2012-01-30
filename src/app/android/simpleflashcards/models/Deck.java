@@ -165,8 +165,8 @@ public class Deck
 	public Card getCardById(int id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(
-				String.format("There's no a card with id = %d in database", id));
+			throw new ModelsException(String.format("There's no a card with id = %d in database",
+				id));
 		}
 
 		return new Card(database, contentValuesFromCursor(cursor));
@@ -293,6 +293,32 @@ public class Deck
 		builder.append(String.format("where %s = %d", DbFieldNames.ID, cardId));
 
 		return builder.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Deck)) {
+			return false;
+		}
+		Deck other = (Deck) obj;
+		if (id != other.id) {
+			return false;
+		}
+		if (title == null) {
+			if (other.title != null) {
+				return false;
+			}
+		}
+		else if (!title.equals(other.title)) {
+			return false;
+		}
+		return true;
 	}
 
 }

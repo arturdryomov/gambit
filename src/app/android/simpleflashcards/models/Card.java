@@ -89,4 +89,38 @@ public class Card
 	public int getId() {
 		return id;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Card)) {
+			return false;
+		}
+		Card other = (Card) obj;
+		if (backSideText == null) {
+			if (other.backSideText != null) {
+				return false;
+			}
+		}
+		else if (!backSideText.equals(other.backSideText)) {
+			return false;
+		}
+		if (frontSideText == null) {
+			if (other.frontSideText != null) {
+				return false;
+			}
+		}
+		else if (!frontSideText.equals(other.frontSideText)) {
+			return false;
+		}
+		if (id != other.id) {
+			return false;
+		}
+		return true;
+	}
 }
