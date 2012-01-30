@@ -43,7 +43,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 	protected void onResume() {
 		super.onResume();
 
-		new LoadDecksFromDatabaseTask().execute();
+		new LoadDecksTask().execute();
 	}
 
 	private void initializeActionbar() {
@@ -81,7 +81,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		registerForContextMenu(getListView());
 	}
 	
-	private class LoadDecksFromDatabaseTask extends AsyncTask<Void, Void, String>
+	private class LoadDecksTask extends AsyncTask<Void, Void, String>
 	{
 		private Decks decks = null;
 		
@@ -107,7 +107,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		
 		@Override
 		protected void onPostExecute(String result) {
-			if (decks.getDecksCount() == 0) {
+			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noFlashcardsDecks));
 			} else {
 				updateList();
@@ -163,15 +163,6 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 	
-	private Deck getDeck(int adapterPosition) {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-		
-		HashMap<String, Object> adapterItem = (HashMap<String, Object>) listAdapter
-			.getItem(adapterPosition);
-		
-		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
-	}
-
 	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
@@ -219,5 +210,14 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 				UserAlerter.alert(activityContext, result);
 			}
 		}
+	}
+	
+	private Deck getDeck(int adapterPosition) {
+		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
+		
+		HashMap<String, Object> adapterItem = (HashMap<String, Object>) listAdapter
+			.getItem(adapterPosition);
+		
+		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 }
