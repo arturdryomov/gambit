@@ -11,7 +11,7 @@ import android.widget.SimpleAdapter;
 import app.android.simpleflashcards.R;
 
 
-public class FlashcardsListActivity extends SimpleAdapterListActivity
+public class CardsListActivity extends SimpleAdapterListActivity
 {
 	private final Context activityContext = this;
 
@@ -21,7 +21,7 @@ public class FlashcardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flashcards);
+		setContentView(R.layout.cards);
 
 		initializeActionbar();
 		initializeList();
@@ -45,14 +45,14 @@ public class FlashcardsListActivity extends SimpleAdapterListActivity
 	private OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			ActivityStarter.start(activityContext, FlashcardCreationActivity.class);
+			ActivityStarter.start(activityContext, CardCreationActivity.class);
 		}
 	};
 
 	@Override
 	protected void initializeList() {
 		SimpleAdapter flashcardsAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.flashcards_list_item, new String[] { LIST_ITEM_FRONT_TEXT, LIST_ITEM_BACK_TEXT },
+			R.layout.cards_list_item, new String[] { LIST_ITEM_FRONT_TEXT, LIST_ITEM_BACK_TEXT },
 			new int[] { R.id.title, R.id.description });
 
 		setListAdapter(flashcardsAdapter);

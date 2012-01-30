@@ -11,7 +11,7 @@ import android.widget.EditText;
 import app.android.simpleflashcards.R;
 
 
-public class FlashcardCreationActivity extends Activity
+public class CardCreationActivity extends Activity
 {
 	private final Context activityContext = this;
 
@@ -21,7 +21,7 @@ public class FlashcardCreationActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flashcard_creation);
+		setContentView(R.layout.card_creation);
 
 		initializeBodyControls();
 	}

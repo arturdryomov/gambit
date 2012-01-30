@@ -11,22 +11,22 @@
 		android:icon="@drawable/icon"
 		android:label="@string/applicationName"
 		android:theme="@android:style/Theme.Light.NoTitleBar" >
-		<activity android:name=".ui.FlashcardsDecksListActivity" >
+		<activity android:name=".ui.DecksListActivity" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.FlashcardsDeckCreationActivity" >
+		<activity android:name=".ui.DeckCreationActivity" >
 		</activity>
-		<activity android:name=".ui.FlashcardsListActivity" >
+		<activity android:name=".ui.CardsListActivity" >
 		</activity>
-		<activity android:name=".ui.FlashcardCreationActivity" >
+		<activity android:name=".ui.CardCreationActivity" >
 		</activity>
-		<activity android:name=".ui.FlashcardsTrainingActivity" >
+		<activity android:name=".ui.CardsTrainingActivity" >
 		</activity>
-		<activity android:name=".ui.FlashcardsDeckEditingActivity" >
+		<activity android:name=".ui.DeckEditingActivity" >
 		</activity>
 	</application>
 

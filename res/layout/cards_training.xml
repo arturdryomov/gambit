@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="Flashcards" />
+			android:text="@string/cards" />
 	</RelativeLayout>
 
 	<!-- Main view -->

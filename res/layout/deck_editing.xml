@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="@string/flashcardsCreationTitle" />
+			android:text="@string/deckEditingTitle" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -25,27 +25,19 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/frontText" />
+				android:text="@string/deckName" />
 
 			<EditText
-				android:id="@+id/frondSideEdit"
+				android:id="@+id/flashcardDeckNameEdit"
 				style="@style/BodyLinearLayoutItem"
-				android:inputType="text" />
-
-			<TextView
-				style="@style/BodyLinearLayoutItem"
-				android:text="@string/backText" />
-
-			<EditText
-				android:id="@+id/backSideEdit"
-				style="@style/BodyLinearLayoutItem"
-				android:inputType="text" />
+				android:inputType="text"
+				android:singleLine="true" />
 
 			<Button
 				android:id="@+id/confirmButton"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/create" />
+				android:text="@string/save" />
 		</LinearLayout>
 	</ScrollView>
 

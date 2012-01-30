@@ -14,13 +14,13 @@ import android.widget.TextView;
 import app.android.simpleflashcards.R;
 
 
-public class FlashcardsTrainingActivity extends Activity
+public class CardsTrainingActivity extends Activity
 {
 	private final Context activityContext = this;
 
 	private ArrayList<String> flashcardsData;
 
-	public FlashcardsTrainingActivity() {
+	public CardsTrainingActivity() {
 		super();
 
 		flashcardsData = new ArrayList<String>();
@@ -33,7 +33,7 @@ public class FlashcardsTrainingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flashcards_training);
+		setContentView(R.layout.cards_training);
 
 		FlashcardsAdapter flashcardsAdapter = new FlashcardsAdapter();
 		ViewPager flashcardsPager = (ViewPager) findViewById(R.id.flashcardsPager);

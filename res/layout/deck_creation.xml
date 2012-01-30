@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="@string/flashcardsDeckCreationTitle" />
+			android:text="@string/deckCreation" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -25,7 +25,7 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/flashcardsDeckName" />
+				android:text="@string/deckName" />
 
 			<EditText
 				android:id="@+id/flashcardDeckNameEdit"

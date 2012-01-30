@@ -11,33 +11,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.SimpleFlashcardsApplication;
-import app.android.simpleflashcards.models.AlreadyExistsException;
-import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
 
-public class FlashcardsDeckEditingActivity extends Activity
+public class DeckCreationActivity extends Activity
 {
 	private final Context activityContext = this;
 
-	private Deck deck;
-	private int deckId;
 	private String deckName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flashcards_deck_editing);
-
-		processActivityMessage();
+		setContentView(R.layout.deck_creation);
 
 		initializeBodyControls();
-
-		new SetupReceivedDeckTask().execute();
-	}
-
-	private void processActivityMessage() {
-		deckId = ActivityMessager.getMessageFromActivity(this);
 	}
 
 	private void initializeBodyControls() {
@@ -53,7 +41,7 @@ public class FlashcardsDeckEditingActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				new DeckUpdatingTask().execute();
+				new FlashcardsDeckCreationTask().execute();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
@@ -81,66 +69,23 @@ public class FlashcardsDeckEditingActivity extends Activity
 		return new String();
 	}
 
-	private class SetupReceivedDeckTask extends AsyncTask<Void, Void, String>
+	private class FlashcardsDeckCreationTask extends AsyncTask<Void, Void, String>
 	{
 		ProgressDialogShowHelper progressDialogHelper;
 
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.gettingFlashcardDeckName));
+			progressDialogHelper.show(activityContext, getString(R.string.creatingDeck));
 		}
 
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
-				deckName = deck.getTitle();
+				SimpleFlashcardsApplication.getInstance().getDecks().addNewDeck(deckName);
 			}
 			catch (ModelsException e) {
-				return getString(R.string.someError);
-			}
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			updateDeckName();
-
-			progressDialogHelper.hide();
-
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
-			}
-		}
-	}
-
-	private void updateDeckName() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
-		deckNameEdit.setText(deckName);
-	}
-
-	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
-	{
-		ProgressDialogShowHelper progressDialogHelper;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.updatingFlashcardsDeck));
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deck.setTitle(deckName);
-			}
-			catch (AlreadyExistsException e) {
-				return getString(R.string.flashcardsDeckAlreadyExists);
-			}
-			catch (ModelsException e) {
-				return getString(R.string.someError);
+				return e.getMessage();
 			}
 
 			return new String();
@@ -154,6 +99,8 @@ public class FlashcardsDeckEditingActivity extends Activity
 				UserAlerter.alert(activityContext, result);
 			}
 			else {
+				// TODO: Put deck as parameter
+				ActivityStarter.start(activityContext, CardsListActivity.class);
 				finish();
 			}
 		}

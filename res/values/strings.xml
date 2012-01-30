@@ -2,30 +2,30 @@
 <resources>
 
 	<string name="applicationName">Simple Flashcards</string>
-	<string name="flashcardsDecksTitle">Flashcards Decks</string>
-	<string name="noFlashcardsDecks">You have no flashcards decks.</string>
+	<string name="decks">Decks</string>
+	<string name="cards">Flashcards</string>
+	<string name="noDecks">You have no decks.</string>
 	<string name="enterDeckName">Enter deck name.</string>
-	<string name="flashcardsDeckCreationTitle">Flashcards Deck Creation</string>
-	<string name="flashcardsDeckName">Flashcards deck name</string>
+	<string name="deckCreation">Deck Creation</string>
+	<string name="deckName">Deck name</string>
 	<string name="create">Create</string>
-	<string name="flashcardsTitle">Flashcards</string>
-	<string name="noFlashcards">You have no flashcards.</string>
+	<string name="noCards">You have no flashcards.</string>
 	<string name="enterFrontText">Enter text for the front side of flashcard.</string>
 	<string name="enterBackText">Enter text for the back side of flashcard.</string>
-	<string name="flashcardsCreationTitle">Flashcard Creation</string>
+	<string name="cardCreation">Flashcard Creation</string>
 	<string name="frontText">Front side text</string>
 	<string name="backText">Back side text</string>
-	<string name="loadingFlashcardsDecks">Loading flashcards decks…</string>
-	<string name="someError">Ooops, some error just happend.</string>
-	<string name="creatingFlashcardsDeck">Creating flashcards deck…</string>
+	<string name="loadingDecks">Loading decks…</string>
+	<string name="someError">Ooops, some error just happend!</string>
+	<string name="creatingDeck">Creating deck…</string>
 	<string name="delete">Delete</string>
 	<string name="edit">Edit</string>
 	<string name="editContents">Edit contents</string>
-	<string name="deletingFlashcardsDeck">Deleting flashcards deck…</string>
-	<string name="flashcardsDeckEditingTitle">Flashcards Deck Editing</string>
+	<string name="deletingDeck">Deleting deck…</string>
+	<string name="deckEditingTitle">Deck Editing</string>
 	<string name="save">Save</string>
-	<string name="gettingFlashcardDeckName">Getting flashcards deck old name…</string>
-	<string name="updatingFlashcardsDeck">Updating flashcards deck…</string>
-	<string name="flashcardsDeckAlreadyExists">Flashcards deck with such name already exists.</string>
-	
+	<string name="gettingDeckName">Getting deck old name…</string>
+	<string name="updatingDeck">Updating deck…</string>
+	<string name="deckAlreadyExists">Deck with such name already exists.</string>
+
 </resources>

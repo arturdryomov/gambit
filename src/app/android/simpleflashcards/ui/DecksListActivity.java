@@ -24,7 +24,7 @@ import app.android.simpleflashcards.models.Decks;
 import app.android.simpleflashcards.models.ModelsException;
 
 
-public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
+public class DecksListActivity extends SimpleAdapterListActivity
 {
 	private final Context activityContext = this;
 
@@ -34,7 +34,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.flashcards_decks);
+		setContentView(R.layout.decks);
 
 		initializeActionbar();
 		initializeList();
@@ -65,14 +65,14 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 	private OnClickListener deckCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			ActivityStarter.start(activityContext, FlashcardsDeckCreationActivity.class);
+			ActivityStarter.start(activityContext, DeckCreationActivity.class);
 		}
 	};
 
 	@Override
 	protected void initializeList() {
 		SimpleAdapter decksAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.flashcards_decks_list_item, new String[] { LIST_ITEM_TEXT_ID },
+			R.layout.decks_list_item, new String[] { LIST_ITEM_TEXT_ID },
 			new int[] { R.id.text });
 
 		setListAdapter(decksAdapter);
@@ -88,7 +88,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			setEmptyListText(getString(R.string.loadingFlashcardsDecks));
+			setEmptyListText(getString(R.string.loadingDecks));
 
 			listData.clear();
 		}
@@ -109,7 +109,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(String result) {
 			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noFlashcardsDecks));
+				setEmptyListText(getString(R.string.noDecks));
 			}
 			else {
 				updateList();
@@ -179,7 +179,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.deletingFlashcardsDeck));
+			progressDialogHelper.show(activityContext, getString(R.string.deletingDeck));
 		}
 
 		@Override
@@ -202,7 +202,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		protected void onPostExecute(String result) {
 			updateList();
 			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noFlashcardsDecks));
+				setEmptyListText(getString(R.string.noDecks));
 			}
 
 			progressDialogHelper.hide();
@@ -237,7 +237,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.gettingFlashcardDeckName));
+			progressDialogHelper.show(activityContext, getString(R.string.gettingDeckName));
 		}
 
 		@Override
@@ -258,7 +258,7 @@ public class FlashcardsDecksListActivity extends SimpleAdapterListActivity
 
 			if (result.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext,
-					FlashcardsDeckEditingActivity.class, deckId);
+					DeckEditingActivity.class, deckId);
 			}
 			else {
 				UserAlerter.alert(activityContext, result);
