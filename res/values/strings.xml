@@ -22,5 +22,7 @@
 	<string name="edit">Edit</string>
 	<string name="editContents">Edit contents</string>
 	<string name="deletingFlashcardsDeck">Deleting flashcards deck…</string>
+	<string name="flashcardsDeckEditingTitle">Flashcards Deck Editing</string>
+	<string name="save">Save</string>
 
 </resources>
