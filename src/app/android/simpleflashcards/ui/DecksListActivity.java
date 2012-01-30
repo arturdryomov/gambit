@@ -72,8 +72,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void initializeList() {
 		SimpleAdapter decksAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.decks_list_item, new String[] { LIST_ITEM_TEXT_ID },
-			new int[] { R.id.text });
+			R.layout.decks_list_item, new String[] { LIST_ITEM_TEXT_ID }, new int[] { R.id.text });
 
 		setListAdapter(decksAdapter);
 
@@ -151,8 +150,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return true;
 
 			case R.id.editItemContents:
-				// TODO: Call edit contents
-
+				new EditDeckContentsTask(itemInfo.position).execute();
 				return true;
 
 			case R.id.delete:
@@ -257,12 +255,55 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			progressDialogHelper.hide();
 
 			if (result.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext,
-					DeckEditingActivity.class, deckId);
+				ActivityMessager.startActivityWithMessage(activityContext, DeckEditingActivity.class,
+					deckId);
 			}
 			else {
 				UserAlerter.alert(activityContext, result);
 			}
 		}
+	}
+
+	private class EditDeckContentsTask extends AsyncTask<Void, Void, String>
+	{
+		private ProgressDialogShowHelper progressDialogShowHelper;
+
+		private int deckId;
+		private int deckAdapterPosition;
+
+		public EditDeckContentsTask(int deckAdapterPosition) {
+			this.deckAdapterPosition = deckAdapterPosition;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			progressDialogShowHelper = new ProgressDialogShowHelper();
+			progressDialogShowHelper.show(activityContext, getString(R.string.gettingDeckName));
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+				deckId = getDeck(deckAdapterPosition).getId();
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			progressDialogShowHelper.hide();
+
+			if (result.isEmpty()) {
+				ActivityMessager.startActivityWithMessage(activityContext, CardsListActivity.class, deckId);
+			}
+			else {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
+
 	}
 }
