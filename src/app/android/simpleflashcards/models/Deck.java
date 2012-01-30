@@ -139,8 +139,55 @@ public class Deck
 		return values;
 	}
 
-	public void addNewCard(String frontSideText, String backSideText) {
+	public Card addNewCard(String frontSideText, String backSideText) {
 		database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
+		return readCardById(lastInsertedId());
+	}
+
+	private int lastInsertedId() {
+		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
+		if (!cursor.moveToFirst()) {
+			throw new ModelsException();
+		}
+		return cursor.getInt(0);
+	}
+
+	private String buildLastInsertedIdSelectionQuery() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("select ");
+		builder.append(String.format("max(%s) ", DbFieldNames.ID, DbFieldNames.ID));
+		builder.append(String.format("from %s ", DbTableNames.CARDS));
+
+		return builder.toString();
+	}
+
+	private Card readCardById(int id) {
+		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
+		if (!cursor.moveToFirst()) {
+			throw new ModelsException(
+				String.format("There's no decks with id = %d in database", id));
+		}
+
+		return new Card(database, contentValuesFromCursor(cursor));
+	}
+
+	private String buildCardByIdSelectionQuery(int id) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("select ");
+
+		builder.append(String.format("%s, ", DbFieldNames.ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
+		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
+
+		builder.append(String.format("from %s ", DbTableNames.CARDS));
+
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
+
+		return builder.toString();
 	}
 
 	private String buildCardInsertionQuery(String frontSideText, String backSideText) {

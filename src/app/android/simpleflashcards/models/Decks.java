@@ -55,7 +55,7 @@ public class Decks
 	}
 
 	private ContentValues contentValuesFromCursor(Cursor cursor) {
-		ContentValues values = new ContentValues(cursor.getCount());
+		ContentValues values = new ContentValues();
 
 		int id = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
 		values.put(DbFieldNames.ID, id);
@@ -66,11 +66,13 @@ public class Decks
 		return values;
 	}
 
-	public void addNewDeck(String title) {
+	public Deck addNewDeck(String title) {
 		if (containsDeckWithTitle(title)) {
 			throw new AlreadyExistsException();
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
+
+		return readDeckById(lastInsertedId());
 	}
 
 	private String buildDeckInsertionQuery(String deckTitle) {
@@ -79,6 +81,45 @@ public class Decks
 		builder.append(String.format("insert into %s ", DbTableNames.DECKS));
 		builder.append(String.format("(%s) ", DbFieldNames.DECK_TITLE));
 		builder.append(String.format("values ('%s') ", deckTitle));
+
+		return builder.toString();
+	}
+
+	private int lastInsertedId() {
+		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
+		if (!cursor.moveToFirst()) {
+			throw new ModelsException();
+		}
+		return cursor.getInt(0);
+	}
+
+	private String buildLastInsertedIdSelectionQuery() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("select ");
+		builder.append(String.format("max(%s) ", DbFieldNames.ID));
+		builder.append(String.format("from %s ", DbTableNames.DECKS));
+
+		return builder.toString();
+	}
+
+	private Deck readDeckById(int id) {
+		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
+		if (!cursor.moveToFirst()) {
+			throw new ModelsException(
+				String.format("There's no decks with id = %d in database", id));
+		}
+
+		return new Deck(database, this, contentValuesFromCursor(cursor));
+	}
+
+	private String buildDeckByIdSelectionQuery(int id) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("select ");
+		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
+		builder.append(String.format("from %s ", DbTableNames.DECKS));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
 
 		return builder.toString();
 	}
