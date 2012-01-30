@@ -143,18 +143,19 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		int itemPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
 			case R.id.editItem:
-				new EditDeckTask(itemInfo.position).execute();
+				new EditDeckTask(itemPosition).execute();
 				return true;
 
 			case R.id.editItemContents:
-				new EditDeckContentsTask(itemInfo.position).execute();
+				new EditDeckContentsTask(itemPosition).execute();
 				return true;
 
 			case R.id.delete:
-				new DeleteDeckTask(itemInfo.position).execute();
+				new DeleteDeckTask(itemPosition).execute();
 				return true;
 
 			default:
