@@ -22,7 +22,7 @@ import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
 
-public class CardsTrainingActivity extends Activity
+public class CardsViewingActivity extends Activity
 {
 	private final Context activityContext = this;
 
@@ -38,7 +38,7 @@ public class CardsTrainingActivity extends Activity
 
 	private int deckId;
 
-	public CardsTrainingActivity() {
+	public CardsViewingActivity() {
 		super();
 
 		cardsData = new ArrayList<HashMap<String, Object>>();

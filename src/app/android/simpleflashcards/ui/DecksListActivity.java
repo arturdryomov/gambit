@@ -342,7 +342,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 
 			if (result.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext, CardsTrainingActivity.class,
+				ActivityMessager.startActivityWithMessage(activityContext, CardsViewingActivity.class,
 					deckId);
 			}
 			else {
