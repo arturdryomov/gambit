@@ -11,9 +11,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Deck
 {
+	public static final int INVALID_CURRENT_CARD_INDEX = -1;
+
 	private SQLiteDatabase database;
 	private int id;
 	private String title;
+	private int currentCardIndex;
 	private Decks parent;
 
 	// Do not use the constructor. It should be used by Decks class only
@@ -35,6 +38,13 @@ public class Deck
 			throw new ModelsException();
 		}
 		title = titleAsString;
+
+		Integer currentCardIndexAsInteger = values
+			.getAsInteger(DbFieldNames.DECK_CURRENT_CARD_INDEX);
+		if (currentCardIndexAsInteger == null) {
+			throw new ModelsException();
+		}
+		currentCardIndex = currentCardIndexAsInteger;
 	}
 
 	public String getTitle() {
@@ -72,6 +82,29 @@ public class Deck
 		Cursor cursor = database.rawQuery(buildCardsCountSelectionQuery(), null);
 		cursor.moveToFirst();
 		return cursor.getInt(0);
+	}
+
+	public int getCurrentCardIndex() {
+		return currentCardIndex;
+	}
+
+	public void setCurrentCardIndex(int index) {
+		if (index == currentCardIndex) {
+			return;
+		}
+
+		database.execSQL(buildCurrentCardIndexUpdatingQuery(index));
+		currentCardIndex = index;
+	}
+
+	private String buildCurrentCardIndexUpdatingQuery(int index) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(String.format("update %s set ", DbTableNames.DECKS));
+		builder.append(String.format("%s = %d ", DbFieldNames.DECK_CURRENT_CARD_INDEX, index));
+		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
+
+		return builder.toString();
 	}
 
 	private String buildCardsCountSelectionQuery() {
@@ -145,8 +178,18 @@ public class Deck
 	}
 
 	public Card addNewCard(String frontSideText, String backSideText) {
-		database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
-		return getCardById(lastInsertedId());
+		database.beginTransaction();
+		try {
+			database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
+			setCurrentCardIndex(0);
+
+			database.setTransactionSuccessful();
+
+			return getCardById(lastInsertedId());
+		}
+		finally {
+			database.endTransaction();
+		}
 	}
 
 	private String buildCardInsertionQuery(String frontSideText, String backSideText) {
@@ -221,7 +264,22 @@ public class Deck
 	}
 
 	public void deleteCard(Card card) {
-		database.execSQL(buildCardDeletingQuery(card));
+		database.beginTransaction();
+
+		try {
+			database.execSQL(buildCardDeletingQuery(card));
+			if (getCardsCount() == 0) {
+				setCurrentCardIndex(INVALID_CURRENT_CARD_INDEX);
+			}
+			else {
+				setCurrentCardIndex(0);
+			}
+
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
 	}
 
 	private String buildCardDeletingQuery(Card card) {

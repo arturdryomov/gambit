@@ -26,10 +26,12 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 
 		builder.append(String.format("Create table %s ", DbTableNames.DECKS));
 
-		builder.append("(");
-		builder.append(String.format(" %s %s, ", DbFieldNames.ID, DbFieldParams.ID));
-		builder.append(String.format(" %s %s ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
-		builder.append(")");
+		builder.append("( ");
+		builder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
+		builder.append(String.format("%s %s, ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
+		builder.append(String.format("%s %s ", DbFieldNames.DECK_CURRENT_CARD_INDEX,
+			DbFieldParams.DECK_NEXT_CARD_INDEX));
+		builder.append(") ");
 
 		return builder.toString();
 	}

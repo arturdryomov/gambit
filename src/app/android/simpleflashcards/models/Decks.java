@@ -46,7 +46,11 @@ public class Decks
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
-		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
+
+		builder.append(String.format("%s, ", DbFieldNames.ID));
+		builder.append(String.format("%s, ", DbFieldNames.DECK_TITLE));
+		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
+
 		builder.append(String.format("from %s ", DbTableNames.DECKS));
 		builder.append(String.format("order by %s", DbFieldNames.DECK_TITLE));
 
@@ -61,6 +65,10 @@ public class Decks
 
 		String title = cursor.getString(cursor.getColumnIndexOrThrow(DbFieldNames.DECK_TITLE));
 		values.put(DbFieldNames.DECK_TITLE, title);
+
+		int currentCardIndex = cursor.getInt(cursor
+			.getColumnIndexOrThrow(DbFieldNames.DECK_CURRENT_CARD_INDEX));
+		values.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, currentCardIndex);
 
 		return values;
 	}
@@ -78,8 +86,10 @@ public class Decks
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("insert into %s ", DbTableNames.DECKS));
-		builder.append(String.format("(%s) ", DbFieldNames.DECK_TITLE));
-		builder.append(String.format("values ('%s') ", deckTitle));
+		builder.append(String.format("(%s, %s) ", DbFieldNames.DECK_TITLE,
+			DbFieldNames.DECK_CURRENT_CARD_INDEX));
+		builder.append(String.format("values ('%s', %d) ", deckTitle,
+			Deck.INVALID_CURRENT_CARD_INDEX));
 
 		return builder.toString();
 	}
@@ -116,7 +126,11 @@ public class Decks
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
-		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
+
+		builder.append(String.format("%s, ", DbFieldNames.ID));
+		builder.append(String.format("%s, ", DbFieldNames.DECK_TITLE));
+		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
+
 		builder.append(String.format("from %s ", DbTableNames.DECKS));
 		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
 
@@ -143,7 +157,11 @@ public class Decks
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
-		builder.append(String.format("%s, %s ", DbFieldNames.ID, DbFieldNames.DECK_TITLE));
+
+		builder.append(String.format("%s, ", DbFieldNames.ID));
+		builder.append(String.format("%s, ", DbFieldNames.DECK_TITLE));
+		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
+
 		builder.append(String.format("from %s ", DbTableNames.DECKS));
 		builder.append(String.format("where %s = (%s)", DbFieldNames.ID,
 			innerSelectBuilder.toString()));
