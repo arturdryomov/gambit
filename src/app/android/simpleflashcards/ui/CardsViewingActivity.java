@@ -26,8 +26,8 @@ public class CardsViewingActivity extends Activity
 {
 	private final Context activityContext = this;
 
-	private ArrayList<HashMap<String, Object>> cardsData;
-	
+	private final List<HashMap<String, Object>> cardsData;
+
 	private static enum CardSide {
 		FRONT, BACK
 	}
@@ -43,48 +43,48 @@ public class CardsViewingActivity extends Activity
 
 		cardsData = new ArrayList<HashMap<String, Object>>();
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cards_training);
-		
+
 		processActivityMessage();
-		
-		new LoadCards().execute();
+
+		new LoadCardsTask().execute();
 	}
-	
+
 	private void processActivityMessage() {
 		deckId = ActivityMessager.getMessageFromActivity(this);
 	}
-	
-	private class LoadCards extends AsyncTask<Void, Void, String>
+
+	private class LoadCardsTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
-		
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.loadingCards));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
 				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
-				addCardsToList(deck.getCardsList());
+				fillList(deck.getCardsList());
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
-			
+
 			if (result.isEmpty()) {
 				initializeCardsAdapter();
 			}
@@ -94,25 +94,29 @@ public class CardsViewingActivity extends Activity
 		}
 	}
 
-	private void addCardsToList(List<Card> cards) {
+	private void fillList(List<Card> cards) {
+		cardsData.clear();
+
 		for (Card card : cards) {
 			addCardToList(card);
 		}
 	}
-	
+
 	private void addCardToList(Card card) {
 		HashMap<String, Object> cardItem = new HashMap<String, Object>();
-		
+
 		cardItem.put(CARDS_DATA_FRONT_SIDE_TEXT_ID, card.getFrontSideText());
 		cardItem.put(CARDS_DATA_BACK_SIDE_TEXT_ID, card.getBackSideText());
 		cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, CardSide.FRONT);
-		
+
 		cardsData.add(cardItem);
 	}
 
 	private void initializeCardsAdapter() {
 		CardsAdapter cardsAdapter = new CardsAdapter();
+
 		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+
 		cardsPager.setAdapter(cardsAdapter);
 	}
 
@@ -126,8 +130,8 @@ public class CardsViewingActivity extends Activity
 		@Override
 		public Object instantiateItem(View container, final int position) {
 			TextView textView = new TextView(activityContext);
-			
-			textView.setText(getCardCurrentText(position));
+
+			textView.setText(getCardText(position));
 			textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 			textView.setTextSize(30);
 
@@ -135,10 +139,10 @@ public class CardsViewingActivity extends Activity
 				@Override
 				public void onClick(View v) {
 					TextView textView = (TextView) v;
-					
+
 					invertCardSide(position);
 
-					textView.setText(getCardCurrentText(position));
+					textView.setText(getCardText(position));
 				}
 			});
 
@@ -159,44 +163,45 @@ public class CardsViewingActivity extends Activity
 			return view == (TextView) object;
 		}
 	}
-	
-	private String getCardCurrentText(int position) {
+
+	private String getCardText(int position) {
 		HashMap<String, Object> cardItem = cardsData.get(position);
-		
+
 		CardSide cardSide = (CardSide) cardItem.get(CARDS_DATA_CURRENT_SIDE_ID);
-		
+
 		switch (cardSide) {
 			case FRONT:
 				return (String) cardItem.get(CARDS_DATA_FRONT_SIDE_TEXT_ID);
+
 			case BACK:
 				return (String) cardItem.get(CARDS_DATA_BACK_SIDE_TEXT_ID);
+
 			default:
 				return new String();
 		}
 	}
-	
+
 	private void invertCardSide(int position) {
 		HashMap<String, Object> cardItem = cardsData.get(position);
-		
+
 		CardSide cardSide = (CardSide) cardItem.get(CARDS_DATA_CURRENT_SIDE_ID);
-		CardSide invertCardSide;
-		
+		CardSide invertedCardSide;
+
 		switch (cardSide) {
 			case FRONT:
-				invertCardSide = CardSide.BACK;
-
+				invertedCardSide = CardSide.BACK;
 				break;
+
 			case BACK:
-				invertCardSide = CardSide.FRONT;
-
+				invertedCardSide = CardSide.FRONT;
 				break;
-			default:
-				invertCardSide = CardSide.FRONT;
 
+			default:
+				invertedCardSide = CardSide.FRONT;
 				break;
 		}
-		
-		setCardSide(invertCardSide, position);
+
+		setCardSide(invertedCardSide, position);
 	}
 
 	private void setDefaultCardSide(int position) {
@@ -205,7 +210,7 @@ public class CardsViewingActivity extends Activity
 
 	private void setCardSide(CardSide cardSide, int position) {
 		HashMap<String, Object> cardItem = cardsData.get(position);
-		
+
 		cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, cardSide);
 	}
 }

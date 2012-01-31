@@ -97,15 +97,13 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPreExecute() {
 			setEmptyListText(getString(R.string.loadingCards));
-
-			listData.clear();
 		}
 
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
 				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
-				addItemsToList(deck.getCardsList());
+				fillList(deck.getCardsList());
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -155,21 +153,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		menuInflater.inflate(R.menu.cards_context_menu, menu);
 	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		int itemPosition = itemInfo.position;
-
-		switch (item.getItemId()) {
-			case R.id.delete:
-				new DeleteCardTask(itemPosition).execute();
-				return true;
-
-			default:
-				return super.onContextItemSelected(item);
-		}
-	}
-
 	private class EditCardTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
@@ -217,6 +200,21 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 	}
 
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		int itemPosition = itemInfo.position;
+
+		switch (item.getItemId()) {
+			case R.id.delete:
+				new DeleteCardTask(itemPosition).execute();
+				return true;
+
+			default:
+				return super.onContextItemSelected(item);
+		}
+	}
+
 	private class DeleteCardTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
@@ -257,9 +255,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noCards));
 			}
-			else {
-				updateList();
-			}
+
+			updateList();
 
 			progressDialogHelper.hide();
 

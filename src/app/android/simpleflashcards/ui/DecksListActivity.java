@@ -86,15 +86,13 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPreExecute() {
 			setEmptyListText(getString(R.string.loadingDecks));
-
-			listData.clear();
 		}
 
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
 				Decks decks = SimpleFlashcardsApplication.getInstance().getDecks();
-				addItemsToList(decks.getDecksList());
+				fillList(decks.getDecksList());
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -245,9 +243,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noDecks));
 			}
-			else {
-				updateList();
-			}
+
+			updateList();
 
 			progressDialogHelper.hide();
 
@@ -282,7 +279,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 					return EMPTY_DECK_MESSAGE;
 				}
 				else {
-					deckId = getDeck(deckAdapterPosition).getId();
+					deckId = deck.getId();
 				}
 			}
 			catch (ModelsException e) {
