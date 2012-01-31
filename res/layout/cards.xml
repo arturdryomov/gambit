@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="@string/cards" />
+			android:text="@string/cardsEditing" />
 
 		<LinearLayout
 			android:id="@+id/actions"

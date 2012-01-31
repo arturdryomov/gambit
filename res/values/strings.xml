@@ -4,12 +4,13 @@
 	<string name="applicationName">Simple Flashcards</string>
 	<string name="decks">Decks</string>
 	<string name="cards">Flashcards</string>
-	<string name="noDecks">You have no decks.</string>
+	<string name="cardsEditing">Flashcards Editing</string>
+	<string name="noDecks">There are no decks.</string>
 	<string name="enterDeckName">Enter deck name.</string>
 	<string name="deckCreation">Deck Creation</string>
 	<string name="deckName">Deck name</string>
 	<string name="create">Create</string>
-	<string name="noCards">You have no flashcards in this deck.</string>
+	<string name="noCards">There are no flashcards in this deck.</string>
 	<string name="enterFrontText">Enter text for the front side of flashcard.</string>
 	<string name="enterBackText">Enter text for the back side of flashcard.</string>
 	<string name="cardCreation">Flashcard Creation</string>
