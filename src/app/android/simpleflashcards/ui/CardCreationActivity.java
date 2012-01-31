@@ -43,7 +43,7 @@ public class CardCreationActivity extends Activity
 		confirmButton.setOnClickListener(confirmListener);
 	}
 
-	private OnClickListener confirmListener = new OnClickListener() {
+	private final OnClickListener confirmListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			readUserDataFromFields();

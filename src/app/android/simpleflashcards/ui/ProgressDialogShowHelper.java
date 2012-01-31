@@ -7,13 +7,15 @@ import android.content.Context;
 
 public class ProgressDialogShowHelper
 {
-	private ProgressDialog progressDialog;
+	private ProgressDialog progressDialog = null;
 
 	public void show(Context context, String text) {
 		progressDialog = ProgressDialog.show(context, new String(), text);
 	}
 
 	public void hide() {
-		progressDialog.dismiss();
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 	}
 }
