@@ -64,14 +64,14 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		newItemCreationButton.setOnClickListener(flashcardCreationListener);
 	}
 
-	private OnClickListener updateListener = new OnClickListener() {
+	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			// TODO: Call update task
 		}
 	};
 
-	private OnClickListener flashcardCreationListener = new OnClickListener() {
+	private final OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			ActivityMessager
@@ -143,6 +143,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		new EditCardTask(position).execute();
+	}
+
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 
@@ -156,10 +161,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		int itemPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.edit:
-				new EditCardTask(itemPosition).execute();
-				return true;
-
 			case R.id.delete:
 				new DeleteCardTask(itemPosition).execute();
 				return true;
@@ -168,14 +169,14 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				return super.onContextItemSelected(item);
 		}
 	}
-	
+
 	private class EditCardTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
-		
+
 		private int cardId;
-		private int cardAdapterPosition;
-		
+		private final int cardAdapterPosition;
+
 		public EditCardTask(int cardAdapterPosition) {
 			super();
 
@@ -205,7 +206,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
-			
+
 			if (result.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, CardEditingActivity.class,
 					cardId);
@@ -215,13 +216,13 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			}
 		}
 	}
-	
+
 	private class DeleteCardTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 
-		private int cardAdapterPosition;
-		
+		private final int cardAdapterPosition;
+
 		public DeleteCardTask(int cardAdapterPosition) {
 			super();
 
@@ -245,7 +246,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			listData.remove(cardAdapterPosition);
 
 			return new String();
@@ -261,7 +262,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			}
 
 			progressDialogHelper.hide();
-			
+
 			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
 			}
