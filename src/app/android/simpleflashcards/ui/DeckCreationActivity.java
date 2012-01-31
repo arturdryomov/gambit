@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.SimpleFlashcardsApplication;
+import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
 
@@ -64,14 +65,14 @@ public class DeckCreationActivity extends Activity
 			return getString(R.string.enterDeckName);
 		}
 
-		// TODO: Call task to check existing decks on server
-
 		return new String();
 	}
 
 	private class FlashcardsDeckCreationTask extends AsyncTask<Void, Void, String>
 	{
-		ProgressDialogShowHelper progressDialogHelper;
+		private ProgressDialogShowHelper progressDialogHelper;
+
+		private int deckId;
 
 		@Override
 		protected void onPreExecute() {
@@ -82,7 +83,8 @@ public class DeckCreationActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				SimpleFlashcardsApplication.getInstance().getDecks().addNewDeck(deckName);
+				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().addNewDeck(deckName);
+				deckId = deck.getId();
 			}
 			catch (ModelsException e) {
 				return e.getMessage();
@@ -95,13 +97,12 @@ public class DeckCreationActivity extends Activity
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
 
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+			if (result.isEmpty()) {
+				ActivityMessager.startActivityWithMessage(activityContext, CardsListActivity.class, deckId);
+				finish();
 			}
 			else {
-				// TODO: Put deck as parameter
-				ActivityStarter.start(activityContext, CardsListActivity.class);
-				finish();
+				UserAlerter.alert(activityContext, result);
 			}
 		}
 	}

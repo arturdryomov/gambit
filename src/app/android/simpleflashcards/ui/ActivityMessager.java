@@ -9,6 +9,7 @@ import android.content.Intent;
 public class ActivityMessager
 {
 	private static final String MESSAGE_ID = "message";
+	private static final int DEFAULT_MESSAGE_VALUE = 0;
 
 	public static void startActivityWithMessage(Context context, Class<?> activityClass, int message) {
 		Intent callIntent = new Intent(context, activityClass);
@@ -19,13 +20,8 @@ public class ActivityMessager
 	}
 
 	public static int getMessageFromActivity(Activity receiverActivity) {
-		int message = 0;
-
 		Intent receivedIntent = receiverActivity.getIntent();
-		if (receivedIntent.hasExtra(MESSAGE_ID)) {
-			message = receivedIntent.getIntExtra(MESSAGE_ID, 0);
-		}
 
-		return message;
+		return receivedIntent.getIntExtra(MESSAGE_ID, DEFAULT_MESSAGE_VALUE);
 	}
 }

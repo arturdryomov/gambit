@@ -20,9 +20,9 @@ public class DeckEditingActivity extends Activity
 {
 	private final Context activityContext = this;
 
-	private Deck deck;
-	private int deckId;
 	private String deckName;
+
+	private int deckId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +76,12 @@ public class DeckEditingActivity extends Activity
 			return getString(R.string.enterDeckName);
 		}
 
-		// TODO: Call task to check existing decks on server
-
 		return new String();
 	}
 
 	private class SetupReceivedDeckTask extends AsyncTask<Void, Void, String>
 	{
-		ProgressDialogShowHelper progressDialogHelper;
+		private ProgressDialogShowHelper progressDialogHelper;
 
 		@Override
 		protected void onPreExecute() {
@@ -94,7 +92,7 @@ public class DeckEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
 				deckName = deck.getTitle();
 			}
 			catch (ModelsException e) {
@@ -106,13 +104,14 @@ public class DeckEditingActivity extends Activity
 
 		@Override
 		protected void onPostExecute(String result) {
-			updateDeckName();
-
-			progressDialogHelper.hide();
-
-			if (!result.isEmpty()) {
+			if (result.isEmpty()) {
+				updateDeckName();
+			}
+			else {
 				UserAlerter.alert(activityContext, result);
 			}
+
+			progressDialogHelper.hide();
 		}
 	}
 
@@ -123,7 +122,7 @@ public class DeckEditingActivity extends Activity
 
 	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
 	{
-		ProgressDialogShowHelper progressDialogHelper;
+		private ProgressDialogShowHelper progressDialogHelper;
 
 		@Override
 		protected void onPreExecute() {
@@ -134,6 +133,7 @@ public class DeckEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
+				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
 				deck.setTitle(deckName);
 			}
 			catch (AlreadyExistsException e) {
@@ -150,11 +150,11 @@ public class DeckEditingActivity extends Activity
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
 
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+			if (result.isEmpty()) {
+				finish();
 			}
 			else {
-				finish();
+				UserAlerter.alert(activityContext, result);
 			}
 		}
 	}

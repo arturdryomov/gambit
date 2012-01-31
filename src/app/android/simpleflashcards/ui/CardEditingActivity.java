@@ -33,8 +33,8 @@ public class CardEditingActivity extends Activity
 		processActivityMessage();
 
 		initializeBodyControls();
-		
-		new SetupReceivedCardTask().execute();
+
+		new SetupExistingCardDataTask().execute();
 	}
 
 	private void processActivityMessage() {
@@ -102,48 +102,49 @@ public class CardEditingActivity extends Activity
 		return new String();
 	}
 
-	private class SetupReceivedCardTask extends AsyncTask<Void, Void, String>
+	private class SetupExistingCardDataTask extends AsyncTask<Void, Void, String>
 	{
-		ProgressDialogShowHelper progressDialogHelper;
-		
+		private ProgressDialogShowHelper progressDialogHelper;
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.gettingDeckName));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
 				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckByCardId(cardId);
 				Card card = deck.getCardById(cardId);
-				
+
 				frontSideText = card.getFrontSideText();
 				backSideText = card.getBackSideText();
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
-			updateCardInfo();
-			
-			progressDialogHelper.hide();
-			
-			if (!result.isEmpty()) {
+			if (result.isEmpty()) {
+				updateCardInfo();
+			}
+			else {
 				UserAlerter.alert(activityContext, result);
 			}
+
+			progressDialogHelper.hide();
 		}
 	}
-	
+
 	private void updateCardInfo() {
 		EditText frontSideTextEdit = (EditText) findViewById(R.id.frondSideEdit);
 		EditText backSideTextEdit = (EditText) findViewById(R.id.backSideEdit);
-		
+
 		frontSideTextEdit.setText(frontSideText);
 		backSideTextEdit.setText(backSideText);
 	}

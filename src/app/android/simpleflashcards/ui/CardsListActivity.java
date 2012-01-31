@@ -219,44 +219,44 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 
 	}
-	
+
 	private class EditCardTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
-		
+
 		private int cardId;
 		private int cardAdapterPosition;
-		
+
 		public EditCardTask(int cardAdapterPosition) {
 			super();
-			
+
 			this.cardAdapterPosition = cardAdapterPosition;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.gettingCardInfo));
 		}
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			Card card = getCard(cardAdapterPosition);
-			
+
 			try {
 				cardId = card.getId();
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-			
+
 			return new String();
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
-			
+
 			if (result.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, CardEditingActivity.class,
 					cardId);
@@ -267,7 +267,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	// TODO: Move to super class
 	private Card getCard(int adapterPosition) {
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
 

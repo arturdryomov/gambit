@@ -210,15 +210,6 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private Deck getDeck(int adapterPosition) {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
-
-		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
-	}
-
 	private class EditDeckTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
@@ -303,6 +294,14 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				UserAlerter.alert(activityContext, result);
 			}
 		}
+	}
 
+	private Deck getDeck(int adapterPosition) {
+		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
+
+		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 }
