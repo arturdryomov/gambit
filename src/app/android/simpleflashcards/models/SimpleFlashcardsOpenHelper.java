@@ -17,8 +17,17 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(buildDecksTableCreationQuery());
-		db.execSQL(buildCardsTableCreationQuery());
+		db.beginTransaction();
+
+		try {
+			db.execSQL(buildDecksTableCreationQuery());
+			db.execSQL(buildCardsTableCreationQuery());
+
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
 	}
 
 	private String buildDecksTableCreationQuery() {
