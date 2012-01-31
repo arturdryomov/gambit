@@ -37,7 +37,7 @@ public class DeckCreationActivity extends Activity
 	private OnClickListener confirmListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			readUserData();
+			readUserDataFromFields();
 
 			String userDataErrorMessage = getUserDataErrorMessage();
 
@@ -50,7 +50,7 @@ public class DeckCreationActivity extends Activity
 		}
 	};
 
-	private void readUserData() {
+	private void readUserDataFromFields() {
 		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
 
 		deckName = deckNameEdit.getText().toString().trim();

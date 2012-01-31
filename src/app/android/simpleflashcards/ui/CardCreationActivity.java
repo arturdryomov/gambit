@@ -46,7 +46,7 @@ public class CardCreationActivity extends Activity
 	private OnClickListener confirmListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			readUserData();
+			readUserDataFromFields();
 
 			String userDataErrorMessage = getUserDataErrorMessage();
 
@@ -59,7 +59,7 @@ public class CardCreationActivity extends Activity
 		}
 	};
 
-	private void readUserData() {
+	private void readUserDataFromFields() {
 		EditText frontSideEdit = (EditText) findViewById(R.id.frondSideEdit);
 		EditText backSideEdit = (EditText) findViewById(R.id.backSideEdit);
 

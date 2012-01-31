@@ -28,8 +28,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 {
 	private final Context activityContext = this;
 
-	private static final String LIST_ITEM_FRONT_TEXT = "front_text";
-	private static final String LIST_ITEM_BACK_TEXT = "back_text";
+	private static final String LIST_ITEM_FRONT_TEXT_ID = "front_text";
+	private static final String LIST_ITEM_BACK_TEXT_ID = "back_text";
 	private static final String LIST_ITEM_OBJECT_ID = "object";
 
 	private int deckId;
@@ -82,7 +82,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void initializeList() {
 		SimpleAdapter flashcardsAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.cards_list_item, new String[] { LIST_ITEM_FRONT_TEXT, LIST_ITEM_BACK_TEXT },
+			R.layout.cards_list_item, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
 			new int[] { R.id.title, R.id.description });
 
 		setListAdapter(flashcardsAdapter);
@@ -135,8 +135,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		HashMap<String, Object> cardItem = new HashMap<String, Object>();
 
-		cardItem.put(LIST_ITEM_FRONT_TEXT, card.getFrontSideText());
-		cardItem.put(LIST_ITEM_BACK_TEXT, card.getBackSideText());
+		cardItem.put(LIST_ITEM_FRONT_TEXT_ID, card.getFrontSideText());
+		cardItem.put(LIST_ITEM_BACK_TEXT_ID, card.getBackSideText());
 		cardItem.put(LIST_ITEM_OBJECT_ID, card);
 
 		listData.add(cardItem);
@@ -156,7 +156,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		int itemPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.editItem:
+			case R.id.edit:
 				new EditCardTask(itemPosition).execute();
 				return true;
 
@@ -168,65 +168,14 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				return super.onContextItemSelected(item);
 		}
 	}
-
-	private class DeleteCardTask extends AsyncTask<Void, Void, String>
-	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		private int cardAdapterPosition;
-
-		public DeleteCardTask(int cardAdapterPosition) {
-			super();
-
-			this.cardAdapterPosition = cardAdapterPosition;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.deletingCard));
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			Card card = getCard(cardAdapterPosition);
-
-			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
-				deck.deleteCard(card);
-			}
-			catch (ModelsException e) {
-				return getString(R.string.someError);
-			}
-
-			listData.remove(cardAdapterPosition);
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			updateList();
-			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noCards));
-			}
-
-			progressDialogHelper.hide();
-
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
-			}
-		}
-
-	}
-
+	
 	private class EditCardTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
-
+		
 		private int cardId;
 		private int cardAdapterPosition;
-
+		
 		public EditCardTask(int cardAdapterPosition) {
 			super();
 
@@ -256,12 +205,64 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(String result) {
 			progressDialogHelper.hide();
-
+			
 			if (result.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, CardEditingActivity.class,
 					cardId);
 			}
 			else {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
+	}
+	
+	private class DeleteCardTask extends AsyncTask<Void, Void, String>
+	{
+		private ProgressDialogShowHelper progressDialogHelper;
+
+		private int cardAdapterPosition;
+		
+		public DeleteCardTask(int cardAdapterPosition) {
+			super();
+
+			this.cardAdapterPosition = cardAdapterPosition;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			progressDialogHelper = new ProgressDialogShowHelper();
+			progressDialogHelper.show(activityContext, getString(R.string.deletingCard));
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			Card card = getCard(cardAdapterPosition);
+
+			try {
+				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				deck.deleteCard(card);
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+			
+			listData.remove(cardAdapterPosition);
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.noCards));
+			}
+			else {
+				updateList();
+			}
+
+			progressDialogHelper.hide();
+			
+			if (!result.isEmpty()) {
 				UserAlerter.alert(activityContext, result);
 			}
 		}

@@ -49,7 +49,7 @@ public class CardEditingActivity extends Activity
 	private OnClickListener confirmListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			readUserData();
+			readUserDataFromFields();
 
 			String userDataErrorMessage = getUserDataErrorMessage();
 
@@ -62,7 +62,7 @@ public class CardEditingActivity extends Activity
 		}
 	};
 
-	private void readUserData() {
+	private void readUserDataFromFields() {
 		EditText frontSideEdit = (EditText) findViewById(R.id.frondSideEdit);
 		EditText backSideEdit = (EditText) findViewById(R.id.backSideEdit);
 
@@ -131,7 +131,7 @@ public class CardEditingActivity extends Activity
 		@Override
 		protected void onPostExecute(String result) {
 			if (result.isEmpty()) {
-				updateCardInfo();
+				updateCardDataInFields();
 			}
 			else {
 				UserAlerter.alert(activityContext, result);
@@ -141,7 +141,7 @@ public class CardEditingActivity extends Activity
 		}
 	}
 
-	private void updateCardInfo() {
+	private void updateCardDataInFields() {
 		EditText frontSideTextEdit = (EditText) findViewById(R.id.frondSideEdit);
 		EditText backSideTextEdit = (EditText) findViewById(R.id.backSideEdit);
 

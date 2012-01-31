@@ -33,7 +33,7 @@ public class DeckEditingActivity extends Activity
 
 		initializeBodyControls();
 
-		new SetupReceivedDeckTask().execute();
+		new SetupExistingDeckDataTask().execute();
 	}
 
 	private void processActivityMessage() {
@@ -48,7 +48,7 @@ public class DeckEditingActivity extends Activity
 	private OnClickListener confirmListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			readUserData();
+			readUserDataFromFields();
 
 			String userDataErrorMessage = getUserDataErrorMessage();
 
@@ -61,7 +61,7 @@ public class DeckEditingActivity extends Activity
 		}
 	};
 
-	private void readUserData() {
+	private void readUserDataFromFields() {
 		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
 
 		deckName = deckNameEdit.getText().toString().trim();
@@ -79,7 +79,7 @@ public class DeckEditingActivity extends Activity
 		return new String();
 	}
 
-	private class SetupReceivedDeckTask extends AsyncTask<Void, Void, String>
+	private class SetupExistingDeckDataTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 
@@ -105,7 +105,7 @@ public class DeckEditingActivity extends Activity
 		@Override
 		protected void onPostExecute(String result) {
 			if (result.isEmpty()) {
-				updateDeckName();
+				updateDeckDataInFields();
 			}
 			else {
 				UserAlerter.alert(activityContext, result);
@@ -115,7 +115,7 @@ public class DeckEditingActivity extends Activity
 		}
 	}
 
-	private void updateDeckName() {
+	private void updateDeckDataInFields() {
 		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
 		deckNameEdit.setText(deckName);
 	}
