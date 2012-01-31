@@ -152,7 +152,19 @@ public class Decks
 	}
 
 	public void deleteDeck(Deck deck) {
+		// First delete all cards of the deck
+		database.execSQL(buildDeckCardsDeleteingQuery(deck));
+		// Then delete a deck itself
 		database.execSQL(buildDeckDeletingQuery(deck));
+	}
+
+	private String buildDeckCardsDeleteingQuery(Deck deck) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(String.format("delete from %s ", DbTableNames.CARDS));
+		builder.append(String.format("where %s = %d", DbFieldNames.CARD_DECK_ID, deck.getId()));
+
+		return builder.toString();
 	}
 
 	private String buildDeckDeletingQuery(Deck deck) {
