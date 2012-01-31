@@ -152,10 +152,16 @@ public class Decks
 	}
 
 	public void deleteDeck(Deck deck) {
-		// First delete all cards of the deck
-		database.execSQL(buildDeckCardsDeleteingQuery(deck));
-		// Then delete a deck itself
-		database.execSQL(buildDeckDeletingQuery(deck));
+		database.beginTransaction();
+		try {
+			database.execSQL(buildDeckCardsDeleteingQuery(deck));
+			database.execSQL(buildDeckDeletingQuery(deck));
+
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
 	}
 
 	private String buildDeckCardsDeleteingQuery(Deck deck) {

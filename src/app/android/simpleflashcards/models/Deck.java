@@ -234,6 +234,17 @@ public class Deck
 	}
 
 	public void shuffleCards() {
+		database.beginTransaction();
+		try {
+			tryShuffleCards();
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void tryShuffleCards() {
 		Cursor cursor = database.rawQuery(buildCardsAlphabeticalSelectionQuery(), null);
 		if (cursor.getCount() == 0) {
 			return;
@@ -249,6 +260,17 @@ public class Deck
 	}
 
 	public void resetCardsOrder() {
+		database.beginTransaction();
+		try {
+			tryResetCardsOrder();
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void tryResetCardsOrder() {
 		Cursor cursor = database.rawQuery(buildCardsAlphabeticalSelectionQuery(), null);
 		if (cursor.getCount() == 0) {
 			return;
