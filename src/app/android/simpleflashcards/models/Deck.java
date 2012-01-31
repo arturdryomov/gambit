@@ -75,7 +75,12 @@ public class Deck
 	}
 
 	private String buildCardsCountSelectionQuery() {
-		return String.format("select count(*) from %s", DbTableNames.CARDS);
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(String.format("select count(*) from %s ", DbTableNames.CARDS));
+		builder.append(String.format("where %s = %d ", DbFieldNames.CARD_DECK_ID, id));
+
+		return builder.toString();
 	}
 
 	public List<Card> getCardsList() {
