@@ -297,6 +297,59 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 		}
 	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		new ViewDeckTask(position).execute();
+	}
+
+	private class ViewDeckTask extends AsyncTask<Void, Void, String>
+	{
+		private static final String EMPTY_DECK_MESSAGE = "empty_deck";
+
+		private int deckId;
+		private int deckAdapterPosition;
+		
+		public ViewDeckTask(int deckAdapterPosition) {
+			this.deckAdapterPosition = deckAdapterPosition;
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+				Deck deck = getDeck(deckAdapterPosition);
+				
+				if (deck.getCardsCount() == 0) {
+					return EMPTY_DECK_MESSAGE;
+				}
+				else {
+					deckId = getDeck(deckAdapterPosition).getId();
+				}
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.equals(EMPTY_DECK_MESSAGE)) {
+				UserAlerter.alert(activityContext, getString(R.string.noCards));
+				
+				return;
+			}
+
+			if (result.isEmpty()) {
+				ActivityMessager.startActivityWithMessage(activityContext, CardsTrainingActivity.class,
+					deckId);
+			}
+			else {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
+	}
 
 	private Deck getDeck(int adapterPosition) {
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
