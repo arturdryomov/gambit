@@ -78,6 +78,10 @@ public class Deck
 		return id;
 	}
 
+	public boolean isEmpty() {
+		return getCardsCount() == 0;
+	}
+
 	public int getCardsCount() {
 		Cursor cursor = database.rawQuery(buildCardsCountSelectionQuery(), null);
 		cursor.moveToFirst();
