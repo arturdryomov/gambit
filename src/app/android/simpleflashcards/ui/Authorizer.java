@@ -61,7 +61,14 @@ public class Authorizer
 
 	private void authorize() {
 		if (haveAccountNameInPreferences()) {
-			authorizeForAccount(loadAccountNameFromPreferences());
+			String accountName = loadAccountNameFromPreferences();
+
+			if (haveAccountRegistered(accountName)) {
+				authorizeForAccount(loadAccountNameFromPreferences());
+			}
+			else {
+				selectAccount();
+			}
 		}
 		else {
 			selectAccount();
@@ -75,6 +82,10 @@ public class Authorizer
 
 	private String loadAccountNameFromPreferences() {
 		return getPreference(PREFERENCE_GOOGLE_ACCOUNT_NAME);
+	}
+
+	private boolean haveAccountRegistered(String accountName) {
+		return getAccountsNames().contains(accountName);
 	}
 
 	private void selectAccount() {
