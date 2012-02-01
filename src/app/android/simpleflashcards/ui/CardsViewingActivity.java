@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -30,6 +33,10 @@ public class CardsViewingActivity extends Activity
 
 	private static enum CardSide {
 		FRONT, BACK
+	}
+
+	private static enum CardsOrder {
+		DEFAULT, STRAIGHT, SHUFFLE
 	}
 
 	private static final String CARDS_DATA_BACK_SIDE_TEXT_ID = "back_side";
@@ -51,7 +58,7 @@ public class CardsViewingActivity extends Activity
 
 		processActivityMessage();
 
-		new LoadCardsTask().execute();
+		new LoadCardsTask(CardsOrder.DEFAULT).execute();
 	}
 
 	private void processActivityMessage() {
@@ -61,6 +68,12 @@ public class CardsViewingActivity extends Activity
 	private class LoadCardsTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
+
+		private final CardsOrder cardsOrder;
+
+		public LoadCardsTask(CardsOrder cardsOrder) {
+			this.cardsOrder = cardsOrder;
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -72,6 +85,20 @@ public class CardsViewingActivity extends Activity
 		protected String doInBackground(Void... params) {
 			try {
 				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+
+				switch (cardsOrder) {
+					case SHUFFLE:
+						deck.shuffleCards();
+						break;
+
+					case STRAIGHT:
+						deck.resetCardsOrder();
+						break;
+
+					case DEFAULT:
+						break;
+				}
+
 				fillList(deck.getCardsList());
 			}
 			catch (ModelsException e) {
@@ -212,5 +239,29 @@ public class CardsViewingActivity extends Activity
 		HashMap<String, Object> cardItem = cardsData.get(position);
 
 		cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, cardSide);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.cards_training_menu, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.shuffle:
+				new LoadCardsTask(CardsOrder.SHUFFLE).execute();
+				return true;
+
+			case R.id.reset:
+				new LoadCardsTask(CardsOrder.STRAIGHT).execute();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 }

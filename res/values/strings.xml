@@ -34,5 +34,7 @@
 	<string name="cardEditing">Flashcard Editing</string>
 	<string name="updatingCard">Updating flashcard…</string>
 	<string name="gettingCardInfo">Getting flashcard information…</string>
+	<string name="resetOrder">Reset order</string>
+	<string name="shuffle">Shuffle</string>
 
 </resources>
