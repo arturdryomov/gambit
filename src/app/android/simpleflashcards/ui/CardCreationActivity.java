@@ -68,19 +68,19 @@ public class CardCreationActivity extends Activity
 	}
 
 	private String getUserDataErrorMessage() {
-		String errorMesage;
+		String errorMessage;
 
-		errorMesage = getFrontSideTextErrorMessage();
-		if (!errorMesage.isEmpty()) {
-			return errorMesage;
+		errorMessage = getFrontSideTextErrorMessage();
+		if (!errorMessage.isEmpty()) {
+			return errorMessage;
 		}
 
-		errorMesage = getBackSideTextErrorMessage();
-		if (!errorMesage.isEmpty()) {
-			return errorMesage;
+		errorMessage = getBackSideTextErrorMessage();
+		if (!errorMessage.isEmpty()) {
+			return errorMessage;
 		}
 
-		return errorMesage;
+		return errorMessage;
 	}
 
 	private String getFrontSideTextErrorMessage() {

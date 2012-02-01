@@ -69,21 +69,7 @@ public class CardsViewingActivity extends Activity
 		new LoadCardsTask(CardsOrder.DEFAULT).execute();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
 
-		sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		
-		new StoreCardsPosition().execute();
-
-		sensorManager.unregisterListener(sensorListener);
-	}
 
 	private void initializeSensor() {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -155,7 +141,7 @@ public class CardsViewingActivity extends Activity
 				initializeCardsAdapter();
 
 				if (cardsOrder == CardsOrder.DEFAULT) {
-					new RestoreCardsPosition().execute();
+					new RestoreCardsPositionTask().execute();
 				}
 			}
 			else {
@@ -317,7 +303,7 @@ public class CardsViewingActivity extends Activity
 		setCardsPagerPosition(0);
 	}
 
-	private class RestoreCardsPosition extends AsyncTask<Void, Void, String>
+	private class RestoreCardsPositionTask extends AsyncTask<Void, Void, String>
 	{
 		private int currentCardPosition;
 
@@ -353,7 +339,23 @@ public class CardsViewingActivity extends Activity
 		cardsPager.setCurrentItem(position);
 	}
 
-	private class StoreCardsPosition extends AsyncTask<Void, Void, String>
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		new StoreCardsPositionTask().execute();
+		
+		sensorManager.unregisterListener(sensorListener);
+	}
+
+	private class StoreCardsPositionTask extends AsyncTask<Void, Void, String>
 	{
 		@Override
 		protected String doInBackground(Void... params) {
