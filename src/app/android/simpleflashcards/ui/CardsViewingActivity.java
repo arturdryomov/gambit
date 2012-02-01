@@ -264,9 +264,18 @@ public class CardsViewingActivity extends Activity
 				new LoadCardsTask(CardsOrder.STRAIGHT).execute();
 				return true;
 
+			case R.id.back:
+				goToFirstCard();
+
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void goToFirstCard() {
+		setCardsPagerPosition(0);
 	}
 
 	private class RestoreCardsPosition extends AsyncTask<Void, Void, String>
