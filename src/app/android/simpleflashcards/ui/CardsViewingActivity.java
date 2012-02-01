@@ -7,6 +7,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -45,6 +47,10 @@ public class CardsViewingActivity extends Activity
 
 	private int deckId;
 
+	private SensorManager sensorManager;
+	private Sensor accelerometer;
+	private ShakeListener sensorListener;
+
 	public CardsViewingActivity() {
 		super();
 
@@ -56,9 +62,42 @@ public class CardsViewingActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cards_viewing);
 
+		initializeSensor();
+
 		processActivityMessage();
 
 		new LoadCardsTask(CardsOrder.DEFAULT).execute();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		new StoreCardsPosition().execute();
+
+		sensorManager.unregisterListener(sensorListener);
+	}
+
+	private void initializeSensor() {
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sensorListener = new ShakeListener();
+
+		sensorListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
+			@Override
+			public void onShake() {
+				UserAlerter.alert(activityContext, getString(R.string.shakeDetected));
+
+				new LoadCardsTask(CardsOrder.SHUFFLE).execute();
+			}
+		});
 	}
 
 	private void processActivityMessage() {
@@ -312,13 +351,6 @@ public class CardsViewingActivity extends Activity
 		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
 
 		cardsPager.setCurrentItem(position);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		new StoreCardsPosition().execute();
 	}
 
 	private class StoreCardsPosition extends AsyncTask<Void, Void, String>
