@@ -24,7 +24,9 @@
 		</activity>
 		<activity android:name=".ui.CardCreationActivity" >
 		</activity>
-		<activity android:name=".ui.CardsViewingActivity" >
+		<activity
+			android:name=".ui.CardsViewingActivity"
+			android:configChanges="keyboardHidden|orientation" >
 		</activity>
 		<activity android:name=".ui.DeckEditingActivity" >
 		</activity>

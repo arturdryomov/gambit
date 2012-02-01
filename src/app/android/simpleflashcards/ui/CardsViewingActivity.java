@@ -51,6 +51,8 @@ public class CardsViewingActivity extends Activity
 	private Sensor accelerometer;
 	private ShakeListener sensorListener;
 
+	private boolean isLoadingInProgress;
+
 	public CardsViewingActivity() {
 		super();
 
@@ -69,8 +71,6 @@ public class CardsViewingActivity extends Activity
 		new LoadCardsTask(CardsOrder.DEFAULT).execute();
 	}
 
-
-
 	private void initializeSensor() {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -79,9 +79,11 @@ public class CardsViewingActivity extends Activity
 		sensorListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
 			@Override
 			public void onShake() {
-				UserAlerter.alert(activityContext, getString(R.string.shakeDetected));
+				if (!isLoadingInProgress) {
+					UserAlerter.alert(activityContext, getString(R.string.shakeDetected));
 
-				new LoadCardsTask(CardsOrder.SHUFFLE).execute();
+					new LoadCardsTask(CardsOrder.SHUFFLE).execute();
+				}
 			}
 		});
 	}
@@ -102,6 +104,12 @@ public class CardsViewingActivity extends Activity
 
 		@Override
 		protected void onPreExecute() {
+			if (isLoadingInProgress) {
+				cancel(true);
+			}
+
+			isLoadingInProgress = true;
+
 			progressDialogHelper = new ProgressDialogShowHelper();
 			progressDialogHelper.show(activityContext, getString(R.string.loadingCards));
 		}
@@ -147,6 +155,8 @@ public class CardsViewingActivity extends Activity
 			else {
 				UserAlerter.alert(activityContext, errorMessage);
 			}
+
+			isLoadingInProgress = false;
 		}
 	}
 
@@ -342,16 +352,16 @@ public class CardsViewingActivity extends Activity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 
 		new StoreCardsPositionTask().execute();
-		
+
 		sensorManager.unregisterListener(sensorListener);
 	}
 
