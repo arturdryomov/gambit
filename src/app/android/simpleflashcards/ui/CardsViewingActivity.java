@@ -54,7 +54,7 @@ public class CardsViewingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cards_training);
+		setContentView(R.layout.cards_viewing);
 
 		processActivityMessage();
 
@@ -248,7 +248,7 @@ public class CardsViewingActivity extends Activity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.cards_training_menu, menu);
+		inflater.inflate(R.menu.cards_viewing_menu, menu);
 
 		return true;
 	}
