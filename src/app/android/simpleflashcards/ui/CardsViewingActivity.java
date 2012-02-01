@@ -114,6 +114,10 @@ public class CardsViewingActivity extends Activity
 
 			if (result.isEmpty()) {
 				initializeCardsAdapter();
+
+				if (cardsOrder == CardsOrder.DEFAULT) {
+					new RestoreCardsPosition().execute();
+				}
 			}
 			else {
 				UserAlerter.alert(activityContext, result);
@@ -263,5 +267,77 @@ public class CardsViewingActivity extends Activity
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private class RestoreCardsPosition extends AsyncTask<Void, Void, String>
+	{
+		private int currentCardPosition;
+
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+				currentCardPosition = SimpleFlashcardsApplication.getInstance().getDecks()
+					.getDeckById(deckId).getCurrentCardIndex();
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (result.isEmpty()) {
+				if (currentCardPosition < cardsData.size()) {
+					setCardsPagerPosition(currentCardPosition);
+				}
+			}
+			else {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
+	}
+
+	private void setCardsPagerPosition(int position) {
+		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+
+		cardsPager.setCurrentItem(position);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		new StoreCardsPosition().execute();
+	}
+
+	private class StoreCardsPosition extends AsyncTask<Void, Void, String>
+	{
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+				SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId)
+					.setCurrentCardIndex(getCardsPagerPosition());
+			}
+			catch (ModelsException e) {
+				return getString(R.string.someError);
+			}
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (!result.isEmpty()) {
+				UserAlerter.alert(activityContext, result);
+			}
+		}
+	}
+
+	private int getCardsPagerPosition() {
+		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+
+		return cardsPager.getCurrentItem();
 	}
 }
