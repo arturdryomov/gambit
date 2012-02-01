@@ -113,7 +113,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noCards));
 			}
@@ -121,8 +121,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				updateList();
 			}
 
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -187,15 +187,15 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			progressDialogHelper.hide();
 
-			if (result.isEmpty()) {
+			if (errorMessage.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, CardEditingActivity.class,
 					cardId);
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -251,7 +251,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noCards));
 			}
@@ -260,8 +260,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 			progressDialogHelper.hide();
 
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}

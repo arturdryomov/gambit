@@ -94,15 +94,15 @@ public class DeckCreationActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			progressDialogHelper.hide();
 
-			if (result.isEmpty()) {
+			if (errorMessage.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, CardsListActivity.class, deckId);
 				finish();
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}

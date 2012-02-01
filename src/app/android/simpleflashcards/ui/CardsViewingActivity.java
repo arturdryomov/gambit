@@ -109,10 +109,10 @@ public class CardsViewingActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			progressDialogHelper.hide();
 
-			if (result.isEmpty()) {
+			if (errorMessage.isEmpty()) {
 				initializeCardsAdapter();
 
 				if (cardsOrder == CardsOrder.DEFAULT) {
@@ -120,7 +120,7 @@ public class CardsViewingActivity extends Activity
 				}
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -296,14 +296,14 @@ public class CardsViewingActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			if (result.isEmpty()) {
+		protected void onPostExecute(String errorMessage) {
+			if (errorMessage.isEmpty()) {
 				if (currentCardPosition < cardsData.size()) {
 					setCardsPagerPosition(currentCardPosition);
 				}
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -337,9 +337,9 @@ public class CardsViewingActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+		protected void onPostExecute(String errorMessage) {
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}

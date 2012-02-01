@@ -129,12 +129,12 @@ public class CardEditingActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			if (result.isEmpty()) {
+		protected void onPostExecute(String errorMessage) {
+			if (errorMessage.isEmpty()) {
 				updateCardDataInFields();
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 
 			progressDialogHelper.hide();
@@ -176,14 +176,14 @@ public class CardEditingActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			progressDialogHelper.hide();
 
-			if (result.isEmpty()) {
+			if (errorMessage.isEmpty()) {
 				finish();
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}

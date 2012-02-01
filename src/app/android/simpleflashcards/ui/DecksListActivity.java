@@ -102,7 +102,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noDecks));
 			}
@@ -110,8 +110,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				updateList();
 			}
 
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -192,14 +192,14 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			progressDialogHelper.hide();
 
-			if (result.isEmpty()) {
+			if (errorMessage.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, calledActivity, deckId);
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -239,7 +239,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String errorMessage) {
 			if (listData.isEmpty()) {
 				setEmptyListText(getString(R.string.noDecks));
 			}
@@ -248,8 +248,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 			progressDialogHelper.hide();
 
-			if (!result.isEmpty()) {
-				UserAlerter.alert(activityContext, result);
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -290,19 +290,19 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			if (result.equals(EMPTY_DECK_MESSAGE)) {
+		protected void onPostExecute(String errorMessage) {
+			if (errorMessage.equals(EMPTY_DECK_MESSAGE)) {
 				UserAlerter.alert(activityContext, getString(R.string.noCards));
 
 				return;
 			}
 
-			if (result.isEmpty()) {
+			if (errorMessage.isEmpty()) {
 				ActivityMessager.startActivityWithMessage(activityContext, CardsViewingActivity.class,
 					deckId);
 			}
 			else {
-				UserAlerter.alert(activityContext, result);
+				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
