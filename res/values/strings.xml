@@ -38,5 +38,9 @@
 	<string name="shuffle">Shuffle</string>
 	<string name="toFirstCard">Back to beginning</string>
 	<string name="shakeDetected">Shake detected, shuffling your flashcards now.</string>
+	<string name="chooseGoogleAccount">Choose Google Account</string>
+	<string name="authenticationError">Authentication error.</string>
+	<string name="authenticationCanceled">Authentication canceled.</string>
+	<string name="noGoogleAccounts">There are no Google accounts to sync.</string>
 
 </resources>

@@ -67,9 +67,22 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: Call update task
+			updateCards();
 		}
 	};
+
+	private void updateCards() {
+		Authorizer authorizer = new Authorizer(this);
+		authorizer.authorize(Authorizer.ServiceType.DOCUMENTS_LIST, new UpdateWorker());
+	}
+
+	private class UpdateWorker implements AuthTokenWaiter
+	{
+		@Override
+		public void onTokenReceived(String token) {
+			UserAlerter.alert(activityContext, getString(R.string.updatingCard));
+		}
+	}
 
 	private final OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override

@@ -58,9 +58,22 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: Call update task
+			updateDecks();
 		}
 	};
+
+	private void updateDecks() {
+		Authorizer authorizer = new Authorizer(this);
+		authorizer.authorize(Authorizer.ServiceType.DOCUMENTS_LIST, new UpdateWorker());
+	}
+
+	private class UpdateWorker implements AuthTokenWaiter
+	{
+		@Override
+		public void onTokenReceived(String token) {
+			UserAlerter.alert(activityContext, getString(R.string.updatingDeck));
+		}
+	}
 
 	private final OnClickListener deckCreationListener = new OnClickListener() {
 		@Override
