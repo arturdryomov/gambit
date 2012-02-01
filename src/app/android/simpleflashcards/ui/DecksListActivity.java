@@ -275,7 +275,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			try {
 				Deck deck = getDeck(deckAdapterPosition);
 
-				if (deck.getCardsCount() == 0) {
+				if (deck.isEmpty()) {
 					return EMPTY_DECK_MESSAGE;
 				}
 				else {
