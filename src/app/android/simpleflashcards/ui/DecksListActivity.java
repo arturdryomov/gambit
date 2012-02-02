@@ -77,30 +77,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	{
 		@Override
 		public void onTokenReceived(String token) {
-			testSpreadsheetClient(token);
 			UserAlerter.alert(activityContext, getString(R.string.updatingDeck));
-		}
-
-		private void testSpreadsheetClient(String token) {
-			SpreadsheetsClient client = new SpreadsheetsClient(token);
-
-			// Get all spreadsheets and peek the very first
-			SpreadsheetFeed spreadsheetFeed = client.getSpreadsheetFeed();
-			if (spreadsheetFeed.getEntries().isEmpty()) {
-				return;
-			}
-			SpreadsheetEntry spreadsheetEntry = spreadsheetFeed.getEntries().get(0);
-
-			// Get all worksheets of the selected spreadsheet and peek the very first
-			WorksheetFeed worksheetFeed = client.getWorksheetFeed(spreadsheetEntry);
-			if (worksheetFeed.getEntries().isEmpty()) {
-				return;
-			}
-			WorksheetEntry worksheetEntry = worksheetFeed.getEntries().get(0);
-
-			// Get all cells of the selected worksheet
-			@SuppressWarnings("unused")
-			CellFeed cellFeed = client.getCellFeed(worksheetEntry);
 		}
 	}
 
