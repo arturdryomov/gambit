@@ -14,11 +14,15 @@ import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.xml.atom.AtomParser;
 import com.google.api.client.xml.XmlNamespaceDictionary;
 
+
+// This class methods will throw UnauthorizedException if auth token passed is invalid,
+// and FailedRequestException if internet connection is unavailable.
 
 public class SpreadsheetsClient
 {
@@ -37,7 +41,8 @@ public class SpreadsheetsClient
 
 	private class RequestInitializer implements HttpRequestInitializer
 	{
-		final XmlNamespaceDictionary DICTIONARY = new XmlNamespaceDictionary()
+		private static final String APPLICATION_NAME = "Simple-Flashcards/0.0.1";
+		private final XmlNamespaceDictionary DICTIONARY = new XmlNamespaceDictionary()
 			.set("", "http://www.w3.org/2005/Atom").set("app", "http://www.w3.org/2007/app")
 			.set("batch", "http://schemas.google.com/gdata/batch")
 			.set("docs", "http://schemas.google.com/docs/2007")
@@ -55,7 +60,7 @@ public class SpreadsheetsClient
 		private GoogleHeaders buildHeaders() {
 			GoogleHeaders headers = new GoogleHeaders();
 
-			headers.setApplicationName("Simple-Flashcards/0.0.1");
+			headers.setApplicationName(APPLICATION_NAME);
 			headers.gdataVersion = "3.0";
 			headers.setGoogleLogin(authToken);
 
@@ -64,39 +69,23 @@ public class SpreadsheetsClient
 	}
 
 	public SpreadsheetFeed getSpreadsheetFeed() {
-		HttpRequest request = buildSpreadsheetFeedRequest();
+		HttpRequest request = buildGetRequest(SpreadsheetUrl.spreadsheetFeedUrl());
 		return processRequest(request, SpreadsheetFeed.class);
 	}
 
-	private HttpRequest buildSpreadsheetFeedRequest() {
-		return buildGetRequest(SpreadsheetUrl.spreadsheetFeedUrl());
-	}
-
 	public SpreadsheetEntry getSpreadsheetEntry(String id) {
-		HttpRequest request = buildSpreadsheedRequest(id);
+		HttpRequest request = buildGetRequest(new SpreadsheetUrl(id));
 		return processRequest(request, SpreadsheetEntry.class);
 	}
 
-	private HttpRequest buildSpreadsheedRequest(String id) {
-		return buildGetRequest(new GoogleUrl(id));
-	}
-
 	public WorksheetFeed getWorksheetFeed(SpreadsheetEntry spreadsheet) {
-		HttpRequest request = buildWorksheetFeedRequest(spreadsheet);
+		HttpRequest request = buildGetRequest(spreadsheet.getWorksheetFeedUrl());
 		return processRequest(request, WorksheetFeed.class);
 	}
 
-	private HttpRequest buildWorksheetFeedRequest(SpreadsheetEntry spreadsheet) {
-		return buildGetRequest(spreadsheet.getWorksheetFeedUrl());
-	}
-
 	public CellFeed getCellFeed(WorksheetEntry worksheet) {
-		HttpRequest request = buildCellFeedRequest(worksheet);
+		HttpRequest request = buildGetRequest(worksheet.getCellFeedUrl());
 		return processRequest(request, CellFeed.class);
-	}
-
-	private HttpRequest buildCellFeedRequest(WorksheetEntry worksheet) {
-		return buildGetRequest(worksheet.getCellFeedUrl());
 	}
 
 	private HttpRequest buildGetRequest(GoogleUrl url) {
@@ -110,10 +99,29 @@ public class SpreadsheetsClient
 
 	private <T> T processRequest(HttpRequest request, Class<T> dataClass) {
 		try {
-			return request.execute().parseAs(dataClass);
+			return processRequest(request).parseAs(dataClass);
 		}
 		catch (IOException e) {
-			throw new SpreadsheetException("Unable to fetch data", e);
+			throw new FailedRequestException(e);
+		}
+	}
+
+	private HttpResponse processRequest(HttpRequest request) throws IOException {
+		HttpResponse response = request.execute();
+
+		if (!response.isSuccessStatusCode()) {
+			throw exceptionFromUnsuccessfulStatusCode(response.getStatusCode());
+		}
+
+		return response;
+	}
+
+	private FailedRequestException exceptionFromUnsuccessfulStatusCode(int statusCode) {
+		if (statusCode == 401) {
+			return new UnauthorizedException();
+		}
+		else {
+			return new FailedRequestException();
 		}
 	}
 }

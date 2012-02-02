@@ -185,13 +185,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		switch (item.getItemId()) {
 			case R.id.edit:
-				new CallActivityWithDeckMessageTask(itemPosition, DeckEditingActivity.class)
-					.execute();
+				new CallActivityWithDeckMessageTask(itemPosition, DeckEditingActivity.class).execute();
 				return true;
 
 			case R.id.editCards:
-				new CallActivityWithDeckMessageTask(itemPosition, CardsListActivity.class)
-					.execute();
+				new CallActivityWithDeckMessageTask(itemPosition, CardsListActivity.class).execute();
 				return true;
 
 			case R.id.delete:
@@ -342,8 +340,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 
 			if (errorMessage.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext,
-					CardsViewingActivity.class, deckId);
+				ActivityMessager.startActivityWithMessage(activityContext, CardsViewingActivity.class,
+					deckId);
 			}
 			else {
 				UserAlerter.alert(activityContext, errorMessage);
@@ -355,8 +353,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter
-			.getItem(adapterPosition);
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
 
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
