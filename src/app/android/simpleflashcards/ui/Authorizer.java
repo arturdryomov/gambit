@@ -1,5 +1,6 @@
 package app.android.simpleflashcards.ui;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import app.android.simpleflashcards.R;
+
 
 public class Authorizer
 {
@@ -61,14 +63,7 @@ public class Authorizer
 
 	private void authorize() {
 		if (haveAccountNameInPreferences()) {
-			String accountName = loadAccountNameFromPreferences();
-
-			if (haveAccountRegistered(accountName)) {
-				authorizeForAccount(loadAccountNameFromPreferences());
-			}
-			else {
-				selectAccount();
-			}
+			authorizeForAccount(loadAccountNameFromPreferences());
 		}
 		else {
 			selectAccount();
@@ -81,7 +76,14 @@ public class Authorizer
 	}
 
 	private String loadAccountNameFromPreferences() {
-		return getPreference(PREFERENCE_GOOGLE_ACCOUNT_NAME);
+		String accountName = getPreference(PREFERENCE_GOOGLE_ACCOUNT_NAME);
+		if (haveAccountRegistered(accountName)) {
+			return accountName;
+		}
+		else {
+			// Account name from preferences was invalid
+			return new String();
+		}
 	}
 
 	private boolean haveAccountRegistered(String accountName) {
@@ -189,8 +191,8 @@ public class Authorizer
 			Bundle authResponse = new Bundle();
 
 			try {
-				authResponse = accountManager.getAuthToken(account, authType, null, activity, null, null)
-					.getResult();
+				authResponse = accountManager.getAuthToken(account, authType, null, activity, null,
+					null).getResult();
 			}
 			catch (OperationCanceledException e) {
 				return activity.getString(R.string.authenticationCanceled);
