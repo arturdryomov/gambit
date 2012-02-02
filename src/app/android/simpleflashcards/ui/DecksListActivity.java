@@ -22,6 +22,12 @@ import app.android.simpleflashcards.SimpleFlashcardsApplication;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.Decks;
 import app.android.simpleflashcards.models.ModelsException;
+import app.android.simpleflashcards.spreadsheets.SpreadsheetsClient;
+import app.android.simpleflashcards.spreadsheets.models.CellFeed;
+import app.android.simpleflashcards.spreadsheets.models.SpreadsheetEntry;
+import app.android.simpleflashcards.spreadsheets.models.SpreadsheetFeed;
+import app.android.simpleflashcards.spreadsheets.models.WorksheetEntry;
+import app.android.simpleflashcards.spreadsheets.models.WorksheetFeed;
 
 
 public class DecksListActivity extends SimpleAdapterListActivity
@@ -64,14 +70,37 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	private void updateDecks() {
 		Authorizer authorizer = new Authorizer(this);
-		authorizer.authorize(Authorizer.ServiceType.DOCUMENTS_LIST, new UpdateWorker());
+		authorizer.authorize(Authorizer.ServiceType.SPREADSHEETS, new UpdateWorker());
 	}
 
 	private class UpdateWorker implements AuthTokenWaiter
 	{
 		@Override
 		public void onTokenReceived(String token) {
+			testSpreadsheetClient(token);
 			UserAlerter.alert(activityContext, getString(R.string.updatingDeck));
+		}
+
+		private void testSpreadsheetClient(String token) {
+			SpreadsheetsClient client = new SpreadsheetsClient(token);
+
+			// Get all spreadsheets and peek the very first
+			SpreadsheetFeed spreadsheetFeed = client.getSpreadsheetFeed();
+			if (spreadsheetFeed.getEntries().isEmpty()) {
+				return;
+			}
+			SpreadsheetEntry spreadsheetEntry = spreadsheetFeed.getEntries().get(0);
+
+			// Get all worksheets of the selected spreadsheet and peek the very first
+			WorksheetFeed worksheetFeed = client.getWorksheetFeed(spreadsheetEntry);
+			if (worksheetFeed.getEntries().isEmpty()) {
+				return;
+			}
+			WorksheetEntry worksheetEntry = worksheetFeed.getEntries().get(0);
+
+			// Get all cells of the selected worksheet
+			@SuppressWarnings("unused")
+			CellFeed cellFeed = client.getCellFeed(worksheetEntry);
 		}
 	}
 
@@ -156,11 +185,13 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		switch (item.getItemId()) {
 			case R.id.edit:
-				new CallActivityWithDeckMessageTask(itemPosition, DeckEditingActivity.class).execute();
+				new CallActivityWithDeckMessageTask(itemPosition, DeckEditingActivity.class)
+					.execute();
 				return true;
 
 			case R.id.editCards:
-				new CallActivityWithDeckMessageTask(itemPosition, CardsListActivity.class).execute();
+				new CallActivityWithDeckMessageTask(itemPosition, CardsListActivity.class)
+					.execute();
 				return true;
 
 			case R.id.delete:
@@ -311,8 +342,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 
 			if (errorMessage.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext, CardsViewingActivity.class,
-					deckId);
+				ActivityMessager.startActivityWithMessage(activityContext,
+					CardsViewingActivity.class, deckId);
 			}
 			else {
 				UserAlerter.alert(activityContext, errorMessage);
@@ -324,7 +355,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter
+			.getItem(adapterPosition);
 
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
