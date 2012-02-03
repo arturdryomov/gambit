@@ -4,6 +4,8 @@ package app.android.simpleflashcards.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,15 +74,27 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	};
 
 	private void updateCards() {
-		Authorizer authorizer = new Authorizer(this);
-		authorizer.authorize(Authorizer.ServiceType.DOCUMENTS_LIST, new UpdateWorker());
+		new UpdateCardsTask().execute();
 	}
 
-	private class UpdateWorker implements AuthTokenWaiter
+	private class UpdateCardsTask extends AsyncTask<Void, Void, String>
 	{
+		// Just obtain user account
+
 		@Override
-		public void onTokenReceived(String token) {
-			UserAlerter.alert(activityContext, getString(R.string.updatingCard));
+		protected String doInBackground(Void... arg0) {
+			try {
+				Account account = AccountSelector.select((Activity) activityContext);
+				return String.format("Account received: '%s'.", account.name);
+			}
+			catch (NoAccountRegisteredException e) {
+				return getString(R.string.noGoogleAccounts);
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String resultMessage) {
+			UserAlerter.alert(activityContext, resultMessage);
 		}
 	}
 
