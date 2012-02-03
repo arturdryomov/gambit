@@ -70,16 +70,28 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	private class UpdateDecksTask extends AsyncTask<Void, Void, String>
 	{
-		// Just obtain user account
+		// Just obtain authorization token
 
 		@Override
 		protected String doInBackground(Void... arg0) {
 			try {
-				Account account = AccountSelector.select((Activity) activityContext);
-				return String.format("Account received: '%s'.", account.name);
+				Activity thisActivity = (Activity) activityContext;
+
+				Account account = AccountSelector.select(thisActivity);
+
+				Authorizer authorizer = new Authorizer(thisActivity);
+				String token = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+
+				return String.format("Token received: '%s'.", token);
 			}
 			catch (NoAccountRegisteredException e) {
 				return getString(R.string.noGoogleAccounts);
+			}
+			catch (AuthorizationCanceledException e) {
+				return getString(R.string.authenticationCanceled);
+			}
+			catch (AuthorizationFailedException e) {
+				return getString(R.string.authenticationError);
 			}
 		}
 
