@@ -106,6 +106,8 @@ public class CardEditingActivity extends Activity
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 
+		private Card card;
+
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
@@ -116,10 +118,7 @@ public class CardEditingActivity extends Activity
 		protected String doInBackground(Void... params) {
 			try {
 				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckByCardId(cardId);
-				Card card = deck.getCardById(cardId);
-
-				frontSideText = card.getFrontSideText();
-				backSideText = card.getBackSideText();
+				card = deck.getCardById(cardId);
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -131,6 +130,9 @@ public class CardEditingActivity extends Activity
 		@Override
 		protected void onPostExecute(String errorMessage) {
 			if (errorMessage.isEmpty()) {
+				frontSideText = card.getFrontSideText();
+				backSideText = card.getBackSideText();
+
 				updateCardDataInFields();
 			}
 			else {

@@ -143,11 +143,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		switch (item.getItemId()) {
 			case R.id.edit:
-				new CallActivityWithDeckMessageTask(itemPosition, DeckEditingActivity.class).execute();
+				callActivityWithDeckMessage(itemPosition, DeckEditingActivity.class);
 				return true;
 
 			case R.id.editCards:
-				new CallActivityWithDeckMessageTask(itemPosition, CardsListActivity.class).execute();
+				callActivityWithDeckMessage(itemPosition, CardsListActivity.class);
 				return true;
 
 			case R.id.delete:
@@ -159,81 +159,37 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private class CallActivityWithDeckMessageTask extends AsyncTask<Void, Void, String>
-	{
-		private ProgressDialogShowHelper progressDialogHelper;
+	private void callActivityWithDeckMessage(int deckAdapterPosition, Class<?> activityClass) {
+		Deck deck = getDeck(deckAdapterPosition);
 
-		private final Class<?> calledActivity;
-
-		private int deckId;
-		private final int deckAdapterPosition;
-
-		public CallActivityWithDeckMessageTask(int deckAdapterPosition, Class<?> activityClass) {
-			this.deckAdapterPosition = deckAdapterPosition;
-			this.calledActivity = activityClass;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.gettingDeckName));
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deckId = getDeck(deckAdapterPosition).getId();
-			}
-			catch (ModelsException e) {
-				return getString(R.string.someError);
-			}
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			progressDialogHelper.hide();
-
-			if (errorMessage.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext, calledActivity, deckId);
-			}
-			else {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
-		}
+		ActivityMessager.startActivityWithMessage(activityContext, activityClass, deck.getId());
 	}
 
 	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		private final int deckAdapterPosition;
+		private final int deckPosition;
+		private final Deck deck;
 
 		public DeleteDeckTask(int deckAdapterPosition) {
 			super();
 
-			this.deckAdapterPosition = deckAdapterPosition;
+			this.deckPosition = deckAdapterPosition;
+			this.deck = getDeck(deckAdapterPosition);
 		}
 
 		@Override
 		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.deletingDeck));
+			listData.remove(deckPosition);
 		}
 
 		@Override
 		protected String doInBackground(Void... params) {
-			Deck deck = getDeck(deckAdapterPosition);
-
 			try {
 				SimpleFlashcardsApplication.getInstance().getDecks().deleteDeck(deck);
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
 			}
-
-			listData.remove(deckAdapterPosition);
 
 			return new String();
 		}
@@ -245,8 +201,6 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 
 			updateList();
-
-			progressDialogHelper.hide();
 
 			if (!errorMessage.isEmpty()) {
 				UserAlerter.alert(activityContext, errorMessage);

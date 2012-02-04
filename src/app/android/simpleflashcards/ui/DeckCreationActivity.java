@@ -87,7 +87,7 @@ public class DeckCreationActivity extends Activity
 				deckId = deck.getId();
 			}
 			catch (ModelsException e) {
-				return e.getMessage();
+				return getString(R.string.someError);
 			}
 
 			return new String();

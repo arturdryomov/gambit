@@ -133,6 +133,5 @@ public class CardCreationActivity extends Activity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
-
 	}
 }
