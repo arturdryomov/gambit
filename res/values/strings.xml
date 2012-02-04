@@ -33,6 +33,6 @@
 	<string name="resetOrder">Reset order</string>
 	<string name="shuffle">Shuffle</string>
 	<string name="toFirstCard">Back to beginning</string>
-	<string name="shakeDetected">Shake detected, shuffling your flashcards now.</string>
+	<string name="shufflingCards">Shuffling your flashcards.</string>
 
 </resources>

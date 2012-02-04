@@ -65,12 +65,12 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		public void onClick(View v) {
 			callCardCreation();
 		}
-	};
 
-	private void callCardCreation() {
-		Intent callIntent = IntentFactory.createCardCreationIntent(activityContext, deck);
-		startActivity(callIntent);
-	}
+		private void callCardCreation() {
+			Intent callIntent = IntentFactory.createCardCreationIntent(activityContext, deck);
+			startActivity(callIntent);
+		}
+	};
 
 	@Override
 	protected void initializeList() {

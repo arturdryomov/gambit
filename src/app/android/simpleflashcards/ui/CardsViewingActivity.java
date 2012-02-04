@@ -32,6 +32,10 @@ public class CardsViewingActivity extends Activity
 
 	private final List<HashMap<String, Object>> cardsData;
 
+	private static final String CARDS_DATA_BACK_SIDE_TEXT_ID = "back_side";
+	private static final String CARDS_DATA_FRONT_SIDE_TEXT_ID = "front_side";
+	private static final String CARDS_DATA_CURRENT_SIDE_ID = "current_side";
+
 	private static enum CardSide {
 		FRONT, BACK
 	}
@@ -39,10 +43,6 @@ public class CardsViewingActivity extends Activity
 	private static enum CardsOrder {
 		DEFAULT, STRAIGHT, SHUFFLE
 	}
-
-	private static final String CARDS_DATA_BACK_SIDE_TEXT_ID = "back_side";
-	private static final String CARDS_DATA_FRONT_SIDE_TEXT_ID = "front_side";
-	private static final String CARDS_DATA_CURRENT_SIDE_ID = "current_side";
 
 	private Deck deck;
 
@@ -80,7 +80,7 @@ public class CardsViewingActivity extends Activity
 			@Override
 			public void onShake() {
 				if (!isLoadingInProgress) {
-					UserAlerter.alert(activityContext, getString(R.string.shakeDetected));
+					UserAlerter.alert(activityContext, getString(R.string.shufflingCards));
 
 					new LoadCardsTask(CardsOrder.SHUFFLE).execute();
 				}
@@ -125,7 +125,7 @@ public class CardsViewingActivity extends Activity
 
 					case DEFAULT:
 						break;
-					
+
 					default:
 						break;
 				}
