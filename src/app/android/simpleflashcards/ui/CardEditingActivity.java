@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.models.Card;
-import app.android.simpleflashcards.models.DatabaseProvider;
-import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
 
@@ -20,25 +18,19 @@ public class CardEditingActivity extends Activity
 {
 	private final Context activityContext = this;
 
+	private Card card;
 	private String frontSideText;
 	private String backSideText;
-
-	private int cardId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.card_editing);
 
-		processActivityMessage();
-
 		initializeBodyControls();
 
-		new SetupExistingCardDataTask().execute();
-	}
-
-	private void processActivityMessage() {
-		cardId = ActivityMessager.getMessageFromActivity(this);
+		processReceivedCard();
+		setUpReceivedCardData();
 	}
 
 	private void initializeBodyControls() {
@@ -102,55 +94,6 @@ public class CardEditingActivity extends Activity
 		return new String();
 	}
 
-	private class SetupExistingCardDataTask extends AsyncTask<Void, Void, String>
-	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		private Card card;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.gettingDeckName));
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckByCardId(cardId);
-				card = deck.getCardById(cardId);
-			}
-			catch (ModelsException e) {
-				return getString(R.string.someError);
-			}
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (errorMessage.isEmpty()) {
-				frontSideText = card.getFrontSideText();
-				backSideText = card.getBackSideText();
-
-				updateCardDataInFields();
-			}
-			else {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
-
-			progressDialogHelper.hide();
-		}
-	}
-
-	private void updateCardDataInFields() {
-		EditText frontSideTextEdit = (EditText) findViewById(R.id.frondSideEdit);
-		EditText backSideTextEdit = (EditText) findViewById(R.id.backSideEdit);
-
-		frontSideTextEdit.setText(frontSideText);
-		backSideTextEdit.setText(backSideText);
-	}
-
 	private class CardUpdatingTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
@@ -164,9 +107,6 @@ public class CardEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckByCardId(cardId);
-				Card card = deck.getCardById(cardId);
-
 				card.setFrontSideText(frontSideText);
 				card.setBackSideText(backSideText);
 			}
@@ -188,5 +128,29 @@ public class CardEditingActivity extends Activity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
+	}
+
+	private void processReceivedCard() {
+		Bundle receivedData = this.getIntent().getExtras();
+
+		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
+			card = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		}
+		else {
+			UserAlerter.alert(activityContext, getString(R.string.someError));
+
+			finish();
+		}
+	}
+
+	private void setUpReceivedCardData() {
+		frontSideText = card.getFrontSideText();
+		backSideText = card.getBackSideText();
+
+		EditText frontSideTextEdit = (EditText) findViewById(R.id.frondSideEdit);
+		EditText backSideTextEdit = (EditText) findViewById(R.id.backSideEdit);
+
+		frontSideTextEdit.setText(frontSideText);
+		backSideTextEdit.setText(backSideText);
 	}
 }

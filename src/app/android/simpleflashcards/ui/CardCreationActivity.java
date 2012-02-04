@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
-import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -19,23 +18,19 @@ public class CardCreationActivity extends Activity
 {
 	private final Context activityContext = this;
 
+	private Deck deck;
+
 	private String frontSideText;
 	private String backSideText;
-
-	private int deckId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.card_creation);
 
-		processActivityMessage();
-
 		initializeBodyControls();
-	}
 
-	private void processActivityMessage() {
-		deckId = ActivityMessager.getMessageFromActivity(this);
+		processReceivedDeck();
 	}
 
 	private void initializeBodyControls() {
@@ -112,7 +107,6 @@ public class CardCreationActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				deck.addNewCard(frontSideText, backSideText);
 			}
 			catch (ModelsException e) {
@@ -132,6 +126,19 @@ public class CardCreationActivity extends Activity
 			else {
 				UserAlerter.alert(activityContext, errorMessage);
 			}
+		}
+	}
+
+	private void processReceivedDeck() {
+		Bundle receivedData = this.getIntent().getExtras();
+
+		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
+			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		}
+		else {
+			UserAlerter.alert(activityContext, getString(R.string.someError));
+
+			finish();
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -65,9 +66,14 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private final OnClickListener deckCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			ActivityStarter.start(activityContext, DeckCreationActivity.class);
+			callDeckCreation();
 		}
 	};
+
+	private void callDeckCreation() {
+		Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
+		activityContext.startActivity(callIntent);
+	}
 
 	@Override
 	protected void initializeList() {
@@ -143,11 +149,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		switch (item.getItemId()) {
 			case R.id.edit:
-				callActivityWithDeckMessage(itemPosition, DeckEditingActivity.class);
+				callDeckEditing(itemPosition);
 				return true;
 
 			case R.id.editCards:
-				callActivityWithDeckMessage(itemPosition, CardsListActivity.class);
+				callCardsEditing(itemPosition);
 				return true;
 
 			case R.id.delete:
@@ -159,10 +165,18 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private void callActivityWithDeckMessage(int deckAdapterPosition, Class<?> activityClass) {
+	private void callDeckEditing(int deckAdapterPosition) {
 		Deck deck = getDeck(deckAdapterPosition);
 
-		ActivityMessager.startActivityWithMessage(activityContext, activityClass, deck.getId());
+		Intent callIntent = IntentFactory.createDeckEditingIntent(activityContext, deck);
+		startActivity(callIntent);
+	}
+
+	private void callCardsEditing(int deckPosition) {
+		Deck deck = getDeck(deckPosition);
+
+		Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
+		startActivity(callIntent);
 	}
 
 	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
@@ -217,7 +231,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	{
 		private static final String EMPTY_DECK_MESSAGE = "empty_deck";
 
-		private int deckId;
+		private Deck deck;
 		private final int deckAdapterPosition;
 
 		public ViewDeckTask(int deckAdapterPosition) {
@@ -227,13 +241,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = getDeck(deckAdapterPosition);
+				deck = getDeck(deckAdapterPosition);
 
 				if (deck.isEmpty()) {
 					return EMPTY_DECK_MESSAGE;
-				}
-				else {
-					deckId = deck.getId();
 				}
 			}
 			catch (ModelsException e) {
@@ -252,8 +263,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 
 			if (errorMessage.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext, CardsViewingActivity.class,
-					deckId);
+				Intent callIntent = IntentFactory.createCardsViewingIntent(activityContext, deck);
+				startActivity(callIntent);
 			}
 			else {
 				UserAlerter.alert(activityContext, errorMessage);

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -19,7 +20,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.models.Card;
-import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -28,32 +28,21 @@ public class CardsListActivity extends SimpleAdapterListActivity
 {
 	private final Context activityContext = this;
 
+	private Deck deck;
+
 	private static final String LIST_ITEM_FRONT_TEXT_ID = "front_text";
 	private static final String LIST_ITEM_BACK_TEXT_ID = "back_text";
 	private static final String LIST_ITEM_OBJECT_ID = "object";
-
-	private int deckId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cards);
 
-		processActivityMessage();
-
 		initializeActionbar();
 		initializeList();
-	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		new LoadCardsTask().execute();
-	}
-
-	private void processActivityMessage() {
-		deckId = ActivityMessager.getMessageFromActivity(this);
+		processReceivedDeck();
 	}
 
 	private void initializeActionbar() {
@@ -61,7 +50,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		updateButton.setOnClickListener(updateListener);
 
 		ImageButton newItemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
-		newItemCreationButton.setOnClickListener(flashcardCreationListener);
+		newItemCreationButton.setOnClickListener(cardCreationListener);
 	}
 
 	private final OnClickListener updateListener = new OnClickListener() {
@@ -71,13 +60,17 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 	};
 
-	private final OnClickListener flashcardCreationListener = new OnClickListener() {
+	private final OnClickListener cardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			ActivityMessager
-				.startActivityWithMessage(activityContext, CardCreationActivity.class, deckId);
+			callCardCreation();
 		}
 	};
+
+	private void callCardCreation() {
+		Intent callIntent = IntentFactory.createCardCreationIntent(activityContext, deck);
+		startActivity(callIntent);
+	}
 
 	@Override
 	protected void initializeList() {
@@ -92,6 +85,26 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		registerForContextMenu(getListView());
 	}
 
+	private void processReceivedDeck() {
+		Bundle receivedData = this.getIntent().getExtras();
+
+		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
+			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		}
+		else {
+			UserAlerter.alert(activityContext, getString(R.string.someError));
+
+			finish();
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		new LoadCardsTask().execute();
+	}
+
 	private class LoadCardsTask extends AsyncTask<Void, Void, String>
 	{
 		@Override
@@ -102,7 +115,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				fillList(deck.getCardsList());
 			}
 			catch (ModelsException e) {
@@ -145,11 +157,20 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		callCardEditing(position);
 	}
 
-	private void callCardEditing(int adapterPosition) {
-		Card card = getCard(adapterPosition);
+	private void callCardEditing(int cardPosition) {
+		Card card = getCard(cardPosition);
 
-		ActivityMessager.startActivityWithMessage(activityContext, CardEditingActivity.class,
-			card.getId());
+		Intent callIntent = IntentFactory.createCardEditingIntent(activityContext, card);
+		startActivity(callIntent);
+	}
+
+	private Card getCard(int adapterPosition) {
+		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
+
+		return (Card) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 
 	@Override
@@ -180,11 +201,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		private final int cardPosition;
 		private final Card card;
 
-		public DeleteCardTask(int cardAdapterPosition) {
+		public DeleteCardTask(int cardPosition) {
 			super();
 
-			this.cardPosition = cardAdapterPosition;
-			this.card = getCard(cardAdapterPosition);
+			this.cardPosition = cardPosition;
+			this.card = getCard(cardPosition);
 		}
 
 		@Override
@@ -195,7 +216,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				deck.deleteCard(card);
 			}
 			catch (ModelsException e) {
@@ -217,14 +237,5 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
-	}
-
-	private Card getCard(int adapterPosition) {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
-
-		return (Card) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 }

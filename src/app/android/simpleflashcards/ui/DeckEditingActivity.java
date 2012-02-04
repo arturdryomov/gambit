@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.models.AlreadyExistsException;
-import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -20,24 +19,18 @@ public class DeckEditingActivity extends Activity
 {
 	private final Context activityContext = this;
 
+	private Deck deck;
 	private String deckName;
-
-	private int deckId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.deck_editing);
 
-		processActivityMessage();
-
 		initializeBodyControls();
 
-		new SetupExistingDeckDataTask().execute();
-	}
-
-	private void processActivityMessage() {
-		deckId = ActivityMessager.getMessageFromActivity(this);
+		processReceivedDeck();
+		setUpReceivedDeckData();
 	}
 
 	private void initializeBodyControls() {
@@ -45,7 +38,7 @@ public class DeckEditingActivity extends Activity
 		confirmButton.setOnClickListener(confirmListener);
 	}
 
-	private OnClickListener confirmListener = new OnClickListener() {
+	private final OnClickListener confirmListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			readUserDataFromFields();
@@ -79,47 +72,6 @@ public class DeckEditingActivity extends Activity
 		return new String();
 	}
 
-	private class SetupExistingDeckDataTask extends AsyncTask<Void, Void, String>
-	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.gettingDeckName));
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
-				deckName = deck.getTitle();
-			}
-			catch (ModelsException e) {
-				return getString(R.string.someError);
-			}
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (errorMessage.isEmpty()) {
-				updateDeckDataInFields();
-			}
-			else {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
-
-			progressDialogHelper.hide();
-		}
-	}
-
-	private void updateDeckDataInFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
-		deckNameEdit.setText(deckName);
-	}
-
 	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
@@ -133,7 +85,6 @@ public class DeckEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				deck.setTitle(deckName);
 			}
 			catch (AlreadyExistsException e) {
@@ -157,5 +108,25 @@ public class DeckEditingActivity extends Activity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
+	}
+
+	private void processReceivedDeck() {
+		Bundle receivedData = this.getIntent().getExtras();
+
+		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
+			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		}
+		else {
+			UserAlerter.alert(activityContext, getString(R.string.someError));
+
+			finish();
+		}
+	}
+
+	private void setUpReceivedDeckData() {
+		deckName = deck.getTitle();
+
+		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
+		deckNameEdit.setText(deckName);
 	}
 }

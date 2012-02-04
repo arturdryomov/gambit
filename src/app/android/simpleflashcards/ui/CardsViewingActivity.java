@@ -22,7 +22,6 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.models.Card;
-import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -45,7 +44,7 @@ public class CardsViewingActivity extends Activity
 	private static final String CARDS_DATA_FRONT_SIDE_TEXT_ID = "front_side";
 	private static final String CARDS_DATA_CURRENT_SIDE_ID = "current_side";
 
-	private int deckId;
+	private Deck deck;
 
 	private SensorManager sensorManager;
 	private Sensor accelerometer;
@@ -66,9 +65,22 @@ public class CardsViewingActivity extends Activity
 
 		initializeSensor();
 
-		processActivityMessage();
+		processReceivedDeck();
 
 		new LoadCardsTask(CardsOrder.DEFAULT).execute();
+	}
+
+	private void processReceivedDeck() {
+		Bundle receivedData = this.getIntent().getExtras();
+
+		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
+			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		}
+		else {
+			UserAlerter.alert(activityContext, getString(R.string.someError));
+
+			finish();
+		}
 	}
 
 	private void initializeSensor() {
@@ -86,10 +98,6 @@ public class CardsViewingActivity extends Activity
 				}
 			}
 		});
-	}
-
-	private void processActivityMessage() {
-		deckId = ActivityMessager.getMessageFromActivity(this);
 	}
 
 	private class LoadCardsTask extends AsyncTask<Void, Void, String>
@@ -117,8 +125,6 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
-
 				switch (cardsOrder) {
 					case SHUFFLE:
 						deck.shuffleCards();
@@ -320,8 +326,7 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				currentCardPosition = DatabaseProvider.getInstance().getDecks().getDeckById(deckId)
-					.getCurrentCardIndex();
+				currentCardPosition = deck.getCurrentCardIndex();
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -370,8 +375,7 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				DatabaseProvider.getInstance().getDecks().getDeckById(deckId)
-					.setCurrentCardIndex(getCardsPagerPosition());
+				deck.setCurrentCardIndex(getCardsPagerPosition());
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
