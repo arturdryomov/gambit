@@ -7,9 +7,11 @@ import java.util.List;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 
-public class Deck
+public class Deck implements Parcelable
 {
 	public static final int INVALID_CURRENT_CARD_INDEX = -1;
 
@@ -39,12 +41,45 @@ public class Deck
 		}
 		title = titleAsString;
 
-		Integer currentCardIndexAsInteger = values
-			.getAsInteger(DbFieldNames.DECK_CURRENT_CARD_INDEX);
+		Integer currentCardIndexAsInteger = values.getAsInteger(DbFieldNames.DECK_CURRENT_CARD_INDEX);
 		if (currentCardIndexAsInteger == null) {
 			throw new ModelsException();
 		}
 		currentCardIndex = currentCardIndexAsInteger;
+	}
+
+	public static final Parcelable.Creator<Deck> CREATOR = new Parcelable.Creator<Deck>() {
+		public Deck createFromParcel(Parcel parcel) {
+			return new Deck(parcel);
+		}
+
+		public Deck[] newArray(int size) {
+			return new Deck[size];
+		}
+	};
+
+	private Deck(Parcel parcel) {
+		this.database = DatabaseProvider.getInstance().getDatabase();
+		this.decks = DatabaseProvider.getInstance().getDecks();
+		readFromParcel(parcel);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeInt(id);
+		parcel.writeString(title);
+		parcel.writeInt(currentCardIndex);
+	}
+
+	public void readFromParcel(Parcel parcel) {
+		id = parcel.readInt();
+		title = parcel.readString();
+		currentCardIndex = parcel.readInt();
 	}
 
 	public String getTitle() {
@@ -242,8 +277,7 @@ public class Deck
 	public Card getCardById(int id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(String.format("There's no a card with id = %d in database",
-				id));
+			throw new ModelsException(String.format("There's no a card with id = %d in database", id));
 		}
 
 		return new Card(contentValuesFromCursor(cursor));
@@ -418,5 +452,4 @@ public class Deck
 		}
 		return true;
 	}
-
 }
