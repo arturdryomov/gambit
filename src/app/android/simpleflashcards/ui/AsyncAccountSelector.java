@@ -113,7 +113,7 @@ public class AsyncAccountSelector
 	}
 
 	private void notifyAccountWaiter(String accountName) {
-		Account account = accountFromName(accountName);
+		Account account = buildAccountFromName(accountName);
 
 		Result result;
 		if (account == null) {
@@ -126,7 +126,7 @@ public class AsyncAccountSelector
 		accountWaiter.onAccountObtained(result, account);
 	}
 
-	private Account accountFromName(String accountName) {
+	private Account buildAccountFromName(String accountName) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 
 		for (Account account : accountManager.getAccountsByType(ACCOUNT_TYPE)) {
