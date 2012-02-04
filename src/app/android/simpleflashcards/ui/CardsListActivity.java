@@ -74,11 +74,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 	@Override
 	protected void initializeList() {
-		SimpleAdapter flashcardsAdapter = new SimpleAdapter(activityContext, listData,
+		SimpleAdapter cardsAdapter = new SimpleAdapter(activityContext, listData,
 			R.layout.cards_list_item, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
 			new int[] { R.id.title, R.id.description });
 
-		setListAdapter(flashcardsAdapter);
+		setListAdapter(cardsAdapter);
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
@@ -164,11 +164,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		startActivity(callIntent);
 	}
 
-	private Card getCard(int adapterPosition) {
+	private Card getCard(int cardPosition) {
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(cardPosition);
 
 		return (Card) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}

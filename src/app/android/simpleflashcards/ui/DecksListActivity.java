@@ -41,13 +41,6 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		initializeList();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		new LoadDecksTask().execute();
-	}
-
 	private void initializeActionbar() {
 		ImageButton updateButton = (ImageButton) findViewById(R.id.updateButton);
 		updateButton.setOnClickListener(updateListener);
@@ -85,6 +78,13 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		registerForContextMenu(getListView());
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		new LoadDecksTask().execute();
 	}
 
 	private class LoadDecksTask extends AsyncTask<Void, Void, String>
@@ -165,8 +165,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private void callDeckEditing(int deckAdapterPosition) {
-		Deck deck = getDeck(deckAdapterPosition);
+	private void callDeckEditing(int deckPosition) {
+		Deck deck = getDeck(deckPosition);
 
 		Intent callIntent = IntentFactory.createDeckEditingIntent(activityContext, deck);
 		startActivity(callIntent);
@@ -184,11 +184,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		private final int deckPosition;
 		private final Deck deck;
 
-		public DeleteDeckTask(int deckAdapterPosition) {
+		public DeleteDeckTask(int deckPosition) {
 			super();
 
-			this.deckPosition = deckAdapterPosition;
-			this.deck = getDeck(deckAdapterPosition);
+			this.deckPosition = deckPosition;
+			this.deck = getDeck(deckPosition);
 		}
 
 		@Override
@@ -231,18 +231,15 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	{
 		private static final String EMPTY_DECK_MESSAGE = "empty_deck";
 
-		private Deck deck;
-		private final int deckAdapterPosition;
+		private final Deck deck;
 
-		public ViewDeckTask(int deckAdapterPosition) {
-			this.deckAdapterPosition = deckAdapterPosition;
+		public ViewDeckTask(int deckPosition) {
+			this.deck = getDeck(deckPosition);
 		}
 
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck = getDeck(deckAdapterPosition);
-
 				if (deck.isEmpty()) {
 					return EMPTY_DECK_MESSAGE;
 				}
@@ -258,25 +255,28 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		protected void onPostExecute(String errorMessage) {
 			if (errorMessage.equals(EMPTY_DECK_MESSAGE)) {
 				UserAlerter.alert(activityContext, getString(R.string.noCards));
-
 				return;
 			}
 
 			if (errorMessage.isEmpty()) {
-				Intent callIntent = IntentFactory.createCardsViewingIntent(activityContext, deck);
-				startActivity(callIntent);
+				callCardsViewing(deck);
 			}
 			else {
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
+
+		private void callCardsViewing(Deck deck) {
+			Intent callIntent = IntentFactory.createCardsViewingIntent(activityContext, deck);
+			startActivity(callIntent);
+		}
 	}
 
-	private Deck getDeck(int adapterPosition) {
+	private Deck getDeck(int deckPosition) {
 		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
 
 		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(adapterPosition);
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(deckPosition);
 
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}

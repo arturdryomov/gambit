@@ -43,7 +43,7 @@ public class DeckCreationActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				new FlashcardsDeckCreationTask().execute();
+				new DeckCreationTask().execute();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
@@ -52,7 +52,7 @@ public class DeckCreationActivity extends Activity
 	};
 
 	private void readUserDataFromFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
+		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
 
 		deckName = deckNameEdit.getText().toString().trim();
 	}
@@ -69,7 +69,7 @@ public class DeckCreationActivity extends Activity
 		return new String();
 	}
 
-	private class FlashcardsDeckCreationTask extends AsyncTask<Void, Void, String>
+	private class DeckCreationTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 

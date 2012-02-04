@@ -55,7 +55,7 @@ public class DeckEditingActivity extends Activity
 	};
 
 	private void readUserDataFromFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
+		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
 
 		deckName = deckNameEdit.getText().toString().trim();
 	}
@@ -126,7 +126,7 @@ public class DeckEditingActivity extends Activity
 	private void setUpReceivedDeckData() {
 		deckName = deck.getTitle();
 
-		EditText deckNameEdit = (EditText) findViewById(R.id.flashcardDeckNameEdit);
+		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
 		deckNameEdit.setText(deckName);
 	}
 }

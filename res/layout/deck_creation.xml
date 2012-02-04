@@ -28,7 +28,7 @@
 				android:text="@string/deckName" />
 
 			<EditText
-				android:id="@+id/flashcardDeckNameEdit"
+				android:id="@+id/deckNameEdit"
 				style="@style/BodyLinearLayoutItem"
 				android:inputType="text"
 				android:singleLine="true" />
