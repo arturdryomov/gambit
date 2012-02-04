@@ -10,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
-import app.android.simpleflashcards.SimpleFlashcardsApplication;
 import app.android.simpleflashcards.models.Card;
+import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -117,7 +117,7 @@ public class CardEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckByCardId(cardId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckByCardId(cardId);
 				card = deck.getCardById(cardId);
 			}
 			catch (ModelsException e) {
@@ -164,7 +164,7 @@ public class CardEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckByCardId(cardId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckByCardId(cardId);
 				Card card = deck.getCardById(cardId);
 
 				card.setFrontSideText(frontSideText);

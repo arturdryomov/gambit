@@ -10,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
-import app.android.simpleflashcards.SimpleFlashcardsApplication;
 import app.android.simpleflashcards.models.AlreadyExistsException;
+import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -92,7 +92,7 @@ public class DeckEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				deckName = deck.getTitle();
 			}
 			catch (ModelsException e) {
@@ -133,7 +133,7 @@ public class DeckEditingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				deck.setTitle(deckName);
 			}
 			catch (AlreadyExistsException e) {

@@ -21,8 +21,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import app.android.simpleflashcards.R;
-import app.android.simpleflashcards.SimpleFlashcardsApplication;
 import app.android.simpleflashcards.models.Card;
+import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -117,7 +117,7 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 
 				switch (cardsOrder) {
 					case SHUFFLE:
@@ -320,8 +320,8 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				currentCardPosition = SimpleFlashcardsApplication.getInstance().getDecks()
-					.getDeckById(deckId).getCurrentCardIndex();
+				currentCardPosition = DatabaseProvider.getInstance().getDecks().getDeckById(deckId)
+					.getCurrentCardIndex();
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -370,7 +370,7 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId)
+				DatabaseProvider.getInstance().getDecks().getDeckById(deckId)
 					.setCurrentCardIndex(getCardsPagerPosition());
 			}
 			catch (ModelsException e) {

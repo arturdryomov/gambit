@@ -18,8 +18,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import app.android.simpleflashcards.R;
-import app.android.simpleflashcards.SimpleFlashcardsApplication;
 import app.android.simpleflashcards.models.Card;
+import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
@@ -102,7 +102,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				fillList(deck.getCardsList());
 			}
 			catch (ModelsException e) {
@@ -195,7 +195,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = SimpleFlashcardsApplication.getInstance().getDecks().getDeckById(deckId);
+				Deck deck = DatabaseProvider.getInstance().getDecks().getDeckById(deckId);
 				deck.deleteCard(card);
 			}
 			catch (ModelsException e) {
