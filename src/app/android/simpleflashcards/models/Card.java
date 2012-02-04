@@ -14,8 +14,8 @@ public class Card
 	private String backSideText;
 
 	// Do not use the constructor. It should be used by Deck class only
-	public Card(SQLiteDatabase database, ContentValues values) {
-		this.database = database;
+	public Card(ContentValues values) {
+		this.database = DatabaseProvider.getInstance().getDatabase();
 
 		setValues(values);
 	}

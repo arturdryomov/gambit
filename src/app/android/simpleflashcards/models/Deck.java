@@ -17,12 +17,12 @@ public class Deck
 	private int id;
 	private String title;
 	private int currentCardIndex;
-	private Decks parent;
+	private Decks decks;
 
 	// Do not use the constructor. It should be used by Decks class only
-	public Deck(SQLiteDatabase database, Decks parent, ContentValues values) {
-		this.database = database;
-		this.parent = parent;
+	public Deck(ContentValues values) {
+		this.database = DatabaseProvider.getInstance().getDatabase();
+		this.decks = DatabaseProvider.getInstance().getDecks();
 		setValues(values);
 	}
 
@@ -56,7 +56,7 @@ public class Deck
 			return;
 		}
 
-		if (parent.containsDeckWithTitle(title)) {
+		if (decks.containsDeckWithTitle(title)) {
 			throw new AlreadyExistsException();
 		}
 
@@ -129,7 +129,7 @@ public class Deck
 
 		while (!cursor.isAfterLast()) {
 			ContentValues values = contentValuesFromCursor(cursor);
-			cardsList.add(new Card(database, values));
+			cardsList.add(new Card(values));
 			cursor.moveToNext();
 		}
 
@@ -246,7 +246,7 @@ public class Deck
 				id));
 		}
 
-		return new Card(database, contentValuesFromCursor(cursor));
+		return new Card(contentValuesFromCursor(cursor));
 	}
 
 	private String buildCardByIdSelectionQuery(int id) {

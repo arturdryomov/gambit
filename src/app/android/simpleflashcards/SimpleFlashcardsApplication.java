@@ -2,16 +2,13 @@ package app.android.simpleflashcards;
 
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Decks;
-import app.android.simpleflashcards.models.SimpleFlashcardsOpenHelper;
 
 
 public class SimpleFlashcardsApplication extends Application
 {
 	private static SimpleFlashcardsApplication instance = null;
-	private SQLiteDatabase database;
 	private Decks decks;
 
 	@Override
@@ -24,9 +21,8 @@ public class SimpleFlashcardsApplication extends Application
 		}
 		instance = this;
 
-		SQLiteOpenHelper openHelper = new SimpleFlashcardsOpenHelper(this);
-		database = openHelper.getWritableDatabase();
-		decks = new Decks(database);
+		DatabaseProvider provider = DatabaseProvider.getInstance(this);
+		decks = provider.getDecks();
 	}
 
 	public Decks getDecks() {

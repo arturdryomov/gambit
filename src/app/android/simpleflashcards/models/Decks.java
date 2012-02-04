@@ -13,8 +13,8 @@ public class Decks
 {
 	private SQLiteDatabase database;
 
-	public Decks(SQLiteDatabase database) {
-		this.database = database;
+	public Decks() {
+		this.database = DatabaseProvider.getInstance().getDatabase();
 	}
 
 	public int getDecksCount() {
@@ -35,7 +35,7 @@ public class Decks
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			ContentValues values = contentValuesFromCursor(cursor);
-			decksList.add(new Deck(database, this, values));
+			decksList.add(new Deck(values));
 			cursor.moveToNext();
 		}
 
@@ -119,7 +119,7 @@ public class Decks
 				id));
 		}
 
-		return new Deck(database, this, contentValuesFromCursor(cursor));
+		return new Deck(contentValuesFromCursor(cursor));
 	}
 
 	private String buildDeckByIdSelectionQuery(int id) {
@@ -144,7 +144,7 @@ public class Decks
 				"There's no a deck that is a parent for card with id = %d", cardId));
 		}
 
-		return new Deck(database, this, contentValuesFromCursor(cursor));
+		return new Deck(contentValuesFromCursor(cursor));
 	}
 
 	private String buildDeckByCardIdSelectionQuery(int cardId) {
