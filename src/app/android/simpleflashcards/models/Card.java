@@ -3,9 +3,11 @@ package app.android.simpleflashcards.models;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 
-public class Card
+public class Card implements Parcelable
 {
 	private SQLiteDatabase database;
 
@@ -38,6 +40,40 @@ public class Card
 			throw new ModelsException();
 		}
 		backSideText = backSideAsString;
+	}
+
+	public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>() {
+		public Card createFromParcel(Parcel parcel) {
+			return new Card(parcel);
+		}
+
+		public Card[] newArray(int size) {
+			return new Card[size];
+		}
+	};
+
+	private Card(Parcel parcel) {
+		this.database = DatabaseProvider.getInstance().getDatabase();
+
+		readFromParcel(parcel);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeInt(id);
+		parcel.writeString(frontSideText);
+		parcel.writeString(backSideText);
+	}
+
+	public void readFromParcel(Parcel parcel) {
+		id = parcel.readInt();
+		frontSideText = parcel.readString();
+		backSideText = parcel.readString();
 	}
 
 	public String getFrontSideText() {
