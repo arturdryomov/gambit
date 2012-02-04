@@ -3,6 +3,7 @@ package app.android.simpleflashcards.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -72,7 +73,7 @@ public class DeckCreationActivity extends Activity
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 
-		private int deckId;
+		private Deck deck;
 
 		@Override
 		protected void onPreExecute() {
@@ -83,8 +84,7 @@ public class DeckCreationActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Deck deck = DatabaseProvider.getInstance().getDecks().addNewDeck(deckName);
-				deckId = deck.getId();
+				deck = DatabaseProvider.getInstance().getDecks().addNewDeck(deckName);
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -98,7 +98,9 @@ public class DeckCreationActivity extends Activity
 			progressDialogHelper.hide();
 
 			if (errorMessage.isEmpty()) {
-				ActivityMessager.startActivityWithMessage(activityContext, CardsListActivity.class, deckId);
+				Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
+				startActivity(callIntent);
+
 				finish();
 			}
 			else {
