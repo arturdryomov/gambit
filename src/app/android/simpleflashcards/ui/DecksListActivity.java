@@ -4,6 +4,8 @@ package app.android.simpleflashcards.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,12 +24,6 @@ import app.android.simpleflashcards.SimpleFlashcardsApplication;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.Decks;
 import app.android.simpleflashcards.models.ModelsException;
-import app.android.simpleflashcards.spreadsheets.SpreadsheetsClient;
-import app.android.simpleflashcards.spreadsheets.models.CellFeed;
-import app.android.simpleflashcards.spreadsheets.models.SpreadsheetEntry;
-import app.android.simpleflashcards.spreadsheets.models.SpreadsheetFeed;
-import app.android.simpleflashcards.spreadsheets.models.WorksheetEntry;
-import app.android.simpleflashcards.spreadsheets.models.WorksheetFeed;
 
 
 public class DecksListActivity extends SimpleAdapterListActivity
@@ -69,15 +65,39 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	};
 
 	private void updateDecks() {
-		Authorizer authorizer = new Authorizer(this);
-		authorizer.authorize(Authorizer.ServiceType.SPREADSHEETS, new UpdateWorker());
+		new UpdateDecksTask().execute();
 	}
 
-	private class UpdateWorker implements AuthTokenWaiter
+	private class UpdateDecksTask extends AsyncTask<Void, Void, String>
 	{
+		// Just obtain authorization token
+
 		@Override
-		public void onTokenReceived(String token) {
-			UserAlerter.alert(activityContext, getString(R.string.updatingDeck));
+		protected String doInBackground(Void... arg0) {
+			try {
+				Activity thisActivity = (Activity) activityContext;
+
+				Account account = AccountSelector.select(thisActivity);
+
+				Authorizer authorizer = new Authorizer(thisActivity);
+				String token = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+
+				return String.format("Token received: '%s'.", token);
+			}
+			catch (NoAccountRegisteredException e) {
+				return getString(R.string.noGoogleAccounts);
+			}
+			catch (AuthorizationCanceledException e) {
+				return getString(R.string.authenticationCanceled);
+			}
+			catch (AuthorizationFailedException e) {
+				return getString(R.string.authenticationError);
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String resultMessage) {
+			UserAlerter.alert(activityContext, resultMessage);
 		}
 	}
 
