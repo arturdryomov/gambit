@@ -9,8 +9,8 @@ import android.app.Activity;
 
 public class AccountSelector
 {
-	private Activity activity;
-	private CountDownLatch latch = new CountDownLatch(1);
+	private final Activity activity;
+	private final CountDownLatch latch = new CountDownLatch(1);
 
 	private Account obtainedAccount;
 	private AsyncAccountSelector.Result accountSelectionResult;

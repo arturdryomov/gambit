@@ -17,7 +17,6 @@ import app.android.simpleflashcards.R;
 
 public class AsyncAccountSelector
 {
-
 	public static enum Result {
 		SUCCESS, NO_ACCOUNTS_REGISTERED;
 	}
@@ -30,17 +29,17 @@ public class AsyncAccountSelector
 	private static final String ACCOUNT_NAME = "google_account";
 	private static final String ACCOUNT_TYPE = "com.google";
 
-	private Activity activity;
-	private AccountWaiter accountWaiter;
+	private final Activity activity;
+	private final AccountWaiter accountWaiter;
 
 	public AsyncAccountSelector(Activity selectDialogParent, AccountWaiter accountWaiter) {
-		activity = selectDialogParent;
+		this.activity = selectDialogParent;
 		this.accountWaiter = accountWaiter;
 	}
 
 	public void selectAccount() {
 		if (haveAccountNameInPreferences()) {
-			accountNameObtained(loadAccountNameFromPreferences());
+			notifyAccountWaiter(loadAccountNameFromPreferences());
 		}
 		else {
 			selectAccountFromDialog();
@@ -58,7 +57,6 @@ public class AsyncAccountSelector
 			return accountName;
 		}
 		else {
-			// Account name from preferences was invalid
 			return new String();
 		}
 	}
@@ -72,7 +70,7 @@ public class AsyncAccountSelector
 			constructAccountsListDialog().show();
 		}
 		else {
-			accountNameObtained(new String());
+			notifyAccountWaiter(new String());
 		}
 	}
 
@@ -107,14 +105,14 @@ public class AsyncAccountSelector
 
 				setPreference(ACCOUNT_NAME, selectedAccountName);
 
-				accountNameObtained(selectedAccountName);
+				notifyAccountWaiter(selectedAccountName);
 			}
 		});
 
 		return dialogBuilder.create();
 	}
 
-	private void accountNameObtained(String accountName) {
+	private void notifyAccountWaiter(String accountName) {
 		Account account = accountFromName(accountName);
 
 		Result result;
