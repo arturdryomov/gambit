@@ -12,6 +12,7 @@ import com.google.api.client.util.Key;
 public class WorksheetEntry
 {
 	private static final String SELF_SCHEMA = "self";
+	private static final String EDIT_SCHEMA = "edit";
 	private static final String CELL_FEED_SCHEMA = "http://schemas.google.com/spreadsheets/2006#cellsfeed";
 
 	@Key
@@ -32,6 +33,10 @@ public class WorksheetEntry
 
 	public SpreadsheetUrl getSelfFeedUrl() {
 		return new SpreadsheetUrl(Link.findFirstWithRel(links, SELF_SCHEMA).href);
+	}
+
+	public SpreadsheetUrl getEditUrl() {
+		return new SpreadsheetUrl(Link.findFirstWithRel(links, EDIT_SCHEMA).href);
 	}
 
 	public SpreadsheetUrl getCellFeedUrl() {

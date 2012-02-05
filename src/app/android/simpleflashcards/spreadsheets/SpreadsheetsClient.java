@@ -138,6 +138,26 @@ public class SpreadsheetsClient
 		processRequest(request);
 	}
 
+	public void deleteWorksheet(WorksheetEntry worksheet) {
+		HttpRequest request = buildDeleteRequest(worksheet.getEditUrl());
+		processDeleteRequest(request);
+	}
+
+	private HttpRequest buildDeleteRequest(SpreadsheetUrl url) {
+		try {
+			HttpRequest request = requestFactory.buildDeleteRequest(url);
+			request.getHeaders().setIfMatch("*");
+			return request;
+		}
+		catch (IOException e) {
+			throw new SpreadsheetException(e);
+		}
+	}
+
+	private void processDeleteRequest(HttpRequest request) {
+		processRequest(request);
+	}
+
 	private HttpResponse processRequest(HttpRequest request) {
 		try {
 			return request.execute();
