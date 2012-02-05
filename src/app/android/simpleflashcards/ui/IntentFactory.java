@@ -11,6 +11,12 @@ public class IntentFactory
 {
 	public static final String MESSAGE_ID = "message";
 
+	public static Intent createSyncSetupIntent(Context context) {
+		Intent intent = new Intent(context, SyncSetupActivity.class);
+
+		return intent;
+	}
+
 	public static Intent createSettingsIntent(Context context) {
 		Intent intent = new Intent(context, SettingsActivity.class);
 

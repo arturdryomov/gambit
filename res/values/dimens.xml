@@ -10,5 +10,6 @@
 	<dimen name="list_item_padding">7dp</dimen>
 	<dimen name="body_layout_padding">20dp</dimen>
 	<dimen name="one_line_list_item_text_size">18sp</dimen>
+	<dimen name="checkbox_text_size">14sp</dimen>
 
 </resources>

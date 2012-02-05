@@ -53,7 +53,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: Call update task
+			// TODO: Check existing of sync document name, if false — call sync setup, true — call update
 		}
 	};
 

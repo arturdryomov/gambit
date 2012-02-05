@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+	<!-- Actionbar -->
+
+	<RelativeLayout
+		android:id="@+id/actionbar"
+		style="@style/Actionbar" >
+
+		<TextView
+			style="@style/ActionbarTitle"
+			android:text="Sync Setup" />
+	</RelativeLayout>
+
+	<!-- Main view -->
+
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@id/actionbar" >
+
+		<LinearLayout style="@style/BodyLinearLayout" >
+
+			<CheckBox
+				android:id="@+id/syncWithExistingCheckbox"
+				style="@style/BodyLinearLayoutItem"
+				android:text="Use existing spreadsheet for sync"
+				android:textSize="@dimen/checkbox_text_size" />
+
+			<TextView
+				style="@style/BodyLinearLayoutItem"
+				android:text="Spreadsheet name" />
+
+			<EditText
+				android:id="@+id/spreadsheetNameEdit"
+				style="@style/BodyLinearLayoutItem"
+				android:inputType="text"
+				android:singleLine="true" />
+
+			<Spinner
+				android:id="@+id/spreadsheetsSpinner"
+				style="@style/BodyLinearLayoutItem"
+				android:visibility="gone" />
+
+			<Button
+				android:id="@+id/confirmButton"
+				style="@style/BodyLinearLayoutItem"
+				android:layout_marginTop="@dimen/confirm_button_top_margin"
+				android:text="Setup" />
+		</LinearLayout>
+	</ScrollView>
+
+</RelativeLayout>
