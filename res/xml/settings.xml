@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<PreferenceCategory android:title="Sync" >
+		<EditTextPreference
+			android:key="@string/settingSyncSpreadsheetName"
+			android:summary="Title of Google Spreadsheet to sync"
+			android:title="Sync document name" />
+	</PreferenceCategory>
+
+</PreferenceScreen>

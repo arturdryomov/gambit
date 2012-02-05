@@ -11,6 +11,12 @@ public class IntentFactory
 {
 	public static final String MESSAGE_ID = "message";
 
+	public static Intent createSettingsIntent(Context context) {
+		Intent intent = new Intent(context, SettingsActivity.class);
+
+		return intent;
+	}
+
 	public static Intent createDeckCreationIntent(Context context) {
 		Intent intent = new Intent(context, DeckCreationActivity.class);
 
