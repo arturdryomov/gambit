@@ -9,7 +9,11 @@ import app.android.simpleflashcards.models.Deck;
 
 public class IntentFactory
 {
-	public static final String MESSAGE_ID = "message";
+	public static final String MESSAGE_ID;
+
+	static {
+		MESSAGE_ID = String.format("%s.message", IntentFactory.class.getPackage().getName());
+	}
 
 	public static Intent createDeckCreationIntent(Context context) {
 		Intent intent = new Intent(context, DeckCreationActivity.class);
