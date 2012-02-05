@@ -36,5 +36,12 @@
 	<string name="shufflingCards">Shuffling your flashcards.</string>
 	<string name="settings">Settings</string>
 	<string name="settingSyncSpreadsheetName">SYNC_SPREADSHEET_NAME</string>
+	<string name="titleOfGoogleSpreadsheet">Title of Google Spreadsheet to sync</string>
+	<string name="syncDocument">Sync document name</string>
+	<string name="syncSetup">Sync Setup</string>
+	<string name="setup">Setup</string>
+	<string name="spreadsheetName">Spreadsheet name</string>
+	<string name="useExistingSpreadsheet">Use existing spreadsheet for sync</string>
+	<string name="noSpreadsheets">There are no spreadsheets in current Google Account.</string>
 
 </resources>

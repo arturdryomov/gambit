@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="Sync Setup" />
+			android:text="@string/syncSetup" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -26,12 +26,12 @@
 			<CheckBox
 				android:id="@+id/syncWithExistingCheckbox"
 				style="@style/BodyLinearLayoutItem"
-				android:text="Use existing spreadsheet for sync"
+				android:text="@string/useExistingSpreadsheet"
 				android:textSize="@dimen/checkbox_text_size" />
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="Spreadsheet name" />
+				android:text="@string/spreadsheetName" />
 
 			<EditText
 				android:id="@+id/spreadsheetNameEdit"
@@ -48,7 +48,7 @@
 				android:id="@+id/confirmButton"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="Setup" />
+				android:text="@string/setup" />
 		</LinearLayout>
 	</ScrollView>
 

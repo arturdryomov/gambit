@@ -78,7 +78,7 @@ public class SyncSetupActivity extends Activity
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
 				if (spreadsheets.isEmpty()) {
-					UserAlerter.alert(activityContext, "There are no spreadsheets in your Google account");
+					UserAlerter.alert(activityContext, getString(R.string.noSpreadsheets));
 
 					CheckBox checkbox = (CheckBox) buttonView;
 					checkbox.setChecked(false);
