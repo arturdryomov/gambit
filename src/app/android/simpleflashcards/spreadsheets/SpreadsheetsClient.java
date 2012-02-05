@@ -36,13 +36,13 @@ public class SpreadsheetsClient
 		.set("docs", "http://schemas.google.com/docs/2007")
 		.set("gAcl", "http://schemas.google.com/acl/2007")
 		.set("gd", "http://schemas.google.com/g/2005")
-		.set("openSearch", "http://a9.com/-/spec/opensearch/1.1/")
-		.set("xml", "http://www.w3.org/XML/1998/namespace")
 		.set("gs", "http://schemas.google.com/spreadsheets/2006")
-		.set("gsx", "http://schemas.google.com/spreadsheets/2006/extended");
+		.set("gsx", "http://schemas.google.com/spreadsheets/2006/extended")
+		.set("openSearch", "http://a9.com/-/spec/opensearch/1.1/")
+		.set("xml", "http://www.w3.org/XML/1998/namespace");
 
 	private String authToken;
-	HttpRequestFactory requestFactory;
+	private HttpRequestFactory requestFactory;
 
 	public SpreadsheetsClient(String authToken) {
 		this.authToken = authToken;
