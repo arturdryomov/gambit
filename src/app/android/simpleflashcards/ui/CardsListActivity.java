@@ -191,6 +191,10 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				new DeleteCardTask(itemPosition).execute();
 				return true;
 
+			case R.id.edit:
+				callCardEditing(itemPosition);
+				return true;
+
 			default:
 				return super.onContextItemSelected(item);
 		}
