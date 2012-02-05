@@ -138,6 +138,28 @@ public class SpreadsheetsClient
 		processRequest(request);
 	}
 
+	public void updateWorksheet(WorksheetEntry worksheet) {
+		AtomContent content = AtomContent.forEntry(DICTIONARY, worksheet);
+
+		HttpRequest request = buildPutRequest(worksheet.getEditUrl(), content);
+		processPutRequest(request);
+	}
+
+	private HttpRequest buildPutRequest(SpreadsheetUrl url, AtomContent content) {
+		try {
+			HttpRequest request = requestFactory.buildPutRequest(url, content);
+			request.getHeaders().setIfMatch("*");
+			return request;
+		}
+		catch (IOException e) {
+			throw new SpreadsheetException(e);
+		}
+	}
+
+	private void processPutRequest(HttpRequest request) {
+		processRequest(request);
+	}
+
 	public void deleteWorksheet(WorksheetEntry worksheet) {
 		HttpRequest request = buildDeleteRequest(worksheet.getEditUrl());
 		processDeleteRequest(request);
