@@ -42,6 +42,6 @@
 	<string name="setup">Setup</string>
 	<string name="spreadsheetName">Spreadsheet name</string>
 	<string name="useExistingSpreadsheet">Use existing spreadsheet for sync</string>
-	<string name="noSpreadsheets">There are no spreadsheets in current Google Account.</string>
+	<string name="loadingSpreadsheets">Loading spreadsheets…</string>
 
 </resources>

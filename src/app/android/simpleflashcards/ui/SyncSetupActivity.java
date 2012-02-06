@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -47,13 +48,14 @@ public class SyncSetupActivity extends Activity
 		setContentView(R.layout.sync_setup);
 
 		initializeBodyControls();
+
+		new LoadSpreadsheetsTask().execute();
 	}
 
 	private void initializeBodyControls() {
 		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.spreadsheetNameEdit);
 		spreadsheetNameEdit.setText(getString(R.string.cards));
 
-		// TODO: Call spreadsheets loading task
 		initializeSpreadsheetsAdapter();
 
 		CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.syncWithExistingCheckbox);
@@ -77,15 +79,7 @@ public class SyncSetupActivity extends Activity
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
-				if (spreadsheets.isEmpty()) {
-					UserAlerter.alert(activityContext, getString(R.string.noSpreadsheets));
-
-					CheckBox checkbox = (CheckBox) buttonView;
-					checkbox.setChecked(false);
-				}
-				else {
-					currentSyncMode = SyncMode.EXISTING;
-				}
+				currentSyncMode = SyncMode.EXISTING;
 			}
 			else {
 				currentSyncMode = SyncMode.NEW;
@@ -112,6 +106,51 @@ public class SyncSetupActivity extends Activity
 
 			default:
 				break;
+		}
+	}
+
+	private class LoadSpreadsheetsTask extends AsyncTask<Void, Void, String>
+	{
+		private ProgressDialogShowHelper progressDialogHelper;
+
+		@Override
+		protected void onPreExecute() {
+			progressDialogHelper = new ProgressDialogShowHelper();
+			progressDialogHelper.show(activityContext, getString(R.string.loadingSpreadsheets));
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			// TODO: Load spreadsheets and fill spinner
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String errorMessage) {
+			progressDialogHelper.hide();
+
+			if (errorMessage.isEmpty()) {
+				if (spreadsheets.isEmpty()) {
+					hideSyncModeCheckbox();
+				}
+				else {
+					updateSpreadsheetsSpinner();
+				}
+			}
+			else {
+				UserAlerter.alert(activityContext, errorMessage);
+			}
+		}
+
+		private void hideSyncModeCheckbox() {
+			CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.syncWithExistingCheckbox);
+			syncModeCheckbox.setVisibility(View.GONE);
+		}
+
+		private void updateSpreadsheetsSpinner() {
+			Spinner spreadsheetsSpinenr = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+			((SimpleAdapter) spreadsheetsSpinenr.getAdapter()).notifyDataSetChanged();
 		}
 	}
 }
