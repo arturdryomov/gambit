@@ -32,6 +32,10 @@
 		</activity>
 		<activity android:name=".ui.CardEditingActivity" >
 		</activity>
+		<activity android:name=".ui.SettingsActivity" >
+		</activity>
+		<activity android:name=".ui.SyncSetupActivity" >
+		</activity>
 	</application>
 
 </manifest>

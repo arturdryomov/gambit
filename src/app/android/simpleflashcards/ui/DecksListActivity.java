@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +53,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: Call update task
+			// TODO: Check existing of sync document name, if false — call sync setup, true — call update
 		}
 	};
 
@@ -279,5 +280,30 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(deckPosition);
 
 		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.decks_menu, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.settings:
+				callSettings();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void callSettings() {
+		Intent callIntent = IntentFactory.createSettingsIntent(activityContext);
+		startActivity(callIntent);
 	}
 }
