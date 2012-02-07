@@ -42,4 +42,8 @@ public class WorksheetEntry
 	public SpreadsheetUrl getCellFeedUrl() {
 		return new SpreadsheetUrl(Link.findFirstWithRel(links, CELL_FEED_SCHEMA).href);
 	}
+
+	public SpreadsheetUrl getCellEditUrl(int row, int column) {
+		return new SpreadsheetUrl(String.format("%s/R%dC%d", getCellFeedUrl().toString(), row, column));
+	}
 }

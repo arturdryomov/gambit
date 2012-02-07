@@ -10,7 +10,7 @@ public class Cell
 	public int row;
 
 	@Key("@col")
-	public int col;
+	public int column;
 
 	@Key("@inputValue")
 	public String value;

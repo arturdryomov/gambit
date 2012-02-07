@@ -3,6 +3,8 @@ package app.android.simpleflashcards.spreadsheets;
 
 import java.io.IOException;
 
+import app.android.simpleflashcards.spreadsheets.models.Cell;
+import app.android.simpleflashcards.spreadsheets.models.CellEntry;
 import app.android.simpleflashcards.spreadsheets.models.CellFeed;
 import app.android.simpleflashcards.spreadsheets.models.SpreadsheetEntry;
 import app.android.simpleflashcards.spreadsheets.models.SpreadsheetFeed;
@@ -29,7 +31,6 @@ import com.google.api.client.xml.XmlNamespaceDictionary;
 
 public class SpreadsheetsClient
 {
-	private static final String APPLICATION_NAME = "Simple-Flashcards/0.0.1";
 	private static final XmlNamespaceDictionary DICTIONARY = new XmlNamespaceDictionary()
 		.set("", "http://www.w3.org/2005/Atom").set("app", "http://www.w3.org/2007/app")
 		.set("batch", "http://schemas.google.com/gdata/batch")
@@ -65,7 +66,6 @@ public class SpreadsheetsClient
 		private GoogleHeaders buildHeaders() {
 			GoogleHeaders headers = new GoogleHeaders();
 
-			headers.setApplicationName(APPLICATION_NAME);
 			headers.gdataVersion = "3.0";
 			headers.setGoogleLogin(authToken);
 
@@ -93,6 +93,60 @@ public class SpreadsheetsClient
 		return processGetRequest(request, CellFeed.class);
 	}
 
+	public void insertWorksheet(SpreadsheetEntry spreadsheet, String title, int rowCount,
+		int columnCount) {
+
+		WorksheetEntry entry = new WorksheetEntry();
+		entry.title = title;
+		entry.rowCount = rowCount;
+		entry.columnCount = columnCount;
+
+		AtomContent content = AtomContent.forEntry(DICTIONARY, entry);
+
+		HttpRequest request = buildPostRequest(spreadsheet.getWorksheetFeedUrl(), content);
+		processPostRequest(request);
+	}
+
+	public void updateWorksheet(WorksheetEntry worksheet) {
+		AtomContent content = AtomContent.forEntry(DICTIONARY, worksheet);
+
+		HttpRequest request = buildPutRequest(worksheet.getEditUrl(), content);
+		processPutRequest(request);
+	}
+
+	public void deleteWorksheet(WorksheetEntry worksheet) {
+		HttpRequest request = buildDeleteRequest(worksheet.getEditUrl());
+		processDeleteRequest(request);
+	}
+
+	public void clearWorksheet(WorksheetEntry worksheet) {
+		int rowCount = worksheet.rowCount;
+		int columnCount = worksheet.columnCount;
+
+		worksheet.rowCount = 1;
+		worksheet.columnCount = 1;
+		updateWorksheet(worksheet);
+
+		worksheet.rowCount = rowCount;
+		worksheet.columnCount = columnCount;
+		updateWorksheet(worksheet);
+
+		updateCell(worksheet, 1, 1, new String());
+	}
+
+	public void updateCell(WorksheetEntry worksheet, int row, int column, String value) {
+		Cell cell = new Cell();
+		cell.row = row;
+		cell.column = column;
+		cell.value = value;
+
+		CellEntry cellEntry = CellEntry.createForUpdating(worksheet, cell);
+		AtomContent content = AtomContent.forEntry(DICTIONARY, cellEntry);
+		HttpRequest request = buildPutRequest(worksheet.getCellEditUrl(row, column), content);
+
+		processPutRequest(request);
+	}
+
 	private HttpRequest buildGetRequest(GoogleUrl url) {
 		try {
 			return requestFactory.buildGetRequest(url);
@@ -111,20 +165,6 @@ public class SpreadsheetsClient
 		}
 	}
 
-	public void insertWorksheet(SpreadsheetEntry spreadsheet, String title, int rowCount,
-		int columnCount) {
-
-		WorksheetEntry entry = new WorksheetEntry();
-		entry.title = title;
-		entry.rowCount = rowCount;
-		entry.columnCount = columnCount;
-
-		AtomContent content = AtomContent.forEntry(DICTIONARY, entry);
-
-		HttpRequest request = buildPostRequest(spreadsheet.getWorksheetFeedUrl(), content);
-		processPostRequest(request);
-	}
-
 	private HttpRequest buildPostRequest(SpreadsheetUrl url, HttpContent content) {
 		try {
 			return requestFactory.buildPostRequest(url, content);
@@ -136,13 +176,6 @@ public class SpreadsheetsClient
 
 	private void processPostRequest(HttpRequest request) {
 		processRequest(request);
-	}
-
-	public void updateWorksheet(WorksheetEntry worksheet) {
-		AtomContent content = AtomContent.forEntry(DICTIONARY, worksheet);
-
-		HttpRequest request = buildPutRequest(worksheet.getEditUrl(), content);
-		processPutRequest(request);
 	}
 
 	private HttpRequest buildPutRequest(SpreadsheetUrl url, AtomContent content) {
@@ -158,11 +191,6 @@ public class SpreadsheetsClient
 
 	private void processPutRequest(HttpRequest request) {
 		processRequest(request);
-	}
-
-	public void deleteWorksheet(WorksheetEntry worksheet) {
-		HttpRequest request = buildDeleteRequest(worksheet.getEditUrl());
-		processDeleteRequest(request);
 	}
 
 	private HttpRequest buildDeleteRequest(SpreadsheetUrl url) {
