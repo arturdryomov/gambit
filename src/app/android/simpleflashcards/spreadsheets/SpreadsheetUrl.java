@@ -14,6 +14,11 @@ public class SpreadsheetUrl extends GoogleUrl
 	}
 
 	public static GoogleUrl spreadsheetFeedUrl() {
-		return new GoogleUrl(ROOT_PATH + SPREADSHEETS_FEED_PART);
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(ROOT_PATH);
+		builder.append(SPREADSHEETS_FEED_PART);
+
+		return new GoogleUrl(builder.toString());
 	}
 }
