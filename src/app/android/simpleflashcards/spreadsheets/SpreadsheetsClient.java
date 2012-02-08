@@ -31,6 +31,7 @@ import com.google.api.client.xml.XmlNamespaceDictionary;
 
 public class SpreadsheetsClient
 {
+	private static final int UNAUTHORIZED_STATUS_CODE = 401;
 	private static final XmlNamespaceDictionary DICTIONARY;
 
 	static {
@@ -46,7 +47,7 @@ public class SpreadsheetsClient
 			.set("xml", "http://www.w3.org/XML/1998/namespace");
 	}
 
-	private String authToken;
+	private final String authToken;
 	private HttpRequestFactory requestFactory;
 
 	public SpreadsheetsClient(String authToken) {
@@ -61,6 +62,8 @@ public class SpreadsheetsClient
 
 	private class RequestInitializer implements HttpRequestInitializer
 	{
+		private static final String GDATA_VERSION = "3.0";
+
 		@Override
 		public void initialize(HttpRequest request) throws IOException {
 			request.setHeaders(buildHeaders());
@@ -70,7 +73,7 @@ public class SpreadsheetsClient
 		private GoogleHeaders buildHeaders() {
 			GoogleHeaders headers = new GoogleHeaders();
 
-			headers.gdataVersion = "3.0";
+			headers.gdataVersion = GDATA_VERSION;
 			headers.setGoogleLogin(authToken);
 
 			return headers;
@@ -124,6 +127,11 @@ public class SpreadsheetsClient
 	}
 
 	public void clearWorksheet(WorksheetEntry worksheet) {
+		// First, clear all cells except the first one by removing them from the worksheet
+		// and then adding them back.
+		// After that just clear the first cell.
+		// This is faster than clearing cells one by one.
+
 		int rowCount = worksheet.getRowCount();
 		int columnCount = worksheet.getColumnCount();
 
@@ -182,6 +190,8 @@ public class SpreadsheetsClient
 	private HttpRequest buildPutRequest(SpreadsheetUrl url, AtomContent content) {
 		try {
 			HttpRequest request = requestFactory.buildPutRequest(url, content);
+			// Ask server to update regardless the corresponding value has been changed by another
+			// client or not
 			request.getHeaders().setIfMatch("*");
 			return request;
 		}
@@ -197,6 +207,8 @@ public class SpreadsheetsClient
 	private HttpRequest buildDeleteRequest(SpreadsheetUrl url) {
 		try {
 			HttpRequest request = requestFactory.buildDeleteRequest(url);
+			// Ask server to delete regardless the corresponding value has been changed by another
+			// client or not
 			request.getHeaders().setIfMatch("*");
 			return request;
 		}
@@ -222,7 +234,7 @@ public class SpreadsheetsClient
 	}
 
 	private FailedRequestException exceptionFromUnsuccessfulStatusCode(int statusCode) {
-		if (statusCode == 401) {
+		if (statusCode == UNAUTHORIZED_STATUS_CODE) {
 			return new UnauthorizedException();
 		}
 		else {
