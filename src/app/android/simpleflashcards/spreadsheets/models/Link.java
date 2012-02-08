@@ -9,18 +9,26 @@ import com.google.api.client.util.Key;
 public class Link
 {
 	@Key("@href")
-	public String href = new String();
+	private String href = new String();
 
 	@Key("@rel")
-	public String rel = new String();
+	private String rel = new String();
+
+	public String getHref() {
+		return href;
+	}
+
+	public String getRel() {
+		return rel;
+	}
 
 	public boolean isEmpty() {
-		return href.isEmpty() && rel.isEmpty();
+		return getHref().isEmpty() && getRel().isEmpty();
 	}
 
 	public static Link findFirstWithRel(List<Link> links, String rel) {
 		for (Link link : links) {
-			if (rel.equals(link.rel)) {
+			if (rel.equals(link.getRel())) {
 				return link;
 			}
 		}

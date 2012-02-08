@@ -1,7 +1,6 @@
 package app.android.simpleflashcards.spreadsheets.models;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.client.util.Key;
@@ -10,13 +9,21 @@ import com.google.api.client.util.Key;
 public class WorksheetFeed
 {
 	@Key("title")
-	public String title;
+	private String title;
 
 	@Key("author")
-	public Author author;
+	private Author author;
 
 	@Key("entry")
-	public List<WorksheetEntry> worksheets = new ArrayList<WorksheetEntry>();
+	private List<WorksheetEntry> worksheets;
+
+	public String getTitle() {
+		return title;
+	}
+
+	public Author getAuthor() {
+		return author;
+	}
 
 	public List<WorksheetEntry> getEntries() {
 		return worksheets;

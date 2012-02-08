@@ -7,8 +7,16 @@ import com.google.api.client.util.Key;
 public class Author
 {
 	@Key("name")
-	public String name;
+	private String name;
 
 	@Key("email")
-	public String email;
+	private String email;
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
 }

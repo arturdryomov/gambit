@@ -97,9 +97,9 @@ public class SpreadsheetsClient
 		int columnCount) {
 
 		WorksheetEntry entry = new WorksheetEntry();
-		entry.title = title;
-		entry.rowCount = rowCount;
-		entry.columnCount = columnCount;
+		entry.setTitle(title);
+		entry.setRowCount(rowCount);
+		entry.setColumnCount(columnCount);
 
 		AtomContent content = AtomContent.forEntry(DICTIONARY, entry);
 
@@ -120,27 +120,24 @@ public class SpreadsheetsClient
 	}
 
 	public void clearWorksheet(WorksheetEntry worksheet) {
-		int rowCount = worksheet.rowCount;
-		int columnCount = worksheet.columnCount;
+		int rowCount = worksheet.getRowCount();
+		int columnCount = worksheet.getColumnCount();
 
-		worksheet.rowCount = 1;
-		worksheet.columnCount = 1;
+		worksheet.setRowCount(1);
+		worksheet.setColumnCount(1);
 		updateWorksheet(worksheet);
 
-		worksheet.rowCount = rowCount;
-		worksheet.columnCount = columnCount;
+		worksheet.setRowCount(rowCount);
+		worksheet.setColumnCount(columnCount);
 		updateWorksheet(worksheet);
 
 		updateCell(worksheet, 1, 1, new String());
 	}
 
 	public void updateCell(WorksheetEntry worksheet, int row, int column, String value) {
-		Cell cell = new Cell();
-		cell.row = row;
-		cell.column = column;
-		cell.value = value;
-
+		Cell cell = Cell.createForUpdating(row, column, value);
 		CellEntry cellEntry = CellEntry.createForUpdating(worksheet, cell);
+
 		AtomContent content = AtomContent.forEntry(DICTIONARY, cellEntry);
 		HttpRequest request = buildPutRequest(worksheet.getCellEditUrl(row, column), content);
 

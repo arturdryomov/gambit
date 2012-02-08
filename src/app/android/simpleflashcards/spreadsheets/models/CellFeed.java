@@ -10,13 +10,21 @@ import com.google.api.client.util.Key;
 public class CellFeed
 {
 	@Key("title")
-	public String title;
+	private String title;
 
 	@Key("author")
-	public Author author;
+	private Author author;
 
 	@Key("entry")
-	public List<CellEntry> cells = new ArrayList<CellEntry>();
+	private List<CellEntry> cells = new ArrayList<CellEntry>();
+
+	public String getTitle() {
+		return title;
+	}
+
+	public Author getAuthor() {
+		return author;
+	}
 
 	public List<CellEntry> getEntries() {
 		return cells;

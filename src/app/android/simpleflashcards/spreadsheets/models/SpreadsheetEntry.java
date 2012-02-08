@@ -14,29 +14,45 @@ public class SpreadsheetEntry
 	private static final String SPREADSHEET_SELF_SCHEMA = "self";
 
 	@Key
-	public String id;
+	private String id;
 
 	@Key
-	public String title;
+	private String title;
 
 	@Key
-	public Author author;
+	private Author author;
 
 	@Key
-	public Content content;
+	private Content content;
 
 	@Key("link")
 	private List<Link> links = new ArrayList<Link>();
+
+	public String getId() {
+		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public Author getAuthor() {
+		return author;
+	}
+
+	public Content getContent() {
+		return content;
+	}
 
 	public List<Link> getLinks() {
 		return links;
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, SPREADSHEET_SELF_SCHEMA).href);
+		return new SpreadsheetUrl(Link.findFirstWithRel(links, SPREADSHEET_SELF_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getWorksheetFeedUrl() {
-		return new SpreadsheetUrl(content.src);
+		return new SpreadsheetUrl(getContent().getSource());
 	}
 }

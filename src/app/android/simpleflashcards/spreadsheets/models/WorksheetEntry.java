@@ -16,31 +16,55 @@ public class WorksheetEntry
 	private static final String CELL_FEED_SCHEMA = "http://schemas.google.com/spreadsheets/2006#cellsfeed";
 
 	@Key
-	public String title;
+	private String title;
 
 	@Key("gs:rowCount")
-	public int rowCount;
+	private int rowCount;
 
 	@Key("gs:colCount")
-	public int columnCount;
+	private int columnCount;
 
 	@Key("link")
 	private List<Link> links = new ArrayList<Link>();
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getRowCount() {
+		return rowCount;
+	}
+
+	public void setRowCount(int rowCount) {
+		this.rowCount = rowCount;
+	}
+
+	public int getColumnCount() {
+		return columnCount;
+	}
+
+	public void setColumnCount(int columnCount) {
+		this.columnCount = columnCount;
+	}
 
 	public List<Link> getLinks() {
 		return links;
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, SELF_SCHEMA).href);
+		return new SpreadsheetUrl(Link.findFirstWithRel(links, SELF_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getEditUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, EDIT_SCHEMA).href);
+		return new SpreadsheetUrl(Link.findFirstWithRel(links, EDIT_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getCellFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, CELL_FEED_SCHEMA).href);
+		return new SpreadsheetUrl(Link.findFirstWithRel(links, CELL_FEED_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getCellEditUrl(int row, int column) {
