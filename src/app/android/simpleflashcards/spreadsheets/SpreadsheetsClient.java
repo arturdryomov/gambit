@@ -31,16 +31,20 @@ import com.google.api.client.xml.XmlNamespaceDictionary;
 
 public class SpreadsheetsClient
 {
-	private static final XmlNamespaceDictionary DICTIONARY = new XmlNamespaceDictionary()
-		.set("", "http://www.w3.org/2005/Atom").set("app", "http://www.w3.org/2007/app")
-		.set("batch", "http://schemas.google.com/gdata/batch")
-		.set("docs", "http://schemas.google.com/docs/2007")
-		.set("gAcl", "http://schemas.google.com/acl/2007")
-		.set("gd", "http://schemas.google.com/g/2005")
-		.set("gs", "http://schemas.google.com/spreadsheets/2006")
-		.set("gsx", "http://schemas.google.com/spreadsheets/2006/extended")
-		.set("openSearch", "http://a9.com/-/spec/opensearch/1.1/")
-		.set("xml", "http://www.w3.org/XML/1998/namespace");
+	private static final XmlNamespaceDictionary DICTIONARY;
+
+	static {
+		DICTIONARY = new XmlNamespaceDictionary().set("", "http://www.w3.org/2005/Atom")
+			.set("app", "http://www.w3.org/2007/app")
+			.set("batch", "http://schemas.google.com/gdata/batch")
+			.set("docs", "http://schemas.google.com/docs/2007")
+			.set("gAcl", "http://schemas.google.com/acl/2007")
+			.set("gd", "http://schemas.google.com/g/2005")
+			.set("gs", "http://schemas.google.com/spreadsheets/2006")
+			.set("gsx", "http://schemas.google.com/spreadsheets/2006/extended")
+			.set("openSearch", "http://a9.com/-/spec/opensearch/1.1/")
+			.set("xml", "http://www.w3.org/XML/1998/namespace");
+	}
 
 	private String authToken;
 	private HttpRequestFactory requestFactory;
