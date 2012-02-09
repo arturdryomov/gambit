@@ -42,4 +42,13 @@ public class Category
 
 		return new Category();
 	}
+
+	public static Category createForUploading(String scheme, String term) {
+		Category category = new Category();
+
+		category.scheme = scheme;
+		category.term = term;
+
+		return category;
+	}
 }

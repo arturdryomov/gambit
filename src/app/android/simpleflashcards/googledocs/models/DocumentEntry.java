@@ -1,6 +1,7 @@
 package app.android.simpleflashcards.googledocs.models;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.android.simpleflashcards.googledocs.GoogleDocsException;
@@ -69,7 +70,7 @@ public class DocumentEntry
 	private String title;
 
 	@Key("category")
-	private List<Category> categories;
+	private List<Category> categories = new ArrayList<Category>();
 
 	public String getId() {
 		return id;
@@ -86,5 +87,14 @@ public class DocumentEntry
 	public Type getType() {
 		Category typeCategory = Category.findFirstWithScheme(categories, CATEGORY_KIND);
 		return Type.fromString(typeCategory.getTerm());
+	}
+
+	public static DocumentEntry createForUploading(Type type, String title) {
+		DocumentEntry entry = new DocumentEntry();
+
+		entry.title = title;
+		entry.categories.add(Category.createForUploading(CATEGORY_KIND, type.toString()));
+
+		return entry;
 	}
 }

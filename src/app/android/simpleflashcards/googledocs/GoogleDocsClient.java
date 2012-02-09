@@ -10,7 +10,7 @@ import app.android.simpleflashcards.spreadsheets.SpreadsheetException;
 import app.android.simpleflashcards.spreadsheets.UnauthorizedException;
 
 import com.google.api.client.googleapis.GoogleHeaders;
-import com.google.api.client.googleapis.GoogleUrl;
+import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -18,6 +18,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.xml.atom.AtomContent;
 import com.google.api.client.http.xml.atom.AtomParser;
 import com.google.api.client.xml.XmlNamespaceDictionary;
 
@@ -83,7 +84,23 @@ public class GoogleDocsClient
 		return processGetRequest(request, DocumentFeed.class);
 	}
 
-	private HttpRequest buildGetRequest(GoogleUrl url) {
+	public void uploadEmptyDocument(DocumentEntry.Type type, String title) {
+		DocumentEntry emptyDocument = DocumentEntry.createForUploading(type, title);
+		AtomContent content = AtomContent.forEntry(DICTIONARY, emptyDocument);
+
+		// Using post url is considered deprecated. However, if using resumable create
+		// media url, a document cannot be just created like it is documented: the server
+		// asks for some additional info as if it is intended to upload and convert a file.
+		HttpRequest request = buildPostRequest(getPostUrl(), content);
+
+		processPostRequest(request);
+	}
+
+	private GoogleDocsUrl getPostUrl() {
+		return getDocumentFeed().getPostUrl();
+	}
+
+	private HttpRequest buildGetRequest(GoogleDocsUrl url) {
 		try {
 			return requestFactory.buildGetRequest(url);
 		}
@@ -99,6 +116,19 @@ public class GoogleDocsClient
 		catch (IOException e) {
 			throw new FailedRequestException(e);
 		}
+	}
+
+	private HttpRequest buildPostRequest(GoogleDocsUrl url, HttpContent content) {
+		try {
+			return requestFactory.buildPostRequest(url, content);
+		}
+		catch (IOException e) {
+			throw new SpreadsheetException(e);
+		}
+	}
+
+	private void processPostRequest(HttpRequest request) {
+		processRequest(request);
 	}
 
 	private HttpResponse processRequest(HttpRequest request) {
