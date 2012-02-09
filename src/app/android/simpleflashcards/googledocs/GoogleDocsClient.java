@@ -6,7 +6,6 @@ import java.io.IOException;
 import app.android.simpleflashcards.googledocs.models.DocumentEntry;
 import app.android.simpleflashcards.googledocs.models.DocumentFeed;
 import app.android.simpleflashcards.spreadsheets.FailedRequestException;
-import app.android.simpleflashcards.spreadsheets.SpreadsheetException;
 import app.android.simpleflashcards.spreadsheets.UnauthorizedException;
 
 import com.google.api.client.googleapis.GoogleHeaders;
@@ -100,12 +99,19 @@ public class GoogleDocsClient
 		return getDocumentFeed().getPostUrl();
 	}
 
+	public void updateDocument(DocumentEntry entry) {
+		AtomContent content = AtomContent.forEntry(DICTIONARY, entry);
+		HttpRequest request = buildPutRequest(entry.getEditUrl(), content);
+
+		processPutRequest(request);
+	}
+
 	private HttpRequest buildGetRequest(GoogleDocsUrl url) {
 		try {
 			return requestFactory.buildGetRequest(url);
 		}
 		catch (IOException e) {
-			throw new SpreadsheetException(e);
+			throw new GoogleDocsException(e);
 		}
 	}
 
@@ -123,11 +129,28 @@ public class GoogleDocsClient
 			return requestFactory.buildPostRequest(url, content);
 		}
 		catch (IOException e) {
-			throw new SpreadsheetException(e);
+			throw new GoogleDocsException(e);
 		}
 	}
 
 	private void processPostRequest(HttpRequest request) {
+		processRequest(request);
+	}
+
+	private HttpRequest buildPutRequest(GoogleDocsUrl url, AtomContent content) {
+		try {
+			HttpRequest request = requestFactory.buildPutRequest(url, content);
+			// Ask server to update regardless the corresponding value has been changed by another
+			// client or not
+			request.getHeaders().setIfMatch("*");
+			return request;
+		}
+		catch (IOException e) {
+			throw new GoogleDocsException(e);
+		}
+	}
+
+	private void processPutRequest(HttpRequest request) {
 		processRequest(request);
 	}
 

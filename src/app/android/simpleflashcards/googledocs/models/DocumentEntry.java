@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.android.simpleflashcards.googledocs.GoogleDocsException;
+import app.android.simpleflashcards.googledocs.GoogleDocsUrl;
 
 import com.google.api.client.util.Key;
 
 
 public class DocumentEntry
 {
+	private static final String EDIT_SCHEME = "edit";
+
 	private static final String CATEGORY_KIND = "http://schemas.google.com/g/2005#kind";
 
 	public static enum Type {
@@ -72,6 +75,9 @@ public class DocumentEntry
 	@Key("category")
 	private List<Category> categories = new ArrayList<Category>();
 
+	@Key("link")
+	private List<Link> links = new ArrayList<Link>();
+
 	public String getId() {
 		return id;
 	}
@@ -80,8 +86,16 @@ public class DocumentEntry
 		return title;
 	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public List<Category> getCategories() {
 		return categories;
+	}
+
+	public List<Link> getLinks() {
+		return links;
 	}
 
 	public Type getType() {
@@ -89,10 +103,14 @@ public class DocumentEntry
 		return Type.fromString(typeCategory.getTerm());
 	}
 
+	public GoogleDocsUrl getEditUrl() {
+		return new GoogleDocsUrl(Link.findFirstWithRel(links, EDIT_SCHEME).getHref());
+	}
+
 	public static DocumentEntry createForUploading(Type type, String title) {
 		DocumentEntry entry = new DocumentEntry();
 
-		entry.title = title;
+		entry.setTitle(title);
 		entry.categories.add(Category.createForUploading(CATEGORY_KIND, type.toString()));
 
 		return entry;
