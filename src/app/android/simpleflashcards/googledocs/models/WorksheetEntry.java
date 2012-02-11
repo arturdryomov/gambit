@@ -70,4 +70,14 @@ public class WorksheetEntry
 	public SpreadsheetUrl getCellEditUrl(int row, int column) {
 		return new SpreadsheetUrl(String.format("%s/R%dC%d", getCellFeedUrl().toString(), row, column));
 	}
+
+	public static WorksheetEntry createForInserting(String title, int rowCount, int columnCount) {
+		WorksheetEntry entry = new WorksheetEntry();
+
+		entry.title = title;
+		entry.rowCount = rowCount;
+		entry.columnCount = columnCount;
+
+		return entry;
+	}
 }
