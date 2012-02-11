@@ -6,7 +6,7 @@ import app.android.simpleflashcards.googledocs.models.DocumentEntry;
 import com.google.api.client.googleapis.GoogleUrl;
 
 
-public class GoogleDocsUrl extends GoogleUrl
+public class DocumentsListUrl extends GoogleUrl
 {
 	private static final String ROOT_PATH = "https://docs.google.com/feeds";
 	private static final String DOCUMENTS_FEED_PART = "/default/private/full";
@@ -17,11 +17,11 @@ public class GoogleDocsUrl extends GoogleUrl
 	private static final String TYPE_PART_DOCUMENT = "/document";
 	private static final String OWNER_PART = "/mine";
 
-	public GoogleDocsUrl(String url) {
+	public DocumentsListUrl(String url) {
 		super(url);
 	}
 
-	public static GoogleDocsUrl documentsFeedUrl() {
+	public static DocumentsListUrl documentsFeedUrl() {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(ROOT_PATH);
@@ -29,10 +29,10 @@ public class GoogleDocsUrl extends GoogleUrl
 		builder.append(DIVIDER_PART);
 		builder.append(OWNER_PART);
 
-		return new GoogleDocsUrl(builder.toString());
+		return new DocumentsListUrl(builder.toString());
 	}
 
-	public static GoogleDocsUrl documentsFeedUrl(DocumentEntry.Type type) {
+	public static DocumentsListUrl documentsFeedUrl(DocumentEntry.Type type) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(ROOT_PATH);
@@ -41,7 +41,7 @@ public class GoogleDocsUrl extends GoogleUrl
 		builder.append(buildDocumentTypePart(type));
 		builder.append(OWNER_PART);
 
-		return new GoogleDocsUrl(builder.toString());
+		return new DocumentsListUrl(builder.toString());
 	}
 
 	private static String buildDocumentTypePart(DocumentEntry.Type type) {

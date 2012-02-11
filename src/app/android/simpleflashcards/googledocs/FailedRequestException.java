@@ -1,7 +1,7 @@
-package app.android.simpleflashcards.spreadsheets;
+package app.android.simpleflashcards.googledocs;
 
 
-public class FailedRequestException extends SpreadsheetException
+public class FailedRequestException extends GoogleDocsException
 {
 	public FailedRequestException() {
 	}

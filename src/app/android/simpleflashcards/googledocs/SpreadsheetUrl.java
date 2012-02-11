@@ -1,4 +1,4 @@
-package app.android.simpleflashcards.spreadsheets;
+package app.android.simpleflashcards.googledocs;
 
 
 import com.google.api.client.googleapis.GoogleUrl;

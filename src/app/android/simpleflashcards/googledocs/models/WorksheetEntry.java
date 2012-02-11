@@ -1,10 +1,10 @@
-package app.android.simpleflashcards.spreadsheets.models;
+package app.android.simpleflashcards.googledocs.models;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.android.simpleflashcards.spreadsheets.SpreadsheetUrl;
+import app.android.simpleflashcards.googledocs.SpreadsheetUrl;
 
 import com.google.api.client.util.Key;
 

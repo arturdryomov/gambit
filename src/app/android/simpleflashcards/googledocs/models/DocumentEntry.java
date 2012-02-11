@@ -4,8 +4,8 @@ package app.android.simpleflashcards.googledocs.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.android.simpleflashcards.googledocs.DocumentsListUrl;
 import app.android.simpleflashcards.googledocs.GoogleDocsException;
-import app.android.simpleflashcards.googledocs.GoogleDocsUrl;
 
 import com.google.api.client.util.Key;
 
@@ -103,8 +103,8 @@ public class DocumentEntry
 		return Type.fromString(typeCategory.getTerm());
 	}
 
-	public GoogleDocsUrl getEditUrl() {
-		return new GoogleDocsUrl(Link.findFirstWithRel(links, EDIT_SCHEME).getHref());
+	public DocumentsListUrl getEditUrl() {
+		return new DocumentsListUrl(Link.findFirstWithRel(links, EDIT_SCHEME).getHref());
 	}
 
 	public static DocumentEntry createForUploading(Type type, String title) {

@@ -4,7 +4,7 @@ package app.android.simpleflashcards.googledocs.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.android.simpleflashcards.googledocs.GoogleDocsUrl;
+import app.android.simpleflashcards.googledocs.DocumentsListUrl;
 
 import com.google.api.client.util.Key;
 
@@ -24,14 +24,14 @@ public class DocumentFeed
 		return entries;
 	}
 
-	public GoogleDocsUrl getResumableCreateMediaUrl() {
+	public DocumentsListUrl getResumableCreateMediaUrl() {
 		String resumableCreateMediaHref = Link.findFirstWithRel(links, RESUMABLE_CREATE_MEDIA_SCHEME)
 			.getHref();
-		return new GoogleDocsUrl(resumableCreateMediaHref);
+		return new DocumentsListUrl(resumableCreateMediaHref);
 	}
 
-	public GoogleDocsUrl getPostUrl() {
+	public DocumentsListUrl getPostUrl() {
 		String postHref = Link.findFirstWithRel(links, POST_SCHEME).getHref();
-		return new GoogleDocsUrl(postHref);
+		return new DocumentsListUrl(postHref);
 	}
 }

@@ -1,4 +1,4 @@
-package app.android.simpleflashcards.spreadsheets.models;
+package app.android.simpleflashcards.googledocs.models;
 
 
 import java.util.List;
