@@ -33,7 +33,6 @@
 	<string name="resetOrder">Reset order</string>
 	<string name="shuffle">Shuffle</string>
 	<string name="toFirstCard">Back to beginning</string>
-	<string name="shufflingCards">Shuffling your flashcards.</string>
 	<string name="settings">Settings</string>
 	<string name="settingSyncSpreadsheetName">SYNC_SPREADSHEET_NAME</string>
 	<string name="titleOfGoogleSpreadsheet">Title of Google Spreadsheet to sync</string>
@@ -43,5 +42,7 @@
 	<string name="spreadsheetName">Spreadsheet name</string>
 	<string name="useExistingSpreadsheet">Use existing spreadsheet for sync</string>
 	<string name="loadingSpreadsheets">Loading spreadsheets…</string>
+	<string name="shufflingCards">Shuffling flashcards…</string>
+	<string name="resettingCardsOrder">Resetting cards order…</string>
 
 </resources>

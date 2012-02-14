@@ -80,8 +80,6 @@ public class CardsViewingActivity extends Activity
 			@Override
 			public void onShake() {
 				if (!isLoadingInProgress) {
-					UserAlerter.alert(activityContext, getString(R.string.shufflingCards));
-
 					new LoadCardsTask(CardsOrder.SHUFFLE).execute();
 				}
 			}
@@ -108,7 +106,23 @@ public class CardsViewingActivity extends Activity
 			}
 
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loadingCards));
+
+			switch (cardsOrder) {
+				case SHUFFLE:
+					progressDialogHelper.show(activityContext, getString(R.string.shufflingCards));
+					break;
+
+				case STRAIGHT:
+					progressDialogHelper.show(activityContext, getString(R.string.resettingCardsOrder));
+					break;
+
+				case DEFAULT:
+					progressDialogHelper.show(activityContext, getString(R.string.loadingCards));
+					break;
+
+				default:
+					break;
+			}
 		}
 
 		@Override
