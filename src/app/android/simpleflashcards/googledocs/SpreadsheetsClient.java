@@ -33,8 +33,7 @@ public class SpreadsheetsClient extends GoogleDocsClient
 		SpreadsheetFeed spreadsheets = getSpreadsheetFeed();
 
 		for (SpreadsheetEntry spreadsheet : spreadsheets.getEntries()) {
-			KeyUrl keyUrl = new KeyUrl(spreadsheet.getLinkHref("alternate"));
-			if (keyUrl.getKey().equals(key)) {
+			if (spreadsheet.getKey().equals(key)) {
 				return spreadsheet;
 			}
 		}

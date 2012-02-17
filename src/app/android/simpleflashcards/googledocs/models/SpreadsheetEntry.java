@@ -12,7 +12,8 @@ import com.google.api.client.util.Key;
 
 public class SpreadsheetEntry
 {
-	private static final String SPREADSHEET_SELF_SCHEMA = "self";
+	private static final String ALTERNATE_SCHEME = "alternate";
+	private static final String SELF_SCHEMA = "self";
 
 	@Key
 	private String id;
@@ -50,12 +51,12 @@ public class SpreadsheetEntry
 	}
 
 	public String getKey() {
-		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, "alternate").getHref());
+		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, ALTERNATE_SCHEME).getHref());
 		return keyUrl.getKey();
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, SPREADSHEET_SELF_SCHEMA).getHref());
+		return new SpreadsheetUrl(Link.findFirstWithRel(links, SELF_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getWorksheetFeedUrl() {

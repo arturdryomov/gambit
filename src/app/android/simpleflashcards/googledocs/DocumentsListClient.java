@@ -29,8 +29,7 @@ public class DocumentsListClient extends GoogleDocsClient
 		DocumentFeed documents = getDocumentFeed(Type.SPREADSHEET);
 
 		for (DocumentEntry document : documents.getEntries()) {
-			KeyUrl keyUrl = new KeyUrl(document.getLinkHref("alternate"));
-			if (keyUrl.getKey().equals(key)) {
+			if (document.getSpreadsheetKey().equals(key)) {
 				return document;
 			}
 		}

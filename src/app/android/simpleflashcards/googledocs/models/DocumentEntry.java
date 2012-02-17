@@ -13,6 +13,7 @@ import com.google.api.client.util.Key;
 
 public class DocumentEntry
 {
+	private static final String ALTERNATE_SCHEME = "alternate";
 	private static final String EDIT_SCHEME = "edit";
 
 	private static final String CATEGORY_KIND = "http://schemas.google.com/g/2005#kind";
@@ -109,7 +110,7 @@ public class DocumentEntry
 			throw new GoogleDocsException("Key can be only determined for a spreadsheet");
 		}
 
-		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, "alternate").getHref());
+		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, ALTERNATE_SCHEME).getHref());
 		return keyUrl.getKey();
 	}
 
