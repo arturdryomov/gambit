@@ -2,6 +2,7 @@ package app.android.simpleflashcards.googledocs;
 
 
 import app.android.simpleflashcards.googledocs.models.DocumentEntry;
+import app.android.simpleflashcards.googledocs.models.DocumentEntry.Type;
 import app.android.simpleflashcards.googledocs.models.DocumentFeed;
 
 import com.google.api.client.http.HttpRequest;
@@ -22,6 +23,19 @@ public class DocumentsListClient extends GoogleDocsClient
 	public DocumentFeed getDocumentFeed(DocumentEntry.Type type) {
 		HttpRequest request = buildGetRequest(DocumentsListUrl.documentsFeedUrl(type));
 		return processGetRequest(request, DocumentFeed.class);
+	}
+
+	public DocumentEntry getSpreadsheetByKey(String key) {
+		DocumentFeed documents = getDocumentFeed(Type.SPREADSHEET);
+
+		for (DocumentEntry document : documents.getEntries()) {
+			KeyUrl keyUrl = new KeyUrl(document.getLinkHref("alternate"));
+			if (keyUrl.getKey().equals(key)) {
+				return document;
+			}
+		}
+
+		throw new EntryNotFoundException();
 	}
 
 	public void uploadEmptyDocument(DocumentEntry.Type type, String title) {

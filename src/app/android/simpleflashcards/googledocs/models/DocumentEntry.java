@@ -115,4 +115,8 @@ public class DocumentEntry
 
 		return entry;
 	}
+
+	public String getLinkHref(String linkRel) {
+		return Link.findFirstWithRel(links, linkRel).getHref();
+	}
 }
