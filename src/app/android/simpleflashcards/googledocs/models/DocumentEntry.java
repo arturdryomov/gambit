@@ -6,6 +6,7 @@ import java.util.List;
 
 import app.android.simpleflashcards.googledocs.DocumentsListUrl;
 import app.android.simpleflashcards.googledocs.GoogleDocsException;
+import app.android.simpleflashcards.googledocs.KeyUrl;
 
 import com.google.api.client.util.Key;
 
@@ -101,6 +102,15 @@ public class DocumentEntry
 	public Type getType() {
 		Category typeCategory = Category.findFirstWithScheme(categories, CATEGORY_KIND);
 		return Type.fromString(typeCategory.getTerm());
+	}
+
+	public String getSpreadsheetKey() {
+		if (getType() != Type.SPREADSHEET) {
+			throw new GoogleDocsException("Key can be only determined for a spreadsheet");
+		}
+
+		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, "alternate").getHref());
+		return keyUrl.getKey();
 	}
 
 	public DocumentsListUrl getEditUrl() {

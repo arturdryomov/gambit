@@ -4,6 +4,7 @@ package app.android.simpleflashcards.googledocs.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.android.simpleflashcards.googledocs.KeyUrl;
 import app.android.simpleflashcards.googledocs.SpreadsheetUrl;
 
 import com.google.api.client.util.Key;
@@ -46,6 +47,11 @@ public class SpreadsheetEntry
 
 	public List<Link> getLinks() {
 		return links;
+	}
+
+	public String getKey() {
+		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, "alternate").getHref());
+		return keyUrl.getKey();
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
