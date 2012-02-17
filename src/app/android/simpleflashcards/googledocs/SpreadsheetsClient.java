@@ -29,6 +29,19 @@ public class SpreadsheetsClient extends GoogleDocsClient
 		return processGetRequest(request, SpreadsheetEntry.class);
 	}
 
+	public SpreadsheetEntry getSpreadsheetEntryByKey(String key) {
+		SpreadsheetFeed spreadsheets = getSpreadsheetFeed();
+
+		for (SpreadsheetEntry spreadsheet : spreadsheets.getEntries()) {
+			KeyUrl keyUrl = new KeyUrl(spreadsheet.getLinkHref("alternate"));
+			if (keyUrl.getKey().equals(key)) {
+				return spreadsheet;
+			}
+		}
+
+		throw new EntryNotFoundException();
+	}
+
 	public WorksheetFeed getWorksheetFeed(SpreadsheetEntry spreadsheet) {
 		HttpRequest request = buildGetRequest(spreadsheet.getWorksheetFeedUrl());
 		return processGetRequest(request, WorksheetFeed.class);

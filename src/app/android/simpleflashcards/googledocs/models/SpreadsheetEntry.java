@@ -55,4 +55,8 @@ public class SpreadsheetEntry
 	public SpreadsheetUrl getWorksheetFeedUrl() {
 		return new SpreadsheetUrl(getContent().getSource());
 	}
+
+	public String getLinkHref(String linkRel) {
+		return Link.findFirstWithRel(links, linkRel).getHref();
+	}
 }
