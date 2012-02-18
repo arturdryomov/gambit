@@ -2,8 +2,10 @@ package app.android.simpleflashcards.googledocs.models;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import app.android.simpleflashcards.Rfc3339DateProcessor;
 import app.android.simpleflashcards.googledocs.KeyUrl;
 import app.android.simpleflashcards.googledocs.SpreadsheetUrl;
 
@@ -30,6 +32,9 @@ public class SpreadsheetEntry
 	@Key("link")
 	private List<Link> links = new ArrayList<Link>();
 
+	@Key("updated")
+	private String lastUpdatedTime;
+
 	public String getId() {
 		return id;
 	}
@@ -48,6 +53,10 @@ public class SpreadsheetEntry
 
 	public List<Link> getLinks() {
 		return links;
+	}
+
+	public Date getLastUpdatedTime() {
+		return Rfc3339DateProcessor.parse(lastUpdatedTime);
 	}
 
 	public String getKey() {
