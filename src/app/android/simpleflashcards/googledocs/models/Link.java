@@ -9,10 +9,10 @@ import com.google.api.client.util.Key;
 public class Link
 {
 	@Key("@href")
-	private String href = new String();
+	private String href;
 
 	@Key("@rel")
-	private String rel = new String();
+	private String rel;
 
 	public String getHref() {
 		return href;
@@ -20,10 +20,6 @@ public class Link
 
 	public String getRel() {
 		return rel;
-	}
-
-	public boolean isEmpty() {
-		return getHref().isEmpty() && getRel().isEmpty();
 	}
 
 	public static Link findFirstWithRel(List<Link> links, String rel) {
