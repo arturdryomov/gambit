@@ -9,13 +9,13 @@ import com.google.api.client.util.Key;
 public class Category
 {
 	@Key("@scheme")
-	private String scheme = new String();
+	private String scheme;
 
 	@Key("@term")
-	private String term = new String();
+	private String term;
 
 	@Key("@label")
-	private String label = new String();
+	private String label;
 
 	public String getScheme() {
 		return scheme;
@@ -27,10 +27,6 @@ public class Category
 
 	public String getLabel() {
 		return label;
-	}
-
-	public boolean isEmpty() {
-		return scheme.isEmpty() && term.isEmpty() && label.isEmpty();
 	}
 
 	public static Category findFirstWithScheme(List<Category> categories, String scheme) {
