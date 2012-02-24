@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import app.android.simpleflashcards.Rfc3339DateProcessor;
+import app.android.simpleflashcards.InternetDateTimeFormatter;
 import app.android.simpleflashcards.googledocs.DocumentsListUrl;
 import app.android.simpleflashcards.googledocs.GoogleDocsException;
 import app.android.simpleflashcards.googledocs.KeyUrl;
@@ -106,7 +106,7 @@ public class DocumentEntry
 	}
 
 	public Date getLastUpdatedTime() {
-		return Rfc3339DateProcessor.parse(lastUpdatedTime);
+		return InternetDateTimeFormatter.parse(lastUpdatedTime);
 	}
 
 	public Type getType() {
