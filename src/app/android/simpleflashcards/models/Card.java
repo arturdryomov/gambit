@@ -113,7 +113,7 @@ public class Card
 		}
 
 		if (frontSideText == null) {
-			if (otherCard.frontSideText == null) {
+			if (otherCard.frontSideText != null) {
 				return false;
 			}
 		}
@@ -123,7 +123,7 @@ public class Card
 		}
 
 		if (backSideText == null) {
-			if (otherCard.backSideText == null) {
+			if (otherCard.backSideText != null) {
 				return false;
 			}
 		}
