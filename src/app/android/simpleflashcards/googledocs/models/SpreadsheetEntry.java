@@ -30,10 +30,14 @@ public class SpreadsheetEntry
 	private Content content;
 
 	@Key("link")
-	private List<Link> links = new ArrayList<Link>();
+	private List<Link> links;
 
 	@Key("updated")
 	private String lastUpdatedTime;
+
+	public SpreadsheetEntry() {
+		links = new ArrayList<Link>();
+	}
 
 	public String getId() {
 		return id;

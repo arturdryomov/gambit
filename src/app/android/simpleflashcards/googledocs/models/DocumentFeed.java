@@ -15,10 +15,15 @@ public class DocumentFeed
 	private static final String POST_SCHEME = "http://schemas.google.com/g/2005#post";
 
 	@Key("link")
-	private List<Link> links = new ArrayList<Link>();
+	private List<Link> links;
 
 	@Key("entry")
-	private List<DocumentEntry> entries = new ArrayList<DocumentEntry>();
+	private List<DocumentEntry> entries;
+
+	public DocumentFeed() {
+		links = new ArrayList<Link>();
+		entries = new ArrayList<DocumentEntry>();
+	}
 
 	public List<DocumentEntry> getEntries() {
 		return entries;

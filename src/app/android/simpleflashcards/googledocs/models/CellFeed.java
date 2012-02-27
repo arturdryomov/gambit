@@ -16,7 +16,11 @@ public class CellFeed
 	private Author author;
 
 	@Key("entry")
-	private List<CellEntry> cells = new ArrayList<CellEntry>();
+	private List<CellEntry> cells;
+
+	public CellFeed() {
+		cells = new ArrayList<CellEntry>();
+	}
 
 	public String getTitle() {
 		return title;

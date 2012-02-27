@@ -77,13 +77,18 @@ public class DocumentEntry
 	private String title;
 
 	@Key("category")
-	private List<Category> categories = new ArrayList<Category>();
+	private List<Category> categories;
 
 	@Key("link")
-	private List<Link> links = new ArrayList<Link>();
+	private List<Link> links;
 
 	@Key("updated")
 	private String lastUpdatedTime;
+
+	public DocumentEntry() {
+		categories = new ArrayList<Category>();
+		links = new ArrayList<Link>();
+	}
 
 	public String getId() {
 		return id;

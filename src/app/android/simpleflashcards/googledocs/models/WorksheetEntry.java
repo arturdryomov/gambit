@@ -25,7 +25,11 @@ public class WorksheetEntry
 	private int columnCount;
 
 	@Key("link")
-	private List<Link> links = new ArrayList<Link>();
+	private List<Link> links;
+
+	public WorksheetEntry() {
+		links = new ArrayList<Link>();
+	}
 
 	public String getTitle() {
 		return title;
