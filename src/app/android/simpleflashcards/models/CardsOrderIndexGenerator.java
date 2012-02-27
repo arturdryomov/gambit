@@ -27,13 +27,13 @@ public class CardsOrderIndexGenerator
 
 	private void resetUnusedIndexes() {
 		unusedIndexes.clear();
-		for (int i = 0; i < cardsCount; ++i) {
+		for (int i = 0; i < cardsCount; i++) {
 			unusedIndexes.add(i);
 		}
 	}
 
 	public int generate() {
-		if (unusedIndexes.size() == 0) {
+		if (unusedIndexes.isEmpty()) {
 			throw new ModelsException();
 		}
 
