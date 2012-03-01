@@ -386,10 +386,8 @@ public class Deck
 			return false;
 		}
 
-		if (title == null) {
-			if (otherDeck.title != null) {
-				return false;
-			}
+		if ((title == null) && (otherDeck.title != null)) {
+			return false;
 		}
 
 		if (!title.equals(otherDeck.title)) {

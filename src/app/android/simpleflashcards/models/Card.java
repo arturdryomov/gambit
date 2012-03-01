@@ -112,20 +112,16 @@ public class Card
 			return false;
 		}
 
-		if (frontSideText == null) {
-			if (otherCard.frontSideText != null) {
-				return false;
-			}
+		if ((frontSideText == null) && (otherCard.frontSideText != null)) {
+			return false;
 		}
 
 		if (!frontSideText.equals(otherCard.frontSideText)) {
 			return false;
 		}
 
-		if (backSideText == null) {
-			if (otherCard.backSideText != null) {
-				return false;
-			}
+		if ((backSideText == null) && (otherCard.backSideText != null)) {
+			return false;
 		}
 
 		if (!backSideText.equals(otherCard.backSideText)) {
