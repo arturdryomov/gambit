@@ -291,11 +291,11 @@ public class Deck
 			return;
 		}
 
-		CardsOrderIndexGenerator generator = new CardsOrderIndexGenerator(cursor.getCount());
+		CardsOrderShuffler shuffler = new CardsOrderShuffler(cursor.getCount());
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
-			setCardOrderIndex(cardId, generator.generate());
+			setCardOrderIndex(cardId, shuffler.generateNextIndex());
 			cursor.moveToNext();
 		}
 	}
