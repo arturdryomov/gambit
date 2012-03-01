@@ -18,8 +18,8 @@ import com.google.api.client.http.xml.atom.AtomParser;
 import com.google.api.client.xml.XmlNamespaceDictionary;
 
 
-//This class methods will throw UnauthorizedException if auth token passed is invalid,
-//and FailedRequestException if internet connection is unavailable.
+// This class methods will throw UnauthorizedException if auth token passed is invalid,
+// and FailedRequestException if internet connection is unavailable.
 
 public class GoogleDocsClient
 {
