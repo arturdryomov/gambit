@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Decks
 {
-	private SQLiteDatabase database;
+	private final SQLiteDatabase database;
 
 	public Decks(SQLiteDatabase database) {
 		this.database = database;
