@@ -136,7 +136,7 @@ public class DocumentEntry
 		DocumentEntry entry = new DocumentEntry();
 
 		entry.setTitle(title);
-		entry.categories.add(Category.createForUploading(CATEGORY_KIND, type.toString()));
+		entry.categories.add(new Category(CATEGORY_KIND, type.toString()));
 
 		return entry;
 	}

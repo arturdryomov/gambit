@@ -29,6 +29,10 @@ public class Category
 		return label;
 	}
 
+	public boolean isEmpty() {
+		return scheme.isEmpty() && term.isEmpty() && label.isEmpty();
+	}
+
 	public static Category findFirstWithScheme(List<Category> categories, String scheme) {
 		for (Category category : categories) {
 			if (scheme.equals(category.getScheme())) {
@@ -39,12 +43,16 @@ public class Category
 		return new Category();
 	}
 
-	public static Category createForUploading(String scheme, String term) {
-		Category category = new Category();
+	public Category(String scheme, String term) {
+		this();
 
-		category.scheme = scheme;
-		category.term = term;
+		this.scheme = scheme;
+		this.term = term;
+	}
 
-		return category;
+	private Category() {
+		scheme = new String();
+		term = new String();
+		label = new String();
 	}
 }

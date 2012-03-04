@@ -27,13 +27,17 @@ public class Cell
 		return value;
 	}
 
-	public static Cell createForUpdating(int row, int column, String value) {
-		Cell cell = new Cell();
+	public boolean isEmpty() {
+		return value.isEmpty();
+	}
 
-		cell.row = row;
-		cell.column = column;
-		cell.value = value;
+	public Cell(int row, int column, String value) {
+		this.row = row;
+		this.column = column;
+		this.value = value;
+	}
 
-		return cell;
+	public Cell() {
+		value = new String();
 	}
 }

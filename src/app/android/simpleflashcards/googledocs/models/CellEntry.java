@@ -27,11 +27,20 @@ public class CellEntry
 		return content;
 	}
 
-	public static CellEntry createForUpdating(WorksheetEntry worksheet, Cell cell) {
-		CellEntry entry = new CellEntry();
-		entry.cell = cell;
-		entry.id = worksheet.getCellEditUrl(cell.getRow(), cell.getColumn()).toString();
+	public boolean isEmpty() {
+		return cell.isEmpty() && id.isEmpty() && content.isEmpty();
+	}
 
-		return entry;
+	public CellEntry(WorksheetEntry worksheet, Cell cell) {
+		this();
+
+		this.cell = cell;
+		id = worksheet.getCellEditUrl(cell.getRow(), cell.getColumn()).toString();
+	}
+
+	private CellEntry() {
+		cell = new Cell(); // empy cell
+		id = new String();
+		content = new String();
 	}
 }

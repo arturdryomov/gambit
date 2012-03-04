@@ -94,8 +94,8 @@ public class SpreadsheetsClient extends GoogleDocsClient
 	}
 
 	public void updateCell(WorksheetEntry worksheet, int row, int column, String value) {
-		Cell cell = Cell.createForUpdating(row, column, value);
-		CellEntry cellEntry = CellEntry.createForUpdating(worksheet, cell);
+		Cell cell = new Cell(row, column, value);
+		CellEntry cellEntry = new CellEntry(worksheet, cell);
 
 		AtomContent content = AtomContent.forEntry(getXmlNamespaceDictionary(), cellEntry);
 		HttpRequest request = buildPutRequest(worksheet.getCellEditUrl(row, column), content);
