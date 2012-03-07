@@ -90,6 +90,13 @@ public class DocumentEntry
 		links = new LinksList();
 	}
 
+	public DocumentEntry(Type type, String title) {
+		this();
+
+		categories.add(new Category(CATEGORY_KIND, type.toString()));
+		this.title = title;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -131,15 +138,6 @@ public class DocumentEntry
 
 	public DocumentsListUrl getEditUrl() {
 		return new DocumentsListUrl(links.findFirstWithRel(EDIT_SCHEME).getHref());
-	}
-
-	public static DocumentEntry createForUploading(Type type, String title) {
-		DocumentEntry entry = new DocumentEntry();
-
-		entry.setTitle(title);
-		entry.categories.add(new Category(CATEGORY_KIND, type.toString()));
-
-		return entry;
 	}
 
 	public String getLinkHref(String linkRel) {

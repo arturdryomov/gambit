@@ -38,7 +38,7 @@ public class DocumentsListClient extends GoogleDocsClient
 	}
 
 	public void uploadEmptyDocument(DocumentEntry.Type type, String title) {
-		DocumentEntry emptyDocument = DocumentEntry.createForUploading(type, title);
+		DocumentEntry emptyDocument = new DocumentEntry(type, title);
 		AtomContent content = AtomContent.forEntry(getXmlNamespaceDictionary(), emptyDocument);
 
 		// Using post url is considered deprecated. However, if using resumable create

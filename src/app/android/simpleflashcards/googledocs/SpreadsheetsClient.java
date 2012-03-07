@@ -54,7 +54,7 @@ public class SpreadsheetsClient extends GoogleDocsClient
 	public void insertWorksheet(SpreadsheetEntry spreadsheet, String title, int rowCount,
 		int columnCount) {
 
-		WorksheetEntry entry = WorksheetEntry.createForInserting(title, rowCount, columnCount);
+		WorksheetEntry entry = new WorksheetEntry(title, rowCount, columnCount);
 		AtomContent content = AtomContent.forEntry(getXmlNamespaceDictionary(), entry);
 
 		HttpRequest request = buildPostRequest(spreadsheet.getWorksheetFeedUrl(), content);
