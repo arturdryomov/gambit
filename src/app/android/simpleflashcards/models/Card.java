@@ -112,19 +112,15 @@ public class Card
 			return false;
 		}
 
-		if ((frontSideText == null) && (otherCard.frontSideText != null)) {
+		boolean frontSidesAreEqual = frontSideText == null ? otherCard.frontSideText == null
+			: frontSideText.equals(otherCard.frontSideText);
+		if (!frontSidesAreEqual) {
 			return false;
 		}
 
-		if (!frontSideText.equals(otherCard.frontSideText)) {
-			return false;
-		}
-
-		if ((backSideText == null) && (otherCard.backSideText != null)) {
-			return false;
-		}
-
-		if (!backSideText.equals(otherCard.backSideText)) {
+		boolean backSidesAreEqual = backSideText == null ? otherCard.backSideText == null
+			: backSideText.equals(otherCard.backSideText);
+		if (!backSidesAreEqual) {
 			return false;
 		}
 
