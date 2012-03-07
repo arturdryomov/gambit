@@ -80,14 +80,14 @@ public class DocumentEntry
 	private List<Category> categories;
 
 	@Key("link")
-	private List<Link> links;
+	private LinksList links;
 
 	@Key("updated")
 	private String lastUpdatedTime;
 
 	public DocumentEntry() {
 		categories = new ArrayList<Category>();
-		links = new ArrayList<Link>();
+		links = new LinksList();
 	}
 
 	public String getId() {
@@ -124,12 +124,13 @@ public class DocumentEntry
 			throw new GoogleDocsException("Key can be only determined for a spreadsheet");
 		}
 
-		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, ALTERNATE_SCHEME).getHref());
+		KeyUrl keyUrl = new KeyUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());
+
 		return keyUrl.getKey();
 	}
 
 	public DocumentsListUrl getEditUrl() {
-		return new DocumentsListUrl(Link.findFirstWithRel(links, EDIT_SCHEME).getHref());
+		return new DocumentsListUrl(links.findFirstWithRel(EDIT_SCHEME).getHref());
 	}
 
 	public static DocumentEntry createForUploading(Type type, String title) {
@@ -142,6 +143,6 @@ public class DocumentEntry
 	}
 
 	public String getLinkHref(String linkRel) {
-		return Link.findFirstWithRel(links, linkRel).getHref();
+		return links.findFirstWithRel(linkRel).getHref();
 	}
 }

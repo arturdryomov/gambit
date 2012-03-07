@@ -15,13 +15,13 @@ public class DocumentFeed
 	private static final String POST_SCHEME = "http://schemas.google.com/g/2005#post";
 
 	@Key("link")
-	private List<Link> links;
+	private LinksList links;
 
 	@Key("entry")
 	private List<DocumentEntry> entries;
 
 	public DocumentFeed() {
-		links = new ArrayList<Link>();
+		links = new LinksList();
 		entries = new ArrayList<DocumentEntry>();
 	}
 
@@ -30,13 +30,13 @@ public class DocumentFeed
 	}
 
 	public DocumentsListUrl getResumableCreateMediaUrl() {
-		String resumableCreateMediaHref = Link.findFirstWithRel(links, RESUMABLE_CREATE_MEDIA_SCHEME)
+		String resumableCreateMediaHref = links.findFirstWithRel(RESUMABLE_CREATE_MEDIA_SCHEME)
 			.getHref();
 		return new DocumentsListUrl(resumableCreateMediaHref);
 	}
 
 	public DocumentsListUrl getPostUrl() {
-		String postHref = Link.findFirstWithRel(links, POST_SCHEME).getHref();
+		String postHref = links.findFirstWithRel(POST_SCHEME).getHref();
 		return new DocumentsListUrl(postHref);
 	}
 }

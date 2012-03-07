@@ -1,8 +1,6 @@
 package app.android.simpleflashcards.googledocs.models;
 
 
-import java.util.List;
-
 import com.google.api.client.util.Key;
 
 
@@ -20,15 +18,5 @@ public class Link
 
 	public String getRel() {
 		return rel;
-	}
-
-	public static Link findFirstWithRel(List<Link> links, String rel) {
-		for (Link link : links) {
-			if (rel.equals(link.getRel())) {
-				return link;
-			}
-		}
-
-		return new Link();
 	}
 }

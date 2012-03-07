@@ -1,7 +1,6 @@
 package app.android.simpleflashcards.googledocs.models;
 
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,13 +29,13 @@ public class SpreadsheetEntry
 	private Content content;
 
 	@Key("link")
-	private List<Link> links;
+	private LinksList links;
 
 	@Key("updated")
 	private String lastUpdatedTime;
 
 	public SpreadsheetEntry() {
-		links = new ArrayList<Link>();
+		links = new LinksList();
 	}
 
 	public String getId() {
@@ -64,12 +63,12 @@ public class SpreadsheetEntry
 	}
 
 	public String getKey() {
-		KeyUrl keyUrl = new KeyUrl(Link.findFirstWithRel(links, ALTERNATE_SCHEME).getHref());
+		KeyUrl keyUrl = new KeyUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());
 		return keyUrl.getKey();
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, SELF_SCHEMA).getHref());
+		return new SpreadsheetUrl(links.findFirstWithRel(SELF_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getWorksheetFeedUrl() {
@@ -77,6 +76,6 @@ public class SpreadsheetEntry
 	}
 
 	public String getLinkHref(String linkRel) {
-		return Link.findFirstWithRel(links, linkRel).getHref();
+		return links.findFirstWithRel(linkRel).getHref();
 	}
 }

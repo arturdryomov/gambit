@@ -1,7 +1,6 @@
 package app.android.simpleflashcards.googledocs.models;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import app.android.simpleflashcards.googledocs.SpreadsheetUrl;
@@ -25,10 +24,10 @@ public class WorksheetEntry
 	private int columnCount;
 
 	@Key("link")
-	private List<Link> links;
+	private LinksList links;
 
 	public WorksheetEntry() {
-		links = new ArrayList<Link>();
+		links = new LinksList();
 	}
 
 	public String getTitle() {
@@ -60,15 +59,15 @@ public class WorksheetEntry
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, SELF_SCHEMA).getHref());
+		return new SpreadsheetUrl(links.findFirstWithRel(SELF_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getEditUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, EDIT_SCHEMA).getHref());
+		return new SpreadsheetUrl(links.findFirstWithRel(EDIT_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getCellFeedUrl() {
-		return new SpreadsheetUrl(Link.findFirstWithRel(links, CELL_FEED_SCHEMA).getHref());
+		return new SpreadsheetUrl(links.findFirstWithRel(CELL_FEED_SCHEMA).getHref());
 	}
 
 	public SpreadsheetUrl getCellEditUrl(int row, int column) {
