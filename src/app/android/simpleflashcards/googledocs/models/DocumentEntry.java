@@ -1,7 +1,6 @@
 package app.android.simpleflashcards.googledocs.models;
 
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class DocumentEntry
 	private String title;
 
 	@Key("category")
-	private List<Category> categories;
+	private CategoriesList categories;
 
 	@Key("link")
 	private LinksList links;
@@ -86,7 +85,7 @@ public class DocumentEntry
 	private String lastUpdatedTime;
 
 	public DocumentEntry() {
-		categories = new ArrayList<Category>();
+		categories = new CategoriesList();
 		links = new LinksList();
 	}
 
@@ -122,7 +121,7 @@ public class DocumentEntry
 	}
 
 	public Type getType() {
-		Category typeCategory = Category.findFirstWithScheme(categories, CATEGORY_KIND);
+		Category typeCategory = categories.findFirstWithScheme(CATEGORY_KIND);
 		return Type.fromString(typeCategory.getTerm());
 	}
 
