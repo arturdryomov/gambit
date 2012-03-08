@@ -386,9 +386,11 @@ public class Deck
 			return false;
 		}
 
-		boolean titlesAreEqual = title == null ? otherDeck.title == null : title
-			.equals(otherDeck.title);
-		if (!titlesAreEqual) {
+		if ((title == null) && (otherDeck.title != null)) {
+			return false;
+		}
+
+		if ((title != null) && !title.equals(otherDeck.title)) {
 			return false;
 		}
 
