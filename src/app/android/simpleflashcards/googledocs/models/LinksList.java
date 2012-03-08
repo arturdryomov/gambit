@@ -14,8 +14,8 @@ public class LinksList extends ArrayList<Link>
 		super(initialCapacity);
 	}
 
-	public LinksList(Collection<Link> c) {
-		super(c);
+	public LinksList(Collection<Link> collection) {
+		super(collection);
 	}
 
 	Link findFirstWithRel(String rel) {

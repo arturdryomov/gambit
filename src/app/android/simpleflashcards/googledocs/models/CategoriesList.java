@@ -14,8 +14,8 @@ public class CategoriesList extends ArrayList<Category>
 		super(initialCapacity);
 	}
 
-	public CategoriesList(Collection<Category> c) {
-		super(c);
+	public CategoriesList(Collection<Category> collection) {
+		super(collection);
 	}
 
 	public Category findFirstWithScheme(String scheme) {
