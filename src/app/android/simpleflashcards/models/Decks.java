@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Decks
 {
-	private SQLiteDatabase database;
+	private final SQLiteDatabase database;
 
 	public Decks() {
 		this.database = DatabaseProvider.getInstance().getDatabase();
@@ -88,8 +88,7 @@ public class Decks
 		builder.append(String.format("insert into %s ", DbTableNames.DECKS));
 		builder.append(String.format("(%s, %s) ", DbFieldNames.DECK_TITLE,
 			DbFieldNames.DECK_CURRENT_CARD_INDEX));
-		builder.append(String.format("values ('%s', %d) ", deckTitle,
-			Deck.INVALID_CURRENT_CARD_INDEX));
+		builder.append(String.format("values ('%s', %d) ", deckTitle, Deck.INVALID_CURRENT_CARD_INDEX));
 
 		return builder.toString();
 	}
@@ -115,8 +114,7 @@ public class Decks
 	public Deck getDeckById(int id) {
 		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(String.format("There's no a deck with id = %d in database",
-				id));
+			throw new ModelsException(String.format("There's no a deck with id = %d in database", id));
 		}
 
 		return new Deck(contentValuesFromCursor(cursor));
@@ -163,8 +161,8 @@ public class Decks
 		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
 
 		builder.append(String.format("from %s ", DbTableNames.DECKS));
-		builder.append(String.format("where %s = (%s)", DbFieldNames.ID,
-			innerSelectBuilder.toString()));
+		builder
+			.append(String.format("where %s = (%s)", DbFieldNames.ID, innerSelectBuilder.toString()));
 
 		return builder.toString();
 	}
@@ -211,8 +209,7 @@ public class Decks
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("select count(*) from %s ", DbTableNames.DECKS));
-		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE,
-			title));
+		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
 
 		return builder.toString();
 	}

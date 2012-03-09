@@ -4,6 +4,8 @@ package app.android.simpleflashcards.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -54,8 +56,46 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		public void onClick(View v) {
 			// TODO: Check existing of sync document name, if false — call sync setup, true — call update
+			updateDecks();
 		}
 	};
+
+	private void updateDecks() {
+		new UpdateDecksTask().execute();
+	}
+
+	private class UpdateDecksTask extends AsyncTask<Void, Void, String>
+	{
+		// Just obtain authorization token
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			try {
+				Activity thisActivity = (Activity) activityContext;
+
+				Account account = AccountSelector.select(thisActivity);
+
+				Authorizer authorizer = new Authorizer(thisActivity);
+				String token = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+
+				return String.format("Token received: '%s'.", token);
+			}
+			catch (NoAccountRegisteredException e) {
+				return getString(R.string.noGoogleAccounts);
+			}
+			catch (AuthorizationCanceledException e) {
+				return getString(R.string.authenticationCanceled);
+			}
+			catch (AuthorizationFailedException e) {
+				return getString(R.string.authenticationError);
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String resultMessage) {
+			UserAlerter.alert(activityContext, resultMessage);
+		}
+	}
 
 	private final OnClickListener deckCreationListener = new OnClickListener() {
 		@Override

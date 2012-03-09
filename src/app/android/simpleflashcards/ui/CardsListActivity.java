@@ -4,6 +4,8 @@ package app.android.simpleflashcards.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -50,17 +52,49 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		updateButton.setOnClickListener(updateListener);
 
 		ImageButton newItemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
-		newItemCreationButton.setOnClickListener(cardCreationListener);
+		newItemCreationButton.setOnClickListener(flashcardCreationListener);
 	}
 
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			// TODO: Call update task
+			updateCards();
 		}
 	};
 
-	private final OnClickListener cardCreationListener = new OnClickListener() {
+	private void updateCards() {
+		new UpdateCardsTask().execute();
+	}
+
+	private class UpdateCardsTask extends AsyncTask<Void, Void, String>
+	{
+		// Just obtain authorization token
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			try {
+				Activity thisActivity = (Activity) activityContext;
+
+				Account account = AccountSelector.select(thisActivity);
+
+				Authorizer authorizer = new Authorizer(thisActivity);
+				String token = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+
+				return String.format("Token received: '%s'.", token);
+			}
+			catch (NoAccountRegisteredException e) {
+				return getString(R.string.noGoogleAccounts);
+			}
+			catch (AuthorizationCanceledException e) {
+				return getString(R.string.authenticationCanceled);
+			}
+			catch (AuthorizationFailedException e) {
+				return getString(R.string.authenticationError);
+			}
+		}
+	}
+
+	private final OnClickListener flashcardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			callCardCreation();

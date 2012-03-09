@@ -15,11 +15,12 @@ public class Deck implements Parcelable
 {
 	public static final int INVALID_CURRENT_CARD_INDEX = -1;
 
-	private SQLiteDatabase database;
+	private final SQLiteDatabase database;
+	private final Decks decks;
+
 	private int id;
 	private String title;
 	private int currentCardIndex;
-	private Decks decks;
 
 	// Do not use the constructor. It should be used by Decks class only
 	public Deck(ContentValues values) {
@@ -158,7 +159,8 @@ public class Deck implements Parcelable
 	public List<Card> getCardsList() {
 		List<Card> cardsList = new ArrayList<Card>();
 
-		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(), null);
+		Cursor cursor = database
+			.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_ORDER_INDEX), null);
 
 		cursor.moveToFirst();
 
@@ -169,28 +171,6 @@ public class Deck implements Parcelable
 		}
 
 		return cardsList;
-	}
-
-	private String buildCardsSelectionQuery() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("select ");
-
-		builder.append(String.format("%s, ", DbFieldNames.ID));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
-
-		builder.append(String.format("from %s ", DbTableNames.CARDS));
-
-		builder.append("where ");
-
-		builder.append(String.format("%s = %d ", DbFieldNames.CARD_DECK_ID, id));
-
-		builder.append(String.format("order by %s", DbFieldNames.CARD_ORDER_INDEX));
-
-		return builder.toString();
 	}
 
 	private ContentValues contentValuesFromCursor(Cursor cursor) {
@@ -341,16 +321,17 @@ public class Deck implements Parcelable
 	}
 
 	private void tryShuffleCards() {
-		Cursor cursor = database.rawQuery(buildCardsAlphabeticalSelectionQuery(), null);
+		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_FRONT_SIDE_TEXT),
+			null);
 		if (cursor.getCount() == 0) {
 			return;
 		}
 
-		CardsOrderIndexGenerator generator = new CardsOrderIndexGenerator(cursor.getCount());
+		CardsOrderShuffler shuffler = new CardsOrderShuffler(cursor.getCount());
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
-			setCardOrderIndex(cardId, generator.generate());
+			setCardOrderIndex(cardId, shuffler.generateNextIndex());
 			cursor.moveToNext();
 		}
 	}
@@ -367,7 +348,8 @@ public class Deck implements Parcelable
 	}
 
 	private void tryResetCardsOrder() {
-		Cursor cursor = database.rawQuery(buildCardsAlphabeticalSelectionQuery(), null);
+		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_FRONT_SIDE_TEXT),
+			null);
 		if (cursor.getCount() == 0) {
 			return;
 		}
@@ -382,7 +364,7 @@ public class Deck implements Parcelable
 		}
 	}
 
-	private String buildCardsAlphabeticalSelectionQuery() {
+	private String buildCardsSelectionQuery(String orderByField) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
@@ -399,7 +381,7 @@ public class Deck implements Parcelable
 
 		builder.append(String.format("%s = %d ", DbFieldNames.CARD_DECK_ID, id));
 
-		builder.append(String.format("order by %s", DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		builder.append(String.format("order by %s", orderByField));
 
 		return builder.toString();
 	}
@@ -420,36 +402,34 @@ public class Deck implements Parcelable
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
+		// hashCode() is not intended to be used
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+	public boolean equals(Object otherObject) {
+		if (this == otherObject) {
 			return true;
 		}
-		if (obj == null) {
+
+		if (!(otherObject instanceof Deck)) {
 			return false;
 		}
-		if (!(obj instanceof Deck)) {
+
+		Deck otherDeck = (Deck) otherObject;
+
+		if (id != otherDeck.id) {
 			return false;
 		}
-		Deck other = (Deck) obj;
-		if (id != other.id) {
+
+		if ((title == null) && (otherDeck.title != null)) {
 			return false;
 		}
-		if (title == null) {
-			if (other.title != null) {
-				return false;
-			}
-		}
-		else if (!title.equals(other.title)) {
+
+		if ((title != null) && !title.equals(otherDeck.title)) {
 			return false;
 		}
+
 		return true;
 	}
 }

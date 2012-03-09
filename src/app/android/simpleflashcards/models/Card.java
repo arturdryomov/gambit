@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Card implements Parcelable
 {
-	private SQLiteDatabase database;
+	private final SQLiteDatabase database;
 
 	private int id;
 	private String frontSideText;
@@ -128,45 +128,42 @@ public class Card implements Parcelable
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((backSideText == null) ? 0 : backSideText.hashCode());
-		result = prime * result + ((frontSideText == null) ? 0 : frontSideText.hashCode());
-		result = prime * result + id;
-		return result;
+		// hashCode() is not intended to be used
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+	public boolean equals(Object otherObject) {
+		if (this == otherObject) {
 			return true;
 		}
-		if (obj == null) {
+
+		if (!(otherObject instanceof Card)) {
 			return false;
 		}
-		if (!(obj instanceof Card)) {
+
+		Card otherCard = (Card) otherObject;
+
+		if (id != otherCard.id) {
 			return false;
 		}
-		Card other = (Card) obj;
-		if (backSideText == null) {
-			if (other.backSideText != null) {
-				return false;
-			}
-		}
-		else if (!backSideText.equals(other.backSideText)) {
+
+		if ((frontSideText == null) && (otherCard.frontSideText != null)) {
 			return false;
 		}
-		if (frontSideText == null) {
-			if (other.frontSideText != null) {
-				return false;
-			}
-		}
-		else if (!frontSideText.equals(other.frontSideText)) {
+
+		if ((frontSideText != null) && !frontSideText.equals(otherCard.frontSideText)) {
 			return false;
 		}
-		if (id != other.id) {
+
+		if ((backSideText == null) && (otherCard.backSideText != null)) {
 			return false;
 		}
+
+		if ((backSideText != null) && !backSideText.equals(otherCard.backSideText)) {
+			return false;
+		}
+
 		return true;
 	}
 }
