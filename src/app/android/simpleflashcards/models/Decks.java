@@ -2,6 +2,7 @@ package app.android.simpleflashcards.models;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -232,5 +233,9 @@ public class Decks
 		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
 
 		return builder.toString();
+	}
+
+	public Date getLastUpdateTime() {
+		return lastUpdateTimeHandler.getLastUpdatedTime();
 	}
 }
