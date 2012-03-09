@@ -12,9 +12,11 @@ import android.database.sqlite.SQLiteDatabase;
 public class Decks
 {
 	private final SQLiteDatabase database;
+	private final LastUpdateTimeHandler lastUpdateTimeHandler;
 
 	public Decks() {
-		this.database = DatabaseProvider.getInstance().getDatabase();
+		database = DatabaseProvider.getInstance().getDatabase();
+		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 	}
 
 	public int getDecksCount() {
@@ -74,10 +76,24 @@ public class Decks
 	}
 
 	public Deck addNewDeck(String title) {
+		database.beginTransaction();
+		try {
+			Deck newDeck = tryAddNewDeck(title);
+			database.setTransactionSuccessful();
+			return newDeck;
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private Deck tryAddNewDeck(String title) {
 		if (containsDeckWithTitle(title)) {
 			throw new AlreadyExistsException();
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
+
+		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
 
 		return getDeckById(lastInsertedId());
 	}
@@ -170,14 +186,18 @@ public class Decks
 	public void deleteDeck(Deck deck) {
 		database.beginTransaction();
 		try {
-			database.execSQL(buildDeckCardsDeleteingQuery(deck));
-			database.execSQL(buildDeckDeletingQuery(deck));
-
+			tryDeleteDeck(deck);
 			database.setTransactionSuccessful();
 		}
 		finally {
 			database.endTransaction();
 		}
+	}
+
+	private void tryDeleteDeck(Deck deck) {
+		database.execSQL(buildDeckCardsDeleteingQuery(deck));
+		database.execSQL(buildDeckDeletingQuery(deck));
+		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
 	}
 
 	private String buildDeckCardsDeleteingQuery(Deck deck) {

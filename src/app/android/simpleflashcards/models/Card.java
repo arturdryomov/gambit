@@ -10,6 +10,7 @@ import android.os.Parcelable;
 public class Card implements Parcelable
 {
 	private final SQLiteDatabase database;
+	private final LastUpdateTimeHandler lastUpdateTimeHandler;
 
 	private int id;
 	private String frontSideText;
@@ -17,7 +18,8 @@ public class Card implements Parcelable
 
 	// Do not use the constructor. It should be used by Deck class only
 	public Card(ContentValues values) {
-		this.database = DatabaseProvider.getInstance().getDatabase();
+		database = DatabaseProvider.getInstance().getDatabase();
+		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 
 		setValues(values);
 	}
@@ -53,7 +55,8 @@ public class Card implements Parcelable
 	};
 
 	private Card(Parcel parcel) {
-		this.database = DatabaseProvider.getInstance().getDatabase();
+		database = DatabaseProvider.getInstance().getDatabase();
+		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 
 		readFromParcel(parcel);
 	}
@@ -81,12 +84,25 @@ public class Card implements Parcelable
 	}
 
 	public void setFrontSideText(String text) {
+		database.beginTransaction();
+		try {
+			trySetFrontSideText(text);
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void trySetFrontSideText(String text) {
 		if (text.equals(frontSideText)) {
 			return;
 		}
 
 		database.execSQL(buildFrontSideTextUpdatingQuery(text));
 		frontSideText = text;
+
+		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
 	}
 
 	private String buildFrontSideTextUpdatingQuery(String text) {
@@ -104,6 +120,17 @@ public class Card implements Parcelable
 	}
 
 	public void setBackSideText(String text) {
+		database.beginTransaction();
+		try {
+			trySetBackSideText(text);
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void trySetBackSideText(String text) {
 		if (text.equals(backSideText)) {
 			return;
 		}
