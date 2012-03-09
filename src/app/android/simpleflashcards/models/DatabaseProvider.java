@@ -11,10 +11,10 @@ public class DatabaseProvider
 	{
 	}
 
-	private static DatabaseProvider instance = null;
+	private static DatabaseProvider instance;
 	private SimpleFlashcardsOpenHelper openHelper;
-	private Decks decks = null;
-	private LastUpdateTimeHandler lastUpdateTimeHandler = null;
+	private Decks decks;
+	private LastUpdateTimeHandler lastUpdateTimeHandler;
 
 	public static DatabaseProvider getInstance() {
 		return instance;
