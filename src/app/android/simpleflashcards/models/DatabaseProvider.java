@@ -14,6 +14,7 @@ public class DatabaseProvider
 	private static DatabaseProvider instance = null;
 	private SimpleFlashcardsOpenHelper openHelper;
 	private Decks decks = null;
+	private LastUpdateTimeHandler lastUpdateTimeHandler = null;
 
 	public static DatabaseProvider getInstance() {
 		return instance;
@@ -43,6 +44,13 @@ public class DatabaseProvider
 			decks = new Decks();
 		}
 		return decks;
+	}
+
+	LastUpdateTimeHandler getLastUpdateTimeHandler() {
+		if (lastUpdateTimeHandler == null) {
+			lastUpdateTimeHandler = new LastUpdateTimeHandler();
+		}
+		return lastUpdateTimeHandler;
 	}
 
 	SQLiteDatabase getDatabase() {

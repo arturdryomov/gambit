@@ -12,4 +12,6 @@ public class DbFieldNames
 	public static final String CARD_FRONT_SIDE_TEXT = "FrontPageSide";
 	public static final String CARD_BACK_SIDE_TEXT = "BackPageSide";
 	public static final String CARD_ORDER_INDEX = "OrderIndex";
+
+	public static final String DB_LAST_UPDATE_TIME = "UpdateTime";
 }

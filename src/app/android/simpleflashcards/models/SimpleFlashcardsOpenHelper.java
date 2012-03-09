@@ -22,6 +22,7 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 		try {
 			db.execSQL(buildDecksTableCreationQuery());
 			db.execSQL(buildCardsTableCreationQuery());
+			db.execSQL(buildLastUpdateTimeTableCreationQuery());
 
 			db.setTransactionSuccessful();
 		}
@@ -53,8 +54,8 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 		builder.append("(");
 
 		builder.append(String.format(" %s %s, ", DbFieldNames.ID, DbFieldParams.ID));
-		builder.append(String.format(" %s %s, ", DbFieldNames.CARD_DECK_ID,
-			DbFieldParams.CARD_DECK_ID));
+		builder
+			.append(String.format(" %s %s, ", DbFieldNames.CARD_DECK_ID, DbFieldParams.CARD_DECK_ID));
 		builder.append(String.format(" %s %s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT,
 			DbFieldParams.CARD_FRONT_SIDE_TEXT));
 		builder.append(String.format(" %s %s, ", DbFieldNames.CARD_BACK_SIDE_TEXT,
@@ -63,6 +64,19 @@ public class SimpleFlashcardsOpenHelper extends SQLiteOpenHelper
 			DbFieldParams.CARD_ORDER_INDEX));
 
 		builder.append(")");
+
+		return builder.toString();
+	}
+
+	private String buildLastUpdateTimeTableCreationQuery() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(String.format("Create table %s ", DbTableNames.DB_LAST_UPDATE_TIME));
+
+		builder.append("( ");
+		builder.append(String.format("%s %s ", DbFieldNames.DB_LAST_UPDATE_TIME,
+			DbFieldParams.DB_LAST_UPDATE_TIME));
+		builder.append(") ");
 
 		return builder.toString();
 	}
