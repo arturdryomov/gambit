@@ -12,11 +12,11 @@ class LastUpdateTimeHandler
 {
 	private final SQLiteDatabase database;
 
-	LastUpdateTimeHandler() {
+	public LastUpdateTimeHandler() {
 		this.database = DatabaseProvider.getInstance().getDatabase();
 	}
 
-	void setCurrentTimeAsLastUpdated() {
+	public void setCurrentTimeAsLastUpdated() {
 		database.beginTransaction();
 		try {
 			trySetCurrentTimeAsLastUpdated();
@@ -63,7 +63,7 @@ class LastUpdateTimeHandler
 		return builder.toString();
 	}
 
-	Date getLastUpdatedTime() {
+	public Date getLastUpdatedTime() {
 		database.beginTransaction();
 		try {
 			Date lastUpdatedTime = tryGetLastUpdatedTime();
