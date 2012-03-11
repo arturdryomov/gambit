@@ -115,7 +115,7 @@ public class Deck implements Parcelable
 		database.execSQL(buildTitleUpdatingQuery(title));
 		this.title = title;
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildTitleUpdatingQuery(String newTitle) {
@@ -165,7 +165,7 @@ public class Deck implements Parcelable
 		database.execSQL(buildCurrentCardIndexUpdatingQuery(index));
 		currentCardIndex = index;
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildCurrentCardIndexUpdatingQuery(int index) {
@@ -243,7 +243,7 @@ public class Deck implements Parcelable
 		database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
 		setCurrentCardIndex(0);
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
 		return getCardById(lastInsertedId());
 	}
@@ -338,7 +338,7 @@ public class Deck implements Parcelable
 			setCurrentCardIndex(0);
 		}
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildCardDeletingQuery(Card card) {
@@ -376,7 +376,7 @@ public class Deck implements Parcelable
 			cursor.moveToNext();
 		}
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	public void resetCardsOrder() {
@@ -406,7 +406,7 @@ public class Deck implements Parcelable
 			cursor.moveToNext();
 		}
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildCardsSelectionQuery(String orderByField) {

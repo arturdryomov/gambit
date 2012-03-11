@@ -16,10 +16,10 @@ class LastUpdateTimeHandler
 		this.database = DatabaseProvider.getInstance().getDatabase();
 	}
 
-	public void setCurrentTimeAsLastUpdated() {
+	public void setCurrentDateTimeAsLastUpdated() {
 		database.beginTransaction();
 		try {
-			trySetCurrentTimeAsLastUpdated();
+			trySetCurrentDateTimeAsLastUpdated();
 			database.setTransactionSuccessful();
 		}
 		finally {
@@ -27,7 +27,7 @@ class LastUpdateTimeHandler
 		}
 	}
 
-	private void trySetCurrentTimeAsLastUpdated() {
+	private void trySetCurrentDateTimeAsLastUpdated() {
 		if (!recordExists()) {
 			insertEmptyRecord();
 		}
@@ -49,46 +49,46 @@ class LastUpdateTimeHandler
 		return builder.toString();
 	}
 
-	private void updateRecord(Date time) {
-		String timeAsString = InternetDateTimeFormatter.convertToString(time);
-		database.execSQL(buildRecordUpdatingQuery(timeAsString));
+	private void updateRecord(Date date) {
+		String dateTimeAsString = InternetDateTimeFormatter.convertToString(date);
+		database.execSQL(buildRecordUpdatingQuery(dateTimeAsString));
 	}
 
-	private String buildRecordUpdatingQuery(String timeAsString) {
+	private String buildRecordUpdatingQuery(String dateTimeAsString) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s ", DbTableNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("set %s=%s ", DbFieldNames.DB_LAST_UPDATE_TIME, timeAsString));
+		builder.append(String.format("set %s=%s ", DbFieldNames.DB_LAST_UPDATE_TIME, dateTimeAsString));
 
 		return builder.toString();
 	}
 
-	public Date getLastUpdatedTime() {
+	public Date getLastUpdatedDateTime() {
 		database.beginTransaction();
 		try {
-			Date lastUpdatedTime = tryGetLastUpdatedTime();
+			Date lastUpdatedDateTime = tryGetLastUpdatedDateTime();
 			database.setTransactionSuccessful();
-			return lastUpdatedTime;
+			return lastUpdatedDateTime;
 		}
 		finally {
 			database.endTransaction();
 		}
 	}
 
-	private Date tryGetLastUpdatedTime() {
+	private Date tryGetLastUpdatedDateTime() {
 		ensureRecordExists();
 
 		Cursor cursor = database.rawQuery(buildRecordSelectingQuery(), null);
 		cursor.moveToFirst();
 
-		String timeAsString = cursor.getString(0);
+		String dateTimeAsString = cursor.getString(0);
 
-		return InternetDateTimeFormatter.parse(timeAsString);
+		return InternetDateTimeFormatter.parse(dateTimeAsString);
 	}
 
 	private void ensureRecordExists() {
 		if (!recordExists()) {
-			setCurrentTimeAsLastUpdated();
+			setCurrentDateTimeAsLastUpdated();
 		}
 	}
 

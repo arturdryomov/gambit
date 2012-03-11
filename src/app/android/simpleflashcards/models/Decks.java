@@ -94,7 +94,7 @@ public class Decks
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
 		return getDeckById(lastInsertedId());
 	}
@@ -198,7 +198,7 @@ public class Decks
 	private void tryDeleteDeck(Deck deck) {
 		database.execSQL(buildDeckCardsDeleteingQuery(deck));
 		database.execSQL(buildDeckDeletingQuery(deck));
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildDeckCardsDeleteingQuery(Deck deck) {
@@ -236,6 +236,6 @@ public class Decks
 	}
 
 	public Date getLastUpdateTime() {
-		return lastUpdateTimeHandler.getLastUpdatedTime();
+		return lastUpdateTimeHandler.getLastUpdatedDateTime();
 	}
 }

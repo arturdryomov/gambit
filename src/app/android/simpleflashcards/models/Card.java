@@ -102,7 +102,7 @@ public class Card implements Parcelable
 		database.execSQL(buildFrontSideTextUpdatingQuery(text));
 		frontSideText = text;
 
-		lastUpdateTimeHandler.setCurrentTimeAsLastUpdated();
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildFrontSideTextUpdatingQuery(String text) {
