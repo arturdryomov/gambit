@@ -2,6 +2,7 @@ package app.android.simpleflashcards.models;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -12,9 +13,11 @@ import android.database.sqlite.SQLiteDatabase;
 public class Decks
 {
 	private final SQLiteDatabase database;
+	private final LastUpdateTimeHandler lastUpdateTimeHandler;
 
 	public Decks() {
-		this.database = DatabaseProvider.getInstance().getDatabase();
+		database = DatabaseProvider.getInstance().getDatabase();
+		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 	}
 
 	public int getDecksCount() {
@@ -74,10 +77,24 @@ public class Decks
 	}
 
 	public Deck addNewDeck(String title) {
+		database.beginTransaction();
+		try {
+			Deck newDeck = tryAddNewDeck(title);
+			database.setTransactionSuccessful();
+			return newDeck;
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private Deck tryAddNewDeck(String title) {
 		if (containsDeckWithTitle(title)) {
 			throw new AlreadyExistsException();
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
+
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
 		return getDeckById(lastInsertedId());
 	}
@@ -170,14 +187,18 @@ public class Decks
 	public void deleteDeck(Deck deck) {
 		database.beginTransaction();
 		try {
-			database.execSQL(buildDeckCardsDeleteingQuery(deck));
-			database.execSQL(buildDeckDeletingQuery(deck));
-
+			tryDeleteDeck(deck);
 			database.setTransactionSuccessful();
 		}
 		finally {
 			database.endTransaction();
 		}
+	}
+
+	private void tryDeleteDeck(Deck deck) {
+		database.execSQL(buildDeckCardsDeleteingQuery(deck));
+		database.execSQL(buildDeckDeletingQuery(deck));
+		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildDeckCardsDeleteingQuery(Deck deck) {
@@ -212,5 +233,9 @@ public class Decks
 		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
 
 		return builder.toString();
+	}
+
+	public Date getLastUpdateTime() {
+		return lastUpdateTimeHandler.getLastUpdatedDateTime();
 	}
 }
