@@ -35,6 +35,15 @@ class LastUpdateTimeHandler
 		updateRecord(new Date());
 	}
 
+	private boolean recordExists() {
+		Cursor cursor = database.rawQuery(buildRecordsCountSelectingQuery(), null);
+		cursor.moveToFirst();
+
+		int recordsCount = cursor.getInt(0);
+
+		return recordsCount > 0;
+	}
+
 	private void insertEmptyRecord() {
 		database.execSQL(buildEmptyRecordInsertionQuery());
 	}
@@ -99,15 +108,6 @@ class LastUpdateTimeHandler
 		builder.append(String.format("from %s", DbTableNames.DB_LAST_UPDATE_TIME));
 
 		return builder.toString();
-	}
-
-	private boolean recordExists() {
-		Cursor cursor = database.rawQuery(buildRecordsCountSelectingQuery(), null);
-		cursor.moveToFirst();
-
-		int recordsCount = cursor.getInt(0);
-
-		return recordsCount > 0;
 	}
 
 	private String buildRecordsCountSelectingQuery() {
