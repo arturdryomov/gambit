@@ -53,7 +53,7 @@ class LastUpdateTimeHandler
 
 		builder.append(String.format("insert into %s ", DbTableNames.DB_LAST_UPDATE_TIME));
 		builder.append(String.format("(%s) ", DbFieldNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("values (%s)", new String()));
+		builder.append(String.format("values (%s)", "''"));
 
 		return builder.toString();
 	}
@@ -67,7 +67,7 @@ class LastUpdateTimeHandler
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s ", DbTableNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("set %s=%s ", DbFieldNames.DB_LAST_UPDATE_TIME, dateTimeAsString));
+		builder.append(String.format("set %s='%s' ", DbFieldNames.DB_LAST_UPDATE_TIME, dateTimeAsString));
 
 		return builder.toString();
 	}
