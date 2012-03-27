@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import app.android.simpleflashcards.InternetDateTime;
 
 
-class LastUpdateTimeHandler
+class LastUpdateDateTimeHandler
 {
 	private final SQLiteDatabase database;
 
-	public LastUpdateTimeHandler() {
+	public LastUpdateDateTimeHandler() {
 		this.database = DatabaseProvider.getInstance().getDatabase();
 	}
 
