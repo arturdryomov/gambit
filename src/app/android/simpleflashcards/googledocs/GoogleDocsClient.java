@@ -146,7 +146,7 @@ public class GoogleDocsClient
 			return request.execute();
 		}
 		catch (HttpResponseException e) {
-			throw exceptionFromUnsuccessfulStatusCode(e.getResponse().getStatusCode());
+			throw exceptionFromUnsuccessfulStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new FailedRequestException(e);
