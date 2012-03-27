@@ -2,12 +2,12 @@ package app.android.simpleflashcards.models;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import app.android.simpleflashcards.InternetDateTime;
 
 
 public class Decks
@@ -235,7 +235,7 @@ public class Decks
 		return builder.toString();
 	}
 
-	public Date getLastUpdateTime() {
+	public InternetDateTime getLastUpdatedDateTime() {
 		return lastUpdateTimeHandler.getLastUpdatedDateTime();
 	}
 }

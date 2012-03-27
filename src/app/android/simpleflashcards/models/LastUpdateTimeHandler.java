@@ -1,11 +1,10 @@
 package app.android.simpleflashcards.models;
 
 
-import java.util.Date;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import app.android.simpleflashcards.InternetDateTimeFormatter;
+import app.android.simpleflashcards.InternetDateTime;
 
 
 class LastUpdateTimeHandler
@@ -32,7 +31,7 @@ class LastUpdateTimeHandler
 			insertEmptyRecord();
 		}
 
-		updateRecord(new Date());
+		updateRecord(new InternetDateTime());
 	}
 
 	private boolean recordExists() {
@@ -58,24 +57,24 @@ class LastUpdateTimeHandler
 		return builder.toString();
 	}
 
-	private void updateRecord(Date date) {
-		String dateTimeAsString = InternetDateTimeFormatter.convertToString(date);
-		database.execSQL(buildRecordUpdatingQuery(dateTimeAsString));
+	private void updateRecord(InternetDateTime dateTime) {
+		database.execSQL(buildRecordUpdatingQuery(dateTime));
 	}
 
-	private String buildRecordUpdatingQuery(String dateTimeAsString) {
+	private String buildRecordUpdatingQuery(InternetDateTime dateTime) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append(String.format("update %s ", DbTableNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("set %s='%s' ", DbFieldNames.DB_LAST_UPDATE_TIME, dateTimeAsString));
+		builder.append(String.format("set %s='%s' ", DbFieldNames.DB_LAST_UPDATE_TIME,
+			dateTime.toString()));
 
 		return builder.toString();
 	}
 
-	public Date getLastUpdatedDateTime() {
+	public InternetDateTime getLastUpdatedDateTime() {
 		database.beginTransaction();
 		try {
-			Date lastUpdatedDateTime = tryGetLastUpdatedDateTime();
+			InternetDateTime lastUpdatedDateTime = tryGetLastUpdatedDateTime();
 			database.setTransactionSuccessful();
 			return lastUpdatedDateTime;
 		}
@@ -84,7 +83,7 @@ class LastUpdateTimeHandler
 		}
 	}
 
-	private Date tryGetLastUpdatedDateTime() {
+	private InternetDateTime tryGetLastUpdatedDateTime() {
 		ensureRecordExists();
 
 		Cursor cursor = database.rawQuery(buildRecordSelectingQuery(), null);
@@ -92,7 +91,7 @@ class LastUpdateTimeHandler
 
 		String dateTimeAsString = cursor.getString(0);
 
-		return InternetDateTimeFormatter.parse(dateTimeAsString);
+		return new InternetDateTime(dateTimeAsString);
 	}
 
 	private void ensureRecordExists() {
