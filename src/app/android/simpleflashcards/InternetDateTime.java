@@ -10,11 +10,9 @@ import java.util.TimeZone;
 
 
 /*
- * InternetDateTimeFormatter is used to parse a string with date in
- * RFC 3339 Internet Date/Time Format into java.util.Date and to convert
- * java.util.Date into a string in Internet Date/Time Format.
- *
- * Date in java.util.Date is treated as UTC time when both parsing and formatting.
+ * InternetDateTime is a light wrapper around java.util.Date that is able
+ * to parse a string with date in RFC 3339 Internet Date/Time Format and
+ * convert a date/time into a string of Internet Date/Time Format.
  *
  * This task cannot be simply done with SimpleDateFormat class because according to
  * RFC 3339 time offsets for different time zones are formatted as follows:
@@ -36,8 +34,10 @@ import java.util.TimeZone;
  *   +0000
  */
 
-public class InternetDateTimeFormatter
+public class InternetDateTime
 {
+	private Date utcDate;
+
 	/*
 	 * This class parses RFC 3339 Internet Date/Time formatted date into integer values without
 	 * any range checks.
@@ -211,7 +211,16 @@ public class InternetDateTimeFormatter
 		}
 	}
 
-	public static Date parse(String dateString) {
+	// Initializes InternetDateTime instance to the current date/time
+	public InternetDateTime() {
+		utcDate = new Date();
+	}
+
+	public InternetDateTime(String dateTimeAsString) {
+		utcDate = parseStringToUtcDate(dateTimeAsString);
+	}
+
+	private Date parseStringToUtcDate(String dateString) {
 		Parser parser = new Parser();
 		parser.parse(dateString);
 
@@ -231,9 +240,15 @@ public class InternetDateTimeFormatter
 		return calendar.getTime();
 	}
 
-	public static String convertToString(Date date) {
+	public InternetDateTime(Date dateTimeAsUtcDate) {
+		utcDate = dateTimeAsUtcDate;
+	}
+
+	// Returns string of RFC 3339 Internet Date/Time format in UTC (thus, offset is 0, i.e. Z)
+	@Override
+	public String toString() {
 		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-		calendar.setTime(date);
+		calendar.setTime(utcDate);
 
 		StringBuilder builder = new StringBuilder();
 
@@ -247,5 +262,18 @@ public class InternetDateTimeFormatter
 		builder.append(String.format("%03dZ", calendar.get(Calendar.MILLISECOND)));
 
 		return builder.toString();
+	}
+
+	// Returns Date in UTC
+	public Date toDate() {
+		return utcDate;
+	}
+
+	public boolean isAfter(InternetDateTime dateTime) {
+		return utcDate.after(dateTime.utcDate);
+	}
+
+	public boolean isBefore(InternetDateTime dateTime) {
+		return utcDate.before(dateTime.utcDate);
 	}
 }

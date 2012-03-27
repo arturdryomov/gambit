@@ -2,22 +2,22 @@ package app.android.simpleflashcards.models;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import app.android.simpleflashcards.InternetDateTime;
 
 
 public class Decks
 {
 	private final SQLiteDatabase database;
-	private final LastUpdateTimeHandler lastUpdateTimeHandler;
+	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	public Decks() {
 		database = DatabaseProvider.getInstance().getDatabase();
-		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 	}
 
 	public int getDecksCount() {
@@ -94,7 +94,7 @@ public class Decks
 		}
 		database.execSQL(buildDeckInsertionQuery(title));
 
-		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
+		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
 		return getDeckById(lastInsertedId());
 	}
@@ -198,7 +198,7 @@ public class Decks
 	private void tryDeleteDeck(Deck deck) {
 		database.execSQL(buildDeckCardsDeleteingQuery(deck));
 		database.execSQL(buildDeckDeletingQuery(deck));
-		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
+		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildDeckCardsDeleteingQuery(Deck deck) {
@@ -235,7 +235,7 @@ public class Decks
 		return builder.toString();
 	}
 
-	public Date getLastUpdateTime() {
-		return lastUpdateTimeHandler.getLastUpdatedDateTime();
+	public InternetDateTime getLastUpdatedDateTime() {
+		return lastUpdateDateTimeHandler.getLastUpdatedDateTime();
 	}
 }

@@ -10,7 +10,7 @@ import android.os.Parcelable;
 public class Card implements Parcelable
 {
 	private final SQLiteDatabase database;
-	private final LastUpdateTimeHandler lastUpdateTimeHandler;
+	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	private int id;
 	private String frontSideText;
@@ -19,7 +19,7 @@ public class Card implements Parcelable
 	// Do not use the constructor. It should be used by Deck class only
 	public Card(ContentValues values) {
 		database = DatabaseProvider.getInstance().getDatabase();
-		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 
 		setValues(values);
 	}
@@ -56,7 +56,7 @@ public class Card implements Parcelable
 
 	private Card(Parcel parcel) {
 		database = DatabaseProvider.getInstance().getDatabase();
-		lastUpdateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 
 		readFromParcel(parcel);
 	}
@@ -102,7 +102,7 @@ public class Card implements Parcelable
 		database.execSQL(buildFrontSideTextUpdatingQuery(text));
 		frontSideText = text;
 
-		lastUpdateTimeHandler.setCurrentDateTimeAsLastUpdated();
+		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private String buildFrontSideTextUpdatingQuery(String text) {

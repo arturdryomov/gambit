@@ -1,10 +1,9 @@
 package app.android.simpleflashcards.googledocs.models;
 
 
-import java.util.Date;
 import java.util.List;
 
-import app.android.simpleflashcards.InternetDateTimeFormatter;
+import app.android.simpleflashcards.InternetDateTime;
 import app.android.simpleflashcards.googledocs.KeyUrl;
 import app.android.simpleflashcards.googledocs.SpreadsheetUrl;
 
@@ -32,7 +31,7 @@ public class SpreadsheetEntry
 	private LinksList links;
 
 	@Key("updated")
-	private String lastUpdatedTime;
+	private String lastUpdatedDateTime;
 
 	public SpreadsheetEntry() {
 		links = new LinksList();
@@ -58,8 +57,8 @@ public class SpreadsheetEntry
 		return links;
 	}
 
-	public Date getLastUpdatedTime() {
-		return InternetDateTimeFormatter.parse(lastUpdatedTime);
+	public InternetDateTime getLastUpdatedDateTime() {
+		return new InternetDateTime(lastUpdatedDateTime);
 	}
 
 	public String getKey() {
