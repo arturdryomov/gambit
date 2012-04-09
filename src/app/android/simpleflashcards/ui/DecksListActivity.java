@@ -2,6 +2,7 @@ package app.android.simpleflashcards.ui;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.accounts.Account;
@@ -24,7 +25,6 @@ import android.widget.SimpleAdapter;
 import app.android.simpleflashcards.R;
 import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
-import app.android.simpleflashcards.models.Decks;
 import app.android.simpleflashcards.models.ModelsException;
 
 
@@ -130,6 +130,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	private class LoadDecksTask extends AsyncTask<Void, Void, String>
 	{
+		private List<Deck> decks;
+
 		@Override
 		protected void onPreExecute() {
 			setEmptyListText(getString(R.string.loadingDecks));
@@ -138,8 +140,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				Decks decks = DatabaseProvider.getInstance().getDecks();
-				fillList(decks.getDecksList());
+				decks = DatabaseProvider.getInstance().getDecks().getDecksList();
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -150,10 +151,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (listData.isEmpty()) {
+			if (decks.isEmpty()) {
 				setEmptyListText(getString(R.string.noDecks));
 			}
 			else {
+				fillList(decks);
 				updateList();
 			}
 
