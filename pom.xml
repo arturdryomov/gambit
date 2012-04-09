@@ -105,6 +105,9 @@
 					<deleteConflictingFiles>true</deleteConflictingFiles>
 					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 					<lazyLibraryUnpack>true</lazyLibraryUnpack>
+					<proguard>
+						<skip>false</skip>
+					</proguard>
 				</configuration>
 				<extensions>true</extensions>
 			</plugin>
