@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
 	<item
-		android:id="@+id/edit"
-		android:title="@string/edit"/>
+		android:id="@+id/rename"
+		android:title="@string/rename"/>
 	<item
 		android:id="@+id/editCards"
 		android:title="@string/editCards"/>

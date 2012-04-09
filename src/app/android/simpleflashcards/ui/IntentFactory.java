@@ -34,7 +34,7 @@ public class IntentFactory
 	}
 
 	public static Intent createDeckEditingIntent(Context context, Deck deck) {
-		Intent intent = new Intent(context, DeckEditingActivity.class);
+		Intent intent = new Intent(context, DeckRenamingActivity.class);
 		intent.putExtra(MESSAGE_ID, deck);
 
 		return intent;

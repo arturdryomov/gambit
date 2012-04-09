@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.simpleflashcards.R;
+import app.android.simpleflashcards.models.AlreadyExistsException;
 import app.android.simpleflashcards.models.DatabaseProvider;
 import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
@@ -85,6 +86,9 @@ public class DeckCreationActivity extends Activity
 		protected String doInBackground(Void... params) {
 			try {
 				deck = DatabaseProvider.getInstance().getDecks().addNewDeck(deckName);
+			}
+			catch (AlreadyExistsException e) {
+				return getString(R.string.deckAlreadyExists);
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);

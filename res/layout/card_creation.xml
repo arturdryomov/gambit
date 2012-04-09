@@ -39,6 +39,7 @@
 			<EditText
 				android:id="@+id/backSideEdit"
 				style="@style/BodyLinearLayoutItem"
+				android:imeOptions="actionDone"
 				android:inputType="text" />
 
 			<Button

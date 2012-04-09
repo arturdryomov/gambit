@@ -33,7 +33,7 @@
 			android:name=".ui.CardsViewingActivity"
 			android:configChanges="keyboardHidden|orientation" >
 		</activity>
-		<activity android:name=".ui.DeckEditingActivity" >
+		<activity android:name=".ui.DeckRenamingActivity" >
 		</activity>
 		<activity android:name=".ui.CardEditingActivity" >
 		</activity>

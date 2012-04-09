@@ -191,7 +191,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		int itemPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.edit:
+			case R.id.rename:
 				callDeckEditing(itemPosition);
 				return true;
 

@@ -15,7 +15,7 @@ import app.android.simpleflashcards.models.Deck;
 import app.android.simpleflashcards.models.ModelsException;
 
 
-public class DeckEditingActivity extends Activity
+public class DeckRenamingActivity extends Activity
 {
 	private final Context activityContext = this;
 
@@ -25,7 +25,7 @@ public class DeckEditingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.deck_editing);
+		setContentView(R.layout.deck_renaming);
 
 		initializeBodyControls();
 
