@@ -253,6 +253,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPreExecute() {
 			listData.remove(cardPosition);
+			updateList();
+
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.noCards));
+			}
 		}
 
 		@Override
@@ -269,12 +274,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noCards));
-			}
-
-			updateList();
-
 			if (!errorMessage.isEmpty()) {
 				UserAlerter.alert(activityContext, errorMessage);
 			}

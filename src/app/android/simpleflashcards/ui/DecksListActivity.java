@@ -237,6 +237,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPreExecute() {
 			listData.remove(deckPosition);
+			updateList();
+
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.noDecks));
+			}
 		}
 
 		@Override
@@ -253,12 +258,6 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noDecks));
-			}
-
-			updateList();
-
 			if (!errorMessage.isEmpty()) {
 				UserAlerter.alert(activityContext, errorMessage);
 			}
