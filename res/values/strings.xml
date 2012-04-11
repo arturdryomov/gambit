@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="applicationName">Simple Flashcards</string>
+	<string name="applicationName">Gambit</string>
 	<string name="decks">Decks</string>
 	<string name="cards">Flashcards</string>
 	<string name="cardsEditing">Flashcards Editing</string>
