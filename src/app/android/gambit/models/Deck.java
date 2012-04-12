@@ -2,6 +2,7 @@ package app.android.gambit.models;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -362,21 +363,68 @@ public class Deck implements Parcelable
 	}
 
 	private void tryShuffleCards() {
-		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_FRONT_SIDE_TEXT),
-			null);
-		if (cursor.getCount() == 0) {
+		List<Integer> currentCardOrderIndexes = getCurrentCardOrderIndexes();
+		if (currentCardOrderIndexes.size() <= 1) {
 			return;
 		}
 
-		CardsOrderShuffler shuffler = new CardsOrderShuffler(cursor.getCount());
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
-			setCardOrderIndex(cardId, shuffler.generateNextIndex());
-			cursor.moveToNext();
+		List<Integer> newCardOrderIndexes;
+
+		if (currentCardOrderIndexes.size() == 2) {
+			newCardOrderIndexes = currentCardOrderIndexes;
+			Collections.swap(newCardOrderIndexes, 0, 1);
 		}
 
+		else {
+			newCardOrderIndexes = createNewCardOrderIndexes(currentCardOrderIndexes.size());
+			while (newCardOrderIndexes.equals(currentCardOrderIndexes)) {
+				newCardOrderIndexes = createNewCardOrderIndexes(currentCardOrderIndexes.size());
+			}
+		}
+
+		setCardsOrder(newCardOrderIndexes);
+
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
+	}
+
+	private List<Integer> getCurrentCardOrderIndexes() {
+		Cursor cursor = database
+			.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_ORDER_INDEX), null);
+
+		List<Integer> cardOrderIndexes = new ArrayList<Integer>();
+
+		while (cursor.moveToNext()) {
+			int index = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.CARD_ORDER_INDEX));
+			cardOrderIndexes.add(index);
+		}
+
+		return cardOrderIndexes;
+	}
+
+	private List<Integer> createNewCardOrderIndexes(int cardsCount) {
+		List<Integer> indexes = new ArrayList<Integer>();
+		CardsOrderShuffler shuffler = new CardsOrderShuffler(cardsCount);
+
+		while (!shuffler.isFinished()) {
+			indexes.add(shuffler.generateNextIndex());
+		}
+
+		return indexes;
+	}
+
+	private void setCardsOrder(List<Integer> cardsOrderIndexes) {
+		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_FRONT_SIDE_TEXT),
+			null);
+
+		if (cursor.getCount() != cardsOrderIndexes.size()) {
+			throw new ModelsException();
+		}
+
+		for (int index : cardsOrderIndexes) {
+			cursor.moveToNext();
+			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
+			setCardOrderIndex(cardId, index);
+		}
 	}
 
 	public void resetCardsOrder() {

@@ -43,4 +43,8 @@ public class CardsOrderShuffler
 
 		return result;
 	}
+
+	public boolean isFinished() {
+		return unusedIndexes.isEmpty();
+	}
 }
