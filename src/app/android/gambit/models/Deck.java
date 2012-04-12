@@ -376,9 +376,9 @@ public class Deck implements Parcelable
 		}
 
 		else {
-			newCardOrderIndexes = createNewCardOrderIndexes(currentCardOrderIndexes.size());
+			newCardOrderIndexes = new ArrayList<Integer>(currentCardOrderIndexes);
 			while (newCardOrderIndexes.equals(currentCardOrderIndexes)) {
-				newCardOrderIndexes = createNewCardOrderIndexes(currentCardOrderIndexes.size());
+				Collections.shuffle(newCardOrderIndexes);
 			}
 		}
 
@@ -399,17 +399,6 @@ public class Deck implements Parcelable
 		}
 
 		return cardOrderIndexes;
-	}
-
-	private List<Integer> createNewCardOrderIndexes(int cardsCount) {
-		List<Integer> indexes = new ArrayList<Integer>();
-		CardsOrderShuffler shuffler = new CardsOrderShuffler(cardsCount);
-
-		while (!shuffler.isFinished()) {
-			indexes.add(shuffler.generateNextIndex());
-		}
-
-		return indexes;
 	}
 
 	private void setCardsOrder(List<Integer> cardsOrderIndexes) {
