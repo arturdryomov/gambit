@@ -12,7 +12,7 @@ public class DatabaseProvider
 	}
 
 	private static DatabaseProvider instance;
-	private SimpleFlashcardsOpenHelper openHelper;
+	private GambitDbOpenHelper openHelper;
 	private Decks decks;
 	private LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
@@ -34,7 +34,7 @@ public class DatabaseProvider
 			throw new AlreadyInstantiatedException();
 		}
 
-		openHelper = new SimpleFlashcardsOpenHelper(context.getApplicationContext());
+		openHelper = new GambitDbOpenHelper(context.getApplicationContext());
 
 		instance = this;
 	}
