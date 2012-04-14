@@ -402,7 +402,7 @@ public class Deck implements Parcelable
 	}
 
 	private void setCardsOrder(List<Integer> cardsOrderIndexes) {
-		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_FRONT_SIDE_TEXT),
+		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.ID),
 			null);
 
 		if (cursor.getCount() != cardsOrderIndexes.size()) {
@@ -428,7 +428,7 @@ public class Deck implements Parcelable
 	}
 
 	private void tryResetCardsOrder() {
-		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.CARD_FRONT_SIDE_TEXT),
+		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.ID),
 			null);
 		if (cursor.getCount() == 0) {
 			return;
