@@ -38,7 +38,7 @@ public class CellEntry
 		id = worksheet.getCellEditUrl(cell.getRow(), cell.getColumn()).toString();
 	}
 
-	private CellEntry() {
+	public CellEntry() {
 		cell = new Cell(); // empy cell
 		id = new String();
 		content = new String();
