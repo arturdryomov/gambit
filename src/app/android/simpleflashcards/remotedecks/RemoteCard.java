@@ -23,11 +23,6 @@ public class RemoteCard
 	}
 
 	@Override
-	public String toString() {
-		return String.format("{ %s : %s}", frontSideText, backSideText);
-	}
-
-	@Override
 	public int hashCode() {
 		// hashCode() is not intended to be used
 		throw new UnsupportedOperationException();

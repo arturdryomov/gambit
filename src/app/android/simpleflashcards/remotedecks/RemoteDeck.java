@@ -26,11 +26,6 @@ public class RemoteDeck
 	}
 
 	@Override
-	public String toString() {
-		return String.format("{ %s\n %s }", title, cards.toString());
-	}
-
-	@Override
 	public int hashCode() {
 		// hashCode() is not intended to be used
 		throw new UnsupportedOperationException();
