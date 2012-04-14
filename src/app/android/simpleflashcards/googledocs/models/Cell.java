@@ -24,11 +24,11 @@ public class Cell
 	}
 
 	public String getValue() {
-		return value;
+		return value.trim();
 	}
 
 	public boolean isEmpty() {
-		return value.isEmpty();
+		return getValue().isEmpty();
 	}
 
 	public Cell(int row, int column, String value) {
