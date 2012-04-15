@@ -68,8 +68,7 @@ public class RemoteDecks
 
 		List<RemoteDeck> decks = new ArrayList<RemoteDeck>();
 
-		List<WorksheetEntry> worksheetEntries = getWorksheetEntries();
-		for (WorksheetEntry worksheetEntry : worksheetEntries) {
+		for (WorksheetEntry worksheetEntry : getWorksheetEntries()) {
 			decks.add(remoteDeckFromWorksheetEntry(worksheetEntry));
 		}
 
