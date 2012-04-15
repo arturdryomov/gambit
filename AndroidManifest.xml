@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="app.android.gambit"
 	android:versionCode="1"
-	android:versionName="0.0.1" >
+	android:versionName="0.0.1">
 
 	<uses-sdk android:minSdkVersion="10" />
 
@@ -15,31 +15,31 @@
 		android:name="GambitApplication"
 		android:icon="@drawable/icon"
 		android:label="@string/applicationName"
-		android:theme="@android:style/Theme.Light.NoTitleBar" >
-		<activity android:name=".ui.DecksListActivity" >
+		android:theme="@android:style/Theme.Light.NoTitleBar">
+		<activity android:name=".ui.DecksListActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ui.DeckCreationActivity" >
+		<activity android:name=".ui.DeckCreationActivity">
 		</activity>
-		<activity android:name=".ui.CardsListActivity" >
+		<activity android:name=".ui.CardsListActivity">
 		</activity>
-		<activity android:name=".ui.CardCreationActivity" >
+		<activity android:name=".ui.CardCreationActivity">
 		</activity>
 		<activity
 			android:name=".ui.CardsViewingActivity"
-			android:configChanges="keyboardHidden|orientation" >
+			android:configChanges="keyboardHidden|orientation">
 		</activity>
-		<activity android:name=".ui.DeckRenamingActivity" >
+		<activity android:name=".ui.DeckRenamingActivity">
 		</activity>
-		<activity android:name=".ui.CardEditingActivity" >
+		<activity android:name=".ui.CardEditingActivity">
 		</activity>
-		<activity android:name=".ui.SettingsActivity" >
+		<activity android:name=".ui.SettingsActivity">
 		</activity>
-		<activity android:name=".ui.SyncSetupActivity" >
+		<activity android:name=".ui.SyncSetupActivity">
 		</activity>
 	</application>
 
