@@ -87,7 +87,7 @@ public class RemoteDecks
 		for (CellEntry cellEntry : cellEntries) {
 			Cell cell = cellEntry.getCell();
 			if (cellContainsValidCardText(cell)) {
-				addCellValueToMap(cardTextsMap, cell);
+				cardTextsMap = addCellValueToMap(cardTextsMap, cell);
 			}
 		}
 
@@ -112,20 +112,27 @@ public class RemoteDecks
 		return !cell.getValue().isEmpty();
 	}
 
-	private void addCellValueToMap(SortedMap<Integer, CardTexts> cardTextsMap, Cell cell) {
-		if (!cardTextsMap.containsKey(cell.getRow())) {
-			cardTextsMap.put(cell.getRow(), new CardTexts());
+	private SortedMap<Integer, CardTexts> addCellValueToMap(
+		SortedMap<Integer, CardTexts> cardTextsMap, Cell cell) {
+
+		SortedMap<Integer, CardTexts> newCardTextsMap = new TreeMap<Integer, RemoteDecks.CardTexts>(
+			cardTextsMap);
+
+		if (!newCardTextsMap.containsKey(cell.getRow())) {
+			newCardTextsMap.put(cell.getRow(), new CardTexts());
 		}
 
 		if (cell.getColumn() == FRONT_SIDE_TEXT_COLUMN_INDEX) {
-			cardTextsMap.get(cell.getRow()).front = cell.getValue();
+			newCardTextsMap.get(cell.getRow()).front = cell.getValue();
 		}
 		else if (cell.getColumn() == BACK_SIDE_TEXT_COLUMN_INDEX) {
-			cardTextsMap.get(cell.getRow()).back = cell.getValue();
+			newCardTextsMap.get(cell.getRow()).back = cell.getValue();
 		}
 		else {
 			throw new RemoteDecksException("Invalid column index");
 		}
+
+		return newCardTextsMap;
 	}
 
 	private List<RemoteCard> cardsListFromCardTextsMap(SortedMap<Integer, CardTexts> cardTextsMap) {
