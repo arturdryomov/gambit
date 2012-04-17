@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,41 +47,43 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		ImageButton updateButton = (ImageButton) findViewById(R.id.updateButton);
 		updateButton.setOnClickListener(updateListener);
 
-		ImageButton newItemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
-		newItemCreationButton.setOnClickListener(deckCreationListener);
+		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
+		itemCreationButton.setOnClickListener(deckCreationListener);
 	}
 
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
-		public void onClick(View v) {
-			// TODO: Check existing of sync document name, if false — call sync setup, true — call update
-			updateDecks();
+		public void onClick(View view) {
+			// TODO: Check sync document name existing
+			// if false — call sync setup, true — call update
+			callDecksUpdating();
+		}
+
+		private void callDecksUpdating() {
+			new UpdateDecksTask().execute();
 		}
 	};
 
-	private void updateDecks() {
-		new UpdateDecksTask().execute();
-	}
-
 	private class UpdateDecksTask extends AsyncTask<Void, Void, String>
 	{
-		// Just obtain authorization token
+		// Just obtain authorization token at moment
 
 		@Override
-		protected String doInBackground(Void... arg0) {
+		protected String doInBackground(Void... params) {
 			try {
-				Activity thisActivity = (Activity) activityContext;
+				Activity activity = (Activity) activityContext;
 
-				Account account = AccountSelector.select(thisActivity);
+				Account account = AccountSelector.select(activity);
 
-				Authorizer authorizer = new Authorizer(thisActivity);
-				String token = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+				Authorizer authorizer = new Authorizer(activity);
+				String authToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
 
-				return String.format("Token received: '%s'.", token);
+				return String.format("Token received: '%s'.", authToken);
 			}
 			catch (NoAccountRegisteredException e) {
 				return getString(R.string.noGoogleAccounts);
 			}
+			// TODO: Remove this exception as useless
 			catch (AuthorizationCanceledException e) {
 				return getString(R.string.authenticationCanceled);
 			}
@@ -92,8 +93,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected void onPostExecute(String resultMessage) {
-			UserAlerter.alert(activityContext, resultMessage);
+		protected void onPostExecute(String errorMessage) {
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
+			}
 		}
 	}
 
@@ -102,12 +105,12 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		public void onClick(View v) {
 			callDeckCreation();
 		}
-	};
 
-	private void callDeckCreation() {
-		Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
-		activityContext.startActivity(callIntent);
-	}
+		private void callDeckCreation() {
+			Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
+			activityContext.startActivity(callIntent);
+		}
+	};
 
 	@Override
 	protected void initializeList() {
@@ -125,6 +128,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	protected void onResume() {
 		super.onResume();
 
+		loadDecks();
+	}
+
+	private void loadDecks() {
 		new LoadDecksTask().execute();
 	}
 
@@ -178,29 +185,28 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
 
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.decks_context_menu, menu);
+		getMenuInflater().inflate(R.menu.decks_context_menu, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		int itemPosition = itemInfo.position;
+		int deckPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
 			case R.id.rename:
-				callDeckEditing(itemPosition);
+				callDeckEditing(deckPosition);
 				return true;
 
 			case R.id.editCards:
-				callCardsEditing(itemPosition);
+				callCardsEditing(deckPosition);
 				return true;
 
 			case R.id.delete:
-				new DeleteDeckTask(itemPosition).execute();
+				callDeckDeleting(deckPosition);
 				return true;
 
 			default:
@@ -215,11 +221,24 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		startActivity(callIntent);
 	}
 
+	private Deck getDeck(int deckPosition) {
+		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(deckPosition);
+
+		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
+	}
+
 	private void callCardsEditing(int deckPosition) {
 		Deck deck = getDeck(deckPosition);
 
 		Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
 		startActivity(callIntent);
+	}
+
+	private void callDeckDeleting(int deckPosition) {
+		new DeleteDeckTask(deckPosition).execute();
 	}
 
 	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
@@ -265,14 +284,16 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		new ViewDeckTask(position).execute();
+	protected void onListItemClick(ListView list, View view, int position, long id) {
+		callDeckViewing(position);
+	}
+
+	private void callDeckViewing(int deckPosition) {
+		new ViewDeckTask(deckPosition).execute();
 	}
 
 	private class ViewDeckTask extends AsyncTask<Void, Void, String>
 	{
-		private static final String EMPTY_DECK_MESSAGE = "empty_deck";
-
 		private final Deck deck;
 
 		public ViewDeckTask(int deckPosition) {
@@ -283,7 +304,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		protected String doInBackground(Void... params) {
 			try {
 				if (deck.isEmpty()) {
-					return EMPTY_DECK_MESSAGE;
+					return getString(R.string.noCards);
 				}
 			}
 			catch (ModelsException e) {
@@ -295,11 +316,6 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (errorMessage.equals(EMPTY_DECK_MESSAGE)) {
-				UserAlerter.alert(activityContext, getString(R.string.noCards));
-				return;
-			}
-
 			if (errorMessage.isEmpty()) {
 				callCardsViewing(deck);
 			}
@@ -314,19 +330,9 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private Deck getDeck(int deckPosition) {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(deckPosition);
-
-		return (Deck) adapterItem.get(LIST_ITEM_OBJECT_ID);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.decks_menu, menu);
+		getMenuInflater().inflate(R.menu.decks_menu, menu);
 
 		return true;
 	}

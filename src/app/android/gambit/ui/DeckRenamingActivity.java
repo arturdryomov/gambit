@@ -46,11 +46,15 @@ public class DeckRenamingActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				new DeckUpdatingTask().execute();
+				callDeckUpdating();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
+		}
+
+		private void callDeckUpdating() {
+			new DeckUpdatingTask().execute();
 		}
 	};
 
@@ -124,9 +128,7 @@ public class DeckRenamingActivity extends Activity
 	}
 
 	private void setUpReceivedDeckData() {
-		deckName = deck.getTitle();
-
 		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
-		deckNameEdit.setText(deckName);
+		deckNameEdit.setText(deck.getTitle());
 	}
 }

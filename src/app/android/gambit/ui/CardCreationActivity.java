@@ -46,11 +46,15 @@ public class CardCreationActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				new CardCreationTask().execute();
+				callCardCreation();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
+		}
+
+		private void callCardCreation() {
+			new CardCreationTask().execute();
 		}
 	};
 

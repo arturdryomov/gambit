@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,40 +51,41 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		ImageButton updateButton = (ImageButton) findViewById(R.id.updateButton);
 		updateButton.setOnClickListener(updateListener);
 
-		ImageButton newItemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
-		newItemCreationButton.setOnClickListener(flashcardCreationListener);
+		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
+		itemCreationButton.setOnClickListener(cardCreationListener);
 	}
 
 	private final OnClickListener updateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			updateCards();
+			callCardsUpdating();
+		}
+
+		private void callCardsUpdating() {
+			new UpdateCardsTask().execute();
 		}
 	};
 
-	private void updateCards() {
-		new UpdateCardsTask().execute();
-	}
-
 	private class UpdateCardsTask extends AsyncTask<Void, Void, String>
 	{
-		// Just obtain authorization token
+		// Just obtain authorization token at moment
 
 		@Override
-		protected String doInBackground(Void... arg0) {
+		protected String doInBackground(Void... params) {
 			try {
-				Activity thisActivity = (Activity) activityContext;
+				Activity activity = (Activity) activityContext;
 
-				Account account = AccountSelector.select(thisActivity);
+				Account account = AccountSelector.select(activity);
 
-				Authorizer authorizer = new Authorizer(thisActivity);
-				String token = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+				Authorizer authorizer = new Authorizer(activity);
+				String authToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
 
-				return String.format("Token received: '%s'.", token);
+				return String.format("Token received: '%s'.", authToken);
 			}
 			catch (NoAccountRegisteredException e) {
 				return getString(R.string.noGoogleAccounts);
 			}
+			// TODO: Remove this exception as useless
 			catch (AuthorizationCanceledException e) {
 				return getString(R.string.authenticationCanceled);
 			}
@@ -93,9 +93,16 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				return getString(R.string.authenticationError);
 			}
 		}
+
+		@Override
+		protected void onPostExecute(String errorMessage) {
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
+			}
+		}
 	}
 
-	private final OnClickListener flashcardCreationListener = new OnClickListener() {
+	private final OnClickListener cardCreationListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			callCardCreation();
@@ -137,6 +144,10 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	protected void onResume() {
 		super.onResume();
 
+		loadCards();
+	}
+
+	private void loadCards() {
 		new LoadCardsTask().execute();
 	}
 
@@ -191,7 +202,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	protected void onListItemClick(ListView list, View view, int position, long id) {
 		callCardEditing(position);
 	}
 
@@ -215,27 +226,30 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.cards_context_menu, menu);
+		getMenuInflater().inflate(R.menu.cards_context_menu, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
-		int itemPosition = itemInfo.position;
+		int cardPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
 			case R.id.delete:
-				new DeleteCardTask(itemPosition).execute();
+				callCardDeleting(cardPosition);
 				return true;
 
 			case R.id.edit:
-				callCardEditing(itemPosition);
+				callCardEditing(cardPosition);
 				return true;
 
 			default:
 				return super.onContextItemSelected(item);
 		}
+	}
+
+	private void callCardDeleting(int cardPosition) {
+		new DeleteCardTask(cardPosition).execute();
 	}
 
 	private class DeleteCardTask extends AsyncTask<Void, Void, String>

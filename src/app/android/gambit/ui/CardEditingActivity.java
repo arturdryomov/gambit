@@ -46,11 +46,15 @@ public class CardEditingActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				new CardUpdatingTask().execute();
+				callCardUpdating();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
+		}
+
+		private void callCardUpdating() {
+			new CardUpdatingTask().execute();
 		}
 	};
 

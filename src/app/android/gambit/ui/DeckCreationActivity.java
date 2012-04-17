@@ -44,11 +44,15 @@ public class DeckCreationActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				new DeckCreationTask().execute();
+				callDeckCreation();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
+		}
+
+		private void callDeckCreation() {
+			new DeckCreationTask().execute();
 		}
 	};
 

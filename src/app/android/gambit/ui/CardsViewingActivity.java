@@ -15,7 +15,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,7 +67,7 @@ public class CardsViewingActivity extends Activity
 
 		processReceivedDeck();
 
-		new LoadCardsTask(CardsOrder.DEFAULT).execute();
+		loadCards(CardsOrder.DEFAULT);
 	}
 
 	private void initializeSensor() {
@@ -80,10 +79,14 @@ public class CardsViewingActivity extends Activity
 			@Override
 			public void onShake() {
 				if (!isLoadingInProgress) {
-					new LoadCardsTask(CardsOrder.SHUFFLE).execute();
+					loadCards(CardsOrder.SHUFFLE);
 				}
 			}
 		});
+	}
+
+	private void loadCards(CardsOrder cardsOrder) {
+		new LoadCardsTask(cardsOrder).execute();
 	}
 
 	private class LoadCardsTask extends AsyncTask<Void, Void, String>
@@ -144,7 +147,7 @@ public class CardsViewingActivity extends Activity
 						break;
 				}
 
-				fillList(deck.getCardsList());
+				fillCardsList(deck.getCardsList());
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -153,15 +156,15 @@ public class CardsViewingActivity extends Activity
 			return new String();
 		}
 
-		private void fillList(List<Card> cards) {
+		private void fillCardsList(List<Card> cards) {
 			cardsData.clear();
 
 			for (Card card : cards) {
-				addCardToList(card);
+				addCardToCardsList(card);
 			}
 		}
 
-		private void addCardToList(Card card) {
+		private void addCardToCardsList(Card card) {
 			HashMap<String, Object> cardItem = new HashMap<String, Object>();
 
 			cardItem.put(CARDS_DATA_FRONT_SIDE_TEXT_ID, card.getFrontSideText());
@@ -197,18 +200,14 @@ public class CardsViewingActivity extends Activity
 
 		private void restoreCurrentCardPosition() {
 			int currentCardPosition = deck.getCurrentCardIndex();
-			setCardsPagerPosition(currentCardPosition);
+			setCurrentCardPosition(currentCardPosition);
 		}
-	}
-
-	private void setCardsPagerPosition(int position) {
-		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
-
-		cardsPager.setCurrentItem(position);
 	}
 
 	private class CardsAdapter extends PagerAdapter
 	{
+		private static final int CARD_TEXT_SIZE = 30;
+
 		@Override
 		public int getCount() {
 			return cardsData.size();
@@ -216,43 +215,25 @@ public class CardsViewingActivity extends Activity
 
 		@Override
 		public Object instantiateItem(View container, final int position) {
-			TextView textView = new TextView(activityContext);
+			TextView cardTextView = new TextView(activityContext);
 
-			textView.setText(getCardText(position));
-			textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-			textView.setTextSize(30);
+			cardTextView.setText(getCardText(position));
+			cardTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+			cardTextView.setTextSize(CARD_TEXT_SIZE);
 
-			textView.setOnClickListener(new OnClickListener() {
+			cardTextView.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v) {
-					TextView textView = (TextView) v;
+				public void onClick(View view) {
+					TextView cardView = (TextView) view;
 
 					invertCardSide(position);
-
-					textView.setText(getCardText(position));
+					cardView.setText(getCardText(position));
 				}
 			});
 
-			((ViewPager) container).addView(textView, 0);
+			((ViewPager) container).addView(cardTextView, 0);
 
-			return textView;
-		}
-
-		private String getCardText(int position) {
-			HashMap<String, Object> cardItem = cardsData.get(position);
-
-			CardSide cardSide = (CardSide) cardItem.get(CARDS_DATA_CURRENT_SIDE_ID);
-
-			switch (cardSide) {
-				case FRONT:
-					return (String) cardItem.get(CARDS_DATA_FRONT_SIDE_TEXT_ID);
-
-				case BACK:
-					return (String) cardItem.get(CARDS_DATA_BACK_SIDE_TEXT_ID);
-
-				default:
-					return new String();
-			}
+			return cardTextView;
 		}
 
 		private void invertCardSide(int position) {
@@ -278,6 +259,29 @@ public class CardsViewingActivity extends Activity
 			setCardSide(invertedCardSide, position);
 		}
 
+		private void setCardSide(CardSide cardSide, int position) {
+			HashMap<String, Object> cardItem = cardsData.get(position);
+
+			cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, cardSide);
+		}
+
+		private String getCardText(int position) {
+			HashMap<String, Object> cardItem = cardsData.get(position);
+
+			CardSide cardSide = (CardSide) cardItem.get(CARDS_DATA_CURRENT_SIDE_ID);
+
+			switch (cardSide) {
+				case FRONT:
+					return (String) cardItem.get(CARDS_DATA_FRONT_SIDE_TEXT_ID);
+
+				case BACK:
+					return (String) cardItem.get(CARDS_DATA_BACK_SIDE_TEXT_ID);
+
+				default:
+					return new String();
+			}
+		}
+
 		@Override
 		public void destroyItem(View container, int position, Object object) {
 			((ViewPager) container).removeView((TextView) object);
@@ -289,16 +293,16 @@ public class CardsViewingActivity extends Activity
 			setCardSide(CardSide.FRONT, position);
 		}
 
-		private void setCardSide(CardSide cardSide, int position) {
-			HashMap<String, Object> cardItem = cardsData.get(position);
-
-			cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, cardSide);
-		}
-
 		@Override
 		public boolean isViewFromObject(View view, Object object) {
 			return view == (TextView) object;
 		}
+	}
+
+	private void setCurrentCardPosition(int position) {
+		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+
+		cardsPager.setCurrentItem(position);
 	}
 
 	private void processReceivedDeck() {
@@ -316,8 +320,7 @@ public class CardsViewingActivity extends Activity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.cards_viewing_menu, menu);
+		getMenuInflater().inflate(R.menu.cards_viewing_menu, menu);
 
 		return true;
 	}
@@ -326,11 +329,11 @@ public class CardsViewingActivity extends Activity
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.shuffle:
-				new LoadCardsTask(CardsOrder.SHUFFLE).execute();
+				loadCards(CardsOrder.SHUFFLE);
 				return true;
 
 			case R.id.reset:
-				new LoadCardsTask(CardsOrder.STRAIGHT).execute();
+				loadCards(CardsOrder.STRAIGHT);
 				return true;
 
 			case R.id.back:
@@ -344,7 +347,7 @@ public class CardsViewingActivity extends Activity
 	}
 
 	private void goToFirstCard() {
-		setCardsPagerPosition(0);
+		setCurrentCardPosition(0);
 	}
 
 	@Override
@@ -358,9 +361,13 @@ public class CardsViewingActivity extends Activity
 	protected void onPause() {
 		super.onPause();
 
-		new StoreCardsPositionTask().execute();
+		storeCurrentCardPosition();
 
 		sensorManager.unregisterListener(sensorListener);
+	}
+
+	private void storeCurrentCardPosition() {
+		new StoreCardsPositionTask().execute();
 	}
 
 	private class StoreCardsPositionTask extends AsyncTask<Void, Void, String>
@@ -368,7 +375,7 @@ public class CardsViewingActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck.setCurrentCardIndex(getCardsPagerPosition());
+				deck.setCurrentCardIndex(getCurrentCardPosition());
 			}
 			catch (ModelsException e) {
 				return getString(R.string.someError);
@@ -377,7 +384,7 @@ public class CardsViewingActivity extends Activity
 			return new String();
 		}
 
-		private int getCardsPagerPosition() {
+		private int getCurrentCardPosition() {
 			ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
 
 			return cardsPager.getCurrentItem();
