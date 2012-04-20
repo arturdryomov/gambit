@@ -16,8 +16,7 @@ public class Card implements Parcelable
 	private String frontSideText;
 	private String backSideText;
 
-	// Do not use the constructor. It should be used by Deck class only
-	public Card(ContentValues values) {
+	Card(ContentValues values) {
 		database = DatabaseProvider.getInstance().getDatabase();
 		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
 
@@ -61,6 +60,12 @@ public class Card implements Parcelable
 		readFromParcel(parcel);
 	}
 
+	public void readFromParcel(Parcel parcel) {
+		id = parcel.readInt();
+		frontSideText = parcel.readString();
+		backSideText = parcel.readString();
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -71,12 +76,6 @@ public class Card implements Parcelable
 		parcel.writeInt(id);
 		parcel.writeString(frontSideText);
 		parcel.writeString(backSideText);
-	}
-
-	public void readFromParcel(Parcel parcel) {
-		id = parcel.readInt();
-		frontSideText = parcel.readString();
-		backSideText = parcel.readString();
 	}
 
 	public String getFrontSideText() {
