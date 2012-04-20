@@ -6,8 +6,8 @@ import java.util.List;
 import app.android.gambit.InternetDateTime;
 import app.android.gambit.googledocs.DocumentsListUrl;
 import app.android.gambit.googledocs.GoogleDocsException;
-import app.android.gambit.googledocs.KeyUrl;
 
+import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.util.Key;
 
 
@@ -129,9 +129,9 @@ public class DocumentEntry
 			throw new GoogleDocsException("Key can be only determined for a spreadsheet");
 		}
 
-		KeyUrl keyUrl = new KeyUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());
+		GoogleUrl url = new GoogleUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());
 
-		return keyUrl.getKey();
+		return url.getKey();
 	}
 
 	public DocumentsListUrl getEditUrl() {

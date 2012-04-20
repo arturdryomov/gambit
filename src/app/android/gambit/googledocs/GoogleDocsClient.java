@@ -65,7 +65,7 @@ public class GoogleDocsClient
 		private GoogleHeaders buildHeaders() {
 			GoogleHeaders headers = new GoogleHeaders();
 
-			headers.gdataVersion = GDATA_VERSION;
+			headers.setGDataVersion(GDATA_VERSION);
 			headers.setGoogleLogin(authToken);
 
 			return headers;

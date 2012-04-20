@@ -4,9 +4,9 @@ package app.android.gambit.googledocs.models;
 import java.util.List;
 
 import app.android.gambit.InternetDateTime;
-import app.android.gambit.googledocs.KeyUrl;
 import app.android.gambit.googledocs.SpreadsheetUrl;
 
+import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.util.Key;
 
 
@@ -62,8 +62,8 @@ public class SpreadsheetEntry
 	}
 
 	public String getKey() {
-		KeyUrl keyUrl = new KeyUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());
-		return keyUrl.getKey();
+		GoogleUrl url = new GoogleUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());
+		return url.getKey();
 	}
 
 	public SpreadsheetUrl getSelfFeedUrl() {
