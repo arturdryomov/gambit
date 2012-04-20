@@ -1,12 +1,13 @@
-package app.android.gambit.googledocs.models;
+package app.android.gambit.remote;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.api.client.util.Key;
 
 
-public class WorksheetFeed
+public class CellFeed
 {
 	@Key("title")
 	private String title;
@@ -15,7 +16,11 @@ public class WorksheetFeed
 	private Author author;
 
 	@Key("entry")
-	private List<WorksheetEntry> worksheets;
+	private List<CellEntry> cells;
+
+	public CellFeed() {
+		cells = new ArrayList<CellEntry>();
+	}
 
 	public String getTitle() {
 		return title;
@@ -25,7 +30,7 @@ public class WorksheetFeed
 		return author;
 	}
 
-	public List<WorksheetEntry> getEntries() {
-		return worksheets;
+	public List<CellEntry> getEntries() {
+		return cells;
 	}
 }

@@ -1,13 +1,6 @@
-package app.android.gambit.googledocs;
+package app.android.gambit.remote;
 
 
-import app.android.gambit.googledocs.models.Cell;
-import app.android.gambit.googledocs.models.CellEntry;
-import app.android.gambit.googledocs.models.CellFeed;
-import app.android.gambit.googledocs.models.SpreadsheetEntry;
-import app.android.gambit.googledocs.models.SpreadsheetFeed;
-import app.android.gambit.googledocs.models.WorksheetEntry;
-import app.android.gambit.googledocs.models.WorksheetFeed;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.xml.atom.AtomContent;

@@ -1,4 +1,4 @@
-package app.android.gambit.googledocs.models;
+package app.android.gambit.remote;
 
 
 import java.util.ArrayList;

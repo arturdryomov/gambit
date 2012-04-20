@@ -1,4 +1,4 @@
-package app.android.gambit.googledocs;
+package app.android.gambit.remote;
 
 
 import java.io.IOException;

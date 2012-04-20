@@ -1,10 +1,9 @@
-package app.android.gambit.googledocs.models;
+package app.android.gambit.remote;
 
 
 import java.util.List;
 
 import app.android.gambit.InternetDateTime;
-import app.android.gambit.googledocs.SpreadsheetUrl;
 
 import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.util.Key;

@@ -1,7 +1,6 @@
-package app.android.gambit.googledocs;
+package app.android.gambit.remote;
 
 
-import app.android.gambit.googledocs.models.DocumentEntry;
 
 import com.google.api.client.googleapis.GoogleUrl;
 

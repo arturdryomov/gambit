@@ -1,10 +1,9 @@
-package app.android.gambit.googledocs.models;
+package app.android.gambit.remote;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import app.android.gambit.googledocs.DocumentsListUrl;
 
 import com.google.api.client.util.Key;
 

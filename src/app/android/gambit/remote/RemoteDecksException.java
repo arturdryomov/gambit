@@ -1,4 +1,4 @@
-package app.android.gambit.remotedecks;
+package app.android.gambit.remote;
 
 
 public class RemoteDecksException extends RuntimeException

@@ -1,4 +1,4 @@
-package app.android.gambit.remotedecks;
+package app.android.gambit.remote;
 
 
 import java.util.ArrayList;
@@ -8,11 +8,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import app.android.gambit.InternetDateTime;
-import app.android.gambit.googledocs.SpreadsheetsClient;
-import app.android.gambit.googledocs.models.Cell;
-import app.android.gambit.googledocs.models.CellEntry;
-import app.android.gambit.googledocs.models.SpreadsheetEntry;
-import app.android.gambit.googledocs.models.WorksheetEntry;
 
 
 public class RemoteDecks

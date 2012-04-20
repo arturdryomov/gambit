@@ -1,4 +1,4 @@
-package app.android.gambit.googledocs;
+package app.android.gambit.remote;
 
 
 public class FailedRequestException extends GoogleDocsException
