@@ -1,7 +1,6 @@
 package app.android.gambit.local;
 
 
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import app.android.gambit.InternetDateTime;
@@ -41,6 +40,10 @@ class LastUpdateDateTimeHandler
 		int recordsCount = cursor.getInt(0);
 
 		return recordsCount > 0;
+	}
+
+	private String buildRecordsCountSelectingQuery() {
+		return String.format("select count(*) from %s", DbTableNames.DB_LAST_UPDATE_TIME);
 	}
 
 	private void insertEmptyRecord() {
@@ -107,9 +110,5 @@ class LastUpdateDateTimeHandler
 		builder.append(String.format("from %s", DbTableNames.DB_LAST_UPDATE_TIME));
 
 		return builder.toString();
-	}
-
-	private String buildRecordsCountSelectingQuery() {
-		return String.format("select count(*) from %s", DbTableNames.DB_LAST_UPDATE_TIME);
 	}
 }
