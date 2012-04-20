@@ -1,5 +1,6 @@
 package app.android.gambit.local;
 
+
 public class DbTableNames
 {
 	public static final String DECKS = "Decks";
