@@ -3,8 +3,8 @@ package app.android.gambit.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import app.android.gambit.models.Card;
-import app.android.gambit.models.Deck;
+import app.android.gambit.local.Card;
+import app.android.gambit.local.Deck;
 
 
 public class IntentFactory

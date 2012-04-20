@@ -10,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
-import app.android.gambit.models.Deck;
-import app.android.gambit.models.ModelsException;
+import app.android.gambit.local.Deck;
+import app.android.gambit.local.ModelsException;
 
 
 public class CardCreationActivity extends Activity

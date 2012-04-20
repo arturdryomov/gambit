@@ -1,4 +1,4 @@
-package app.android.gambit.models;
+package app.android.gambit.local;
 
 
 import java.util.ArrayList;

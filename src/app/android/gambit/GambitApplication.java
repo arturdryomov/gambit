@@ -2,7 +2,7 @@ package app.android.gambit;
 
 
 import android.app.Application;
-import app.android.gambit.models.DatabaseProvider;
+import app.android.gambit.local.DatabaseProvider;
 
 
 public class GambitApplication extends Application
