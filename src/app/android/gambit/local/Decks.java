@@ -35,11 +35,9 @@ public class Decks
 
 		Cursor cursor = database.rawQuery(buildDecksSelectionQuery(), null);
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
+		while (cursor.moveToNext()) {
 			ContentValues values = contentValuesFromCursor(cursor);
 			decksList.add(new Deck(values));
-			cursor.moveToNext();
 		}
 
 		return decksList;
@@ -92,11 +90,27 @@ public class Decks
 		if (containsDeckWithTitle(title)) {
 			throw new AlreadyExistsException();
 		}
-		database.execSQL(buildDeckInsertionQuery(title));
 
+		database.execSQL(buildDeckInsertionQuery(title));
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
 		return getDeckById(lastInsertedId());
+	}
+
+	public boolean containsDeckWithTitle(String title) {
+		Cursor cursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
+		cursor.moveToFirst();
+
+		return cursor.getInt(0) > 0;
+	}
+
+	private String buildDeckWithTitlePresenceQuery(String title) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append(String.format("select count(*) from %s ", DbTableNames.DECKS));
+		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
+
+		return builder.toString();
 	}
 
 	private String buildDeckInsertionQuery(String deckTitle) {
@@ -215,22 +229,6 @@ public class Decks
 
 		builder.append(String.format("delete from %s ", DbTableNames.DECKS));
 		builder.append(String.format("where %s = %d", DbFieldNames.ID, deck.getId()));
-
-		return builder.toString();
-	}
-
-	public boolean containsDeckWithTitle(String title) {
-		Cursor cursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
-		cursor.moveToFirst();
-
-		return cursor.getInt(0) > 0;
-	}
-
-	private String buildDeckWithTitlePresenceQuery(String title) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("select count(*) from %s ", DbTableNames.DECKS));
-		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
 
 		return builder.toString();
 	}
