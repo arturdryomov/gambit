@@ -23,7 +23,7 @@ import android.widget.SimpleAdapter;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.ModelsException;
+import app.android.gambit.local.DatabaseException;
 
 
 public class CardsListActivity extends SimpleAdapterListActivity
@@ -165,7 +165,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			try {
 				cards = deck.getCardsList();
 			}
-			catch (ModelsException e) {
+			catch (DatabaseException e) {
 				return getString(R.string.someError);
 			}
 
@@ -279,7 +279,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			try {
 				deck.deleteCard(card);
 			}
-			catch (ModelsException e) {
+			catch (DatabaseException e) {
 				return getString(R.string.someError);
 			}
 

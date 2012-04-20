@@ -26,19 +26,19 @@ public class Card implements Parcelable
 	private void setValues(ContentValues values) {
 		Integer idAsInteger = values.getAsInteger(DbFieldNames.ID);
 		if (idAsInteger == null) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		id = idAsInteger;
 
 		String frontSideAsString = values.getAsString(DbFieldNames.CARD_FRONT_SIDE_TEXT);
 		if (frontSideAsString == null) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		frontSideText = frontSideAsString;
 
 		String backSideAsString = values.getAsString(DbFieldNames.CARD_BACK_SIDE_TEXT);
 		if (backSideAsString == null) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		backSideText = backSideAsString;
 	}

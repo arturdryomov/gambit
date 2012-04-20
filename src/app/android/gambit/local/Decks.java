@@ -127,7 +127,7 @@ public class Decks
 	private int lastInsertedId() {
 		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		return cursor.getInt(0);
 	}
@@ -145,7 +145,7 @@ public class Decks
 	public Deck getDeckById(int id) {
 		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(String.format("There's no a deck with id = %d in database", id));
+			throw new DatabaseException(String.format("There's no a deck with id = %d in database", id));
 		}
 
 		return new Deck(contentValuesFromCursor(cursor));
@@ -169,7 +169,7 @@ public class Decks
 	public Deck getDeckByCardId(int cardId) {
 		Cursor cursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(String.format(
+			throw new DatabaseException(String.format(
 				"There's no a deck that is a parent for card with id = %d", cardId));
 		}
 

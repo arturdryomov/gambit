@@ -35,19 +35,19 @@ public class Deck implements Parcelable
 	private void setValues(ContentValues values) {
 		Integer idAsInteger = values.getAsInteger(DbFieldNames.ID);
 		if (idAsInteger == null) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		id = idAsInteger;
 
 		String titleAsString = values.getAsString(DbFieldNames.DECK_TITLE);
 		if (titleAsString == null) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		title = titleAsString;
 
 		Integer currentCardIndexAsInteger = values.getAsInteger(DbFieldNames.DECK_CURRENT_CARD_INDEX);
 		if (currentCardIndexAsInteger == null) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 		currentCardIndex = currentCardIndexAsInteger;
 	}
@@ -296,7 +296,7 @@ public class Deck implements Parcelable
 	private int lastInsertedId() {
 		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 
 		return cursor.getInt(0);
@@ -315,7 +315,7 @@ public class Deck implements Parcelable
 	public Card getCardById(int id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new ModelsException(String.format("There's no a card with id = %d in database", id));
+			throw new DatabaseException(String.format("There's no a card with id = %d in database", id));
 		}
 
 		return new Card(contentValuesFromCursor(cursor));
@@ -425,7 +425,7 @@ public class Deck implements Parcelable
 		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.ID), null);
 
 		if (cursor.getCount() != cardsOrderIndexes.size()) {
-			throw new ModelsException();
+			throw new DatabaseException();
 		}
 
 		for (int index : cardsOrderIndexes) {

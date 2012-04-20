@@ -83,7 +83,7 @@ public class GambitDbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		throw new ModelsException(String.format(
+		throw new DatabaseException(String.format(
 			"'%s' database is currently not intended to be upgraded", DATABASE_NAME));
 	}
 }
