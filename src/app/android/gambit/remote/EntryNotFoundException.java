@@ -1,6 +1,6 @@
 package app.android.gambit.remote;
 
 
-public class EntryNotFoundException extends RuntimeException
+public class EntryNotFoundException extends GoogleDocsException
 {
 }
