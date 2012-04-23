@@ -124,7 +124,7 @@ public class RemoteDecks
 			newCardTextsMap.get(cell.getRow()).back = cell.getValue();
 		}
 		else {
-			throw new RemoteDecksException("Invalid column index");
+			throw new SyncException("Invalid column index");
 		}
 
 		return newCardTextsMap;
