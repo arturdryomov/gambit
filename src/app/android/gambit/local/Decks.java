@@ -21,19 +21,20 @@ public class Decks
 	}
 
 	public int getDecksCount() {
-		Cursor cursor = database.rawQuery(buildDecksCountSelectionQuery(), null);
+		Cursor cursor = queryDecksCount();
 		cursor.moveToFirst();
 		return cursor.getInt(0);
 	}
 
-	private String buildDecksCountSelectionQuery() {
-		return String.format("select count(*) from %s", DbTableNames.DECKS);
+	private Cursor queryDecksCount() {
+		return database.query(DbTableNames.DECKS, new String[] { "count(*)" }, null, null, null, null,
+			null);
 	}
 
 	public List<Deck> getDecksList() {
 		List<Deck> decksList = new ArrayList<Deck>();
 
-		Cursor cursor = database.rawQuery(buildDecksSelectionQuery(), null);
+		Cursor cursor = queryDecksList();
 
 		while (cursor.moveToNext()) {
 			ContentValues values = contentValuesFromCursor(cursor);
@@ -43,19 +44,19 @@ public class Decks
 		return decksList;
 	}
 
-	private String buildDecksSelectionQuery() {
-		StringBuilder builder = new StringBuilder();
+	private Cursor queryDecksList() {
+		// TODO: Code formatter makes array initializaton ugly. This comments, though,
+		// make code look a bit strange as well
 
-		builder.append("select ");
+		// @formatter:off
+		String[] columns = {
+			DbFieldNames.ID,
+			DbFieldNames.DECK_TITLE,
+			DbFieldNames.DECK_CURRENT_CARD_INDEX };
+		// @formatter:on
 
-		builder.append(String.format("%s, ", DbFieldNames.ID));
-		builder.append(String.format("%s, ", DbFieldNames.DECK_TITLE));
-		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
-
-		builder.append(String.format("from %s ", DbTableNames.DECKS));
-		builder.append(String.format("order by %s", DbFieldNames.DECK_TITLE));
-
-		return builder.toString();
+		return database.query(DbTableNames.DECKS, columns, null, null, null, null,
+			DbFieldNames.DECK_TITLE);
 	}
 
 	private ContentValues contentValuesFromCursor(Cursor cursor) {
@@ -94,62 +95,37 @@ public class Decks
 			throw new AlreadyExistsException();
 		}
 
-		database.execSQL(buildDeckInsertionQuery(title));
+		Deck insertedDeck = getDeckById(insertDeckWithTitle(title));
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
-		return getDeckById(lastInsertedId());
+		return insertedDeck;
 	}
 
 	public boolean containsDeckWithTitle(String title) {
-		Cursor cursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
+		Cursor cursor = queryDecksCountWithTitle(title);
 		cursor.moveToFirst();
 
 		return cursor.getInt(0) > 0;
 	}
 
-	private String buildDeckWithTitlePresenceQuery(String title) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("select count(*) from %s ", DbTableNames.DECKS));
-		builder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
-
-		return builder.toString();
+	private Cursor queryDecksCountWithTitle(String title) {
+		return database.query(DbTableNames.DECKS, new String[] { "count(*)" }, "upper(?) = upper(?)",
+			new String[] { DbFieldNames.DECK_TITLE, title }, null, null, null);
 	}
 
-	private String buildDeckInsertionQuery(String deckTitle) {
-		StringBuilder builder = new StringBuilder();
+	private long insertDeckWithTitle(String title) {
+		ContentValues columns = new ContentValues();
+		columns.put(DbFieldNames.DECK_TITLE, title);
+		columns.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, Deck.INVALID_CURRENT_CARD_INDEX);
 
-		builder.append(String.format("insert into %s ", DbTableNames.DECKS));
-		builder.append(String.format("(%s, %s) ", DbFieldNames.DECK_TITLE,
-			DbFieldNames.DECK_CURRENT_CARD_INDEX));
-		builder.append(String.format("values ('%s', %d) ", deckTitle, Deck.INVALID_CURRENT_CARD_INDEX));
-
-		return builder.toString();
-	}
-
-	private int lastInsertedId() {
-		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
-		if (!cursor.moveToFirst()) {
-			throw new DatabaseException();
-		}
-		return cursor.getInt(0);
-	}
-
-	private String buildLastInsertedIdSelectionQuery() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("select ");
-		builder.append(String.format("max(%s) ", DbFieldNames.ID));
-		builder.append(String.format("from %s ", DbTableNames.DECKS));
-
-		return builder.toString();
+		return database.insert(DbTableNames.DECKS, null, columns);
 	}
 
 	/**
 	 * @throws DatabaseException if there is no deck with id specified.
 	 */
-	public Deck getDeckById(int id) {
-		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
+	public Deck getDeckById(long id) {
+		Cursor cursor = queryDeckById(id);
 		if (!cursor.moveToFirst()) {
 			throw new DatabaseException(String.format("There's no a deck with id = %d in database", id));
 		}
@@ -157,26 +133,24 @@ public class Decks
 		return new Deck(contentValuesFromCursor(cursor));
 	}
 
-	private String buildDeckByIdSelectionQuery(int id) {
-		StringBuilder builder = new StringBuilder();
+	private Cursor queryDeckById(long id) {
+		// @formatter:off
+		String[] columns = {
+			DbFieldNames.ID,
+			DbFieldNames.DECK_TITLE,
+			DbFieldNames.DECK_CURRENT_CARD_INDEX };
+		// @formatter:on
 
-		builder.append("select ");
-
-		builder.append(String.format("%s, ", DbFieldNames.ID));
-		builder.append(String.format("%s, ", DbFieldNames.DECK_TITLE));
-		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
-
-		builder.append(String.format("from %s ", DbTableNames.DECKS));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return builder.toString();
+		return database.query(DbTableNames.DECKS, columns,
+			String.format("%s = %d", DbFieldNames.ID, id), null, null, null, null);
 	}
 
 	/**
 	 * @throws DatabaseException if there is no card with id specified.
 	 */
 	public Deck getDeckByCardId(int cardId) {
-		Cursor cursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
+		//		Cursor cursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
+		Cursor cursor = queryDeckByCardId(cardId);
 		if (!cursor.moveToFirst()) {
 			throw new DatabaseException(String.format(
 				"There's no a deck that is a parent for card with id = %d", cardId));
@@ -185,26 +159,25 @@ public class Decks
 		return new Deck(contentValuesFromCursor(cursor));
 	}
 
-	private String buildDeckByCardIdSelectionQuery(int cardId) {
-		StringBuilder innerSelectBuilder = new StringBuilder();
+	private Cursor queryDeckByCardId(long id) {
+		// @formatter:off
+		String[] columns = {
+			String.format("%s.%s as %2$s", DbTableNames.DECKS, DbFieldNames.ID),
+			String.format("%s.%s as %2$s", DbTableNames.DECKS, DbFieldNames.DECK_TITLE),
+			String.format("%s.%s as %2$s", DbTableNames.DECKS, DbFieldNames.DECK_CURRENT_CARD_INDEX)
+		};
 
-		innerSelectBuilder.append(String.format("select %s from %s ", DbFieldNames.CARD_DECK_ID,
-			DbTableNames.CARDS));
-		innerSelectBuilder.append(String.format("where %s = %d", DbFieldNames.ID, cardId));
 
-		StringBuilder builder = new StringBuilder();
+		String tables = String.format("%s inner join %s on %1$s.%s = %2$s.%s",
+			DbTableNames.DECKS,
+			DbTableNames.CARDS,
+			DbFieldNames.ID,
+			DbFieldNames.CARD_DECK_ID);
+		// @formatter:on
 
-		builder.append("select ");
+		String where = String.format("%s.%s = %d", DbTableNames.CARDS, DbFieldNames.ID, id);
 
-		builder.append(String.format("%s, ", DbFieldNames.ID));
-		builder.append(String.format("%s, ", DbFieldNames.DECK_TITLE));
-		builder.append(String.format("%s ", DbFieldNames.DECK_CURRENT_CARD_INDEX));
-
-		builder.append(String.format("from %s ", DbTableNames.DECKS));
-		builder
-			.append(String.format("where %s = (%s)", DbFieldNames.ID, innerSelectBuilder.toString()));
-
-		return builder.toString();
+		return database.query(tables, columns, where, null, null, null, null);
 	}
 
 	public void deleteDeck(Deck deck) {
@@ -219,27 +192,12 @@ public class Decks
 	}
 
 	private void tryDeleteDeck(Deck deck) {
-		database.execSQL(buildDeckCardsDeleteingQuery(deck));
-		database.execSQL(buildDeckDeletingQuery(deck));
+		database.delete(DbTableNames.CARDS,
+			String.format("%s = %d", DbFieldNames.CARD_DECK_ID, deck.getId()), null);
+		database.delete(DbTableNames.DECKS, String.format("%s = %d", DbFieldNames.ID, deck.getId()),
+			null);
+
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
-	}
-
-	private String buildDeckCardsDeleteingQuery(Deck deck) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("delete from %s ", DbTableNames.CARDS));
-		builder.append(String.format("where %s = %d", DbFieldNames.CARD_DECK_ID, deck.getId()));
-
-		return builder.toString();
-	}
-
-	private String buildDeckDeletingQuery(Deck deck) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("delete from %s ", DbTableNames.DECKS));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, deck.getId()));
-
-		return builder.toString();
 	}
 
 	public InternetDateTime getLastUpdatedDateTime() {
