@@ -92,6 +92,9 @@ public class Deck implements Parcelable
 		return title;
 	}
 
+	/**
+	 * @throws AlreadyExistsException if deck with such title already exists.
+	 */
 	public void setTitle(String title) {
 		database.beginTransaction();
 		try {
@@ -312,6 +315,9 @@ public class Deck implements Parcelable
 		return builder.toString();
 	}
 
+	/**
+	 * @throws DatabaseException if there is no card with id specified.
+	 */
 	public Card getCardById(int id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {

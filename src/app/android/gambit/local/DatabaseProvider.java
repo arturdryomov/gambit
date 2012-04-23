@@ -20,6 +20,10 @@ public class DatabaseProvider
 		return instance;
 	}
 
+	/**
+	 * @throws AlreadyInstantiatedException if this method is called more
+	 * than once.
+	 */
 	public static DatabaseProvider getInstance(Context context) {
 		if (instance == null) {
 			return new DatabaseProvider(context);

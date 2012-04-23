@@ -74,6 +74,9 @@ public class Decks
 		return values;
 	}
 
+	/**
+	 *	@throws AlreadyExistsException if deck with such title already exists.
+	 */
 	public Deck addNewDeck(String title) {
 		database.beginTransaction();
 		try {
@@ -142,6 +145,9 @@ public class Decks
 		return builder.toString();
 	}
 
+	/**
+	 * @throws DatabaseException if there is no deck with id specified.
+	 */
 	public Deck getDeckById(int id) {
 		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
@@ -166,6 +172,9 @@ public class Decks
 		return builder.toString();
 	}
 
+	/**
+	 * @throws DatabaseException if there is no card with id specified.
+	 */
 	public Deck getDeckByCardId(int cardId) {
 		Cursor cursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
 		if (!cursor.moveToFirst()) {
