@@ -245,4 +245,16 @@ public class Decks
 	public InternetDateTime getLastUpdatedDateTime() {
 		return lastUpdateDateTimeHandler.getLastUpdatedDateTime();
 	}
+
+	public void beginTransaction() {
+		database.beginTransaction();
+	}
+
+	public void setTransactionSuccessful() {
+		database.setTransactionSuccessful();
+	}
+
+	public void endTransaction() {
+		database.endTransaction();
+	}
 }
