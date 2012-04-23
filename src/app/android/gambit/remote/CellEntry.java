@@ -39,7 +39,7 @@ public class CellEntry
 	}
 
 	public CellEntry() {
-		cell = new Cell(); // empy cell
+		cell = new Cell(); // empty cell
 		id = new String();
 		content = new String();
 	}
