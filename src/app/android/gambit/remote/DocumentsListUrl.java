@@ -58,7 +58,7 @@ public class DocumentsListUrl extends GoogleUrl
 				return TYPE_PART_DRAWING;
 
 			default:
-				throw new GoogleDocsException("Unknown Google Docs type");
+				throw new SyncException("Unknown Google Docs type");
 		}
 	}
 }

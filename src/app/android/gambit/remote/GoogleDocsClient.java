@@ -81,7 +81,7 @@ public class GoogleDocsClient
 			return requestFactory.buildGetRequest(url);
 		}
 		catch (IOException e) {
-			throw new GoogleDocsException(e);
+			throw new SyncException(e);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class GoogleDocsClient
 			return requestFactory.buildPostRequest(url, content);
 		}
 		catch (IOException e) {
-			throw new GoogleDocsException(e);
+			throw new SyncException(e);
 		}
 	}
 
@@ -116,7 +116,7 @@ public class GoogleDocsClient
 			return request;
 		}
 		catch (IOException e) {
-			throw new GoogleDocsException(e);
+			throw new SyncException(e);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class GoogleDocsClient
 			return request;
 		}
 		catch (IOException e) {
-			throw new GoogleDocsException(e);
+			throw new SyncException(e);
 		}
 	}
 

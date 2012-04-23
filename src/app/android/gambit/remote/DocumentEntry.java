@@ -39,7 +39,7 @@ public class DocumentEntry
 					return SCHEME_DRAWING;
 
 				default:
-					throw new GoogleDocsException("Unknown Google Docs type");
+					throw new SyncException("Unknown Google Docs type");
 			}
 		}
 
@@ -61,7 +61,7 @@ public class DocumentEntry
 			}
 
 			else {
-				throw new GoogleDocsException("Unknown Google Docs type");
+				throw new SyncException("Unknown Google Docs type");
 			}
 		}
 	}
@@ -124,7 +124,7 @@ public class DocumentEntry
 
 	public String getSpreadsheetKey() {
 		if (getType() != Type.SPREADSHEET) {
-			throw new GoogleDocsException("Key can be only determined for a spreadsheet");
+			throw new SyncException("Key can be only determined for a spreadsheet");
 		}
 
 		GoogleUrl url = new GoogleUrl(links.findFirstWithRel(ALTERNATE_SCHEME).getHref());

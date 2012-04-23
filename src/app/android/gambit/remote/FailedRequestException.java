@@ -1,7 +1,7 @@
 package app.android.gambit.remote;
 
 
-public class FailedRequestException extends GoogleDocsException
+public class FailedRequestException extends SyncException
 {
 	public FailedRequestException() {
 	}
