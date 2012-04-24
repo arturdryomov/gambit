@@ -20,7 +20,7 @@ public class Deck implements Parcelable
 	private final Decks decks;
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
-	private int id;
+	private long id;
 	private String title;
 	private int currentCardIndex;
 
@@ -83,7 +83,7 @@ public class Deck implements Parcelable
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeInt(id);
+		parcel.writeLong(id);
 		parcel.writeString(title);
 		parcel.writeInt(currentCardIndex);
 	}
@@ -129,7 +129,7 @@ public class Deck implements Parcelable
 			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 

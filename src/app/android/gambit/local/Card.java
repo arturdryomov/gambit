@@ -12,7 +12,7 @@ public class Card implements Parcelable
 	private final SQLiteDatabase database;
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
-	private int id;
+	private long id;
 	private String frontSideText;
 	private String backSideText;
 
@@ -73,7 +73,7 @@ public class Card implements Parcelable
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeInt(id);
+		parcel.writeLong(id);
 		parcel.writeString(frontSideText);
 		parcel.writeString(backSideText);
 	}
@@ -146,7 +146,7 @@ public class Card implements Parcelable
 			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
