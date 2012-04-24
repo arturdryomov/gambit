@@ -12,7 +12,7 @@ public class Card implements Parcelable
 	private final SQLiteDatabase database;
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
-	private int id;
+	private long id;
 	private String frontSideText;
 	private String backSideText;
 
@@ -73,7 +73,7 @@ public class Card implements Parcelable
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeInt(id);
+		parcel.writeLong(id);
 		parcel.writeString(frontSideText);
 		parcel.writeString(backSideText);
 	}
@@ -98,20 +98,18 @@ public class Card implements Parcelable
 			return;
 		}
 
-		database.execSQL(buildFrontSideTextUpdatingQuery(text));
+		updateFrontSideText(text);
 		frontSideText = text;
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
-	private String buildFrontSideTextUpdatingQuery(String text) {
-		StringBuilder builder = new StringBuilder();
+	private void updateFrontSideText(String text) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, text);
 
-		builder.append(String.format("update %s set ", DbTableNames.CARDS));
-		builder.append(String.format("%s = '%s' ", DbFieldNames.CARD_FRONT_SIDE_TEXT, text));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return builder.toString();
+		database.update(DbTableNames.CARDS, contentValues,
+			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
 	public String getBackSideText() {
@@ -134,21 +132,21 @@ public class Card implements Parcelable
 			return;
 		}
 
-		database.execSQL(buildBackSideTextUpdatingQuery(text));
+		updateBackSideText(text);
 		backSideText = text;
+
+		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
-	private String buildBackSideTextUpdatingQuery(String text) {
-		StringBuilder builder = new StringBuilder();
+	private void updateBackSideText(String text) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, text);
 
-		builder.append(String.format("update %s set ", DbTableNames.CARDS));
-		builder.append(String.format("%s = '%s' ", DbFieldNames.CARD_BACK_SIDE_TEXT, text));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return builder.toString();
+		database.update(DbTableNames.CARDS, contentValues,
+			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
