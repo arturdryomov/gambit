@@ -115,20 +115,18 @@ public class Deck implements Parcelable
 			throw new AlreadyExistsException();
 		}
 
-		database.execSQL(buildTitleUpdatingQuery(title));
+		updateTitle(title);
 		this.title = title;
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
-	private String buildTitleUpdatingQuery(String newTitle) {
-		StringBuilder builder = new StringBuilder();
+	private void updateTitle(String title) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(DbFieldNames.DECK_TITLE, title);
 
-		builder.append(String.format("update %s set ", DbTableNames.DECKS));
-		builder.append(String.format("%s = '%s' ", DbFieldNames.DECK_TITLE, newTitle));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return builder.toString();
+		database.update(DbTableNames.DECKS, contentValues,
+			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
 	public int getId() {
@@ -175,20 +173,18 @@ public class Deck implements Parcelable
 			return;
 		}
 
-		database.execSQL(buildCurrentCardIndexUpdatingQuery(index));
+		updateCurrentCardIndex(index);
 		currentCardIndex = index;
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
-	private String buildCurrentCardIndexUpdatingQuery(int index) {
-		StringBuilder builder = new StringBuilder();
+	private void updateCurrentCardIndex(int index) {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, index);
 
-		builder.append(String.format("update %s set ", DbTableNames.DECKS));
-		builder.append(String.format("%s = %d ", DbFieldNames.DECK_CURRENT_CARD_INDEX, index));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return builder.toString();
+		database.update(DbTableNames.DECKS, contentValues,
+			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
 	public List<Card> getCardsList() {
@@ -263,62 +259,32 @@ public class Deck implements Parcelable
 	}
 
 	private Card tryAddNewCard(String frontSideText, String backSideText) {
-		database.execSQL(buildCardInsertionQuery(frontSideText, backSideText));
+		Card insertedCard = getCardById(insertCard(frontSideText, backSideText));
 		setCurrentCardIndex(0);
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
-		return getCardById(lastInsertedId());
+		return insertedCard;
 	}
 
-	private String buildCardInsertionQuery(String frontSideText, String backSideText) {
+	private long insertCard(String frontSideText, String backSideText) {
 		// Append to the end
 		int newCardOrderIndex = getCardsCount();
 
-		StringBuilder builder = new StringBuilder();
+		ContentValues contentValues = new ContentValues();
 
-		builder.append(String.format("insert into %s ", DbTableNames.CARDS));
+		contentValues.put(DbFieldNames.CARD_DECK_ID, id);
+		contentValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, frontSideText);
+		contentValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, backSideText);
+		contentValues.put(DbFieldNames.CARD_ORDER_INDEX, newCardOrderIndex);
 
-		builder.append("( ");
-		builder.append(String.format("%s, ", DbFieldNames.CARD_DECK_ID));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT));
-		builder.append(String.format("%s, ", DbFieldNames.CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s ", DbFieldNames.CARD_ORDER_INDEX));
-		builder.append(") ");
-
-		builder.append("values ( ");
-		builder.append(String.format("%d, ", id));
-		builder.append(String.format("'%s', ", frontSideText));
-		builder.append(String.format("'%s', ", backSideText));
-		builder.append(String.format("%d ", newCardOrderIndex));
-		builder.append(")");
-
-		return builder.toString();
-	}
-
-	private int lastInsertedId() {
-		Cursor cursor = database.rawQuery(buildLastInsertedIdSelectionQuery(), null);
-		if (!cursor.moveToFirst()) {
-			throw new DatabaseException();
-		}
-
-		return cursor.getInt(0);
-	}
-
-	private String buildLastInsertedIdSelectionQuery() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("select ");
-		builder.append(String.format("max(%s) ", DbFieldNames.ID));
-		builder.append(String.format("from %s ", DbTableNames.CARDS));
-
-		return builder.toString();
+		return database.insert(DbTableNames.CARDS, null, contentValues);
 	}
 
 	/**
 	 * @throws DatabaseException if there is no card with id specified.
 	 */
-	public Card getCardById(int id) {
+	public Card getCardById(long id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
 			throw new DatabaseException(String.format("There's no a card with id = %d in database", id));
@@ -327,7 +293,7 @@ public class Deck implements Parcelable
 		return new Card(contentValuesFromCursor(cursor));
 	}
 
-	private String buildCardByIdSelectionQuery(int id) {
+	private String buildCardByIdSelectionQuery(long id) {
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("select ");
@@ -357,7 +323,9 @@ public class Deck implements Parcelable
 	}
 
 	private void tryDeleteCard(Card card) {
-		database.execSQL(buildCardDeletingQuery(card));
+		database.delete(DbTableNames.CARDS, String.format("%s = %d", DbFieldNames.ID, card.getId()),
+			null);
+
 		if (getCardsCount() == 0) {
 			setCurrentCardIndex(INVALID_CURRENT_CARD_INDEX);
 		}
@@ -366,15 +334,6 @@ public class Deck implements Parcelable
 		}
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
-	}
-
-	private String buildCardDeletingQuery(Card card) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("delete from %s ", DbTableNames.CARDS));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, card.getId()));
-
-		return builder.toString();
 	}
 
 	public void shuffleCards() {
@@ -469,17 +428,11 @@ public class Deck implements Parcelable
 	}
 
 	private void setCardOrderIndex(int cardId, int index) {
-		database.execSQL(buildCardOrderIndexSettingQuery(cardId, index));
-	}
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(DbFieldNames.CARD_ORDER_INDEX, index);
 
-	private String buildCardOrderIndexSettingQuery(int cardId, int index) {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append(String.format("update %s ", DbTableNames.CARDS));
-		builder.append(String.format("set %s = %d ", DbFieldNames.CARD_ORDER_INDEX, index));
-		builder.append(String.format("where %s = %d", DbFieldNames.ID, cardId));
-
-		return builder.toString();
+		database.update(DbTableNames.CARDS, contentValues,
+			String.format("%s = %d", DbFieldNames.ID, cardId), null);
 	}
 
 	@Override
