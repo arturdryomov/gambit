@@ -21,7 +21,7 @@ import com.google.api.client.xml.XmlNamespaceDictionary;
 // This class methods will throw UnauthorizedException if auth token passed is invalid,
 // and FailedRequestException if internet connection is unavailable.
 
-public class GoogleDocsClient
+class GoogleDocsClient
 {
 	private static final int UNAUTHORIZED_STATUS_CODE = 401;
 

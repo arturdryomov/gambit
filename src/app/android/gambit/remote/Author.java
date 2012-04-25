@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import com.google.api.client.util.Key;
 
 
-public class Author
+class Author
 {
 	@Key("name")
 	private String name;

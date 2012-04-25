@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import com.google.api.client.util.Key;
 
 
-public class Content
+class Content
 {
 	@Key("@src")
 	private String source;

@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.api.client.util.Key;
 
 
-public class WorksheetEntry
+class WorksheetEntry
 {
 	private static final String SELF_SCHEMA = "self";
 	private static final String EDIT_SCHEMA = "edit";

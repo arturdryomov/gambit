@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-public class CategoriesList extends ArrayList<Category>
+class CategoriesList extends ArrayList<Category>
 {
 	public CategoriesList() {
 	}

@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import java.util.List;
 
 
-public class RemoteDeck
+class RemoteDeck
 {
 	private String title;
 	private List<RemoteCard> cards;

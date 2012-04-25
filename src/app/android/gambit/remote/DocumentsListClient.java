@@ -7,7 +7,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.xml.atom.AtomContent;
 
 
-public class DocumentsListClient extends GoogleDocsClient
+class DocumentsListClient extends GoogleDocsClient
 {
 	public DocumentsListClient(String authToken) {
 		super(authToken);

@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import com.google.api.client.util.Key;
 
 
-public class Link
+class Link
 {
 	@Key("@href")
 	private String href;

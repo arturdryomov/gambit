@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import com.google.api.client.googleapis.GoogleUrl;
 
 
-public class SpreadsheetUrl extends GoogleUrl
+class SpreadsheetUrl extends GoogleUrl
 {
 	private static final String ROOT_PATH = "https://spreadsheets.google.com/feeds";
 	private static final String SPREADSHEETS_FEED_PART = "/spreadsheets/private/full";

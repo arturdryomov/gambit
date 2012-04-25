@@ -10,7 +10,7 @@ import java.util.TreeMap;
 import app.android.gambit.InternetDateTime;
 
 
-public class RemoteDecks
+class RemoteDecks
 {
 	private static final String FRONT_SIDE_TEXT = "Front Side Text";
 	private static final String BACK_SIDE_TEXT = "Back Side Text";

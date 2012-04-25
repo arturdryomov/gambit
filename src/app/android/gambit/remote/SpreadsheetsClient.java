@@ -6,7 +6,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.xml.atom.AtomContent;
 
 
-public class SpreadsheetsClient extends GoogleDocsClient
+class SpreadsheetsClient extends GoogleDocsClient
 {
 	public SpreadsheetsClient(String authToken) {
 		super(authToken);
