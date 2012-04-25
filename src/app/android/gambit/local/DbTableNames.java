@@ -1,7 +1,7 @@
 package app.android.gambit.local;
 
 
-public class DbTableNames
+class DbTableNames
 {
 	public static final String DECKS = "Decks";
 	public static final String CARDS = "Cards";

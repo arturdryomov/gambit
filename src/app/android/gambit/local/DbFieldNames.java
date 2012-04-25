@@ -1,7 +1,7 @@
 package app.android.gambit.local;
 
 
-public class DbFieldNames
+class DbFieldNames
 {
 	public static final String ID = "_id";
 

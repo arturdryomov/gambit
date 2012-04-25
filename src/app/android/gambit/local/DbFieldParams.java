@@ -1,7 +1,7 @@
 package app.android.gambit.local;
 
 
-public class DbFieldParams
+class DbFieldParams
 {
 	public static final String ID = "integer primary key autoincrement not null unique";
 	public static final String DECK_TITLE = "text not null unique";
