@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import com.google.api.client.util.Key;
 
 
-class Cell
+public class Cell
 {
 	@Key("@row")
 	private int row;

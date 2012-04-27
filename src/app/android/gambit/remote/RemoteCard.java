@@ -1,7 +1,7 @@
 package app.android.gambit.remote;
 
 
-class RemoteCard
+public class RemoteCard
 {
 	private String frontSideText;
 	private String backSideText;

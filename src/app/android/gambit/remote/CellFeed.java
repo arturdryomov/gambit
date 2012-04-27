@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.api.client.util.Key;
 
 
-class CellFeed
+public class CellFeed
 {
 	@Key("title")
 	private String title;

@@ -17,7 +17,7 @@ import com.google.api.client.http.xml.atom.AtomContent;
  * FailedRequestException will be thrown.
  */
 
-class SpreadsheetsClient extends GoogleDocsClient
+public class SpreadsheetsClient extends GoogleDocsClient
 {
 	public SpreadsheetsClient(String authToken) {
 		super(authToken);

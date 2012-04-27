@@ -4,7 +4,7 @@ package app.android.gambit.remote;
 import com.google.api.client.util.Key;
 
 
-class Category
+public class Category
 {
 	@Key("@scheme")
 	private String scheme;
