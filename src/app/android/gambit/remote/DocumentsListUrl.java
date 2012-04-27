@@ -5,7 +5,7 @@ package app.android.gambit.remote;
 import com.google.api.client.googleapis.GoogleUrl;
 
 
-class DocumentsListUrl extends GoogleUrl
+public class DocumentsListUrl extends GoogleUrl
 {
 	private static final String ROOT_PATH = "https://docs.google.com/feeds";
 	private static final String DOCUMENTS_FEED_PART = "/default/private/full";

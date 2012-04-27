@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.api.client.util.Key;
 
 
-class SpreadsheetFeed
+public class SpreadsheetFeed
 {
 	@Key("entry")
 	private List<SpreadsheetEntry> entries;

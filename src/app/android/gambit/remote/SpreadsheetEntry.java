@@ -9,7 +9,7 @@ import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.util.Key;
 
 
-class SpreadsheetEntry
+public class SpreadsheetEntry
 {
 	private static final String ALTERNATE_SCHEME = "alternate";
 	private static final String SELF_SCHEMA = "self";

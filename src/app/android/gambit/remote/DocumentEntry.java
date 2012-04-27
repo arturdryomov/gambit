@@ -9,7 +9,7 @@ import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.util.Key;
 
 
-class DocumentEntry
+public class DocumentEntry
 {
 	private static final String ALTERNATE_SCHEME = "alternate";
 	private static final String EDIT_SCHEME = "edit";

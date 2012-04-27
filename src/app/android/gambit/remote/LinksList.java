@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-class LinksList extends ArrayList<Link>
+public class LinksList extends ArrayList<Link>
 {
 	public LinksList() {
 	}

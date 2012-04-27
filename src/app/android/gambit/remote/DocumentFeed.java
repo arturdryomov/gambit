@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.api.client.util.Key;
 
 
-class DocumentFeed
+public class DocumentFeed
 {
 	private static final String RESUMABLE_CREATE_MEDIA_SCHEME = "http://schemas.google.com/g/2005#resumable-create-media";
 	private static final String POST_SCHEME = "http://schemas.google.com/g/2005#post";
