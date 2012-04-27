@@ -27,6 +27,10 @@ public class Authorizer
 		this.activity = activity;
 	}
 
+	/**
+	 *	@throws AuthorizationCanceledException if user cancelled authorization.
+	 *	@throws AuthorizationFailedException if an error occurred during authorization.
+	 */
 	public String getToken(ServiceType serviceType, Account account) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 		Bundle authResponse = new Bundle();

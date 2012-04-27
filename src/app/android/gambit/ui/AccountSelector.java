@@ -23,6 +23,10 @@ public class AccountSelector
 		activity = dialogParentActivity;
 	}
 
+	/**
+	 *	@throws NoAccountRegisteredException if there is no registered accounts
+	 *		and user has nothing to select from.
+	 */
 	private Account select() {
 		final AsyncAccountSelector asyncAccountSelector = new AsyncAccountSelector(activity,
 			new AsyncAccountSelector.AccountWaiter() {

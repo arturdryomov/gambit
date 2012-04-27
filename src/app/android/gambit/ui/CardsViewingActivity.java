@@ -20,9 +20,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import app.android.gambit.R;
-import app.android.gambit.models.Card;
-import app.android.gambit.models.Deck;
-import app.android.gambit.models.ModelsException;
+import app.android.gambit.local.Card;
+import app.android.gambit.local.Deck;
+import app.android.gambit.local.DatabaseException;
 
 
 public class CardsViewingActivity extends Activity
@@ -149,7 +149,7 @@ public class CardsViewingActivity extends Activity
 
 				fillCardsList(deck.getCardsList());
 			}
-			catch (ModelsException e) {
+			catch (DatabaseException e) {
 				return getString(R.string.someError);
 			}
 
@@ -377,7 +377,7 @@ public class CardsViewingActivity extends Activity
 			try {
 				deck.setCurrentCardIndex(getCurrentCardPosition());
 			}
-			catch (ModelsException e) {
+			catch (DatabaseException e) {
 				return getString(R.string.someError);
 			}
 

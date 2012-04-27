@@ -10,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
-import app.android.gambit.models.Card;
-import app.android.gambit.models.ModelsException;
+import app.android.gambit.local.Card;
+import app.android.gambit.local.DatabaseException;
 
 
 public class CardEditingActivity extends Activity
@@ -114,7 +114,7 @@ public class CardEditingActivity extends Activity
 				card.setFrontSideText(frontSideText);
 				card.setBackSideText(backSideText);
 			}
-			catch (ModelsException e) {
+			catch (DatabaseException e) {
 				return getString(R.string.someError);
 			}
 

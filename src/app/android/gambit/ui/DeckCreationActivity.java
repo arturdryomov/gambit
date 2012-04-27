@@ -11,10 +11,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
-import app.android.gambit.models.AlreadyExistsException;
-import app.android.gambit.models.DatabaseProvider;
-import app.android.gambit.models.Deck;
-import app.android.gambit.models.ModelsException;
+import app.android.gambit.local.AlreadyExistsException;
+import app.android.gambit.local.DatabaseProvider;
+import app.android.gambit.local.Deck;
+import app.android.gambit.local.DatabaseException;
 
 
 public class DeckCreationActivity extends Activity
@@ -94,7 +94,7 @@ public class DeckCreationActivity extends Activity
 			catch (AlreadyExistsException e) {
 				return getString(R.string.deckAlreadyExists);
 			}
-			catch (ModelsException e) {
+			catch (DatabaseException e) {
 				return getString(R.string.someError);
 			}
 
