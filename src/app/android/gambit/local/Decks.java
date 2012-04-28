@@ -61,7 +61,7 @@ public class Decks
 	private ContentValues contentValuesFromCursor(Cursor cursor) {
 		ContentValues values = new ContentValues();
 
-		int id = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
+		long id = cursor.getLong(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
 		values.put(DbFieldNames.ID, id);
 
 		String title = cursor.getString(cursor.getColumnIndexOrThrow(DbFieldNames.DECK_TITLE));

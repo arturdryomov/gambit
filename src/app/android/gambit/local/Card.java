@@ -24,11 +24,11 @@ public class Card implements Parcelable
 	}
 
 	private void setValues(ContentValues values) {
-		Integer idAsInteger = values.getAsInteger(DbFieldNames.ID);
-		if (idAsInteger == null) {
+		Long idAsLong = values.getAsLong(DbFieldNames.ID);
+		if (idAsLong == null) {
 			throw new DatabaseException();
 		}
-		id = idAsInteger;
+		id = idAsLong.longValue();
 
 		String frontSideAsString = values.getAsString(DbFieldNames.CARD_FRONT_SIDE_TEXT);
 		if (frontSideAsString == null) {
@@ -44,10 +44,12 @@ public class Card implements Parcelable
 	}
 
 	public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>() {
+		@Override
 		public Card createFromParcel(Parcel parcel) {
 			return new Card(parcel);
 		}
 
+		@Override
 		public Card[] newArray(int size) {
 			return new Card[size];
 		}

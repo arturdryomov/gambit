@@ -33,11 +33,11 @@ public class Deck implements Parcelable
 	}
 
 	private void setValues(ContentValues values) {
-		Integer idAsInteger = values.getAsInteger(DbFieldNames.ID);
-		if (idAsInteger == null) {
+		Long idAsLong = values.getAsLong(DbFieldNames.ID);
+		if (idAsLong == null) {
 			throw new DatabaseException();
 		}
-		id = idAsInteger;
+		id = idAsLong.longValue();
 
 		String titleAsString = values.getAsString(DbFieldNames.DECK_TITLE);
 		if (titleAsString == null) {
@@ -53,10 +53,12 @@ public class Deck implements Parcelable
 	}
 
 	public static final Parcelable.Creator<Deck> CREATOR = new Parcelable.Creator<Deck>() {
+		@Override
 		public Deck createFromParcel(Parcel parcel) {
 			return new Deck(parcel);
 		}
 
+		@Override
 		public Deck[] newArray(int size) {
 			return new Deck[size];
 		}
