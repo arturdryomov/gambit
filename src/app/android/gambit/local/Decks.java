@@ -219,6 +219,22 @@ public class Decks
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
+	public void clear() {
+		database.beginTransaction();
+		try {
+			tryClear();
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void tryClear() {
+		database.delete(DbTableNames.CARDS, null, null);
+		database.delete(DbTableNames.DECKS, null, null);
+	}
+
 	public InternetDateTime getLastUpdatedDateTime() {
 		return lastUpdateDateTimeHandler.getLastUpdatedDateTime();
 	}
