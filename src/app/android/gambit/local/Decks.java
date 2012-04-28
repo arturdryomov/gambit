@@ -239,6 +239,10 @@ public class Decks
 		return lastUpdateDateTimeHandler.getLastUpdatedDateTime();
 	}
 
+	public void setCurrentDateTimeAsLastUpdated() {
+		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
+	}
+
 	public void beginTransaction() {
 		database.beginTransaction();
 	}
