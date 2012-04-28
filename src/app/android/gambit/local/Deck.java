@@ -25,9 +25,9 @@ public class Deck implements Parcelable
 	private int currentCardIndex;
 
 	Deck(ContentValues values) {
-		database = DatabaseProvider.getInstance().getDatabase();
-		decks = DatabaseProvider.getInstance().getDecks();
-		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		database = DbProvider.getInstance().getDatabase();
+		decks = DbProvider.getInstance().getDecks();
+		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
 		setValues(values);
 	}
@@ -35,19 +35,19 @@ public class Deck implements Parcelable
 	private void setValues(ContentValues values) {
 		Long idAsLong = values.getAsLong(DbFieldNames.ID);
 		if (idAsLong == null) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 		id = idAsLong.longValue();
 
 		String titleAsString = values.getAsString(DbFieldNames.DECK_TITLE);
 		if (titleAsString == null) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 		title = titleAsString;
 
 		Integer currentCardIndexAsInteger = values.getAsInteger(DbFieldNames.DECK_CURRENT_CARD_INDEX);
 		if (currentCardIndexAsInteger == null) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 		currentCardIndex = currentCardIndexAsInteger;
 	}
@@ -65,9 +65,9 @@ public class Deck implements Parcelable
 	};
 
 	private Deck(Parcel parcel) {
-		database = DatabaseProvider.getInstance().getDatabase();
-		decks = DatabaseProvider.getInstance().getDecks();
-		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		database = DbProvider.getInstance().getDatabase();
+		decks = DbProvider.getInstance().getDecks();
+		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
 		readFromParcel(parcel);
 	}
@@ -284,12 +284,12 @@ public class Deck implements Parcelable
 	}
 
 	/**
-	 * @throws DatabaseException if there is no card with id specified.
+	 * @throws DbException if there is no card with id specified.
 	 */
 	public Card getCardById(long id) {
 		Cursor cursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new DatabaseException(String.format("There's no a card with id = %d in database", id));
+			throw new DbException(String.format("There's no a card with id = %d in database", id));
 		}
 
 		return new Card(contentValuesFromCursor(cursor));
@@ -392,7 +392,7 @@ public class Deck implements Parcelable
 		Cursor cursor = database.rawQuery(buildCardsSelectionQuery(DbFieldNames.ID), null);
 
 		if (cursor.getCount() != cardsOrderIndexes.size()) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 
 		for (int index : cardsOrderIndexes) {

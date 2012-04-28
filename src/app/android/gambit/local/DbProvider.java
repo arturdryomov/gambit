@@ -5,18 +5,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-public class DatabaseProvider
+public class DbProvider
 {
 	public class AlreadyInstantiatedException extends RuntimeException
 	{
 	}
 
-	private static DatabaseProvider instance;
-	private GambitDbOpenHelper openHelper;
+	private static DbProvider instance;
+	private DbOpenHelper openHelper;
 	private Decks decks;
 	private LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
-	public static DatabaseProvider getInstance() {
+	public static DbProvider getInstance() {
 		return instance;
 	}
 
@@ -24,21 +24,21 @@ public class DatabaseProvider
 	 * @throws AlreadyInstantiatedException if this method is called more
 	 * than once.
 	 */
-	public static DatabaseProvider getInstance(Context context) {
+	public static DbProvider getInstance(Context context) {
 		if (instance == null) {
-			return new DatabaseProvider(context);
+			return new DbProvider(context);
 		}
 		else {
 			return instance;
 		}
 	}
 
-	private DatabaseProvider(Context context) {
+	private DbProvider(Context context) {
 		if (instance != null) {
 			throw new AlreadyInstantiatedException();
 		}
 
-		openHelper = new GambitDbOpenHelper(context.getApplicationContext());
+		openHelper = new DbOpenHelper(context.getApplicationContext());
 
 		instance = this;
 	}

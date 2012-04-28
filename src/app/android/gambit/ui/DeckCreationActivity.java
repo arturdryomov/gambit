@@ -12,9 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
-import app.android.gambit.local.DatabaseProvider;
+import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DatabaseException;
+import app.android.gambit.local.DbException;
 
 
 public class DeckCreationActivity extends Activity
@@ -89,12 +89,12 @@ public class DeckCreationActivity extends Activity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck = DatabaseProvider.getInstance().getDecks().addNewDeck(deckName);
+				deck = DbProvider.getInstance().getDecks().addNewDeck(deckName);
 			}
 			catch (AlreadyExistsException e) {
 				return getString(R.string.deckAlreadyExists);
 			}
-			catch (DatabaseException e) {
+			catch (DbException e) {
 				return getString(R.string.someError);
 			}
 

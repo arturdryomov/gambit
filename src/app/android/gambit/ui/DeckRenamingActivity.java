@@ -12,7 +12,7 @@ import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DatabaseException;
+import app.android.gambit.local.DbException;
 
 
 public class DeckRenamingActivity extends Activity
@@ -94,7 +94,7 @@ public class DeckRenamingActivity extends Activity
 			catch (AlreadyExistsException e) {
 				return getString(R.string.deckAlreadyExists);
 			}
-			catch (DatabaseException e) {
+			catch (DbException e) {
 				return getString(R.string.someError);
 			}
 

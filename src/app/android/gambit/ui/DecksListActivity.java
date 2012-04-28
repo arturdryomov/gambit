@@ -22,9 +22,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import app.android.gambit.R;
-import app.android.gambit.local.DatabaseProvider;
+import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DatabaseException;
+import app.android.gambit.local.DbException;
 
 
 public class DecksListActivity extends SimpleAdapterListActivity
@@ -147,9 +147,9 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				decks = DatabaseProvider.getInstance().getDecks().getDecksList();
+				decks = DbProvider.getInstance().getDecks().getDecksList();
 			}
-			catch (DatabaseException e) {
+			catch (DbException e) {
 				return getString(R.string.someError);
 			}
 
@@ -266,9 +266,9 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				DatabaseProvider.getInstance().getDecks().deleteDeck(deck);
+				DbProvider.getInstance().getDecks().deleteDeck(deck);
 			}
-			catch (DatabaseException e) {
+			catch (DbException e) {
 				return getString(R.string.someError);
 			}
 
@@ -307,7 +307,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 					return getString(R.string.noCards);
 				}
 			}
-			catch (DatabaseException e) {
+			catch (DbException e) {
 				return getString(R.string.someError);
 			}
 

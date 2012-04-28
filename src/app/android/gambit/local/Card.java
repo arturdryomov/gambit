@@ -17,8 +17,8 @@ public class Card implements Parcelable
 	private String backSideText;
 
 	Card(ContentValues values) {
-		database = DatabaseProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		database = DbProvider.getInstance().getDatabase();
+		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
 		setValues(values);
 	}
@@ -26,19 +26,19 @@ public class Card implements Parcelable
 	private void setValues(ContentValues values) {
 		Long idAsLong = values.getAsLong(DbFieldNames.ID);
 		if (idAsLong == null) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 		id = idAsLong.longValue();
 
 		String frontSideAsString = values.getAsString(DbFieldNames.CARD_FRONT_SIDE_TEXT);
 		if (frontSideAsString == null) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 		frontSideText = frontSideAsString;
 
 		String backSideAsString = values.getAsString(DbFieldNames.CARD_BACK_SIDE_TEXT);
 		if (backSideAsString == null) {
-			throw new DatabaseException();
+			throw new DbException();
 		}
 		backSideText = backSideAsString;
 	}
@@ -56,8 +56,8 @@ public class Card implements Parcelable
 	};
 
 	private Card(Parcel parcel) {
-		database = DatabaseProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		database = DbProvider.getInstance().getDatabase();
+		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
 		readFromParcel(parcel);
 	}

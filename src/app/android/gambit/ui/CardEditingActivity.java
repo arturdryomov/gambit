@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
-import app.android.gambit.local.DatabaseException;
+import app.android.gambit.local.DbException;
 
 
 public class CardEditingActivity extends Activity
@@ -114,7 +114,7 @@ public class CardEditingActivity extends Activity
 				card.setFrontSideText(frontSideText);
 				card.setBackSideText(backSideText);
 			}
-			catch (DatabaseException e) {
+			catch (DbException e) {
 				return getString(R.string.someError);
 			}
 

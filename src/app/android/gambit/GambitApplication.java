@@ -2,7 +2,7 @@ package app.android.gambit;
 
 
 import android.app.Application;
-import app.android.gambit.local.DatabaseProvider;
+import app.android.gambit.local.DbProvider;
 
 
 public class GambitApplication extends Application
@@ -11,6 +11,6 @@ public class GambitApplication extends Application
 	public void onCreate() {
 		super.onCreate();
 
-		DatabaseProvider.getInstance(this);
+		DbProvider.getInstance(this);
 	}
 }

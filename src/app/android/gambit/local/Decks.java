@@ -16,8 +16,8 @@ public class Decks
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	public Decks() {
-		database = DatabaseProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DatabaseProvider.getInstance().getLastUpdateTimeHandler();
+		database = DbProvider.getInstance().getDatabase();
+		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 	}
 
 	public int getDecksCount() {
@@ -125,12 +125,12 @@ public class Decks
 	}
 
 	/**
-	 * @throws DatabaseException if there is no deck with id specified.
+	 * @throws DbException if there is no deck with id specified.
 	 */
 	public Deck getDeckById(long id) {
 		Cursor cursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
 		if (!cursor.moveToFirst()) {
-			throw new DatabaseException(String.format("There's no a deck with id = %d in database", id));
+			throw new DbException(String.format("There's no a deck with id = %d in database", id));
 		}
 
 		return new Deck(contentValuesFromCursor(cursor));
@@ -152,12 +152,12 @@ public class Decks
 	}
 
 	/**
-	 * @throws DatabaseException if there is no card with id specified.
+	 * @throws DbException if there is no card with id specified.
 	 */
 	public Deck getDeckByCardId(long cardId) {
 		Cursor cursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
 		if (!cursor.moveToFirst()) {
-			throw new DatabaseException(String.format(
+			throw new DbException(String.format(
 				"There's no a deck that is a parent for card with id = %d", cardId));
 		}
 

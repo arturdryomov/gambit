@@ -1,5 +1,5 @@
 package app.android.gambit.local;
 
-public class AlreadyExistsException extends DatabaseException
+public class AlreadyExistsException extends DbException
 {
 }

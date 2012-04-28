@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class GambitDbOpenHelper extends SQLiteOpenHelper
+public class DbOpenHelper extends SQLiteOpenHelper
 {
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "Gambit";
 
-	public GambitDbOpenHelper(Context context) {
+	public DbOpenHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -82,7 +82,7 @@ public class GambitDbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		throw new DatabaseException(String.format(
+		throw new DbException(String.format(
 			"'%s' database is currently not intended to be upgraded", DATABASE_NAME));
 	}
 }

@@ -11,7 +11,7 @@ class LastUpdateDateTimeHandler
 	private final SQLiteDatabase database;
 
 	public LastUpdateDateTimeHandler() {
-		this.database = DatabaseProvider.getInstance().getDatabase();
+		this.database = DbProvider.getInstance().getDatabase();
 	}
 
 	public void setCurrentDateTimeAsLastUpdated() {
