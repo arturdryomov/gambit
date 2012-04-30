@@ -97,24 +97,9 @@ public class GambitDbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public synchronized SQLiteDatabase getWritableDatabase() {
-		/* We need to turn off database locking (it's not sqlite stuff, it's part of Android java code).
-		 *
-		 * When (1) locking is enabled (by default), (2) database transaction is opened,
-		 * (3) querying from database is performed and (4) database remains in transaction state for
-		 * quite a long period (more than 10 secs) the following error occurs and application crashes:
-		 *   'HeapWorker is wedged: 1XXXXms spent inside
-		 *   Landroid/database/sqlite/SQLiteCursor;.finalize()V'
-		 * See http://stackoverflow.com/q/8570864 for some details.
-		 *
-		 * It is needed to use transactions when (unit-)testing anything related to database, and
-		 * synchronization tests take relatively much time for network operations.
-		 *
-		 * The only shortcoming from disabling of locking is that SQLiteDatabase client should
-		 * guarantee to access database only once at a time. We do not perform concurrent database
-		 * queries so it isn't a problem.
-		 *
-		 * As a side effect SQLiteDatabase#setLockingEnabled(false) may increase database access
-		 * performance.
+		/*
+		 * We need to turn off database locking in order to avoid “HeapWorker is wedged:
+		 * 1XXXXms spent inside Landroid/database/sqlite/SQLiteCursor;.finalize()V” error.
 		 */
 		SQLiteDatabase database = super.getWritableDatabase();
 		database.setLockingEnabled(false);
