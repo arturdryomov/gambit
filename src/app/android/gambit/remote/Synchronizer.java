@@ -19,17 +19,6 @@ public class Synchronizer
 {
 	private static final int ACCEPTABLE_TIME_DELTA_IN_MILLIS = 45 * 1000; // 45 seconds
 
-	private final class DocumentEntriesComparator implements Comparator<DocumentEntry>
-	{
-		@Override
-		public int compare(DocumentEntry left, DocumentEntry right) {
-			Date leftDate = left.getLastUpdatedDateTime().toDate();
-			Date rightDate = right.getLastUpdatedDateTime().toDate();
-
-			return leftDate.compareTo(rightDate);
-		}
-	}
-
 	public String createSpreadsheet(String spreadsheetTitle, String googleDocsAuthToken) {
 		DocumentsListClient client = new DocumentsListClient(googleDocsAuthToken);
 		client.uploadEmptyDocument(Type.SPREADSHEET, spreadsheetTitle);
@@ -61,6 +50,17 @@ public class Synchronizer
 		}
 
 		throw new SyncException();
+	}
+
+	private final class DocumentEntriesComparator implements Comparator<DocumentEntry>
+	{
+		@Override
+		public int compare(DocumentEntry first, DocumentEntry second) {
+			Date leftDate = first.getLastUpdatedDateTime().toDate();
+			Date rightDate = second.getLastUpdatedDateTime().toDate();
+
+			return leftDate.compareTo(rightDate);
+		}
 	}
 
 	private boolean isLastUpdateDateTimeAcceptable(DocumentEntry entry) {
