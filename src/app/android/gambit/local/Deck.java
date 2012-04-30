@@ -73,7 +73,7 @@ public class Deck implements Parcelable
 	}
 
 	public void readFromParcel(Parcel parcel) {
-		id = parcel.readInt();
+		id = parcel.readLong();
 		title = parcel.readString();
 		currentCardIndex = parcel.readInt();
 	}

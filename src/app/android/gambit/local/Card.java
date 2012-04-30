@@ -63,7 +63,7 @@ public class Card implements Parcelable
 	}
 
 	public void readFromParcel(Parcel parcel) {
-		id = parcel.readInt();
+		id = parcel.readLong();
 		frontSideText = parcel.readString();
 		backSideText = parcel.readString();
 	}
