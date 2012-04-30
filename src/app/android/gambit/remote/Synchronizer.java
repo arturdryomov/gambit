@@ -17,20 +17,23 @@ import app.android.gambit.remote.DocumentEntry.Type;
 
 public class Synchronizer
 {
-	private static final int ACCEPTABLE_TIME_DELTA_IN_MILLIS = 45 * 1000; // 45 seconds
-
 	public String createSpreadsheet(String spreadsheetTitle, String googleDocsAuthToken) {
+		InternetDateTime dateTimeBeforeInsertion = new InternetDateTime();
+
 		DocumentsListClient client = new DocumentsListClient(googleDocsAuthToken);
 		client.uploadEmptyDocument(Type.SPREADSHEET, spreadsheetTitle);
 
-		return findJustInsertedSpeadsheetKey(spreadsheetTitle, googleDocsAuthToken);
+		return findJustInsertedSpeadsheetKey(spreadsheetTitle, googleDocsAuthToken,
+			dateTimeBeforeInsertion);
 	}
 
-	private String findJustInsertedSpeadsheetKey(String spreadsheetTitle, String googleDocsAuthToken) {
+	private String findJustInsertedSpeadsheetKey(String spreadsheetTitle, String googleDocsAuthToken,
+		InternetDateTime dateTimeBeforeInsertion) {
+
 		/* Simply take first spreadsheet with proper title that was changed (assumed 'created')
-		 * no earlier than ACCEPTABLE_TIME_DELTA_IN_MILLIS milliseconds ago.
+		 * no earlier than dateTimeBeforeInsertion.
 		 *
-		 * No very determined but nothing better is provided with Documents List API.
+		 * Not very determined way but nothing better is provided with Documents List API.
 		 */
 
 		DocumentsListClient client = new DocumentsListClient(googleDocsAuthToken);
@@ -43,7 +46,7 @@ public class Synchronizer
 
 		for (DocumentEntry entry : documentEntries) {
 			if (entry.getTitle().equals(spreadsheetTitle)) {
-				if (isLastUpdateDateTimeAcceptable(entry)) {
+				if (dateTimeBeforeInsertion.isBefore(entry.getLastUpdatedDateTime())) {
 					return entry.getSpreadsheetKey();
 				}
 			}
@@ -61,13 +64,6 @@ public class Synchronizer
 
 			return leftDate.compareTo(rightDate);
 		}
-	}
-
-	private boolean isLastUpdateDateTimeAcceptable(DocumentEntry entry) {
-		long currentTimeInMillis = new Date().getTime();
-		long entryTimeInMillis = entry.getLastUpdatedDateTime().toDate().getTime();
-
-		return currentTimeInMillis - entryTimeInMillis <= ACCEPTABLE_TIME_DELTA_IN_MILLIS;
 	}
 
 	public void synchronize(String spreadsheetKey, String spreadsheetsToken) {
