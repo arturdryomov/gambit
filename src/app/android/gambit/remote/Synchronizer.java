@@ -17,6 +17,13 @@ import app.android.gambit.remote.DocumentEntry.Type;
 
 public class Synchronizer
 {
+	/**
+	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 * 	due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 * 	be caught.
+	 */
 	public String createSpreadsheet(String spreadsheetTitle, String googleDocsAuthToken) {
 		InternetDateTime dateTimeBeforeInsertion = new InternetDateTime();
 
@@ -66,6 +73,14 @@ public class Synchronizer
 		}
 	}
 
+	/**
+	 * @throws EntryNotFoundException if no spreadsheet for spreadsheetKey can be found.
+	 * @throws UnauthorizedException if spreadsheetsToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 * 	due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 * 	be caught.
+	 */
 	public void synchronize(String spreadsheetKey, String spreadsheetsToken) {
 		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsToken, spreadsheetKey);
 
