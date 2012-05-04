@@ -81,8 +81,8 @@ public class Synchronizer
 	 * @throws SyncException for any general unexpected error. This exception should not
 	 * 	be caught.
 	 */
-	public void synchronize(String spreadsheetKey, String spreadsheetsToken) {
-		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsToken, spreadsheetKey);
+	public void synchronize(String spreadsheetKey, String spreadsheetsAuthToken) {
+		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsAuthToken, spreadsheetKey);
 
 		InternetDateTime remoteDateTime = remoteDecks.lastUpdatedDateTime();
 		InternetDateTime localDateTime = DatabaseProvider.getInstance().getDecks()
