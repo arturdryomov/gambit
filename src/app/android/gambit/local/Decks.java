@@ -194,8 +194,6 @@ public class Decks
 	}
 
 	private void tryDeleteDeck(Deck deck) {
-		database.delete(DbTableNames.CARDS,
-			String.format("%s = %d", DbFieldNames.CARD_DECK_ID, deck.getId()), null);
 		database.delete(DbTableNames.DECKS, String.format("%s = %d", DbFieldNames.ID, deck.getId()),
 			null);
 
