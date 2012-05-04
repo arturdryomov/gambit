@@ -23,7 +23,6 @@ import android.widget.SimpleAdapter;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DbException;
 
 
 public class CardsListActivity extends SimpleAdapterListActivity
@@ -151,7 +150,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		new LoadCardsTask().execute();
 	}
 
-	private class LoadCardsTask extends AsyncTask<Void, Void, String>
+	private class LoadCardsTask extends AsyncTask<Void, Void, Void>
 	{
 		private List<Card> cards;
 
@@ -161,29 +160,20 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				cards = deck.getCardsList();
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
-			}
+		protected Void doInBackground(Void... params) {
+			cards = deck.getCardsList();
 
-			return new String();
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String errorMessage) {
+		protected void onPostExecute(Void result) {
 			if (cards.isEmpty()) {
 				setEmptyListText(getString(R.string.noCards));
 			}
 			else {
 				fillList(cards);
 				updateList();
-			}
-
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -252,7 +242,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		new DeleteCardTask(cardPosition).execute();
 	}
 
-	private class DeleteCardTask extends AsyncTask<Void, Void, String>
+	private class DeleteCardTask extends AsyncTask<Void, Void, Void>
 	{
 		private final int cardPosition;
 		private final Card card;
@@ -275,22 +265,10 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deck.deleteCard(card);
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
-			}
+		protected Void doInBackground(Void... params) {
+			deck.deleteCard(card);
 
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
+			return null;
 		}
 	}
 }

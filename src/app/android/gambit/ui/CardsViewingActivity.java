@@ -22,7 +22,6 @@ import android.widget.TextView;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DbException;
 
 
 public class CardsViewingActivity extends Activity
@@ -89,7 +88,7 @@ public class CardsViewingActivity extends Activity
 		new LoadCardsTask(cardsOrder).execute();
 	}
 
-	private class LoadCardsTask extends AsyncTask<Void, Void, String>
+	private class LoadCardsTask extends AsyncTask<Void, Void, Void>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 
@@ -129,31 +128,26 @@ public class CardsViewingActivity extends Activity
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				switch (cardsOrder) {
-					case SHUFFLE:
-						deck.shuffleCards();
-						break;
+		protected Void doInBackground(Void... params) {
+			switch (cardsOrder) {
+				case SHUFFLE:
+					deck.shuffleCards();
+					break;
 
-					case STRAIGHT:
-						deck.resetCardsOrder();
-						break;
+				case STRAIGHT:
+					deck.resetCardsOrder();
+					break;
 
-					case DEFAULT:
-						break;
+				case DEFAULT:
+					break;
 
-					default:
-						break;
-				}
-
-				fillCardsList(deck.getCardsList());
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
+				default:
+					break;
 			}
 
-			return new String();
+			fillCardsList(deck.getCardsList());
+
+			return null;
 		}
 
 		private void fillCardsList(List<Card> cards) {
@@ -175,18 +169,13 @@ public class CardsViewingActivity extends Activity
 		}
 
 		@Override
-		protected void onPostExecute(String errorMessage) {
+		protected void onPostExecute(Void result) {
 			progressDialogHelper.hide();
 
-			if (errorMessage.isEmpty()) {
-				initializeCardsAdapter();
+			initializeCardsAdapter();
 
-				if (cardsOrder == CardsOrder.DEFAULT) {
-					restoreCurrentCardPosition();
-				}
-			}
-			else {
-				UserAlerter.alert(activityContext, errorMessage);
+			if (cardsOrder == CardsOrder.DEFAULT) {
+				restoreCurrentCardPosition();
 			}
 
 			isLoadingInProgress = false;
@@ -370,31 +359,19 @@ public class CardsViewingActivity extends Activity
 		new StoreCardsPositionTask().execute();
 	}
 
-	private class StoreCardsPositionTask extends AsyncTask<Void, Void, String>
+	private class StoreCardsPositionTask extends AsyncTask<Void, Void, Void>
 	{
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deck.setCurrentCardIndex(getCurrentCardPosition());
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
-			}
+		protected Void doInBackground(Void... params) {
+			deck.setCurrentCardIndex(getCurrentCardPosition());
 
-			return new String();
+			return null;
 		}
 
 		private int getCurrentCardPosition() {
 			ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
 
 			return cardsPager.getCurrentItem();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
 		}
 	}
 }

@@ -14,7 +14,6 @@ import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DbException;
 
 
 public class DeckCreationActivity extends Activity
@@ -93,9 +92,6 @@ public class DeckCreationActivity extends Activity
 			}
 			catch (AlreadyExistsException e) {
 				return getString(R.string.deckAlreadyExists);
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
 			}
 
 			return new String();

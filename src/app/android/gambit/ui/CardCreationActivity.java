@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DbException;
 
 
 public class CardCreationActivity extends Activity
@@ -98,7 +97,7 @@ public class CardCreationActivity extends Activity
 		return new String();
 	}
 
-	private class CardCreationTask extends AsyncTask<Void, Void, String>
+	private class CardCreationTask extends AsyncTask<Void, Void, Void>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
 
@@ -109,27 +108,17 @@ public class CardCreationActivity extends Activity
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deck.addNewCard(frontSideText, backSideText);
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
-			}
+		protected Void doInBackground(Void... params) {
+			deck.addNewCard(frontSideText, backSideText);
 
-			return new String();
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String errorMessage) {
+		protected void onPostExecute(Void result) {
 			progressDialogHelper.hide();
 
-			if (errorMessage.isEmpty()) {
-				finish();
-			}
-			else {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
+			finish();
 		}
 	}
 

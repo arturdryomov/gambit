@@ -24,7 +24,6 @@ import android.widget.SimpleAdapter;
 import app.android.gambit.R;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
-import app.android.gambit.local.DbException;
 
 
 public class DecksListActivity extends SimpleAdapterListActivity
@@ -135,7 +134,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		new LoadDecksTask().execute();
 	}
 
-	private class LoadDecksTask extends AsyncTask<Void, Void, String>
+	private class LoadDecksTask extends AsyncTask<Void, Void, Void>
 	{
 		private List<Deck> decks;
 
@@ -145,29 +144,20 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				decks = DbProvider.getInstance().getDecks().getDecksList();
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
-			}
+		protected Void doInBackground(Void... params) {
+			decks = DbProvider.getInstance().getDecks().getDecksList();
 
-			return new String();
+			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String errorMessage) {
+		protected void onPostExecute(Void result) {
 			if (decks.isEmpty()) {
 				setEmptyListText(getString(R.string.noDecks));
 			}
 			else {
 				fillList(decks);
 				updateList();
-			}
-
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
 	}
@@ -241,7 +231,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		new DeleteDeckTask(deckPosition).execute();
 	}
 
-	private class DeleteDeckTask extends AsyncTask<Void, Void, String>
+	private class DeleteDeckTask extends AsyncTask<Void, Void, Void>
 	{
 		private final int deckPosition;
 		private final Deck deck;
@@ -264,22 +254,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				DbProvider.getInstance().getDecks().deleteDeck(deck);
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
-			}
+		protected Void doInBackground(Void... params) {
+			DbProvider.getInstance().getDecks().deleteDeck(deck);
 
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
+			return null;
 		}
 	}
 
@@ -302,13 +280,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected String doInBackground(Void... params) {
-			try {
-				if (deck.isEmpty()) {
-					return getString(R.string.noCards);
-				}
-			}
-			catch (DbException e) {
-				return getString(R.string.someError);
+			if (deck.isEmpty()) {
+				return getString(R.string.noCards);
 			}
 
 			return new String();
