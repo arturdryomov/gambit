@@ -20,15 +20,18 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		db.beginTransaction();
 
 		try {
-			db.execSQL(buildDecksTableCreationQuery());
-			db.execSQL(buildCardsTableCreationQuery());
-			db.execSQL(buildLastUpdateTimeTableCreationQuery());
-
+			createTables(db);
 			db.setTransactionSuccessful();
 		}
 		finally {
 			db.endTransaction();
 		}
+	}
+
+	private void createTables(SQLiteDatabase db) {
+		db.execSQL(buildDecksTableCreationQuery());
+		db.execSQL(buildCardsTableCreationQuery());
+		db.execSQL(buildLastUpdateTimeTableCreationQuery());
 	}
 
 	private String buildDecksTableCreationQuery() {
@@ -82,7 +85,25 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		throw new DbException(String.format(
-			"'%s' database is currently not intended to be upgraded", DATABASE_NAME));
+		db.beginTransaction();
+
+		try {
+			dropTables(db);
+			createTables(db);
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+	private void dropTables(SQLiteDatabase db) {
+		dropTable(db, DbTableNames.CARDS);
+		dropTable(db, DbTableNames.DECKS);
+		dropTable(db, DbTableNames.DB_LAST_UPDATE_TIME);
+	}
+
+	private void dropTable(SQLiteDatabase db, String tableName) {
+		db.execSQL(String.format("drop table %s", tableName));
 	}
 }
