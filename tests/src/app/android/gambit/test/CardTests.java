@@ -1,4 +1,4 @@
-package app.android.simpleflashcards.test;
+package app.android.gambit.test;
 
 
 import app.android.gambit.local.Card;
