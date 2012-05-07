@@ -23,7 +23,10 @@ public class Decks
 	public int getDecksCount() {
 		Cursor cursor = database.rawQuery(buildDecksCountSelectionQuery(), null);
 		cursor.moveToFirst();
-		return cursor.getInt(0);
+		int decksCount = cursor.getInt(0);
+		cursor.close();
+
+		return decksCount;
 	}
 
 	private String buildDecksCountSelectionQuery() {
@@ -39,6 +42,8 @@ public class Decks
 			ContentValues values = contentValuesFromCursor(cursor);
 			decksList.add(new Deck(values));
 		}
+
+		cursor.close();
 
 		return decksList;
 	}
@@ -104,7 +109,11 @@ public class Decks
 		Cursor cursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
 		cursor.moveToFirst();
 
-		return cursor.getInt(0) > 0;
+		boolean contains = cursor.getInt(0) > 0;
+
+		cursor.close();
+
+		return contains;
 	}
 
 	private String buildDeckWithTitlePresenceQuery(String title) {
@@ -133,7 +142,11 @@ public class Decks
 			throw new DbException(String.format("There's no a deck with id = %d in database", id));
 		}
 
-		return new Deck(contentValuesFromCursor(cursor));
+		Deck deck = new Deck(contentValuesFromCursor(cursor));
+
+		cursor.close();
+
+		return deck;
 	}
 
 	private String buildDeckByIdSelectionQuery(long id) {
@@ -161,7 +174,11 @@ public class Decks
 				"There's no a deck that is a parent for card with id = %d", cardId));
 		}
 
-		return new Deck(contentValuesFromCursor(cursor));
+		Deck deck = new Deck(contentValuesFromCursor(cursor));
+
+		cursor.close();
+
+		return deck;
 	}
 
 	private String buildDeckByCardIdSelectionQuery(long cardId) {
@@ -202,8 +219,28 @@ public class Decks
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
+	public void clear() {
+		database.beginTransaction();
+		try {
+			tryClear();
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void tryClear() {
+		database.delete(DbTableNames.CARDS, null, null);
+		database.delete(DbTableNames.DECKS, null, null);
+	}
+
 	public InternetDateTime getLastUpdatedDateTime() {
 		return lastUpdateDateTimeHandler.getLastUpdatedDateTime();
+	}
+
+	public void setCurrentDateTimeAsLastUpdated() {
+		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	public void beginTransaction() {

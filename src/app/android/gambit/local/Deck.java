@@ -142,8 +142,10 @@ public class Deck implements Parcelable
 	public int getCardsCount() {
 		Cursor cursor = database.rawQuery(buildCardsCountSelectionQuery(), null);
 		cursor.moveToFirst();
+		int cardsCount = cursor.getInt(0);
+		cursor.close();
 
-		return cursor.getInt(0);
+		return cardsCount;
 	}
 
 	private String buildCardsCountSelectionQuery() {
@@ -199,6 +201,8 @@ public class Deck implements Parcelable
 			ContentValues values = contentValuesFromCursor(cursor);
 			cardsList.add(new Card(values));
 		}
+
+		cursor.close();
 
 		return cardsList;
 	}
@@ -292,7 +296,11 @@ public class Deck implements Parcelable
 			throw new DbException(String.format("There's no a card with id = %d in database", id));
 		}
 
-		return new Card(contentValuesFromCursor(cursor));
+		Card card = new Card(contentValuesFromCursor(cursor));
+
+		cursor.close();
+
+		return card;
 	}
 
 	private String buildCardByIdSelectionQuery(long id) {
@@ -336,6 +344,22 @@ public class Deck implements Parcelable
 		}
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
+	}
+
+	public void clear() {
+		database.beginTransaction();
+		try {
+			tryClear();
+			database.setTransactionSuccessful();
+		}
+		finally {
+			database.endTransaction();
+		}
+	}
+
+	private void tryClear() {
+		database.delete(DbTableNames.CARDS, String.format("%s = %d", DbFieldNames.CARD_DECK_ID, id),
+			null);
 	}
 
 	public void shuffleCards() {
@@ -385,6 +409,8 @@ public class Deck implements Parcelable
 			cardOrderIndexes.add(index);
 		}
 
+		cursor.close();
+
 		return cardOrderIndexes;
 	}
 
@@ -400,6 +426,8 @@ public class Deck implements Parcelable
 			int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(DbFieldNames.ID));
 			setCardOrderIndex(cardId, index);
 		}
+
+		cursor.close();
 	}
 
 	public void resetCardsOrder() {
@@ -425,6 +453,8 @@ public class Deck implements Parcelable
 			setCardOrderIndex(cardId, index);
 			index++;
 		}
+
+		cursor.close();
 
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
