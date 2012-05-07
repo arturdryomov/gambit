@@ -17,50 +17,22 @@
 
 		<dependency>
 			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>2.2.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.android</groupId>
 			<artifactId>android-test</artifactId>
 			<version>2.2.1</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>android.support</groupId>
-			<artifactId>compatibility-v4</artifactId>
-			<version>r6</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.api-client</groupId>
-			<artifactId>google-api-client</artifactId>
-			<version>1.8.0-beta</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.http-client</groupId>
-			<artifactId>google-http-client</artifactId>
-			<version>1.8.3-beta</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>app.android</groupId>
-			<artifactId>Gambit</artifactId>
+			<artifactId>gambit-application</artifactId>
+			<version>${project.version}</version>
 			<type>apk</type>
-			<version>0.0.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>app.android</groupId>
-			<artifactId>Gambit</artifactId>
-			<version>0.0.1</version>
+			<artifactId>gambit-application</artifactId>
+			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
 
