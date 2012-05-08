@@ -35,6 +35,7 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 	@Override
 	protected void tearDown() throws Exception {
 		decks.endTransaction();
+
 		super.tearDown();
 	}
 

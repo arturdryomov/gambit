@@ -23,36 +23,36 @@ public class DecksTests extends DatabaseTestCase
 	}
 
 	public void testAddDeck() {
-		String title = "New deck";
+		String deckTitle = "New deck";
 
-		Deck newDeck = decks.addNewDeck(title);
+		Deck newDeck = decks.addNewDeck(deckTitle);
 
 		assertEquals(1, decks.getDecksCount());
-		assertEquals(title, newDeck.getTitle());
+		assertEquals(deckTitle, newDeck.getTitle());
 	}
 
 	public void testDeleteDeck() {
-		Deck newDeck = decks.addNewDeck("New deck");
+		Deck deck = decks.addNewDeck("New deck");
 
-		decks.deleteDeck(newDeck);
+		decks.deleteDeck(deck);
 
 		assertEquals(0, decks.getDecksCount());
 	}
 
 	public void testGetDeckById() {
-		Deck justDeck = decks.addNewDeck("New deck");
+		Deck deck = decks.addNewDeck("New deck");
 
-		Deck deckById = decks.getDeckById(justDeck.getId());
+		Deck deckById = decks.getDeckById(deck.getId());
 
-		assertEquals(justDeck, deckById);
+		assertEquals(deck, deckById);
 	}
 
 	public void testGetDeckByCardId() {
-		Deck justDeck = decks.addNewDeck("New deck");
-		long cardId = justDeck.addNewCard("Front side text", "Back side text").getId();
+		Deck deck = decks.addNewDeck("New deck");
+		long cardId = deck.addNewCard("Front side text", "Back side text").getId();
 
 		Deck deckByCardId = decks.getDeckByCardId(cardId);
 
-		assertEquals(justDeck, deckByCardId);
+		assertEquals(deck, deckByCardId);
 	}
 }

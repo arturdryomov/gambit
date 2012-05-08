@@ -21,8 +21,9 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testGetId() {
-		long id = deck.getId();
-		assertTrue(id >= 0);
+		long deckId = deck.getId();
+
+		assertTrue(deckId >= 0);
 	}
 
 	public void testGetTitle() {
@@ -30,11 +31,11 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testSetTitle() {
-		String newTitle = "New title";
+		String newDeckTitle = "New title";
 
-		deck.setTitle(newTitle);
+		deck.setTitle(newDeckTitle);
 
-		assertEquals(newTitle, deck.getTitle());
+		assertEquals(newDeckTitle, deck.getTitle());
 	}
 
 	public void testGetCardsCount() {
@@ -53,14 +54,14 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testAddCard() {
-		String frontSideText = "Front side text";
-		String backSideText = "Back side text";
+		String cardFrontSideText = "Front side text";
+		String cardBackSideText = "Back side text";
 
-		Card newCard = deck.addNewCard(frontSideText, backSideText);
+		Card card = deck.addNewCard(cardFrontSideText, cardBackSideText);
 
 		assertEquals(1, deck.getCardsCount());
-		assertEquals(frontSideText, newCard.getFrontSideText());
-		assertEquals(backSideText, newCard.getBackSideText());
+		assertEquals(cardFrontSideText, card.getFrontSideText());
+		assertEquals(cardBackSideText, card.getBackSideText());
 	}
 
 	public void testDeleteCard() {
@@ -89,20 +90,20 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testGetCardById() {
-		Card justCard = deck.addNewCard("Front text", "Back text");
+		Card card = deck.addNewCard("Front text", "Back text");
 
-		Card cardById = deck.getCardById(justCard.getId());
+		Card cardById = deck.getCardById(card.getId());
 
-		assertEquals(justCard, cardById);
+		assertEquals(card, cardById);
 	}
 
 	public void testGetSetCurrentCardIndex() {
 		fillDeckWithCards(deck);
-		int index = 1;
+		final int currentCardIndex = 1;
 
-		deck.setCurrentCardIndex(index);
+		deck.setCurrentCardIndex(currentCardIndex);
 
-		assertEquals(index, deck.getCurrentCardIndex());
+		assertEquals(currentCardIndex, deck.getCurrentCardIndex());
 	}
 
 	public void testCurrentCardIndexIsZeroAfterInsertion() {

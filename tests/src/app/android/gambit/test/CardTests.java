@@ -27,18 +27,18 @@ public class CardTests extends DatabaseTestCase
 	}
 
 	public void testSetFrontSideText() {
-		String newText = "New front side text";
+		String newFrontSideText = "New front side text";
 
-		card.setFrontSideText(newText);
+		card.setFrontSideText(newFrontSideText);
 
-		assertEquals(newText, card.getFrontSideText());
+		assertEquals(newFrontSideText, card.getFrontSideText());
 	}
 
 	public void testSetBackSideText() {
-		String newText = "New back side text";
+		String newBackSideText = "New back side text";
 
-		card.setBackSideText(newText);
+		card.setBackSideText(newBackSideText);
 
-		assertEquals(newText, card.getBackSideText());
+		assertEquals(newBackSideText, card.getBackSideText());
 	}
 }
