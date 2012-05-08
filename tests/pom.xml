@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
-			<version>r6</version>
+			<version>r7</version>
 			<scope>provided</scope>
 		</dependency>
 
