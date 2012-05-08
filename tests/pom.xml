@@ -8,55 +8,55 @@
 	<packaging>apk</packaging>
 
 	<parent>
+		<artifactId>gambit-parent</artifactId>
 		<version>0.0.1</version>
 		<groupId>app.android</groupId>
-		<artifactId>gambit-parent</artifactId>
 	</parent>
 
 	<dependencies>
+		<dependency>
+			<artifactId>android</artifactId>
+			<version>${android.version}</version>
+			<groupId>com.google.android</groupId>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
-			<groupId>app.android</groupId>
+			<artifactId>android-test</artifactId>
+			<version>${android.version}</version>
+			<groupId>com.google.android</groupId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<artifactId>google-api-client</artifactId>
+			<version>1.8.0-beta</version>
+			<groupId>com.google.api-client</groupId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<artifactId>google-http-client</artifactId>
+			<version>1.8.3-beta</version>
+			<groupId>com.google.http-client</groupId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
+			<groupId>app.android</groupId>
+			<scope>provided</scope>
 			<type>apk</type>
 		</dependency>
 
 		<dependency>
-			<groupId>app.android</groupId>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
+			<groupId>app.android</groupId>
+			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
-
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android-test</artifactId>
-			<version>2.2.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>android.support</groupId>
-			<artifactId>compatibility-v4</artifactId>
-			<version>r7</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.api-client</groupId>
-			<artifactId>google-api-client</artifactId>
-			<version>1.8.0-beta</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.http-client</groupId>
-			<artifactId>google-http-client</artifactId>
-			<version>1.8.3-beta</version>
-			<scope>provided</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>

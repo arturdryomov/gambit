@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
 	<name>Gambit Application</name>
 	<artifactId>gambit-application</artifactId>
-	<modelVersion>4.0.0</modelVersion>
 	<packaging>apk</packaging>
 
 	<parent>
+		<artifactId>gambit-parent</artifactId>
 		<version>0.0.1</version>
 		<groupId>app.android</groupId>
-		<artifactId>gambit-parent</artifactId>
 	</parent>
 	
 	<dependencies>
-
 		<dependency>
-			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
-			<version>2.2.1</version>
+			<version>${android.version}</version>
+			<groupId>com.google.android</groupId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
 			<version>r7</version>
+			<groupId>android.support</groupId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
 			<version>1.8.0-beta</version>
+			<groupId>com.google.api-client</groupId>
 
 			<exclusions>
 				<exclusion>
@@ -57,9 +56,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.http-client</groupId>
 			<artifactId>google-http-client</artifactId>
 			<version>1.8.3-beta</version>
+			<groupId>com.google.http-client</groupId>
 
 			<exclusions>
 				<exclusion>
@@ -83,7 +82,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 	</dependencies>
 
 	<build>
