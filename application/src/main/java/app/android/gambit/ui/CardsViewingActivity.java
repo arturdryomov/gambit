@@ -111,15 +111,15 @@ public class CardsViewingActivity extends Activity
 
 			switch (cardsOrder) {
 				case SHUFFLE:
-					progressDialogHelper.show(activityContext, getString(R.string.shufflingCards));
+					progressDialogHelper.show(activityContext, getString(R.string.loading_shuffling_cards));
 					break;
 
 				case STRAIGHT:
-					progressDialogHelper.show(activityContext, getString(R.string.resettingCardsOrder));
+					progressDialogHelper.show(activityContext, getString(R.string.loading_resetting_cards_order));
 					break;
 
 				case DEFAULT:
-					progressDialogHelper.show(activityContext, getString(R.string.loadingCards));
+					progressDialogHelper.show(activityContext, getString(R.string.loading_cards));
 					break;
 
 				default:
@@ -301,7 +301,7 @@ public class CardsViewingActivity extends Activity
 			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}

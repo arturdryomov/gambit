@@ -4,14 +4,14 @@
 	<item
 		android:id="@+id/menu_back"
 		android:icon="@drawable/ic_menu_back"
-		android:title="@string/toFirstCard"/>
+		android:title="@string/menu_to_first_card"/>
 	<item
 		android:id="@+id/menu_shuffle"
 		android:icon="@drawable/ic_menu_shuffle"
-		android:title="@string/shuffle"/>
+		android:title="@string/menu_shuffle"/>
 	<item
 		android:id="@+id/menu_reset"
 		android:icon="@drawable/ic_menu_revert"
-		android:title="@string/resetOrder"/>
+		android:title="@string/menu_reset_order"/>
 
 </menu>

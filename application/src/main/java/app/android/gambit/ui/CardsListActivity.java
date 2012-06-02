@@ -82,14 +82,14 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				return String.format("Token received: '%s'.", authToken);
 			}
 			catch (NoAccountRegisteredException e) {
-				return getString(R.string.noGoogleAccounts);
+				return getString(R.string.error_no_google_accounts);
 			}
 			// TODO: Remove this exception as useless
 			catch (AuthorizationCanceledException e) {
-				return getString(R.string.authenticationCanceled);
+				return getString(R.string.error_authentication_canceled);
 			}
 			catch (AuthorizationFailedException e) {
-				return getString(R.string.authenticationError);
+				return getString(R.string.error_authentication);
 			}
 		}
 
@@ -133,7 +133,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}
@@ -156,7 +156,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			setEmptyListText(getString(R.string.loadingCards));
+			setEmptyListText(getString(R.string.loading_cards));
 		}
 
 		@Override
@@ -169,7 +169,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(Void result) {
 			if (cards.isEmpty()) {
-				setEmptyListText(getString(R.string.noCards));
+				setEmptyListText(getString(R.string.empty_cards));
 			}
 			else {
 				fillList(cards);
@@ -260,7 +260,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			updateList();
 
 			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noCards));
+				setEmptyListText(getString(R.string.empty_cards));
 			}
 		}
 

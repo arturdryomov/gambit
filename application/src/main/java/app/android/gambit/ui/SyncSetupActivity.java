@@ -54,7 +54,7 @@ public class SyncSetupActivity extends Activity
 
 	private void initializeBodyControls() {
 		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.edit_spreadsheet_name);
-		spreadsheetNameEdit.setText(getString(R.string.cards));
+		spreadsheetNameEdit.setText(getString(R.string.title_cards));
 
 		initializeSpreadsheetsAdapter();
 
@@ -116,7 +116,7 @@ public class SyncSetupActivity extends Activity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loadingSpreadsheets));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_spreadsheets));
 		}
 
 		@Override

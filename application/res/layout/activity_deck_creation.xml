@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="@string/deckCreation" />
+			android:text="@string/title_deck_creation" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -25,7 +25,7 @@
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/deckName" />
+				android:text="@string/signature_deck_name" />
 
 			<EditText
 				android:id="@+id/edit_deck_name"
@@ -37,7 +37,7 @@
 				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/create" />
+				android:text="@string/button_create" />
 		</LinearLayout>
 	</ScrollView>
 

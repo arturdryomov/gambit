@@ -14,7 +14,7 @@
 	<application
 		android:name="GambitApplication"
 		android:icon="@drawable/ic_launcher_gambit"
-		android:label="@string/applicationName"
+		android:label="@string/application_name"
 		android:theme="@android:style/Theme.Light.NoTitleBar">
 
 		<activity android:name=".ui.DecksListActivity">

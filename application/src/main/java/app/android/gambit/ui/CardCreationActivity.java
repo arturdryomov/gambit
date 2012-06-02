@@ -83,7 +83,7 @@ public class CardCreationActivity extends Activity
 
 	private String getFrontSideTextErrorMessage() {
 		if (frontSideText.isEmpty()) {
-			return getString(R.string.enterFrontText);
+			return getString(R.string.error_empty_card_front_text);
 		}
 
 		return new String();
@@ -91,7 +91,7 @@ public class CardCreationActivity extends Activity
 
 	private String getBackSideTextErrorMessage() {
 		if (backSideText.isEmpty()) {
-			return getString(R.string.enterBackText);
+			return getString(R.string.error_empty_card_back_text);
 		}
 
 		return new String();
@@ -104,7 +104,7 @@ public class CardCreationActivity extends Activity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.creatingCard));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_creating_card));
 		}
 
 		@Override
@@ -129,7 +129,7 @@ public class CardCreationActivity extends Activity
 			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}

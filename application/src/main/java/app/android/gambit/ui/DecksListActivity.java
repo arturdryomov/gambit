@@ -80,14 +80,14 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return String.format("Token received: '%s'.", authToken);
 			}
 			catch (NoAccountRegisteredException e) {
-				return getString(R.string.noGoogleAccounts);
+				return getString(R.string.error_no_google_accounts);
 			}
 			// TODO: Remove this exception as useless
 			catch (AuthorizationCanceledException e) {
-				return getString(R.string.authenticationCanceled);
+				return getString(R.string.error_authentication_canceled);
 			}
 			catch (AuthorizationFailedException e) {
-				return getString(R.string.authenticationError);
+				return getString(R.string.error_authentication);
 			}
 		}
 
@@ -140,7 +140,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			setEmptyListText(getString(R.string.loadingDecks));
+			setEmptyListText(getString(R.string.loading_decks));
 		}
 
 		@Override
@@ -153,7 +153,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(Void result) {
 			if (decks.isEmpty()) {
-				setEmptyListText(getString(R.string.noDecks));
+				setEmptyListText(getString(R.string.empty_decks));
 			}
 			else {
 				fillList(decks);
@@ -249,7 +249,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			updateList();
 
 			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noDecks));
+				setEmptyListText(getString(R.string.empty_decks));
 			}
 		}
 
@@ -281,7 +281,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			if (deck.isEmpty()) {
-				return getString(R.string.noCards);
+				return getString(R.string.empty_cards);
 			}
 
 			return new String();

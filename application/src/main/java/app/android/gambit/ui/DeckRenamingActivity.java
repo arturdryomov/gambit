@@ -69,7 +69,7 @@ public class DeckRenamingActivity extends Activity
 
 	private String getDeckNameErrorMessage() {
 		if (deckName.isEmpty()) {
-			return getString(R.string.enterDeckName);
+			return getString(R.string.error_empty_deck_name);
 		}
 
 		return new String();
@@ -82,7 +82,7 @@ public class DeckRenamingActivity extends Activity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.updatingDeck));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_updating_deck));
 		}
 
 		@Override
@@ -91,7 +91,7 @@ public class DeckRenamingActivity extends Activity
 				deck.setTitle(deckName);
 			}
 			catch (AlreadyExistsException e) {
-				return getString(R.string.deckAlreadyExists);
+				return getString(R.string.error_deck_already_exists);
 			}
 
 			return new String();
@@ -117,7 +117,7 @@ public class DeckRenamingActivity extends Activity
 			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}

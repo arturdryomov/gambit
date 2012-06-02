@@ -67,7 +67,7 @@ public class DeckCreationActivity extends Activity
 
 	private String getDeckNameErrorMessage() {
 		if (deckName.isEmpty()) {
-			return getString(R.string.enterDeckName);
+			return getString(R.string.error_empty_deck_name);
 		}
 
 		return new String();
@@ -82,7 +82,7 @@ public class DeckCreationActivity extends Activity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.creatingDeck));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_creating_deck));
 		}
 
 		@Override
@@ -91,7 +91,7 @@ public class DeckCreationActivity extends Activity
 				deck = DbProvider.getInstance().getDecks().addNewDeck(deckName);
 			}
 			catch (AlreadyExistsException e) {
-				return getString(R.string.deckAlreadyExists);
+				return getString(R.string.error_deck_already_exists);
 			}
 
 			return new String();

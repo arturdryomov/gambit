@@ -11,7 +11,7 @@
 
 		<TextView
 			style="@style/ActionbarTitle"
-			android:text="@string/cardsEditing" />
+			android:text="@string/title_cards_editing" />
 
 		<LinearLayout
 			android:id="@+id/actions"
@@ -39,6 +39,6 @@
 	<TextView
 		android:id="@android:id/empty"
 		style="@style/BodyEmptyListViewSign"
-		android:text="@string/noCards" />
+		android:text="@string/empty_cards" />
 
 </RelativeLayout>
