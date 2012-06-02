@@ -56,6 +56,9 @@
 	<string name="menu_to_first_card">Back to beginning</string>
 	<string name="menu_settings">Settings</string>
 
+	<string name="description_item_creation">Item creation</string>
+	<string name="description_sync">Sync</string>
+
 	<string name="key_sync_spreadsheet_name">SYNC_SPREADSHEET_NAME</string>
 
 </resources>
