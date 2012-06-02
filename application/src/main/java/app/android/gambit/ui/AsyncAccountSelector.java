@@ -18,7 +18,7 @@ import app.android.gambit.R;
 public class AsyncAccountSelector
 {
 	public static enum Result {
-		SUCCESS, NO_ACCOUNTS_REGISTERED;
+		SUCCESS, NO_ACCOUNTS_REGISTERED
 	}
 
 	public static interface AccountWaiter

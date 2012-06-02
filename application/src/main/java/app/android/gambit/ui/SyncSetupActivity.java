@@ -149,8 +149,8 @@ public class SyncSetupActivity extends Activity
 		}
 
 		private void updateSpreadsheetsSpinner() {
-			Spinner spreadsheetsSpinenr = (Spinner) findViewById(R.id.spinner_spreadsheets);
-			((SimpleAdapter) spreadsheetsSpinenr.getAdapter()).notifyDataSetChanged();
+			Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spinner_spreadsheets);
+			((SimpleAdapter) spreadsheetsSpinner.getAdapter()).notifyDataSetChanged();
 		}
 	}
 }

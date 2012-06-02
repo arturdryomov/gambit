@@ -16,21 +16,15 @@ public class IntentFactory
 	}
 
 	public static Intent createSyncSetupIntent(Context context) {
-		Intent intent = new Intent(context, SyncSetupActivity.class);
-
-		return intent;
+		return new Intent(context, SyncSetupActivity.class);
 	}
 
 	public static Intent createSettingsIntent(Context context) {
-		Intent intent = new Intent(context, SettingsActivity.class);
-
-		return intent;
+		return new Intent(context, SettingsActivity.class);
 	}
 
 	public static Intent createDeckCreationIntent(Context context) {
-		Intent intent = new Intent(context, DeckCreationActivity.class);
-
-		return intent;
+		return new Intent(context, DeckCreationActivity.class);
 	}
 
 	public static Intent createDeckEditingIntent(Context context, Deck deck) {
