@@ -24,7 +24,7 @@ public class CardEditingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.card_editing);
+		setContentView(R.layout.activity_card_editing);
 
 		initializeBodyControls();
 
@@ -33,7 +33,7 @@ public class CardEditingActivity extends Activity
 	}
 
 	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
 		confirmButton.setOnClickListener(confirmListener);
 	}
 
@@ -58,8 +58,8 @@ public class CardEditingActivity extends Activity
 	};
 
 	private void readUserDataFromFields() {
-		EditText frontSideEdit = (EditText) findViewById(R.id.frondSideEdit);
-		EditText backSideEdit = (EditText) findViewById(R.id.backSideEdit);
+		EditText frontSideEdit = (EditText) findViewById(R.id.edit_frond_side);
+		EditText backSideEdit = (EditText) findViewById(R.id.edit_back_side);
 
 		frontSideText = frontSideEdit.getText().toString().trim();
 		backSideText = backSideEdit.getText().toString().trim();
@@ -83,7 +83,7 @@ public class CardEditingActivity extends Activity
 
 	private String getFrontSideTextErrorMessage() {
 		if (frontSideText.isEmpty()) {
-			return getString(R.string.enterFrontText);
+			return getString(R.string.error_empty_card_front_text);
 		}
 
 		return new String();
@@ -91,7 +91,7 @@ public class CardEditingActivity extends Activity
 
 	private String getBackSideTextErrorMessage() {
 		if (backSideText.isEmpty()) {
-			return getString(R.string.enterBackText);
+			return getString(R.string.error_empty_card_back_text);
 		}
 
 		return new String();
@@ -104,7 +104,7 @@ public class CardEditingActivity extends Activity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.updatingCard));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_updating_card));
 		}
 
 		@Override
@@ -130,7 +130,7 @@ public class CardEditingActivity extends Activity
 			card = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}
@@ -140,8 +140,8 @@ public class CardEditingActivity extends Activity
 		frontSideText = card.getFrontSideText();
 		backSideText = card.getBackSideText();
 
-		EditText frontSideTextEdit = (EditText) findViewById(R.id.frondSideEdit);
-		EditText backSideTextEdit = (EditText) findViewById(R.id.backSideEdit);
+		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_frond_side);
+		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side);
 
 		frontSideTextEdit.setText(frontSideText);
 		backSideTextEdit.setText(backSideText);

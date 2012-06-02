@@ -6,12 +6,12 @@
 	<!-- Actionbar -->
 
 	<RelativeLayout
-		android:id="@+id/actionbar"
-		style="@style/Actionbar" >
+		android:id="@+id/action_bar"
+		style="@style/ActionBar" >
 
 		<TextView
-			style="@style/ActionbarTitle"
-			android:text="@string/cardEditing" />
+			style="@style/ActionBarTitle"
+			android:text="@string/title_deck_renaming" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -19,34 +19,25 @@
 	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_below="@id/actionbar" >
+		android:layout_below="@id/action_bar" >
 
 		<LinearLayout style="@style/BodyLinearLayout" >
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/frontText" />
+				android:text="@string/signature_deck_name" />
 
 			<EditText
-				android:id="@+id/frondSideEdit"
+				android:id="@+id/edit_deck_name"
 				style="@style/BodyLinearLayoutItem"
-				android:inputType="text" />
-
-			<TextView
-				style="@style/BodyLinearLayoutItem"
-				android:text="@string/backText" />
-
-			<EditText
-				android:id="@+id/backSideEdit"
-				style="@style/BodyLinearLayoutItem"
-				android:imeOptions="actionDone"
-				android:inputType="text" />
+				android:inputType="text"
+				android:singleLine="true" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/save" />
+				android:text="@string/menu_rename" />
 		</LinearLayout>
 	</ScrollView>
 

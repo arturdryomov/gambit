@@ -3,9 +3,9 @@
 
 	<PreferenceCategory android:title="Sync" >
 		<EditTextPreference
-			android:key="@string/settingSyncSpreadsheetName"
-			android:summary="@string/titleOfGoogleSpreadsheet"
-			android:title="@string/syncDocument" />
+			android:key="@string/key_sync_spreadsheet_name"
+			android:summary="@string/signature_google_spreadsheet_to_sync"
+			android:title="@string/signature_sync_document_name" />
 	</PreferenceCategory>
 
 </PreferenceScreen>

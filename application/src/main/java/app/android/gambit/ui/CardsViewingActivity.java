@@ -60,7 +60,7 @@ public class CardsViewingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cards_viewing);
+		setContentView(R.layout.activity_cards_viewing);
 
 		initializeSensor();
 
@@ -111,15 +111,15 @@ public class CardsViewingActivity extends Activity
 
 			switch (cardsOrder) {
 				case SHUFFLE:
-					progressDialogHelper.show(activityContext, getString(R.string.shufflingCards));
+					progressDialogHelper.show(activityContext, getString(R.string.loading_shuffling_cards));
 					break;
 
 				case STRAIGHT:
-					progressDialogHelper.show(activityContext, getString(R.string.resettingCardsOrder));
+					progressDialogHelper.show(activityContext, getString(R.string.loading_resetting_cards_order));
 					break;
 
 				case DEFAULT:
-					progressDialogHelper.show(activityContext, getString(R.string.loadingCards));
+					progressDialogHelper.show(activityContext, getString(R.string.loading_cards));
 					break;
 
 				default:
@@ -301,7 +301,7 @@ public class CardsViewingActivity extends Activity
 			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}
@@ -317,15 +317,15 @@ public class CardsViewingActivity extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.shuffle:
+			case R.id.menu_shuffle:
 				loadCards(CardsOrder.SHUFFLE);
 				return true;
 
-			case R.id.reset:
+			case R.id.menu_reset:
 				loadCards(CardsOrder.STRAIGHT);
 				return true;
 
-			case R.id.back:
+			case R.id.menu_back:
 				goToFirstCard();
 
 				return true;

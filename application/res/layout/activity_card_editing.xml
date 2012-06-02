@@ -6,12 +6,12 @@
 	<!-- Actionbar -->
 
 	<RelativeLayout
-		android:id="@+id/actionbar"
-		style="@style/Actionbar" >
+		android:id="@+id/action_bar"
+		style="@style/ActionBar" >
 
 		<TextView
-			style="@style/ActionbarTitle"
-			android:text="@string/cardCreation" />
+			style="@style/ActionBarTitle"
+			android:text="@string/title_card_editing" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -19,34 +19,34 @@
 	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_below="@id/actionbar" >
+		android:layout_below="@id/action_bar" >
 
 		<LinearLayout style="@style/BodyLinearLayout" >
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/frontText" />
+				android:text="@string/signature_card_front_text" />
 
 			<EditText
-				android:id="@+id/frondSideEdit"
+				android:id="@+id/edit_frond_side"
 				style="@style/BodyLinearLayoutItem"
 				android:inputType="text" />
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/backText" />
+				android:text="@string/signature_card_back_text" />
 
 			<EditText
-				android:id="@+id/backSideEdit"
+				android:id="@+id/edit_back_side"
 				style="@style/BodyLinearLayoutItem"
 				android:imeOptions="actionDone"
 				android:inputType="text" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/create" />
+				android:text="@string/button_save" />
 		</LinearLayout>
 	</ScrollView>
 

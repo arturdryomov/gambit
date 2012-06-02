@@ -38,7 +38,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cards);
+		setContentView(R.layout.activity_cards);
 
 		initializeActionbar();
 		initializeList();
@@ -47,10 +47,10 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	private void initializeActionbar() {
-		ImageButton updateButton = (ImageButton) findViewById(R.id.updateButton);
+		ImageButton updateButton = (ImageButton) findViewById(R.id.button_update);
 		updateButton.setOnClickListener(updateListener);
 
-		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
+		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.button_item_create);
 		itemCreationButton.setOnClickListener(cardCreationListener);
 	}
 
@@ -82,14 +82,14 @@ public class CardsListActivity extends SimpleAdapterListActivity
 				return String.format("Token received: '%s'.", authToken);
 			}
 			catch (NoAccountRegisteredException e) {
-				return getString(R.string.noGoogleAccounts);
+				return getString(R.string.error_no_google_accounts);
 			}
 			// TODO: Remove this exception as useless
 			catch (AuthorizationCanceledException e) {
-				return getString(R.string.authenticationCanceled);
+				return getString(R.string.error_authentication_canceled);
 			}
 			catch (AuthorizationFailedException e) {
-				return getString(R.string.authenticationError);
+				return getString(R.string.error_authentication);
 			}
 		}
 
@@ -116,8 +116,8 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void initializeList() {
 		SimpleAdapter cardsAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.cards_list_item, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
-			new int[] { R.id.title, R.id.description });
+			R.layout.list_item_two_line, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
+			new int[] { R.id.text_first_line, R.id.test_second_line});
 
 		setListAdapter(cardsAdapter);
 
@@ -133,7 +133,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
 		}
 		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
+			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
 		}
@@ -156,7 +156,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			setEmptyListText(getString(R.string.loadingCards));
+			setEmptyListText(getString(R.string.loading_cards));
 		}
 
 		@Override
@@ -169,7 +169,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(Void result) {
 			if (cards.isEmpty()) {
-				setEmptyListText(getString(R.string.noCards));
+				setEmptyListText(getString(R.string.empty_cards));
 			}
 			else {
 				fillList(cards);
@@ -225,11 +225,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		int cardPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.delete:
+			case R.id.menu_delete:
 				callCardDeleting(cardPosition);
 				return true;
 
-			case R.id.edit:
+			case R.id.menu_edit:
 				callCardEditing(cardPosition);
 				return true;
 
@@ -260,7 +260,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			updateList();
 
 			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.noCards));
+				setEmptyListText(getString(R.string.empty_cards));
 			}
 		}
 

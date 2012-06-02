@@ -45,7 +45,7 @@ public class SyncSetupActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sync_setup);
+		setContentView(R.layout.activitiy_sync_setup);
 
 		initializeBodyControls();
 
@@ -53,21 +53,21 @@ public class SyncSetupActivity extends Activity
 	}
 
 	private void initializeBodyControls() {
-		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.spreadsheetNameEdit);
-		spreadsheetNameEdit.setText(getString(R.string.cards));
+		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.edit_spreadsheet_name);
+		spreadsheetNameEdit.setText(getString(R.string.title_cards));
 
 		initializeSpreadsheetsAdapter();
 
-		CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.syncWithExistingCheckbox);
+		CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.checkbox_sync_with_existing_spreadsheet);
 		syncModeCheckbox.setChecked(false);
 		syncModeCheckbox.setOnCheckedChangeListener(syncModeListener);
 	}
 
 	private void initializeSpreadsheetsAdapter() {
-		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spinner_spreadsheets);
 
 		SimpleAdapter spreadsheetsAdapter = new SimpleAdapter(activityContext, spreadsheets,
-			R.layout.cards_list_item, new String[] { SPREADSHEET_ITEM_TEXT_ID },
+			R.layout.list_item_two_line, new String[] { SPREADSHEET_ITEM_TEXT_ID },
 			new int[] { android.R.layout.simple_spinner_item });
 
 		spreadsheetsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,8 +90,8 @@ public class SyncSetupActivity extends Activity
 	};
 
 	private void updateSyncModeDependentControls() {
-		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.spreadsheetNameEdit);
-		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.edit_spreadsheet_name);
+		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spinner_spreadsheets);
 
 		switch (currentSyncMode) {
 			case NEW:
@@ -116,7 +116,7 @@ public class SyncSetupActivity extends Activity
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loadingSpreadsheets));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_spreadsheets));
 		}
 
 		@Override
@@ -144,12 +144,12 @@ public class SyncSetupActivity extends Activity
 		}
 
 		private void hideSyncModeCheckbox() {
-			CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.syncWithExistingCheckbox);
+			CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.checkbox_sync_with_existing_spreadsheet);
 			syncModeCheckbox.setVisibility(View.GONE);
 		}
 
 		private void updateSpreadsheetsSpinner() {
-			Spinner spreadsheetsSpinenr = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+			Spinner spreadsheetsSpinenr = (Spinner) findViewById(R.id.spinner_spreadsheets);
 			((SimpleAdapter) spreadsheetsSpinenr.getAdapter()).notifyDataSetChanged();
 		}
 	}

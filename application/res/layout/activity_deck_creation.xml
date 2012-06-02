@@ -6,12 +6,12 @@
 	<!-- Actionbar -->
 
 	<RelativeLayout
-		android:id="@+id/actionbar"
-		style="@style/Actionbar" >
+		android:id="@+id/action_bar"
+		style="@style/ActionBar" >
 
 		<TextView
-			style="@style/ActionbarTitle"
-			android:text="@string/deckCreation" />
+			style="@style/ActionBarTitle"
+			android:text="@string/title_deck_creation" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -19,25 +19,25 @@
 	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_below="@id/actionbar" >
+		android:layout_below="@id/action_bar" >
 
 		<LinearLayout style="@style/BodyLinearLayout" >
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/deckName" />
+				android:text="@string/signature_deck_name" />
 
 			<EditText
-				android:id="@+id/deckNameEdit"
+				android:id="@+id/edit_deck_name"
 				style="@style/BodyLinearLayoutItem"
 				android:inputType="text"
 				android:singleLine="true" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/create" />
+				android:text="@string/button_create" />
 		</LinearLayout>
 	</ScrollView>
 

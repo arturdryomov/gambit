@@ -46,8 +46,6 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>${project.basedir}/src</sourceDirectory>
-
 		<plugins>
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>

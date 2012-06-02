@@ -4,7 +4,7 @@
 	android:padding="@dimen/list_item_padding" >
 
 	<TextView
-		android:id="@+id/description"
+		android:id="@+id/test_second_line"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
@@ -12,10 +12,10 @@
 		android:textColor="?android:attr/textColorSecondaryInverse" />
 
 	<TextView
-		android:id="@+id/title"
+		android:id="@+id/text_first_line"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_above="@id/description"
+		android:layout_above="@id/test_second_line"
 		android:layout_alignParentTop="true"
 		android:singleLine="true"
 		android:textColor="?android:attr/textColorPrimary" />

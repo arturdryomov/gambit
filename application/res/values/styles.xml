@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="Actionbar">
+	<style name="ActionBar">
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:layout_height">@dimen/actionbar_height</item>
 		<item name="android:background">@color/actionbar_background</item>
 	</style>
 
-	<style name="ActionbarTitle">
+	<style name="ActionBarTitle">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_centerVertical">true</item>
@@ -19,7 +19,7 @@
 		<item name="android:textStyle">bold</item>
 	</style>
 
-	<style name="ActionbarButtons">
+	<style name="ActionBarButtons">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_alignParentRight">true</item>
@@ -28,7 +28,7 @@
 		<item name="android:orientation">horizontal</item>
 	</style>
 
-	<style name="ActionbarButton">
+	<style name="ActionBarButton">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<!-- 1 dp on the left for viewing separator -->

@@ -3,6 +3,7 @@ package app.android.gambit.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -11,29 +12,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
+import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
 
 
-public class DeckRenamingActivity extends Activity
+public class DeckCreationActivity extends Activity
 {
 	private final Context activityContext = this;
 
-	private Deck deck;
 	private String deckName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.deck_renaming);
+		setContentView(R.layout.activity_deck_creation);
 
 		initializeBodyControls();
-
-		processReceivedDeck();
-		setUpReceivedDeckData();
 	}
 
 	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
 		confirmButton.setOnClickListener(confirmListener);
 	}
 
@@ -45,20 +43,20 @@ public class DeckRenamingActivity extends Activity
 			String userDataErrorMessage = getUserDataErrorMessage();
 
 			if (userDataErrorMessage.isEmpty()) {
-				callDeckUpdating();
+				callDeckCreation();
 			}
 			else {
 				UserAlerter.alert(activityContext, userDataErrorMessage);
 			}
 		}
 
-		private void callDeckUpdating() {
-			new DeckUpdatingTask().execute();
+		private void callDeckCreation() {
+			new DeckCreationTask().execute();
 		}
 	};
 
 	private void readUserDataFromFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
+		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
 
 		deckName = deckNameEdit.getText().toString().trim();
 	}
@@ -69,29 +67,31 @@ public class DeckRenamingActivity extends Activity
 
 	private String getDeckNameErrorMessage() {
 		if (deckName.isEmpty()) {
-			return getString(R.string.enterDeckName);
+			return getString(R.string.error_empty_deck_name);
 		}
 
 		return new String();
 	}
 
-	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
+	private class DeckCreationTask extends AsyncTask<Void, Void, String>
 	{
 		private ProgressDialogShowHelper progressDialogHelper;
+
+		private Deck deck;
 
 		@Override
 		protected void onPreExecute() {
 			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.updatingDeck));
+			progressDialogHelper.show(activityContext, getString(R.string.loading_creating_deck));
 		}
 
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck.setTitle(deckName);
+				deck = DbProvider.getInstance().getDecks().addNewDeck(deckName);
 			}
 			catch (AlreadyExistsException e) {
-				return getString(R.string.deckAlreadyExists);
+				return getString(R.string.error_deck_already_exists);
 			}
 
 			return new String();
@@ -102,29 +102,14 @@ public class DeckRenamingActivity extends Activity
 			progressDialogHelper.hide();
 
 			if (errorMessage.isEmpty()) {
+				Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
+				startActivity(callIntent);
+
 				finish();
 			}
 			else {
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
-	}
-
-	private void processReceivedDeck() {
-		Bundle receivedData = this.getIntent().getExtras();
-
-		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
-			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
-		}
-		else {
-			UserAlerter.alert(activityContext, getString(R.string.someError));
-
-			finish();
-		}
-	}
-
-	private void setUpReceivedDeckData() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
-		deckNameEdit.setText(deck.getTitle());
 	}
 }

@@ -6,12 +6,12 @@
 	<!-- Actionbar -->
 
 	<RelativeLayout
-		android:id="@+id/actionbar"
-		style="@style/Actionbar" >
+		android:id="@+id/action_bar"
+		style="@style/ActionBar" >
 
 		<TextView
-			style="@style/ActionbarTitle"
-			android:text="@string/syncSetup" />
+			style="@style/ActionBarTitle"
+			android:text="@string/title_card_creation" />
 	</RelativeLayout>
 
 	<!-- Main view -->
@@ -19,36 +19,34 @@
 	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_below="@id/actionbar" >
+		android:layout_below="@id/action_bar" >
 
 		<LinearLayout style="@style/BodyLinearLayout" >
 
-			<CheckBox
-				android:id="@+id/syncWithExistingCheckbox"
+			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/useExistingSpreadsheet"
-				android:textSize="@dimen/checkbox_text_size" />
+				android:text="@string/signature_card_front_text" />
+
+			<EditText
+				android:id="@+id/edit_frond_side"
+				style="@style/BodyLinearLayoutItem"
+				android:inputType="text" />
 
 			<TextView
 				style="@style/BodyLinearLayoutItem"
-				android:text="@string/spreadsheetName" />
+				android:text="@string/signature_card_back_text" />
 
 			<EditText
-				android:id="@+id/spreadsheetNameEdit"
+				android:id="@+id/edit_back_side"
 				style="@style/BodyLinearLayoutItem"
-				android:inputType="text"
-				android:singleLine="true" />
-
-			<Spinner
-				android:id="@+id/spreadsheetsSpinner"
-				style="@style/BodyLinearLayoutItem"
-				android:visibility="gone" />
+				android:imeOptions="actionDone"
+				android:inputType="text" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/setup" />
+				android:text="@string/button_create" />
 		</LinearLayout>
 	</ScrollView>
 

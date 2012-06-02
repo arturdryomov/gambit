@@ -92,7 +92,7 @@ public class AsyncAccountSelector
 
 	private Dialog constructAccountsListDialog() {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-		dialogBuilder.setTitle(activity.getString(R.string.chooseGoogleAccount));
+		dialogBuilder.setTitle(activity.getString(R.string.title_choose_google_account));
 
 		final List<String> accountsNamesList = getRegisteredAccountsNames();
 		String[] accountsNamesArray = new String[accountsNamesList.size()];

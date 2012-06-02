@@ -6,26 +6,26 @@
 	<!-- Actionbar -->
 
 	<RelativeLayout
-		android:id="@+id/actionbar"
-		style="@style/Actionbar" >
+		android:id="@+id/action_bar"
+		style="@style/ActionBar" >
 
 		<TextView
-			style="@style/ActionbarTitle"
-			android:text="@string/cardsEditing" />
+			style="@style/ActionBarTitle"
+			android:text="@string/title_cards_editing" />
 
 		<LinearLayout
 			android:id="@+id/actions"
-			style="@style/ActionbarButtons" >
+			style="@style/ActionBarButtons" >
 
 			<ImageButton
-				android:id="@+id/updateButton"
-				style="@style/ActionbarButton"
-				android:src="@drawable/actionbar_update_icon" />
+				android:id="@+id/button_update"
+				style="@style/ActionBarButton"
+				android:src="@drawable/ic_menu_sync" />
 
 			<ImageButton
-				android:id="@+id/itemCreationButton"
-				style="@style/ActionbarButton"
-				android:src="@drawable/actionbar_add_new_item_icon" />
+				android:id="@+id/button_item_create"
+				style="@style/ActionBarButton"
+				android:src="@drawable/ic_menu_create_item" />
 		</LinearLayout>
 	</RelativeLayout>
 
@@ -34,11 +34,11 @@
 	<ListView
 		android:id="@android:id/list"
 		style="@style/BodyListView"
-		android:layout_below="@id/actionbar" />
+		android:layout_below="@id/action_bar" />
 
 	<TextView
 		android:id="@android:id/empty"
 		style="@style/BodyEmptyListViewSign"
-		android:text="@string/noCards" />
+		android:text="@string/empty_cards" />
 
 </RelativeLayout>
