@@ -33,7 +33,7 @@ public class DeckRenamingActivity extends Activity
 	}
 
 	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
 		confirmButton.setOnClickListener(confirmListener);
 	}
 
@@ -58,7 +58,7 @@ public class DeckRenamingActivity extends Activity
 	};
 
 	private void readUserDataFromFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
+		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
 
 		deckName = deckNameEdit.getText().toString().trim();
 	}
@@ -124,7 +124,7 @@ public class DeckRenamingActivity extends Activity
 	}
 
 	private void setUpReceivedDeckData() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.deckNameEdit);
+		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
 		deckNameEdit.setText(deck.getTitle());
 	}
 }

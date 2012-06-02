@@ -28,7 +28,7 @@
 				android:text="@string/frontText" />
 
 			<EditText
-				android:id="@+id/frondSideEdit"
+				android:id="@+id/edit_frond_side"
 				style="@style/BodyLinearLayoutItem"
 				android:inputType="text" />
 
@@ -37,13 +37,13 @@
 				android:text="@string/backText" />
 
 			<EditText
-				android:id="@+id/backSideEdit"
+				android:id="@+id/edit_back_side"
 				style="@style/BodyLinearLayoutItem"
 				android:imeOptions="actionDone"
 				android:inputType="text" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
 				android:text="@string/save" />

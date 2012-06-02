@@ -317,15 +317,15 @@ public class CardsViewingActivity extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.shuffle:
+			case R.id.menu_shuffle:
 				loadCards(CardsOrder.SHUFFLE);
 				return true;
 
-			case R.id.reset:
+			case R.id.menu_reset:
 				loadCards(CardsOrder.STRAIGHT);
 				return true;
 
-			case R.id.back:
+			case R.id.menu_back:
 				goToFirstCard();
 
 				return true;

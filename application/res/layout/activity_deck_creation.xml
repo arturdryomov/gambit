@@ -28,13 +28,13 @@
 				android:text="@string/deckName" />
 
 			<EditText
-				android:id="@+id/deckNameEdit"
+				android:id="@+id/edit_deck_name"
 				style="@style/BodyLinearLayoutItem"
 				android:inputType="text"
 				android:singleLine="true" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
 				android:text="@string/create" />

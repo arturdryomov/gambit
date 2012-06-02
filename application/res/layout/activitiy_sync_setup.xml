@@ -24,7 +24,7 @@
 		<LinearLayout style="@style/BodyLinearLayout" >
 
 			<CheckBox
-				android:id="@+id/syncWithExistingCheckbox"
+				android:id="@+id/checkbox_sync_with_existing_spreadsheet"
 				style="@style/BodyLinearLayoutItem"
 				android:text="@string/useExistingSpreadsheet"
 				android:textSize="@dimen/checkbox_text_size" />
@@ -34,18 +34,18 @@
 				android:text="@string/spreadsheetName" />
 
 			<EditText
-				android:id="@+id/spreadsheetNameEdit"
+				android:id="@+id/edit_spreadsheet_name"
 				style="@style/BodyLinearLayoutItem"
 				android:inputType="text"
 				android:singleLine="true" />
 
 			<Spinner
-				android:id="@+id/spreadsheetsSpinner"
+				android:id="@+id/spinner_spreadsheets"
 				style="@style/BodyLinearLayoutItem"
 				android:visibility="gone" />
 
 			<Button
-				android:id="@+id/confirmButton"
+				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
 				android:text="@string/setup" />

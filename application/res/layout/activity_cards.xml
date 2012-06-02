@@ -18,12 +18,12 @@
 			style="@style/ActionbarButtons" >
 
 			<ImageButton
-				android:id="@+id/updateButton"
+				android:id="@+id/button_update"
 				style="@style/ActionbarButton"
 				android:src="@drawable/ic_menu_sync" />
 
 			<ImageButton
-				android:id="@+id/itemCreationButton"
+				android:id="@+id/button_item_create"
 				style="@style/ActionbarButton"
 				android:src="@drawable/ic_menu_create_item" />
 		</LinearLayout>

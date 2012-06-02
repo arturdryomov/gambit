@@ -33,7 +33,7 @@ public class CardCreationActivity extends Activity
 	}
 
 	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.confirmButton);
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
 		confirmButton.setOnClickListener(confirmListener);
 	}
 
@@ -58,8 +58,8 @@ public class CardCreationActivity extends Activity
 	};
 
 	private void readUserDataFromFields() {
-		EditText frontSideEdit = (EditText) findViewById(R.id.frondSideEdit);
-		EditText backSideEdit = (EditText) findViewById(R.id.backSideEdit);
+		EditText frontSideEdit = (EditText) findViewById(R.id.edit_frond_side);
+		EditText backSideEdit = (EditText) findViewById(R.id.edit_back_side);
 
 		frontSideText = frontSideEdit.getText().toString().trim();
 		backSideText = backSideEdit.getText().toString().trim();

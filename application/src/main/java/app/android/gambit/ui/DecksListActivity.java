@@ -43,10 +43,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	}
 
 	private void initializeActionbar() {
-		ImageButton updateButton = (ImageButton) findViewById(R.id.updateButton);
+		ImageButton updateButton = (ImageButton) findViewById(R.id.button_update);
 		updateButton.setOnClickListener(updateListener);
 
-		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
+		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.button_item_create);
 		itemCreationButton.setOnClickListener(deckCreationListener);
 	}
 
@@ -187,15 +187,15 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		int deckPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.rename:
+			case R.id.menu_rename:
 				callDeckEditing(deckPosition);
 				return true;
 
-			case R.id.editCards:
+			case R.id.menu_edit_cards:
 				callCardsEditing(deckPosition);
 				return true;
 
-			case R.id.delete:
+			case R.id.menu_delete:
 				callDeckDeleting(deckPosition);
 				return true;
 
@@ -313,7 +313,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.settings:
+			case R.id.menu_settings:
 				callSettings();
 				return true;
 

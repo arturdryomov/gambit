@@ -47,10 +47,10 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	private void initializeActionbar() {
-		ImageButton updateButton = (ImageButton) findViewById(R.id.updateButton);
+		ImageButton updateButton = (ImageButton) findViewById(R.id.button_update);
 		updateButton.setOnClickListener(updateListener);
 
-		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.itemCreationButton);
+		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.button_item_create);
 		itemCreationButton.setOnClickListener(cardCreationListener);
 	}
 
@@ -117,7 +117,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	protected void initializeList() {
 		SimpleAdapter cardsAdapter = new SimpleAdapter(activityContext, listData,
 			R.layout.list_item_two_line, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
-			new int[] { R.id.title, R.id.description });
+			new int[] { R.id.text_first_line, R.id.test_second_line});
 
 		setListAdapter(cardsAdapter);
 
@@ -225,11 +225,11 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		int cardPosition = itemInfo.position;
 
 		switch (item.getItemId()) {
-			case R.id.delete:
+			case R.id.menu_delete:
 				callCardDeleting(cardPosition);
 				return true;
 
-			case R.id.edit:
+			case R.id.menu_edit:
 				callCardEditing(cardPosition);
 				return true;
 

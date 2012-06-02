@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
 	<item
-		android:id="@+id/back"
+		android:id="@+id/menu_back"
 		android:icon="@drawable/ic_menu_back"
 		android:title="@string/toFirstCard"/>
 	<item
-		android:id="@+id/shuffle"
+		android:id="@+id/menu_shuffle"
 		android:icon="@drawable/ic_menu_shuffle"
 		android:title="@string/shuffle"/>
 	<item
-		android:id="@+id/reset"
+		android:id="@+id/menu_reset"
 		android:icon="@drawable/ic_menu_revert"
 		android:title="@string/resetOrder"/>
 

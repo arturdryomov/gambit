@@ -53,18 +53,18 @@ public class SyncSetupActivity extends Activity
 	}
 
 	private void initializeBodyControls() {
-		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.spreadsheetNameEdit);
+		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.edit_spreadsheet_name);
 		spreadsheetNameEdit.setText(getString(R.string.cards));
 
 		initializeSpreadsheetsAdapter();
 
-		CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.syncWithExistingCheckbox);
+		CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.checkbox_sync_with_existing_spreadsheet);
 		syncModeCheckbox.setChecked(false);
 		syncModeCheckbox.setOnCheckedChangeListener(syncModeListener);
 	}
 
 	private void initializeSpreadsheetsAdapter() {
-		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spinner_spreadsheets);
 
 		SimpleAdapter spreadsheetsAdapter = new SimpleAdapter(activityContext, spreadsheets,
 			R.layout.list_item_two_line, new String[] { SPREADSHEET_ITEM_TEXT_ID },
@@ -90,8 +90,8 @@ public class SyncSetupActivity extends Activity
 	};
 
 	private void updateSyncModeDependentControls() {
-		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.spreadsheetNameEdit);
-		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+		EditText spreadsheetNameEdit = (EditText) findViewById(R.id.edit_spreadsheet_name);
+		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spinner_spreadsheets);
 
 		switch (currentSyncMode) {
 			case NEW:
@@ -144,12 +144,12 @@ public class SyncSetupActivity extends Activity
 		}
 
 		private void hideSyncModeCheckbox() {
-			CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.syncWithExistingCheckbox);
+			CheckBox syncModeCheckbox = (CheckBox) findViewById(R.id.checkbox_sync_with_existing_spreadsheet);
 			syncModeCheckbox.setVisibility(View.GONE);
 		}
 
 		private void updateSpreadsheetsSpinner() {
-			Spinner spreadsheetsSpinenr = (Spinner) findViewById(R.id.spreadsheetsSpinner);
+			Spinner spreadsheetsSpinenr = (Spinner) findViewById(R.id.spinner_spreadsheets);
 			((SimpleAdapter) spreadsheetsSpinenr.getAdapter()).notifyDataSetChanged();
 		}
 	}
