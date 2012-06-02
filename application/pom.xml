@@ -12,7 +12,7 @@
 		<version>0.0.1</version>
 		<groupId>app.android</groupId>
 	</parent>
-	
+
 	<dependencies>
 		<dependency>
 			<artifactId>android</artifactId>
@@ -29,7 +29,7 @@
 
 		<dependency>
 			<artifactId>google-api-client</artifactId>
-			<version>1.8.0-beta</version>
+			<version>1.9.0-beta</version>
 			<groupId>com.google.api-client</groupId>
 
 			<exclusions>
@@ -57,7 +57,7 @@
 
 		<dependency>
 			<artifactId>google-http-client</artifactId>
-			<version>1.8.3-beta</version>
+			<version>1.9.0-beta</version>
 			<groupId>com.google.http-client</groupId>
 
 			<exclusions>
