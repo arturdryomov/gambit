@@ -1,12 +1,8 @@
 package app.android.gambit.ui;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,75 +11,24 @@ import app.android.gambit.local.AlreadyExistsException;
 import app.android.gambit.local.Deck;
 
 
-public class DeckRenamingActivity extends Activity
+public class DeckRenamingActivity extends DeckCreationActivity
 {
-	private final Context activityContext = this;
-
 	private Deck deck;
 	private String deckName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_deck_creation);
 
 		setActivityViewsInscriptions();
-
-		initializeBodyControls();
 
 		processReceivedDeck();
 		setUpReceivedDeckData();
 	}
 
-	private void setActivityViewsInscriptions() {
-		TextView actionBarTitle = (TextView) findViewById(R.id.text_action_bar);
-		actionBarTitle.setText(R.string.title_deck_renaming);
-
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setText(R.string.button_rename_deck);
-	}
-
-	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setOnClickListener(confirmListener);
-	}
-
-	private final OnClickListener confirmListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			readUserDataFromFields();
-
-			String userDataErrorMessage = getUserDataErrorMessage();
-
-			if (userDataErrorMessage.isEmpty()) {
-				callDeckUpdating();
-			}
-			else {
-				UserAlerter.alert(activityContext, userDataErrorMessage);
-			}
-		}
-
-		private void callDeckUpdating() {
-			new DeckUpdatingTask().execute();
-		}
-	};
-
-	private void readUserDataFromFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
-
-		deckName = deckNameEdit.getText().toString().trim();
-	}
-
-	private String getUserDataErrorMessage() {
-		return getDeckNameErrorMessage();
-	}
-
-	private String getDeckNameErrorMessage() {
-		if (deckName.isEmpty()) {
-			return getString(R.string.error_empty_deck_name);
-		}
-
-		return new String();
+	@Override
+	protected void performSubmitAction() {
+		new DeckUpdatingTask().execute();
 	}
 
 	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
@@ -119,6 +64,14 @@ public class DeckRenamingActivity extends Activity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
+	}
+
+	private void setActivityViewsInscriptions() {
+		TextView actionBarTitle = (TextView) findViewById(R.id.text_action_bar);
+		actionBarTitle.setText(R.string.title_deck_renaming);
+
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
+		confirmButton.setText(R.string.button_rename_deck);
 	}
 
 	private void processReceivedDeck() {

@@ -1,12 +1,8 @@
 package app.android.gambit.ui;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,10 +10,8 @@ import app.android.gambit.R;
 import app.android.gambit.local.Card;
 
 
-public class CardEditingActivity extends Activity
+public class CardEditingActivity extends CardCreationActivity
 {
-	private final Context activityContext = this;
-
 	private Card card;
 	private String frontSideText;
 	private String backSideText;
@@ -25,87 +19,15 @@ public class CardEditingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_card_creation);
 
 		setActivityViewsInscriptions();
 
-		initializeBodyControls();
-
-		processReceivedCard();
 		setUpReceivedCardData();
 	}
 
-	private void setActivityViewsInscriptions() {
-		TextView actionBarTitle = (TextView) findViewById(R.id.text_action_bar);
-		actionBarTitle.setText(R.string.title_card_editing);
-
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setText(R.string.button_update_card);
-	}
-
-	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setOnClickListener(confirmListener);
-	}
-
-	private final OnClickListener confirmListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			readUserDataFromFields();
-
-			String userDataErrorMessage = getUserDataErrorMessage();
-
-			if (userDataErrorMessage.isEmpty()) {
-				callCardUpdating();
-			}
-			else {
-				UserAlerter.alert(activityContext, userDataErrorMessage);
-			}
-		}
-
-		private void callCardUpdating() {
-			new CardUpdatingTask().execute();
-		}
-	};
-
-	private void readUserDataFromFields() {
-		EditText frontSideEdit = (EditText) findViewById(R.id.edit_frond_side);
-		EditText backSideEdit = (EditText) findViewById(R.id.edit_back_side);
-
-		frontSideText = frontSideEdit.getText().toString().trim();
-		backSideText = backSideEdit.getText().toString().trim();
-	}
-
-	private String getUserDataErrorMessage() {
-		String errorMessage;
-
-		errorMessage = getFrontSideTextErrorMessage();
-		if (!errorMessage.isEmpty()) {
-			return errorMessage;
-		}
-
-		errorMessage = getBackSideTextErrorMessage();
-		if (!errorMessage.isEmpty()) {
-			return errorMessage;
-		}
-
-		return errorMessage;
-	}
-
-	private String getFrontSideTextErrorMessage() {
-		if (frontSideText.isEmpty()) {
-			return getString(R.string.error_empty_card_front_text);
-		}
-
-		return new String();
-	}
-
-	private String getBackSideTextErrorMessage() {
-		if (backSideText.isEmpty()) {
-			return getString(R.string.error_empty_card_back_text);
-		}
-
-		return new String();
+	@Override
+	protected void performSubmitAction() {
+		new CardUpdatingTask().execute();
 	}
 
 	private class CardUpdatingTask extends AsyncTask<Void, Void, Void>
@@ -134,7 +56,8 @@ public class CardEditingActivity extends Activity
 		}
 	}
 
-	private void processReceivedCard() {
+	@Override
+	protected void processReceivedData() {
 		Bundle receivedData = this.getIntent().getExtras();
 
 		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
@@ -145,6 +68,14 @@ public class CardEditingActivity extends Activity
 
 			finish();
 		}
+	}
+
+	private void setActivityViewsInscriptions() {
+		TextView actionBarTitle = (TextView) findViewById(R.id.text_action_bar);
+		actionBarTitle.setText(R.string.title_card_editing);
+
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
+		confirmButton.setText(R.string.button_update_card);
 	}
 
 	private void setUpReceivedCardData() {
