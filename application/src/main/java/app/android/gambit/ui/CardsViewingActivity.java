@@ -60,7 +60,7 @@ public class CardsViewingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cards_viewing);
+		setContentView(R.layout.activity_cards_viewing);
 
 		initializeSensor();
 

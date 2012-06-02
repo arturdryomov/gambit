@@ -3,15 +3,15 @@
 
 	<item
 		android:id="@+id/back"
-		android:icon="@drawable/menu_back"
+		android:icon="@drawable/ic_menu_back"
 		android:title="@string/toFirstCard"/>
 	<item
 		android:id="@+id/shuffle"
-		android:icon="@drawable/menu_shuffle"
+		android:icon="@drawable/ic_menu_shuffle"
 		android:title="@string/shuffle"/>
 	<item
 		android:id="@+id/reset"
-		android:icon="@drawable/menu_revert"
+		android:icon="@drawable/ic_menu_revert"
 		android:title="@string/resetOrder"/>
 
 </menu>

@@ -38,7 +38,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cards);
+		setContentView(R.layout.activity_cards);
 
 		initializeActionbar();
 		initializeList();
@@ -116,7 +116,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void initializeList() {
 		SimpleAdapter cardsAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.cards_list_item, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
+			R.layout.list_item_two_line, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
 			new int[] { R.id.title, R.id.description });
 
 		setListAdapter(cardsAdapter);

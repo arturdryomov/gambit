@@ -20,12 +20,12 @@
 			<ImageButton
 				android:id="@+id/updateButton"
 				style="@style/ActionbarButton"
-				android:src="@drawable/actionbar_update_icon" />
+				android:src="@drawable/ic_menu_sync" />
 
 			<ImageButton
 				android:id="@+id/itemCreationButton"
 				style="@style/ActionbarButton"
-				android:src="@drawable/actionbar_add_new_item_icon" />
+				android:src="@drawable/ic_menu_create_item" />
 		</LinearLayout>
 	</RelativeLayout>
 

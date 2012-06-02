@@ -13,7 +13,7 @@
 
 	<application
 		android:name="GambitApplication"
-		android:icon="@drawable/icon"
+		android:icon="@drawable/ic_launcher_gambit"
 		android:label="@string/applicationName"
 		android:theme="@android:style/Theme.Light.NoTitleBar">
 

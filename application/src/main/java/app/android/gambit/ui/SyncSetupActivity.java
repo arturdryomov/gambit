@@ -45,7 +45,7 @@ public class SyncSetupActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sync_setup);
+		setContentView(R.layout.activitiy_sync_setup);
 
 		initializeBodyControls();
 
@@ -67,7 +67,7 @@ public class SyncSetupActivity extends Activity
 		Spinner spreadsheetsSpinner = (Spinner) findViewById(R.id.spreadsheetsSpinner);
 
 		SimpleAdapter spreadsheetsAdapter = new SimpleAdapter(activityContext, spreadsheets,
-			R.layout.cards_list_item, new String[] { SPREADSHEET_ITEM_TEXT_ID },
+			R.layout.list_item_two_line, new String[] { SPREADSHEET_ITEM_TEXT_ID },
 			new int[] { android.R.layout.simple_spinner_item });
 
 		spreadsheetsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
