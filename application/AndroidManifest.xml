@@ -26,7 +26,27 @@
 		</activity>
 
 		<activity
-			android:name=".ui.DeckCreationActivity">
+			android:theme="@style/Theme.Gambit"
+			android:name=".ui.DeckCreationActivity"
+			android:label="@string/title_deck_creation" >
+		</activity>
+
+		<activity
+			android:theme="@style/Theme.Gambit"
+			android:name=".ui.DeckRenamingActivity"
+			android:label="@string/title_deck_renaming" >
+		</activity>
+
+		<activity
+			android:theme="@style/Theme.Gambit"
+			android:name=".ui.CardCreationActivity"
+			android:label="@string/title_card_creation" >
+		</activity>
+
+		<activity
+			android:theme="@style/Theme.Gambit"
+			android:name=".ui.CardEditingActivity"
+			android:label="@string/title_card_editing" >
 		</activity>
 
 		<activity
@@ -34,20 +54,8 @@
 		</activity>
 
 		<activity
-			android:name=".ui.CardCreationActivity">
-		</activity>
-
-		<activity
 			android:name=".ui.CardsViewingActivity"
 			android:configChanges="keyboardHidden|orientation">
-		</activity>
-
-		<activity
-			android:name=".ui.DeckRenamingActivity">
-		</activity>
-
-		<activity
-			android:name=".ui.CardEditingActivity">
 		</activity>
 
 		<activity

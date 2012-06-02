@@ -2,6 +2,6 @@
 .project
 .settings
 
-bin
-gen
-target
+bin/
+gen*/
+target/

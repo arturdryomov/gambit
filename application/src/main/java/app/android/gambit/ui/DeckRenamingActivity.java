@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
 import app.android.gambit.local.Deck;
@@ -14,7 +13,6 @@ import app.android.gambit.local.Deck;
 public class DeckRenamingActivity extends DeckCreationActivity
 {
 	private Deck deck;
-	private String deckName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +65,6 @@ public class DeckRenamingActivity extends DeckCreationActivity
 	}
 
 	private void setActivityViewsInscriptions() {
-		TextView actionBarTitle = (TextView) findViewById(R.id.text_action_bar);
-		actionBarTitle.setText(R.string.title_deck_renaming);
-
 		Button confirmButton = (Button) findViewById(R.id.button_confirm);
 		confirmButton.setText(R.string.button_rename_deck);
 	}

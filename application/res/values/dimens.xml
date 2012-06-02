@@ -6,6 +6,7 @@
 	<dimen name="actionbar_title_text_left_padding">10dp</dimen>
 	<dimen name="actionbar_items_separator_width">1dp</dimen>
 
+	<dimen name="form_item_top_margin">10dp</dimen>
 	<dimen name="confirm_button_top_margin">20dp</dimen>
 	<dimen name="list_item_padding">7dp</dimen>
 	<dimen name="body_layout_padding">20dp</dimen>
