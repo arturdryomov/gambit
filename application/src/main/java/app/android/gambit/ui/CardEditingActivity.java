@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
 
@@ -24,12 +25,22 @@ public class CardEditingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_card_editing);
+		setContentView(R.layout.activity_card_creation);
+
+		setActivityViewsInscriptions();
 
 		initializeBodyControls();
 
 		processReceivedCard();
 		setUpReceivedCardData();
+	}
+
+	private void setActivityViewsInscriptions() {
+		TextView actionBarTitle = (TextView) findViewById(R.id.text_action_bar);
+		actionBarTitle.setText(R.string.title_card_editing);
+
+		Button confirmButton = (Button) findViewById(R.id.button_confirm);
+		confirmButton.setText(R.string.button_update_card);
 	}
 
 	private void initializeBodyControls() {

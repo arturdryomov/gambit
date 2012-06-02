@@ -10,6 +10,7 @@
 		style="@style/ActionBar" >
 
 		<TextView
+			android:id="@+id/text_action_bar"
 			style="@style/ActionBarTitle"
 			android:text="@string/title_card_creation" />
 	</RelativeLayout>
@@ -46,7 +47,7 @@
 				android:id="@+id/button_confirm"
 				style="@style/BodyLinearLayoutItem"
 				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/button_create" />
+				android:text="@string/button_create_card" />
 		</LinearLayout>
 	</ScrollView>
 

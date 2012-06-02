@@ -45,6 +45,10 @@
 	<string name="signature_sync_document_name">Sync document name</string>
 
 	<string name="button_create">Create</string>
+	<string name="button_create_deck">Create deck</string>
+	<string name="button_rename_deck">Rename deck</string>
+	<string name="button_create_card">Create flashcard</string>
+	<string name="button_update_card">Update flashcard</string>
 	<string name="button_save">Save</string>
 
 	<string name="menu_delete">Delete</string>
