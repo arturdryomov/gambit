@@ -13,7 +13,7 @@ import app.android.gambit.local.Deck;
 
 public class DeckCreationActivity extends FormActivity
 {
-	private String deckName;
+	protected String deckName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

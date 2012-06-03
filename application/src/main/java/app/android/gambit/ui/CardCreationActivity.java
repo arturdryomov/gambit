@@ -12,8 +12,8 @@ public class CardCreationActivity extends FormActivity
 {
 	private Deck deck;
 
-	private String frontSideText;
-	private String backSideText;
+	protected String frontSideText;
+	protected String backSideText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

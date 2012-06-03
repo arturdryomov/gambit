@@ -1,54 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" >
 
-	<!-- Actionbar -->
+	<LinearLayout style="@style/BodyLinearLayout">
 
-	<RelativeLayout
-		android:id="@+id/action_bar"
-		style="@style/ActionBar" >
+		<EditText
+			android:id="@+id/edit_frond_side"
+			style="@style/BodyLinearLayoutItem"
+			android:hint="@string/signature_card_front_text"
+			android:inputType="text" />
 
-		<TextView
-			android:id="@+id/text_action_bar"
-			style="@style/ActionBarTitle"
-			android:text="@string/title_card_creation" />
-	</RelativeLayout>
+		<EditText
+			android:id="@+id/edit_back_side"
+			style="@style/BodyLinearLayoutItem"
+			android:layout_marginTop="@dimen/form_item_top_margin"
+			android:hint="@string/signature_card_back_text"
+			android:imeOptions="actionDone"
+			android:inputType="text" />
 
-	<!-- Main view -->
+		<Button
+			android:id="@+id/button_confirm"
+			style="@style/BodyLinearLayoutItem"
+			android:layout_marginTop="@dimen/confirm_button_top_margin"
+			android:text="@string/button_create_card" />
+	</LinearLayout>
 
-	<ScrollView
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_below="@id/action_bar" >
-
-		<LinearLayout style="@style/BodyLinearLayout" >
-
-			<TextView
-				style="@style/BodyLinearLayoutItem"
-				android:text="@string/signature_card_front_text" />
-
-			<EditText
-				android:id="@+id/edit_frond_side"
-				style="@style/BodyLinearLayoutItem"
-				android:inputType="text" />
-
-			<TextView
-				style="@style/BodyLinearLayoutItem"
-				android:text="@string/signature_card_back_text" />
-
-			<EditText
-				android:id="@+id/edit_back_side"
-				style="@style/BodyLinearLayoutItem"
-				android:imeOptions="actionDone"
-				android:inputType="text" />
-
-			<Button
-				android:id="@+id/button_confirm"
-				style="@style/BodyLinearLayoutItem"
-				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/button_create_card" />
-		</LinearLayout>
-	</ScrollView>
-
-</RelativeLayout>
+</ScrollView>

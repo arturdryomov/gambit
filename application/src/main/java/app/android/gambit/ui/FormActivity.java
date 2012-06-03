@@ -1,15 +1,15 @@
 package app.android.gambit.ui;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import app.android.gambit.R;
+import com.actionbarsherlock.app.SherlockActivity;
 
 
-public abstract class FormActivity extends Activity
+public abstract class FormActivity extends SherlockActivity
 {
 	protected final Context activityContext = this;
 

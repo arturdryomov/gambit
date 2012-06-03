@@ -15,14 +15,6 @@ public class IntentFactory
 		MESSAGE_ID = String.format("%s.message", IntentFactory.class.getPackage().getName());
 	}
 
-	public static Intent createSyncSetupIntent(Context context) {
-		return new Intent(context, SyncSetupActivity.class);
-	}
-
-	public static Intent createSettingsIntent(Context context) {
-		return new Intent(context, SettingsActivity.class);
-	}
-
 	public static Intent createDeckCreationIntent(Context context) {
 		return new Intent(context, DeckCreationActivity.class);
 	}

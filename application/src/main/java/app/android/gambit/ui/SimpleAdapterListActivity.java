@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.ListActivity;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockListActivity;
 
 
-public abstract class SimpleAdapterListActivity extends ListActivity
+public abstract class SimpleAdapterListActivity extends SherlockListActivity
 {
 	protected List<HashMap<String, Object>> listData;
 
