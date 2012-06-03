@@ -33,6 +33,7 @@
 	<string name="button_create_card">Create flashcard</string>
 	<string name="button_update_card">Update flashcard</string>
 
+	<string name="menu_accept">Accept</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_rename">Rename</string>
 	<string name="menu_edit">Edit</string>

@@ -2,7 +2,6 @@
 <resources>
 
 	<dimen name="margin_top_form_item">10dp</dimen>
-	<dimen name="margin_top_confirm_button">20dp</dimen>
 
 	<dimen name="padding_horizontal_list_item">8dp</dimen>
 	<dimen name="padding_body_layout">20dp</dimen>

@@ -11,12 +11,6 @@
 			android:inputType="text"
 			android:hint="@string/hint_deck_name"
 			android:singleLine="true" />
-
-		<Button
-			android:id="@+id/button_confirm"
-			style="@style/BodyLinearLayoutItem"
-			android:layout_marginTop="@dimen/margin_top_confirm_button"
-			android:text="@string/button_create_deck" />
 	</LinearLayout>
 
 </ScrollView>

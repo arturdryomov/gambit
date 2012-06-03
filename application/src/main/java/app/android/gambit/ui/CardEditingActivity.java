@@ -3,7 +3,6 @@ package app.android.gambit.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
@@ -16,8 +15,6 @@ public class CardEditingActivity extends CardCreationActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setActivityViewsInscriptions();
 
 		setUpReceivedCardData();
 	}
@@ -55,11 +52,6 @@ public class CardEditingActivity extends CardCreationActivity
 
 			finish();
 		}
-	}
-
-	private void setActivityViewsInscriptions() {
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setText(R.string.button_update_card);
 	}
 
 	private void setUpReceivedCardData() {

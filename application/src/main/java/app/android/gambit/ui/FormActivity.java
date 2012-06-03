@@ -2,11 +2,10 @@ package app.android.gambit.ui;
 
 
 import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import app.android.gambit.R;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 
 abstract class FormActivity extends SherlockActivity
@@ -14,33 +13,36 @@ abstract class FormActivity extends SherlockActivity
 	protected final Context activityContext = this;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_item_editing, menu);
 
-		initializeConfirmButton();
+		return true;
 	}
 
-	protected void initializeConfirmButton() {
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setOnClickListener(confirmListener);
-	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_accept:
+				checkAndAcceptUserData();
+				return true;
 
-	private final View.OnClickListener confirmListener = new View.OnClickListener()
-	{
-		@Override
-		public void onClick(View view) {
-			readUserDataFromFields();
-
-			String userDataErrorMessage = getUserDataErrorMessage();
-
-			if (userDataErrorMessage.isEmpty()) {
-				performSubmitAction();
-			}
-			else {
-				UserAlerter.alert(activityContext, userDataErrorMessage);
-			}
+			default:
+				return super.onOptionsItemSelected(item);
 		}
-	};
+	}
+
+	private void checkAndAcceptUserData() {
+		readUserDataFromFields();
+
+		String userDataErrorMessage = getUserDataErrorMessage();
+
+		if (userDataErrorMessage.isEmpty()) {
+			performSubmitAction();
+		}
+		else {
+			UserAlerter.alert(activityContext, userDataErrorMessage);
+		}
+	}
 
 	protected abstract void readUserDataFromFields();
 

@@ -18,12 +18,6 @@
 			android:hint="@string/hint_card_back_text"
 			android:imeOptions="actionDone"
 			android:inputType="text" />
-
-		<Button
-			android:id="@+id/button_confirm"
-			style="@style/BodyLinearLayoutItem"
-			android:layout_marginTop="@dimen/margin_top_confirm_button"
-			android:text="@string/button_create_card" />
 	</LinearLayout>
 
 </ScrollView>

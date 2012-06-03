@@ -3,7 +3,6 @@ package app.android.gambit.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
@@ -17,8 +16,6 @@ public class DeckRenamingActivity extends DeckCreationActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setActivityViewsInscriptions();
 
 		processReceivedDeck();
 		setUpReceivedDeckData();
@@ -52,11 +49,6 @@ public class DeckRenamingActivity extends DeckCreationActivity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
-	}
-
-	private void setActivityViewsInscriptions() {
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setText(R.string.button_rename_deck);
 	}
 
 	private void processReceivedDeck() {
