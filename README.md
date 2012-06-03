@@ -10,7 +10,11 @@ training. Do you want it? Just shake your phone and it’ll be done.
 * There are thousands of cards and you’d forgot where did you stop?
 No problema — Gambit remembers your current position in deck.
 
-## Get it!
+## Building
 
-We’re currently developing it, but if you want to build it —
-[you’re welcome](https://github.com/ming13/gambit/wiki/Building).
+The build requires Maven and the Android SDK to be installed.
+
+Building process is very simple:
+
+* `mvn -f application/pom.xml clean package` command builds application APK that you could find in `application/target` directory.
+* `mvn clean install` will build application and run tests.
