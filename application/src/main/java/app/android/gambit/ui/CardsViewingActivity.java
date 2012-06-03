@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -14,17 +13,16 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
 import app.android.gambit.local.Deck;
+import com.actionbarsherlock.app.SherlockActivity;
 
 
-public class CardsViewingActivity extends Activity
+public class CardsViewingActivity extends SherlockActivity
 {
 	private final Context activityContext = this;
 
@@ -308,14 +306,14 @@ public class CardsViewingActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.cards_viewing_menu, menu);
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_viewing, menu);
 
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_shuffle:
 				loadCards(CardsOrder.SHUFFLE);

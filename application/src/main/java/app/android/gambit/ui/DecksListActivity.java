@@ -76,6 +76,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		public boolean onCreateActionMode(ActionMode actionMode, android.view.Menu menu) {
 			actionMode.getMenuInflater().inflate(R.menu.menu_context_decks, menu);
+
 			return true;
 		}
 
