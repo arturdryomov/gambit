@@ -62,14 +62,6 @@
 			android:name=".ui.CardsViewingActivity"
 			android:configChanges="keyboardHidden|orientation">
 		</activity>
-
-		<activity
-			android:name=".ui.SettingsActivity">
-		</activity>
-
-		<activity
-			android:name=".ui.SyncSetupActivity">
-		</activity>
 	</application>
 
 </manifest>
