@@ -22,12 +22,6 @@
 		</dependency>
 
 		<dependency>
-			<artifactId>support-v4</artifactId>
-			<version>r7</version>
-			<groupId>com.google.android</groupId>
-		</dependency>
-
-		<dependency>
 			<artifactId>library</artifactId>
 			<version>4.1.0</version>
 			<groupId>com.actionbarsherlock</groupId>
