@@ -183,7 +183,7 @@ public class CardsViewingActivity extends Activity
 
 		private void initializeCardsAdapter() {
 			CardsAdapter cardsAdapter = new CardsAdapter();
-			ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+			ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
 			cardsPager.setAdapter(cardsAdapter);
 		}
 
@@ -289,7 +289,7 @@ public class CardsViewingActivity extends Activity
 	}
 
 	private void setCurrentCardPosition(int position) {
-		ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+		ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
 
 		cardsPager.setCurrentItem(position);
 	}
@@ -369,7 +369,7 @@ public class CardsViewingActivity extends Activity
 		}
 
 		private int getCurrentCardPosition() {
-			ViewPager cardsPager = (ViewPager) findViewById(R.id.cardsPager);
+			ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
 
 			return cardsPager.getCurrentItem();
 		}

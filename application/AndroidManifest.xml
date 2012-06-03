@@ -59,7 +59,9 @@
 		</activity>
 
 		<activity
+			android:theme="@style/Theme.Gambit"
 			android:name=".ui.CardsViewingActivity"
+			android:label="@string/title_cards"
 			android:configChanges="keyboardHidden|orientation">
 		</activity>
 	</application>
