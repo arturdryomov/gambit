@@ -1,63 +1,30 @@
 package app.android.gambit.ui;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.Deck;
 
 
-public class CardCreationActivity extends Activity
+public class CardCreationActivity extends FormActivity
 {
-	private final Context activityContext = this;
-
 	private Deck deck;
 
-	private String frontSideText;
-	private String backSideText;
+	protected String frontSideText;
+	protected String backSideText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_card_creation);
+		super.onCreate(savedInstanceState);
 
-		initializeBodyControls();
-
-		processReceivedDeck();
+		processReceivedData();
 	}
 
-	private void initializeBodyControls() {
-		Button confirmButton = (Button) findViewById(R.id.button_confirm);
-		confirmButton.setOnClickListener(confirmListener);
-	}
-
-	private final OnClickListener confirmListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			readUserDataFromFields();
-
-			String userDataErrorMessage = getUserDataErrorMessage();
-
-			if (userDataErrorMessage.isEmpty()) {
-				callCardCreation();
-			}
-			else {
-				UserAlerter.alert(activityContext, userDataErrorMessage);
-			}
-		}
-
-		private void callCardCreation() {
-			new CardCreationTask().execute();
-		}
-	};
-
-	private void readUserDataFromFields() {
+	@Override
+	protected void readUserDataFromFields() {
 		EditText frontSideEdit = (EditText) findViewById(R.id.edit_frond_side);
 		EditText backSideEdit = (EditText) findViewById(R.id.edit_back_side);
 
@@ -65,7 +32,8 @@ public class CardCreationActivity extends Activity
 		backSideText = backSideEdit.getText().toString().trim();
 	}
 
-	private String getUserDataErrorMessage() {
+	@Override
+	protected String getUserDataErrorMessage() {
 		String errorMessage;
 
 		errorMessage = getFrontSideTextErrorMessage();
@@ -97,16 +65,13 @@ public class CardCreationActivity extends Activity
 		return new String();
 	}
 
+	@Override
+	protected void performSubmitAction() {
+		new CardCreationTask().execute();
+	}
+
 	private class CardCreationTask extends AsyncTask<Void, Void, Void>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loading_creating_card));
-		}
-
 		@Override
 		protected Void doInBackground(Void... params) {
 			deck.addNewCard(frontSideText, backSideText);
@@ -116,13 +81,11 @@ public class CardCreationActivity extends Activity
 
 		@Override
 		protected void onPostExecute(Void result) {
-			progressDialogHelper.hide();
-
 			finish();
 		}
 	}
 
-	private void processReceivedDeck() {
+	protected void processReceivedData() {
 		Bundle receivedData = this.getIntent().getExtras();
 
 		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {

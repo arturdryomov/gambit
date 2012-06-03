@@ -5,6 +5,6 @@ gen/
 
 # Maven
 
-target
+target/
 
 # Use global .gitignore for your IDE

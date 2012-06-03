@@ -5,60 +5,43 @@
 
 	<string name="title_decks">Decks</string>
 	<string name="title_cards">Flashcards</string>
-	<string name="title_deck_creation">Deck Creation</string>
-	<string name="title_deck_renaming">Deck Renaming</string>
-	<string name="title_cards_editing">Flashcards Editing</string>
-	<string name="title_card_creation">Flashcard Creation</string>
-	<string name="title_card_editing">Flashcard Editing</string>
-	<string name="title_choose_google_account">Choose Google Account</string>
-	<string name="title_sync_setup">Sync Setup</string>
-	<string name="title_setup">Setup</string>
+	<string name="title_new_deck">New deck</string>
+	<string name="title_rename_deck">Rename deck</string>
+	<string name="title_edit_cards">Edit flashcards</string>
+	<string name="title_new_card">New flashcard</string>
+	<string name="title_edit_card">Edit flashcard</string>
+	<string name="title_choose_google_account">Choose Google account</string>
 
-	<string name="empty_decks">There are no decks.</string>
-	<string name="empty_cards">There are no flashcards in this deck.</string>
+	<string name="empty_decks">No decks.</string>
+	<string name="empty_cards">No flashcards in deck.</string>
 
 	<string name="loading_decks">Loading decks…</string>
-	<string name="loading_creating_deck">Creating deck…</string>
-	<string name="loading_updating_deck">Updating deck…</string>
 	<string name="loading_cards">Loading flashcards…</string>
-	<string name="loading_creating_card">Creating flashcard…</string>
-	<string name="loading_updating_card">Updating flashcard…</string>
-	<string name="loading_shuffling_cards">Shuffling flashcards…</string>
-	<string name="loading_resetting_cards_order">Resetting cards order…</string>
-	<string name="loading_spreadsheets">Loading spreadsheets…</string>
 
 	<string name="error_unspecified">Ooops, some error just happened!</string>
 	<string name="error_empty_deck_name">Enter deck name.</string>
 	<string name="error_deck_already_exists">Deck with such name already exists.</string>
 	<string name="error_empty_card_front_text">Enter text for the front side of flashcard.</string>
 	<string name="error_empty_card_back_text">Enter text for the back side of flashcard.</string>
-	<string name="error_no_google_accounts">There are no Google accounts to sync.</string>
-	<string name="error_authentication">Authentication error.</string>
-	<string name="error_authentication_canceled">Authentication canceled.</string>
 
-	<string name="signature_deck_name">Deck name</string>
-	<string name="signature_card_front_text">Front side text</string>
-	<string name="signature_card_back_text">Back side text</string>
-	<string name="signature_use_existing_spreadsheet">Use existing spreadsheet for sync</string>
-	<string name="signature_spreadsheet_name">Spreadsheet name</string>
-	<string name="signature_google_spreadsheet_to_sync">Title of Google Spreadsheet to sync</string>
-	<string name="signature_sync_document_name">Sync document name</string>
+	<string name="hint_deck_name">Deck name</string>
+	<string name="hint_card_front_text">Front side text</string>
+	<string name="hint_card_back_text">Back side text</string>
 
-	<string name="button_create">Create</string>
-	<string name="button_save">Save</string>
+	<string name="button_create_deck">Create deck</string>
+	<string name="button_rename_deck">Rename deck</string>
+	<string name="button_create_card">Create flashcard</string>
+	<string name="button_update_card">Update flashcard</string>
 
+	<string name="menu_accept">Accept</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_rename">Rename</string>
 	<string name="menu_edit">Edit</string>
+	<string name="menu_sync">Sync</string>
+	<string name="menu_create_new_item">Create new item</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
 	<string name="menu_reset_order">Reset order</string>
 	<string name="menu_shuffle">Shuffle</string>
 	<string name="menu_to_first_card">Back to beginning</string>
-	<string name="menu_settings">Settings</string>
-
-	<string name="description_item_creation">Item creation</string>
-	<string name="description_sync">Sync</string>
-
-	<string name="key_sync_spreadsheet_name">SYNC_SPREADSHEET_NAME</string>
 
 </resources>

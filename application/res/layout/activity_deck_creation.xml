@@ -1,44 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" >
+	android:layout_height="fill_parent">
 
-	<!-- Actionbar -->
+	<LinearLayout style="@style/BodyLinearLayout">
 
-	<RelativeLayout
-		android:id="@+id/action_bar"
-		style="@style/ActionBar" >
+		<EditText
+			android:id="@+id/edit_deck_name"
+			style="@style/BodyLinearLayoutItem"
+			android:inputType="text"
+			android:hint="@string/hint_deck_name"
+			android:singleLine="true" />
+	</LinearLayout>
 
-		<TextView
-			style="@style/ActionBarTitle"
-			android:text="@string/title_deck_creation" />
-	</RelativeLayout>
-
-	<!-- Main view -->
-
-	<ScrollView
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_below="@id/action_bar" >
-
-		<LinearLayout style="@style/BodyLinearLayout" >
-
-			<TextView
-				style="@style/BodyLinearLayoutItem"
-				android:text="@string/signature_deck_name" />
-
-			<EditText
-				android:id="@+id/edit_deck_name"
-				style="@style/BodyLinearLayoutItem"
-				android:inputType="text"
-				android:singleLine="true" />
-
-			<Button
-				android:id="@+id/button_confirm"
-				style="@style/BodyLinearLayoutItem"
-				android:layout_marginTop="@dimen/confirm_button_top_margin"
-				android:text="@string/button_create" />
-		</LinearLayout>
-	</ScrollView>
-
-</RelativeLayout>
+</ScrollView>

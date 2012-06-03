@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/menu_back"
+		android:icon="@drawable/ic_menu_rewind"
+		android:title="@string/menu_to_first_card"
+		android:showAsAction="always" />
+
+	<item
+		android:id="@+id/menu_shuffle"
+		android:icon="@drawable/ic_menu_shuffle"
+		android:title="@string/menu_shuffle"
+		android:showAsAction="always" />
+
+	<item
+		android:id="@+id/menu_reset"
+		android:title="@string/menu_reset_order"
+		android:showAsAction="ifRoom" />
+
+</menu>
