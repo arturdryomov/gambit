@@ -58,7 +58,7 @@ public class CardEditingActivity extends CardCreationActivity
 		frontSideText = card.getFrontSideText();
 		backSideText = card.getBackSideText();
 
-		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_frond_side);
+		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side);
 		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side);
 
 		frontSideTextEdit.setText(frontSideText);

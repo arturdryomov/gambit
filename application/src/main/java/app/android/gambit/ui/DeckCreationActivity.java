@@ -4,7 +4,6 @@ package app.android.gambit.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
 import app.android.gambit.local.DbProvider;
@@ -23,9 +22,7 @@ public class DeckCreationActivity extends FormActivity
 
 	@Override
 	protected void readUserDataFromFields() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
-
-		deckName = deckNameEdit.getText().toString().trim();
+		deckName = getTextFromEdit(R.id.edit_deck_name);
 	}
 
 	@Override

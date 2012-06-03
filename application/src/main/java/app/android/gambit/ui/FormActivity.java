@@ -2,6 +2,7 @@ package app.android.gambit.ui;
 
 
 import android.content.Context;
+import android.widget.EditText;
 import app.android.gambit.R;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -45,6 +46,12 @@ abstract class FormActivity extends SherlockActivity
 	}
 
 	protected abstract void readUserDataFromFields();
+
+	protected String getTextFromEdit(int editTextId) {
+		EditText editText = (EditText) findViewById(editTextId);
+
+		return editText.getText().toString().trim();
+	}
 
 	protected abstract String getUserDataErrorMessage();
 

@@ -6,7 +6,7 @@
 	<LinearLayout style="@style/BodyLinearLayout">
 
 		<EditText
-			android:id="@+id/edit_frond_side"
+			android:id="@+id/edit_front_side"
 			style="@style/BodyLinearLayoutItem"
 			android:hint="@string/hint_card_front_text"
 			android:inputType="text" />

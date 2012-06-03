@@ -3,7 +3,6 @@ package app.android.gambit.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.Deck;
 
@@ -25,11 +24,8 @@ public class CardCreationActivity extends FormActivity
 
 	@Override
 	protected void readUserDataFromFields() {
-		EditText frontSideEdit = (EditText) findViewById(R.id.edit_frond_side);
-		EditText backSideEdit = (EditText) findViewById(R.id.edit_back_side);
-
-		frontSideText = frontSideEdit.getText().toString().trim();
-		backSideText = backSideEdit.getText().toString().trim();
+		frontSideText = getTextFromEdit(R.id.edit_front_side);
+		backSideText = getTextFromEdit(R.id.edit_back_side);
 	}
 
 	@Override
