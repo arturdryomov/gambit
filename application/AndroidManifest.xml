@@ -18,8 +18,7 @@
 		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:name=".ui.DecksListActivity"
-			android:label="@string/title_decks">
+			android:name=".ui.DecksListActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 

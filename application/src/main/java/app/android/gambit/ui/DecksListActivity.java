@@ -29,6 +29,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_list);
 		super.onCreate(savedInstanceState);
+
+		// This is main activity that sets application launcher label. If title will be set in
+		//   AndroidManifest.xml then launcher sign will be not correct.
+		setTitle();
 	}
 
 	@Override
@@ -104,6 +108,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		@Override
 		public void onDestroyActionMode(ActionMode actionMode) {
 		}
+	}
+
+	private void setTitle() {
+		getSupportActionBar().setTitle(R.string.title_decks);
 	}
 
 	@Override
