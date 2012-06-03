@@ -40,10 +40,10 @@ public class DeckCreationActivity extends FormActivity
 
 	@Override
 	protected void performSubmitAction() {
-		new DeckCreationTask().execute();
+		new CreateDeckTask().execute();
 	}
 
-	private class DeckCreationTask extends AsyncTask<Void, Void, String>
+	private class CreateDeckTask extends AsyncTask<Void, Void, String>
 	{
 		private Deck deck;
 
@@ -62,8 +62,7 @@ public class DeckCreationActivity extends FormActivity
 		@Override
 		protected void onPostExecute(String errorMessage) {
 			if (errorMessage.isEmpty()) {
-				Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
-				startActivity(callIntent);
+				callCardsEditing(deck);
 
 				finish();
 			}
@@ -71,5 +70,10 @@ public class DeckCreationActivity extends FormActivity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
+	}
+
+	private void callCardsEditing(Deck deck) {
+		Intent callIntent = IntentFactory.createCardsEditingIntent(activityContext, deck);
+		startActivity(callIntent);
 	}
 }

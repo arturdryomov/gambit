@@ -84,29 +84,88 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-			switch (menuItem.getItemId()) {
-				case R.id.menu_rename:
-					callDeckEditing(selectedItemPosition);
-					actionMode.finish();
-					return true;
+			if (handleContextMenuItem(menuItem, selectedItemPosition)) {
+				actionMode.finish();
 
-				case R.id.menu_delete:
-					callDeckDeleting(selectedItemPosition);
-					actionMode.finish();
-					return true;
-
-				case R.id.menu_edit_cards:
-					callCardsEditing(selectedItemPosition);
-					actionMode.finish();
-					return true;
-
-				default:
-					return false;
+				return true;
 			}
+
+			return false;
 		}
 
 		@Override
 		public void onDestroyActionMode(ActionMode actionMode) {
+		}
+	}
+
+	private boolean handleContextMenuItem(MenuItem menuItem, int selectedItemPosition) {
+		switch (menuItem.getItemId()) {
+			case R.id.menu_rename:
+				callDeckRenaming(selectedItemPosition);
+				return true;
+
+			case R.id.menu_edit_cards:
+				callCardsEditing(selectedItemPosition);
+				return true;
+
+			case R.id.menu_delete:
+				callDeckDeleting(selectedItemPosition);
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	private void callDeckRenaming(int deckPosition) {
+		Deck deck = getDeck(deckPosition);
+
+		Intent callIntent = IntentFactory.createDeckEditingIntent(activityContext, deck);
+		startActivity(callIntent);
+	}
+
+	private Deck getDeck(int deckPosition) {
+		return (Deck) getObject(deckPosition);
+	}
+
+	private void callCardsEditing(int deckPosition) {
+		Deck deck = getDeck(deckPosition);
+
+		Intent callIntent = IntentFactory.createCardsEditingIntent(activityContext, deck);
+		startActivity(callIntent);
+	}
+
+	private void callDeckDeleting(int deckPosition) {
+		new DeleteDeckTask(deckPosition).execute();
+	}
+
+	private class DeleteDeckTask extends AsyncTask<Void, Void, Void>
+	{
+		private final int deckPosition;
+		private final Deck deck;
+
+		public DeleteDeckTask(int deckPosition) {
+			super();
+
+			this.deckPosition = deckPosition;
+			this.deck = getDeck(deckPosition);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			listData.remove(deckPosition);
+			updateList();
+
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.empty_decks));
+			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			DbProvider.getInstance().getDecks().deleteDeck(deck);
+
+			return null;
 		}
 	}
 
@@ -176,90 +235,23 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int deckPosition = itemInfo.position;
 
-		switch (item.getItemId()) {
-			case R.id.menu_rename:
-				callDeckEditing(deckPosition);
-				return true;
-
-			case R.id.menu_edit_cards:
-				callCardsEditing(deckPosition);
-				return true;
-
-			case R.id.menu_delete:
-				callDeckDeleting(deckPosition);
-				return true;
-
-			default:
-				return super.onContextItemSelected(item);
-		}
-	}
-
-	private void callDeckEditing(int deckPosition) {
-		Deck deck = getDeck(deckPosition);
-
-		Intent callIntent = IntentFactory.createDeckEditingIntent(activityContext, deck);
-		startActivity(callIntent);
-	}
-
-	private Deck getDeck(int deckPosition) {
-		return (Deck) getObject(deckPosition);
-	}
-
-	private void callCardsEditing(int deckPosition) {
-		Deck deck = getDeck(deckPosition);
-
-		Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
-		startActivity(callIntent);
-	}
-
-	private void callDeckDeleting(int deckPosition) {
-		new DeleteDeckTask(deckPosition).execute();
-	}
-
-	private class DeleteDeckTask extends AsyncTask<Void, Void, Void>
-	{
-		private final int deckPosition;
-		private final Deck deck;
-
-		public DeleteDeckTask(int deckPosition) {
-			super();
-
-			this.deckPosition = deckPosition;
-			this.deck = getDeck(deckPosition);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			listData.remove(deckPosition);
-			updateList();
-
-			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.empty_decks));
-			}
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			DbProvider.getInstance().getDecks().deleteDeck(deck);
-
-			return null;
-		}
+		return handleContextMenuItem(item, deckPosition);
 	}
 
 	@Override
 	protected void onListItemClick(ListView list, View view, int position, long id) {
-		callDeckViewing(position);
+		callCardsViewing(position);
 	}
 
-	private void callDeckViewing(int deckPosition) {
-		new ViewDeckTask(deckPosition).execute();
+	private void callCardsViewing(int deckPosition) {
+		new ViewCardsTask(deckPosition).execute();
 	}
 
-	private class ViewDeckTask extends AsyncTask<Void, Void, String>
+	private class ViewCardsTask extends AsyncTask<Void, Void, String>
 	{
 		private final Deck deck;
 
-		public ViewDeckTask(int deckPosition) {
+		public ViewCardsTask(int deckPosition) {
 			this.deck = getDeck(deckPosition);
 		}
 
@@ -281,11 +273,11 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				UserAlerter.alert(activityContext, errorMessage);
 			}
 		}
+	}
 
-		private void callCardsViewing(Deck deck) {
-			Intent callIntent = IntentFactory.createCardsViewingIntent(activityContext, deck);
-			startActivity(callIntent);
-		}
+	private void callCardsViewing(Deck deck) {
+		Intent callIntent = IntentFactory.createCardsViewingIntent(activityContext, deck);
+		startActivity(callIntent);
 	}
 
 	@Override

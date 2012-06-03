@@ -21,10 +21,10 @@ public class CardEditingActivity extends CardCreationActivity
 
 	@Override
 	protected void performSubmitAction() {
-		new CardUpdatingTask().execute();
+		new UpdateCardTask().execute();
 	}
 
-	private class CardUpdatingTask extends AsyncTask<Void, Void, Void>
+	private class UpdateCardTask extends AsyncTask<Void, Void, Void>
 	{
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -55,13 +55,10 @@ public class CardEditingActivity extends CardCreationActivity
 	}
 
 	private void setUpReceivedCardData() {
-		frontSideText = card.getFrontSideText();
-		backSideText = card.getBackSideText();
-
 		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side);
 		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side);
 
-		frontSideTextEdit.setText(frontSideText);
-		backSideTextEdit.setText(backSideText);
+		frontSideTextEdit.setText(card.getFrontSideText());
+		backSideTextEdit.setText(card.getBackSideText());
 	}
 }

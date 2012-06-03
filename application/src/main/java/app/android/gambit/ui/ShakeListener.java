@@ -14,19 +14,33 @@ class ShakeListener implements SensorEventListener
 	private static final int MAXIMUM_PAUSE_BETWEEN_DIRECTION_CHANGES = 200;
 	private static final int MAXIMUM_DURATION_OF_SHAKE = 400;
 
-	private long firstDirectionChangeTime = 0;
+	private long firstDirectionChangeTime;
 	private long lastDirectionChangeTime;
-	private int directionChangesCount = 0;
+	private int directionChangesCount;
 
-	private float lastX = 0;
-	private float lastY = 0;
-	private float lastZ = 0;
+	private float lastX;
+	private float lastY;
+	private float lastZ;
 
 	private OnShakeListener shakeListener;
 
 	public interface OnShakeListener
 	{
 		void onShake();
+	}
+
+	public ShakeListener() {
+		resetShakeParameters();
+	}
+
+	private void resetShakeParameters() {
+		firstDirectionChangeTime = 0;
+		lastDirectionChangeTime = 0;
+		directionChangesCount = 0;
+
+		lastX = 0;
+		lastY = 0;
+		lastZ = 0;
 	}
 
 	public void setOnShakeListener(OnShakeListener listener) {
@@ -74,18 +88,7 @@ class ShakeListener implements SensorEventListener
 		}
 	}
 
-	private void resetShakeParameters() {
-		firstDirectionChangeTime = 0;
-		directionChangesCount = 0;
-		lastDirectionChangeTime = 0;
-
-		lastX = 0;
-		lastY = 0;
-		lastZ = 0;
-	}
-
 	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// Just need to be implemented, but we don’t need it
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 }

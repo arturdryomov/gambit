@@ -30,19 +30,12 @@ public class CardCreationActivity extends FormActivity
 
 	@Override
 	protected String getUserDataErrorMessage() {
-		String errorMessage;
-
-		errorMessage = getFrontSideTextErrorMessage();
+		String errorMessage = getFrontSideTextErrorMessage();
 		if (!errorMessage.isEmpty()) {
 			return errorMessage;
 		}
 
-		errorMessage = getBackSideTextErrorMessage();
-		if (!errorMessage.isEmpty()) {
-			return errorMessage;
-		}
-
-		return errorMessage;
+		return getBackSideTextErrorMessage();
 	}
 
 	private String getFrontSideTextErrorMessage() {
@@ -63,10 +56,10 @@ public class CardCreationActivity extends FormActivity
 
 	@Override
 	protected void performSubmitAction() {
-		new CardCreationTask().execute();
+		new CreateCardTask().execute();
 	}
 
-	private class CardCreationTask extends AsyncTask<Void, Void, Void>
+	private class CreateCardTask extends AsyncTask<Void, Void, Void>
 	{
 		@Override
 		protected Void doInBackground(Void... params) {

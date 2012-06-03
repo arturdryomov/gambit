@@ -85,24 +85,77 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		@Override
 		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-			switch (menuItem.getItemId()) {
-				case R.id.menu_edit:
-					callCardEditing(selectedItemPosition);
-					actionMode.finish();
-					return true;
+			if (handleContextMenuItem(menuItem, selectedItemPosition)) {
+				actionMode.finish();
 
-				case R.id.menu_delete:
-					callCardDeleting(selectedItemPosition);
-					actionMode.finish();
-					return true;
-
-				default:
-					return false;
+				return true;
 			}
+
+			return false;
 		}
 
 		@Override
 		public void onDestroyActionMode(ActionMode actionMode) {
+		}
+	}
+
+	private boolean handleContextMenuItem(MenuItem menuItem, int selectedItemPosition) {
+		switch (menuItem.getItemId()) {
+			case R.id.menu_edit:
+				callCardEditing(selectedItemPosition);
+				return true;
+
+			case R.id.menu_delete:
+				callCardDeleting(selectedItemPosition);
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	private void callCardEditing(int cardPosition) {
+		Card card = getCard(cardPosition);
+
+		Intent callIntent = IntentFactory.createCardEditingIntent(activityContext, card);
+		startActivity(callIntent);
+	}
+
+	private Card getCard(int cardPosition) {
+		return (Card) getObject(cardPosition);
+	}
+
+	private void callCardDeleting(int cardPosition) {
+		new DeleteCardTask(cardPosition).execute();
+	}
+
+	private class DeleteCardTask extends AsyncTask<Void, Void, Void>
+	{
+		private final int cardPosition;
+		private final Card card;
+
+		public DeleteCardTask(int cardPosition) {
+			super();
+
+			this.cardPosition = cardPosition;
+			this.card = getCard(cardPosition);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			listData.remove(cardPosition);
+			updateList();
+
+			if (listData.isEmpty()) {
+				setEmptyListText(getString(R.string.empty_cards));
+			}
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			deck.deleteCard(card);
+
+			return null;
 		}
 	}
 
@@ -175,17 +228,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		callCardEditing(position);
 	}
 
-	private void callCardEditing(int cardPosition) {
-		Card card = getCard(cardPosition);
-
-		Intent callIntent = IntentFactory.createCardEditingIntent(activityContext, card);
-		startActivity(callIntent);
-	}
-
-	private Card getCard(int cardPosition) {
-		return (Card) getObject(cardPosition);
-	}
-
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -198,52 +240,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int cardPosition = itemInfo.position;
 
-		switch (item.getItemId()) {
-			case R.id.menu_delete:
-				callCardDeleting(cardPosition);
-				return true;
-
-			case R.id.menu_edit:
-				callCardEditing(cardPosition);
-				return true;
-
-			default:
-				return super.onContextItemSelected(item);
-		}
-	}
-
-	private void callCardDeleting(int cardPosition) {
-		new DeleteCardTask(cardPosition).execute();
-	}
-
-	private class DeleteCardTask extends AsyncTask<Void, Void, Void>
-	{
-		private final int cardPosition;
-		private final Card card;
-
-		public DeleteCardTask(int cardPosition) {
-			super();
-
-			this.cardPosition = cardPosition;
-			this.card = getCard(cardPosition);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			listData.remove(cardPosition);
-			updateList();
-
-			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.empty_cards));
-			}
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			deck.deleteCard(card);
-
-			return null;
-		}
+		return handleContextMenuItem(item, cardPosition);
 	}
 
 	@Override

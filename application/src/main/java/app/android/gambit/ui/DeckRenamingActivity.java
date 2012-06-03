@@ -23,10 +23,10 @@ public class DeckRenamingActivity extends DeckCreationActivity
 
 	@Override
 	protected void performSubmitAction() {
-		new DeckUpdatingTask().execute();
+		new UpdateDeckTask().execute();
 	}
 
-	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
+	private class UpdateDeckTask extends AsyncTask<Void, Void, String>
 	{
 		@Override
 		protected String doInBackground(Void... params) {

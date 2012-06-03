@@ -26,7 +26,7 @@ class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardsListIntent(Context context, Deck deck) {
+	public static Intent createCardsEditingIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, CardsListActivity.class);
 		intent.putExtra(MESSAGE_ID, deck);
 
