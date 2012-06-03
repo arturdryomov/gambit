@@ -1,5 +1,5 @@
 package app.android.gambit.ui;
 
-public class AuthorizationFailedException extends RuntimeException
+class AuthorizationFailedException extends RuntimeException
 {
 }

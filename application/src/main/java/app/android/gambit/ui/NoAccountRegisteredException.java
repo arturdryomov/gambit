@@ -1,6 +1,6 @@
 package app.android.gambit.ui;
 
 
-public class NoAccountRegisteredException extends RuntimeException
+class NoAccountRegisteredException extends RuntimeException
 {
 }

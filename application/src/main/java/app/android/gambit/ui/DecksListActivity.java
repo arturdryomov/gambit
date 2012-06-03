@@ -67,7 +67,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	private class ActionModeCallback implements ActionMode.Callback
 	{
-		private int selectedItemPosition;
+		private final int selectedItemPosition;
 
 		public ActionModeCallback(int selectedItemPosition) {
 			this.selectedItemPosition = selectedItemPosition;

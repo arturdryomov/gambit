@@ -9,7 +9,7 @@ import app.android.gambit.R;
 import com.actionbarsherlock.app.SherlockActivity;
 
 
-public abstract class FormActivity extends SherlockActivity
+abstract class FormActivity extends SherlockActivity
 {
 	protected final Context activityContext = this;
 

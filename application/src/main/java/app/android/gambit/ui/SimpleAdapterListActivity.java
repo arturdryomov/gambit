@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListActivity;
 
 
-public abstract class SimpleAdapterListActivity extends SherlockListActivity
+abstract class SimpleAdapterListActivity extends SherlockListActivity
 {
-	protected List<HashMap<String, Object>> listData;
+	protected final List<HashMap<String, Object>> listData;
 
 	public SimpleAdapterListActivity() {
 		super();

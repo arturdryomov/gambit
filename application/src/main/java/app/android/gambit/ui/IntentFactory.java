@@ -7,7 +7,7 @@ import app.android.gambit.local.Card;
 import app.android.gambit.local.Deck;
 
 
-public class IntentFactory
+class IntentFactory
 {
 	public static final String MESSAGE_ID;
 

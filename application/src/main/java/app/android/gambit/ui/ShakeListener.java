@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 
-public class ShakeListener implements SensorEventListener
+class ShakeListener implements SensorEventListener
 {
 	private static final int MINIMUM_FORCE = 10;
 	private static final int MINIMUM_DIRECTION_CHANGE_COUNT = 3;
