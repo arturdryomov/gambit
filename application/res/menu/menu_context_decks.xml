@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
 		android:id="@+id/menu_rename"
@@ -9,7 +9,7 @@
 
 	<item
 		android:id="@+id/menu_edit_cards"
-		android:title="@string/menu_edit_cards"/>
+		android:title="@string/menu_edit_cards" />
 
 	<item
 		android:id="@+id/menu_delete"

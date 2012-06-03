@@ -9,13 +9,13 @@
 			android:id="@+id/edit_deck_name"
 			style="@style/BodyLinearLayoutItem"
 			android:inputType="text"
-			android:hint="@string/signature_deck_name"
+			android:hint="@string/hint_deck_name"
 			android:singleLine="true" />
 
 		<Button
 			android:id="@+id/button_confirm"
 			style="@style/BodyLinearLayoutItem"
-			android:layout_marginTop="@dimen/confirm_button_top_margin"
+			android:layout_marginTop="@dimen/margin_top_confirm_button"
 			android:text="@string/button_create_deck" />
 	</LinearLayout>
 

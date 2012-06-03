@@ -19,7 +19,7 @@
 
 		<activity
 			android:name=".ui.DecksListActivity"
-			android:label="@string/title_decks" >
+			android:label="@string/title_decks">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -29,27 +29,27 @@
 
 		<activity
 			android:name=".ui.DeckCreationActivity"
-			android:label="@string/title_new_deck" >
+			android:label="@string/title_new_deck">
 		</activity>
 
 		<activity
 			android:name=".ui.DeckRenamingActivity"
-			android:label="@string/title_rename_deck" >
+			android:label="@string/title_rename_deck">
 		</activity>
 
 		<activity
 			android:name=".ui.CardCreationActivity"
-			android:label="@string/title_new_card" >
+			android:label="@string/title_new_card">
 		</activity>
 
 		<activity
 			android:name=".ui.CardEditingActivity"
-			android:label="@string/title_edit_card" >
+			android:label="@string/title_edit_card">
 		</activity>
 
 		<activity
 			android:name=".ui.CardsListActivity"
-			android:label="@string/title_edit_cards" >
+			android:label="@string/title_edit_cards">
 		</activity>
 
 		<activity

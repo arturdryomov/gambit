@@ -24,9 +24,9 @@
 	<string name="error_empty_card_front_text">Enter text for the front side of flashcard.</string>
 	<string name="error_empty_card_back_text">Enter text for the back side of flashcard.</string>
 
-	<string name="signature_deck_name">Deck name</string>
-	<string name="signature_card_front_text">Front side text</string>
-	<string name="signature_card_back_text">Back side text</string>
+	<string name="hint_deck_name">Deck name</string>
+	<string name="hint_card_front_text">Front side text</string>
+	<string name="hint_card_back_text">Back side text</string>
 
 	<string name="button_create_deck">Create deck</string>
 	<string name="button_rename_deck">Rename deck</string>
