@@ -1,46 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" >
-
-	<!-- Actionbar -->
-
-	<RelativeLayout
-		android:id="@+id/action_bar"
-		style="@style/ActionBar" >
-
-		<TextView
-			style="@style/ActionBarTitle"
-			android:text="@string/title_cards_editing" />
-
-		<LinearLayout
-			android:id="@+id/actions"
-			style="@style/ActionBarButtons" >
-
-			<ImageButton
-				android:id="@+id/button_update"
-				style="@style/ActionBarButton"
-				android:contentDescription="@string/description_sync"
-				android:src="@drawable/ic_menu_sync" />
-
-			<ImageButton
-				android:id="@+id/button_item_create"
-				style="@style/ActionBarButton"
-				android:contentDescription="@string/description_item_creation"
-				android:src="@drawable/ic_menu_create_item" />
-		</LinearLayout>
-	</RelativeLayout>
-
-	<!-- Main view -->
+	android:layout_height="fill_parent"
+	android:orientation="vertical" >
 
 	<ListView
 		android:id="@android:id/list"
-		style="@style/BodyListView"
-		android:layout_below="@id/action_bar" />
+		style="@style/BodyListView" />
 
 	<TextView
 		android:id="@android:id/empty"
 		style="@style/BodyEmptyListViewSign"
 		android:text="@string/empty_cards" />
 
-</RelativeLayout>
+</LinearLayout>

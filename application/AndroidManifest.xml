@@ -17,7 +17,10 @@
 		android:label="@string/application_name"
 		android:theme="@android:style/Theme.Light.NoTitleBar">
 
-		<activity android:name=".ui.DecksListActivity">
+		<activity
+			android:theme="@style/Theme.Gambit"
+			android:name=".ui.DecksListActivity"
+			android:label="@string/title_decks" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +53,9 @@
 		</activity>
 
 		<activity
-			android:name=".ui.CardsListActivity">
+			android:theme="@style/Theme.Gambit"
+			android:name=".ui.CardsListActivity"
+			android:label="@string/title_cards" >
 		</activity>
 
 		<activity

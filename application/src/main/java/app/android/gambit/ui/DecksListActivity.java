@@ -5,25 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.accounts.Account;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import app.android.gambit.R;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
+import com.actionbarsherlock.view.Menu;
 
 
 public class DecksListActivity extends SimpleAdapterListActivity
@@ -38,78 +34,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_decks);
 
-		initializeActionbar();
 		initializeList();
 	}
-
-	private void initializeActionbar() {
-		ImageButton updateButton = (ImageButton) findViewById(R.id.button_update);
-		updateButton.setOnClickListener(updateListener);
-
-		ImageButton itemCreationButton = (ImageButton) findViewById(R.id.button_item_create);
-		itemCreationButton.setOnClickListener(deckCreationListener);
-	}
-
-	private final OnClickListener updateListener = new OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			// TODO: Check sync document name existing
-			// if false — call sync setup, true — call update
-			callDecksUpdating();
-		}
-
-		private void callDecksUpdating() {
-			new UpdateDecksTask().execute();
-		}
-	};
-
-	private class UpdateDecksTask extends AsyncTask<Void, Void, String>
-	{
-		// Just obtain authorization token at moment
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				Activity activity = (Activity) activityContext;
-
-				Account account = AccountSelector.select(activity);
-
-				Authorizer authorizer = new Authorizer(activity);
-				String authToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
-
-				return String.format("Token received: '%s'.", authToken);
-			}
-			catch (NoAccountRegisteredException e) {
-				return getString(R.string.error_no_google_accounts);
-			}
-			// TODO: Remove this exception as useless
-			catch (AuthorizationCanceledException e) {
-				return getString(R.string.error_authentication_canceled);
-			}
-			catch (AuthorizationFailedException e) {
-				return getString(R.string.error_authentication);
-			}
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
-		}
-	}
-
-	private final OnClickListener deckCreationListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			callDeckCreation();
-		}
-
-		private void callDeckCreation() {
-			Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
-			activityContext.startActivity(callIntent);
-		}
-	};
 
 	@Override
 	protected void initializeList() {
@@ -305,16 +231,20 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.decks_menu, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_decks_and_cards, menu);
 
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_settings:
-				callSettings();
+			case R.id.menu_create_item:
+				callDeckCreation();
+				return true;
+
+			case R.id.menu_sync:
+				// TODO: Call decks updating
 				return true;
 
 			default:
@@ -322,8 +252,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private void callSettings() {
-		Intent callIntent = IntentFactory.createSettingsIntent(activityContext);
-		startActivity(callIntent);
+	private void callDeckCreation() {
+		Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
+		activityContext.startActivity(callIntent);
 	}
 }
