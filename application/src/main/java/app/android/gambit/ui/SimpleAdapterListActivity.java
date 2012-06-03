@@ -4,7 +4,10 @@ package app.android.gambit.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -12,12 +15,22 @@ import com.actionbarsherlock.app.SherlockListActivity;
 
 abstract class SimpleAdapterListActivity extends SherlockListActivity
 {
+	protected final Context activityContext = this;
+
 	protected final List<HashMap<String, Object>> listData;
+	protected static final String LIST_ITEM_OBJECT_ID = "object";
 
 	public SimpleAdapterListActivity() {
 		super();
 
 		listData = new ArrayList<HashMap<String, Object>>();
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		initializeList();
 	}
 
 	protected abstract void initializeList();
@@ -28,6 +41,8 @@ abstract class SimpleAdapterListActivity extends SherlockListActivity
 		for (Object itemData : itemsData) {
 			addItemToList(itemData);
 		}
+
+		updateList();
 	}
 
 	protected abstract void addItemToList(Object itemData);
@@ -40,5 +55,14 @@ abstract class SimpleAdapterListActivity extends SherlockListActivity
 		TextView textView = (TextView) getListView().getEmptyView();
 
 		textView.setText(text);
+	}
+
+	protected Object getObject(int listPosition) {
+		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(listPosition);
+
+		return adapterItem.get(LIST_ITEM_OBJECT_ID);
 	}
 }

@@ -3,9 +3,7 @@ package app.android.gambit.ui;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,20 +23,15 @@ import com.actionbarsherlock.view.Menu;
 
 public class CardsListActivity extends SimpleAdapterListActivity
 {
-	private final Context activityContext = this;
-
 	private Deck deck;
 
 	private static final String LIST_ITEM_FRONT_TEXT_ID = "front_text";
 	private static final String LIST_ITEM_BACK_TEXT_ID = "back_text";
-	private static final String LIST_ITEM_OBJECT_ID = "object";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list);
-
-		initializeList();
+		super.onCreate(savedInstanceState);
 
 		processReceivedDeck();
 	}
@@ -160,7 +153,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			}
 			else {
 				fillList(cards);
-				updateList();
 			}
 		}
 	}
@@ -191,12 +183,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	private Card getCard(int cardPosition) {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> adapterItem = (Map<String, Object>) listAdapter.getItem(cardPosition);
-
-		return (Card) adapterItem.get(LIST_ITEM_OBJECT_ID);
+		return (Card) getObject(cardPosition);
 	}
 
 	@Override
