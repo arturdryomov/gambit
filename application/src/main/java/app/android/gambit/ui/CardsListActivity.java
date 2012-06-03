@@ -8,12 +8,13 @@ import java.util.Map;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import app.android.gambit.R;
@@ -35,7 +36,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_cards);
+		setContentView(R.layout.activity_list);
 
 		initializeList();
 
@@ -52,7 +53,64 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		registerForContextMenu(getListView());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			getListView().setOnItemLongClickListener(actionModeListener);
+		}
+		else {
+			registerForContextMenu(getListView());
+		}
+	}
+
+	private final AdapterView.OnItemLongClickListener actionModeListener = new AdapterView.OnItemLongClickListener()
+	{
+		@Override
+		public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+			startActionMode(new ActionModeCallback(position));
+
+			return true;
+		}
+	};
+
+	private class ActionModeCallback implements ActionMode.Callback
+	{
+		private int selectedItemPosition;
+
+		public ActionModeCallback(int selectedItemPosition) {
+			this.selectedItemPosition = selectedItemPosition;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode actionMode, android.view.Menu menu) {
+			actionMode.getMenuInflater().inflate(R.menu.menu_context_cards, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode actionMode, android.view.Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+			switch (menuItem.getItemId()) {
+				case R.id.menu_edit:
+					callCardEditing(selectedItemPosition);
+					actionMode.finish();
+					return true;
+
+				case R.id.menu_delete:
+					callCardDeleting(selectedItemPosition);
+					actionMode.finish();
+					return true;
+
+				default:
+					return false;
+			}
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode actionMode) {
+		}
 	}
 
 	private void processReceivedDeck() {
@@ -142,15 +200,15 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 
-		getMenuInflater().inflate(R.menu.cards_context_menu, menu);
+		getMenuInflater().inflate(R.menu.menu_context_cards, menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo itemInfo = (AdapterContextMenuInfo) item.getMenuInfo();
+		AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		int cardPosition = itemInfo.position;
 
 		switch (item.getItemId()) {

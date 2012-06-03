@@ -12,8 +12,6 @@ import app.android.gambit.local.Card;
 public class CardEditingActivity extends CardCreationActivity
 {
 	private Card card;
-	private String frontSideText;
-	private String backSideText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

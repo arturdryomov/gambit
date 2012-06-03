@@ -3,12 +3,18 @@
 
 	<item
 		android:id="@+id/menu_rename"
-		android:title="@string/menu_rename"/>
+		android:icon="@drawable/ic_menu_edit"
+		android:title="@string/menu_rename"
+		android:showAsAction="always" />
+
 	<item
 		android:id="@+id/menu_edit_cards"
 		android:title="@string/menu_edit_cards"/>
+
 	<item
 		android:id="@+id/menu_delete"
-		android:title="@string/menu_delete"/>
+		android:icon="@drawable/ic_menu_remove"
+		android:title="@string/menu_delete"
+		android:showAsAction="always" />
 
 </menu>

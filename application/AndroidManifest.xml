@@ -15,10 +15,9 @@
 		android:name="GambitApplication"
 		android:icon="@drawable/ic_launcher_gambit"
 		android:label="@string/application_name"
-		android:theme="@android:style/Theme.Light.NoTitleBar">
+		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.DecksListActivity"
 			android:label="@string/title_decks" >
 			<intent-filter>
@@ -29,37 +28,31 @@
 		</activity>
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.DeckCreationActivity"
 			android:label="@string/title_deck_creation" >
 		</activity>
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.DeckRenamingActivity"
 			android:label="@string/title_deck_renaming" >
 		</activity>
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.CardCreationActivity"
 			android:label="@string/title_card_creation" >
 		</activity>
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.CardEditingActivity"
 			android:label="@string/title_card_editing" >
 		</activity>
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.CardsListActivity"
-			android:label="@string/title_cards" >
+			android:label="@string/title_cards_editing" >
 		</activity>
 
 		<activity
-			android:theme="@style/Theme.Gambit"
 			android:name=".ui.CardsViewingActivity"
 			android:label="@string/title_cards"
 			android:configChanges="keyboardHidden|orientation">
