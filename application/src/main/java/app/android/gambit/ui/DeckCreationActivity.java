@@ -48,15 +48,7 @@ public class DeckCreationActivity extends FormActivity
 
 	private class DeckCreationTask extends AsyncTask<Void, Void, String>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
 		private Deck deck;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loading_creating_deck));
-		}
 
 		@Override
 		protected String doInBackground(Void... params) {
@@ -72,8 +64,6 @@ public class DeckCreationActivity extends FormActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			progressDialogHelper.hide();
-
 			if (errorMessage.isEmpty()) {
 				Intent callIntent = IntentFactory.createCardsListIntent(activityContext, deck);
 				startActivity(callIntent);

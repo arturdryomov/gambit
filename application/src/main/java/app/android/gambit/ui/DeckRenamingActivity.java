@@ -31,14 +31,6 @@ public class DeckRenamingActivity extends DeckCreationActivity
 
 	private class DeckUpdatingTask extends AsyncTask<Void, Void, String>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loading_updating_deck));
-		}
-
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
@@ -53,8 +45,6 @@ public class DeckRenamingActivity extends DeckCreationActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			progressDialogHelper.hide();
-
 			if (errorMessage.isEmpty()) {
 				finish();
 			}

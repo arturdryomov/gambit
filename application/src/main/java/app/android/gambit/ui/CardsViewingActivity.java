@@ -88,8 +88,6 @@ public class CardsViewingActivity extends SherlockActivity
 
 	private class LoadCardsTask extends AsyncTask<Void, Void, Void>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
 		private final CardsOrder cardsOrder;
 
 		public LoadCardsTask(CardsOrder cardsOrder) {
@@ -103,25 +101,6 @@ public class CardsViewingActivity extends SherlockActivity
 			}
 			else {
 				isLoadingInProgress = true;
-			}
-
-			progressDialogHelper = new ProgressDialogShowHelper();
-
-			switch (cardsOrder) {
-				case SHUFFLE:
-					progressDialogHelper.show(activityContext, getString(R.string.loading_shuffling_cards));
-					break;
-
-				case STRAIGHT:
-					progressDialogHelper.show(activityContext, getString(R.string.loading_resetting_cards_order));
-					break;
-
-				case DEFAULT:
-					progressDialogHelper.show(activityContext, getString(R.string.loading_cards));
-					break;
-
-				default:
-					break;
 			}
 		}
 
@@ -168,8 +147,6 @@ public class CardsViewingActivity extends SherlockActivity
 
 		@Override
 		protected void onPostExecute(Void result) {
-			progressDialogHelper.hide();
-
 			initializeCardsAdapter();
 
 			if (cardsOrder == CardsOrder.DEFAULT) {

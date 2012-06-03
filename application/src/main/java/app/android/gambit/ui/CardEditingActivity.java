@@ -29,14 +29,6 @@ public class CardEditingActivity extends CardCreationActivity
 
 	private class CardUpdatingTask extends AsyncTask<Void, Void, Void>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loading_updating_card));
-		}
-
 		@Override
 		protected Void doInBackground(Void... params) {
 			card.setFrontSideText(frontSideText);
@@ -47,8 +39,6 @@ public class CardEditingActivity extends CardCreationActivity
 
 		@Override
 		protected void onPostExecute(Void result) {
-			progressDialogHelper.hide();
-
 			finish();
 		}
 	}

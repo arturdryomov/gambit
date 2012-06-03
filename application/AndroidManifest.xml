@@ -29,27 +29,27 @@
 
 		<activity
 			android:name=".ui.DeckCreationActivity"
-			android:label="@string/title_deck_creation" >
+			android:label="@string/title_new_deck" >
 		</activity>
 
 		<activity
 			android:name=".ui.DeckRenamingActivity"
-			android:label="@string/title_deck_renaming" >
+			android:label="@string/title_rename_deck" >
 		</activity>
 
 		<activity
 			android:name=".ui.CardCreationActivity"
-			android:label="@string/title_card_creation" >
+			android:label="@string/title_new_card" >
 		</activity>
 
 		<activity
 			android:name=".ui.CardEditingActivity"
-			android:label="@string/title_card_editing" >
+			android:label="@string/title_edit_card" >
 		</activity>
 
 		<activity
 			android:name=".ui.CardsListActivity"
-			android:label="@string/title_cards_editing" >
+			android:label="@string/title_edit_cards" >
 		</activity>
 
 		<activity

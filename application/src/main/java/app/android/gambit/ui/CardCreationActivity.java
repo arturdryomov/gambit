@@ -72,14 +72,6 @@ public class CardCreationActivity extends FormActivity
 
 	private class CardCreationTask extends AsyncTask<Void, Void, Void>
 	{
-		private ProgressDialogShowHelper progressDialogHelper;
-
-		@Override
-		protected void onPreExecute() {
-			progressDialogHelper = new ProgressDialogShowHelper();
-			progressDialogHelper.show(activityContext, getString(R.string.loading_creating_card));
-		}
-
 		@Override
 		protected Void doInBackground(Void... params) {
 			deck.addNewCard(frontSideText, backSideText);
@@ -89,8 +81,6 @@ public class CardCreationActivity extends FormActivity
 
 		@Override
 		protected void onPostExecute(Void result) {
-			progressDialogHelper.hide();
-
 			finish();
 		}
 	}

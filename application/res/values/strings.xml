@@ -5,17 +5,15 @@
 
 	<string name="title_decks">Decks</string>
 	<string name="title_cards">Flashcards</string>
-	<string name="title_deck_creation">Deck Creation</string>
-	<string name="title_deck_renaming">Deck Renaming</string>
-	<string name="title_cards_editing">Flashcards Editing</string>
-	<string name="title_card_creation">Flashcard Creation</string>
-	<string name="title_card_editing">Flashcard Editing</string>
-	<string name="title_choose_google_account">Choose Google Account</string>
-	<string name="title_sync_setup">Sync Setup</string>
-	<string name="title_setup">Setup</string>
+	<string name="title_new_deck">New deck</string>
+	<string name="title_rename_deck">Rename deck</string>
+	<string name="title_edit_cards">Edit flashcards</string>
+	<string name="title_new_card">New flashcard</string>
+	<string name="title_edit_card">Edit flashcard</string>
+	<string name="title_choose_google_account">Choose Google account</string>
 
-	<string name="empty_decks">There are no decks.</string>
-	<string name="empty_cards">There are no flashcards in this deck.</string>
+	<string name="empty_decks">No decks.</string>
+	<string name="empty_cards">No flashcards in deck.</string>
 
 	<string name="loading_decks">Loading decks…</string>
 	<string name="loading_creating_deck">Creating deck…</string>
