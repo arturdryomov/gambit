@@ -34,7 +34,7 @@
 		<!-- 1 dp on the left for viewing separator -->
 		<item name="android:layout_marginLeft">@dimen/actionbar_items_separator_width</item>
 		<!-- Common background is separator, so use own one -->
-		<item name="android:background">@drawable/actionbar_item_background</item>
+		<item name="android:background">@drawable/background_actionbar_item</item>
 	</style>
 
 	<style name="BodyLinearLayout">

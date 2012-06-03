@@ -5,7 +5,7 @@
 		<item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
 		<item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
 
-		<item name="actionBarItemBackground">@drawable/actionbar_item_background</item>
+		<item name="actionBarItemBackground">@drawable/background_actionbar_item</item>
 	</style>
 
 	<style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
