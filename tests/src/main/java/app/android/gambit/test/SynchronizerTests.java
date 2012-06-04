@@ -117,7 +117,7 @@ public class SynchronizerTests extends InstrumentationTestCase
 		decks.clear();
 
 		for (int deckIndex = 0; deckIndex < DECK_COUNT; deckIndex++) {
-			Deck deck = decks.addNewDeck(buildDeckTitle(deckIndex));
+			Deck deck = decks.createDeck(buildDeckTitle(deckIndex));
 
 			for (int cardIndex = 0; cardIndex < CARD_COUNT; cardIndex++) {
 				deck.addNewCard(buildCardFrontSideText(deckIndex, cardIndex),

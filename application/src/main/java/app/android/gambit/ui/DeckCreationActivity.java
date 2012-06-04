@@ -50,7 +50,7 @@ public class DeckCreationActivity extends FormActivity
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				deck = DbProvider.getInstance().getDecks().addNewDeck(deckName);
+				deck = DbProvider.getInstance().getDecks().createDeck(deckName);
 			}
 			catch (AlreadyExistsException e) {
 				return getString(R.string.error_deck_already_exists);

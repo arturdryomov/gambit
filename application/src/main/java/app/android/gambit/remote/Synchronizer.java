@@ -147,7 +147,7 @@ public class Synchronizer
 		decks.clear();
 
 		for (RemoteDeck remoteDeck : remoteDecks.getDecks()) {
-			Deck deck = decks.addNewDeck(remoteDeck.getTitle());
+			Deck deck = decks.createDeck(remoteDeck.getTitle());
 
 			for (RemoteCard remoteCard : remoteDeck.getCards()) {
 				deck.addNewCard(remoteCard.getFrontSideText(), remoteCard.getBackSideText());

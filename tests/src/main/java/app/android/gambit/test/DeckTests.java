@@ -17,7 +17,7 @@ public class DeckTests extends DatabaseTestCase
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		deck = decks.addNewDeck(DECK_TITLE);
+		deck = decks.createDeck(DECK_TITLE);
 	}
 
 	public void testGetId() {
