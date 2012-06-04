@@ -3,6 +3,8 @@
 bin/
 gen*/
 
+project.properties
+
 # Maven
 
 target/
