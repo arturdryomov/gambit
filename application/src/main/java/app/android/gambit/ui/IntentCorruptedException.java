@@ -1,6 +1,6 @@
 package app.android.gambit.ui;
 
 
-public class IntentCorruptedException extends RuntimeException
+class IntentCorruptedException extends RuntimeException
 {
 }

@@ -53,7 +53,8 @@ public class AsyncAccountSelector
 
 	private String loadAccountNameFromPreferences() {
 		String accountName = getPreference(ACCOUNT_NAME);
-		if (haveAccountRegistered(accountName)) {
+
+		if (isAccountRegistered(accountName)) {
 			return accountName;
 		}
 		else {
@@ -61,55 +62,27 @@ public class AsyncAccountSelector
 		}
 	}
 
-	private boolean haveAccountRegistered(String accountName) {
+	private String getPreference(String key) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity
+			.getApplicationContext());
+
+		return preferences.getString(key, new String());
+	}
+
+	private boolean isAccountRegistered(String accountName) {
 		return getRegisteredAccountsNames().contains(accountName);
 	}
 
-	private void selectAccountFromDialog() {
-		if (haveSomeAccountRegistered()) {
-			constructAccountsListDialog().show();
-		}
-		else {
-			notifyAccountWaiter(new String());
-		}
-	}
-
-	private boolean haveSomeAccountRegistered() {
-		return !getRegisteredAccountsNames().isEmpty();
-	}
-
 	private List<String> getRegisteredAccountsNames() {
-		List<String> result = new ArrayList<String>();
+		List<String> registeredAccountsNames = new ArrayList<String>();
 
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 
 		for (Account account : accountManager.getAccountsByType(ACCOUNT_TYPE)) {
-			result.add(account.name);
+			registeredAccountsNames.add(account.name);
 		}
 
-		return result;
-	}
-
-	private Dialog constructAccountsListDialog() {
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-		dialogBuilder.setTitle(activity.getString(R.string.title_choose_google_account));
-
-		final List<String> accountsNamesList = getRegisteredAccountsNames();
-		String[] accountsNamesArray = new String[accountsNamesList.size()];
-		accountsNamesList.toArray(accountsNamesArray);
-
-		dialogBuilder.setItems(accountsNamesArray, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				String selectedAccountName = accountsNamesList.get(which);
-
-				setPreference(ACCOUNT_NAME, selectedAccountName);
-
-				notifyAccountWaiter(selectedAccountName);
-			}
-		});
-
-		return dialogBuilder.create();
+		return registeredAccountsNames;
 	}
 
 	private void notifyAccountWaiter(String accountName) {
@@ -138,20 +111,48 @@ public class AsyncAccountSelector
 		return null;
 	}
 
-	private String getPreference(String key) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity
-			.getApplicationContext());
+	private void selectAccountFromDialog() {
+		if (haveSomeAccountRegistered()) {
+			constructAccountsListDialog().show();
+		}
+		else {
+			notifyAccountWaiter(new String());
+		}
+	}
 
-		return preferences.getString(key, new String());
+	private boolean haveSomeAccountRegistered() {
+		return !getRegisteredAccountsNames().isEmpty();
+	}
+
+	private Dialog constructAccountsListDialog() {
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+		dialogBuilder.setTitle(activity.getString(R.string.title_choose_google_account));
+
+		final List<String> accountsNamesList = getRegisteredAccountsNames();
+		String[] accountsNamesArray = new String[accountsNamesList.size()];
+		accountsNamesList.toArray(accountsNamesArray);
+
+		dialogBuilder.setItems(accountsNamesArray, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int selectedAccountPosition) {
+				String selectedAccountName = accountsNamesList.get(selectedAccountPosition);
+
+				setPreference(ACCOUNT_NAME, selectedAccountName);
+
+				notifyAccountWaiter(selectedAccountName);
+			}
+		});
+
+		return dialogBuilder.create();
 	}
 
 	private void setPreference(String key, String value) {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity
 			.getApplicationContext());
-		SharedPreferences.Editor preferenceEditor = preferences.edit();
+		SharedPreferences.Editor preferencesEditor = preferences.edit();
 
-		preferenceEditor.putString(key, value);
+		preferencesEditor.putString(key, value);
 
-		preferenceEditor.commit();
+		preferencesEditor.commit();
 	}
 }

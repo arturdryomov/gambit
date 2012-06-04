@@ -260,7 +260,7 @@ public class CardsViewingActivity extends SherlockActivity
 
 		@Override
 		public boolean isViewFromObject(View view, Object object) {
-			return view == (TextView) object;
+			return view == object;
 		}
 	}
 

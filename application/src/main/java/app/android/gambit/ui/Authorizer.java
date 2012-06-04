@@ -33,7 +33,7 @@ public class Authorizer
 	 */
 	public String getToken(ServiceType serviceType, Account account) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
-		Bundle authResponse = new Bundle();
+		Bundle authResponse;
 		String authType = authTypeFromServiceType(serviceType);
 
 		try {
