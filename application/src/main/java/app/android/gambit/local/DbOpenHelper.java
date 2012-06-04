@@ -44,7 +44,7 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		builder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
 		builder.append(String.format("%s %s, ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
 		builder.append(String.format("%s %s", DbFieldNames.DECK_CURRENT_CARD_INDEX,
-			DbFieldParams.DECK_NEXT_CARD_INDEX));
+			DbFieldParams.INDEX));
 		builder.append(")");
 
 		return builder.toString();
@@ -58,13 +58,12 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		builder.append("(");
 
 		builder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
-		builder.append(String.format("%s %s, ", DbFieldNames.CARD_DECK_ID, DbFieldParams.CARD_DECK_ID));
+		builder.append(String.format("%s %s, ", DbFieldNames.CARD_DECK_ID, DbFieldParams.DECK_FOREIGN_ID));
 		builder.append(String.format("%s %s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT,
-			DbFieldParams.CARD_FRONT_SIDE_TEXT));
+			DbFieldParams.CARD_TEXT));
 		builder.append(String.format("%s %s, ", DbFieldNames.CARD_BACK_SIDE_TEXT,
-			DbFieldParams.CARD_BACK_SIDE_TEXT));
-		builder.append(String.format("%s %s", DbFieldNames.CARD_ORDER_INDEX,
-			DbFieldParams.CARD_ORDER_INDEX));
+			DbFieldParams.CARD_TEXT));
+		builder.append(String.format("%s %s", DbFieldNames.CARD_ORDER_INDEX, DbFieldParams.INDEX));
 
 		builder.append(")");
 
