@@ -42,12 +42,10 @@ public class CardEditingActivity extends CardCreationActivity
 
 	@Override
 	protected void processReceivedData() {
-		Bundle receivedData = this.getIntent().getExtras();
-
-		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
-			card = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		try {
+			card = (Card) IntentProcessor.getMessage(this);
 		}
-		else {
+		catch (IntentCorruptedException e) {
 			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();

@@ -52,12 +52,10 @@ public class DeckRenamingActivity extends DeckCreationActivity
 	}
 
 	private void processReceivedDeck() {
-		Bundle receivedData = this.getIntent().getExtras();
-
-		if (receivedData.containsKey(IntentFactory.MESSAGE_ID)) {
-			deck = receivedData.getParcelable(IntentFactory.MESSAGE_ID);
+		try {
+			deck = (Deck) IntentProcessor.getMessage(this);
 		}
-		else {
+		catch (IntentCorruptedException e) {
 			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
 
 			finish();
