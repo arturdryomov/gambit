@@ -346,22 +346,6 @@ public class Deck implements Parcelable
 		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
-	public void clear() {
-		database.beginTransaction();
-		try {
-			tryClear();
-			database.setTransactionSuccessful();
-		}
-		finally {
-			database.endTransaction();
-		}
-	}
-
-	private void tryClear() {
-		database.delete(DbTableNames.CARDS, String.format("%s = %d", DbFieldNames.CARD_DECK_ID, id),
-			null);
-	}
-
 	public void shuffleCards() {
 		database.beginTransaction();
 		try {

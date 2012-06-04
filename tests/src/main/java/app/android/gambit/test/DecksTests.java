@@ -19,7 +19,7 @@ public class DecksTests extends DatabaseTestCase
 	public void testGetDecksCount() {
 		decks.addNewDeck("New deck");
 
-		assertEquals(1, decks.getDecksCount());
+		assertEquals(1, decks.getDecksList().size());
 	}
 
 	public void testAddDeck() {
@@ -27,7 +27,7 @@ public class DecksTests extends DatabaseTestCase
 
 		Deck newDeck = decks.addNewDeck(deckTitle);
 
-		assertEquals(1, decks.getDecksCount());
+		assertEquals(1, decks.getDecksList().size());
 		assertEquals(deckTitle, newDeck.getTitle());
 	}
 
@@ -36,7 +36,7 @@ public class DecksTests extends DatabaseTestCase
 
 		decks.deleteDeck(deck);
 
-		assertEquals(0, decks.getDecksCount());
+		assertEquals(0, decks.getDecksList().size());
 	}
 
 	public void testGetDeckById() {

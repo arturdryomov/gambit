@@ -40,7 +40,7 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 	}
 
 	protected void fillDatabaseWithEmptyDecks() {
-		if (decks.getDecksCount() != 0) {
+		if (decks.getDecksList().size() != 0) {
 			return;
 		}
 

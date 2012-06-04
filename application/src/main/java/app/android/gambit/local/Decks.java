@@ -20,19 +20,6 @@ public class Decks
 		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 	}
 
-	public int getDecksCount() {
-		Cursor cursor = database.rawQuery(buildDecksCountSelectionQuery(), null);
-		cursor.moveToFirst();
-		int decksCount = cursor.getInt(0);
-		cursor.close();
-
-		return decksCount;
-	}
-
-	private String buildDecksCountSelectionQuery() {
-		return String.format("select count(*) from %s", DbTableNames.DECKS);
-	}
-
 	public List<Deck> getDecksList() {
 		List<Deck> decksList = new ArrayList<Deck>();
 
