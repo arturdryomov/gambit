@@ -20,15 +20,19 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		db.beginTransaction();
 
 		try {
-			db.execSQL(buildDecksTableCreationQuery());
-			db.execSQL(buildCardsTableCreationQuery());
-			db.execSQL(buildLastUpdateTimeTableCreationQuery());
+			createTables(db);
 
 			db.setTransactionSuccessful();
 		}
 		finally {
 			db.endTransaction();
 		}
+	}
+
+	private void createTables(SQLiteDatabase db) {
+		db.execSQL(buildDecksTableCreationQuery());
+		db.execSQL(buildCardsTableCreationQuery());
+		db.execSQL(buildLastUpdateTimeTableCreationQuery());
 	}
 
 	private String buildDecksTableCreationQuery() {
@@ -81,14 +85,17 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
 		throw new DbException(String.format(
 			"'%s' database is currently not intended to be upgraded", DATABASE_NAME));
 	}
 
 	@Override
 	public synchronized SQLiteDatabase getReadableDatabase() {
-		// See getWritableDatabase() for details
+		/*
+		 * We need to turn off database locking in order to avoid “HeapWorker is wedged:
+		 * 1XXXXms spent inside Landroid/database/sqlite/SQLiteCursor;.finalize()V” error.
+		 */
 		SQLiteDatabase database = super.getReadableDatabase();
 		database.setLockingEnabled(false);
 		return database;
@@ -96,10 +103,6 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public synchronized SQLiteDatabase getWritableDatabase() {
-		/*
-		 * We need to turn off database locking in order to avoid “HeapWorker is wedged:
-		 * 1XXXXms spent inside Landroid/database/sqlite/SQLiteCursor;.finalize()V” error.
-		 */
 		SQLiteDatabase database = super.getWritableDatabase();
 		database.setLockingEnabled(false);
 		return database;
