@@ -24,8 +24,8 @@ public class CardCreationActivity extends FormActivity
 
 	@Override
 	protected void readUserDataFromFields() {
-		frontSideText = getTextFromEdit(R.id.edit_front_side);
-		backSideText = getTextFromEdit(R.id.edit_back_side);
+		frontSideText = getTextFromEdit(R.id.edit_front_side_text);
+		backSideText = getTextFromEdit(R.id.edit_back_side_text);
 	}
 
 	@Override

@@ -55,8 +55,8 @@ public class CardEditingActivity extends CardCreationActivity
 	}
 
 	private void setUpReceivedCardData() {
-		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side);
-		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side);
+		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side_text);
+		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side_text);
 
 		frontSideTextEdit.setText(card.getFrontSideText());
 		backSideTextEdit.setText(card.getBackSideText());

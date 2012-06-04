@@ -51,10 +51,11 @@ abstract class SimpleAdapterListActivity extends SherlockListActivity
 		((SimpleAdapter) getListAdapter()).notifyDataSetChanged();
 	}
 
-	protected void setEmptyListText(String text) {
-		TextView textView = (TextView) getListView().getEmptyView();
+	protected void setEmptyListText(int textId) {
+		TextView emptyListSign = (TextView) getListView().getEmptyView();
+		String text = getString(textId);
 
-		textView.setText(text);
+		emptyListSign.setText(text);
 	}
 
 	protected Object getObject(int listPosition) {

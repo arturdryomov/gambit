@@ -6,13 +6,13 @@
 	<LinearLayout style="@style/BodyLinearLayout">
 
 		<EditText
-			android:id="@+id/edit_front_side"
+			android:id="@+id/edit_front_side_text"
 			style="@style/BodyLinearLayoutItem"
 			android:hint="@string/hint_card_front_text"
 			android:inputType="text" />
 
 		<EditText
-			android:id="@+id/edit_back_side"
+			android:id="@+id/edit_back_side_text"
 			style="@style/BodyLinearLayoutItem"
 			android:layout_marginTop="@dimen/margin_top_form_item"
 			android:hint="@string/hint_card_back_text"

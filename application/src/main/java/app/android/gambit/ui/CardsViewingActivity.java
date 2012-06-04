@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import app.android.gambit.R;
 import app.android.gambit.local.Card;
@@ -159,12 +160,12 @@ public class CardsViewingActivity extends SherlockActivity
 		private void initializeCardsAdapter() {
 			CardsAdapter cardsAdapter = new CardsAdapter();
 			ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
+
 			cardsPager.setAdapter(cardsAdapter);
 		}
 
 		private void restoreCurrentCardPosition() {
-			int currentCardPosition = deck.getCurrentCardIndex();
-			setCurrentCardPosition(currentCardPosition);
+			setCurrentCardPosition(deck.getCurrentCardIndex());
 		}
 	}
 
@@ -178,7 +179,7 @@ public class CardsViewingActivity extends SherlockActivity
 		}
 
 		@Override
-		public Object instantiateItem(View container, final int position) {
+		public Object instantiateItem(ViewGroup container, final int position) {
 			TextView cardTextView = new TextView(activityContext);
 
 			cardTextView.setText(getCardText(position));
@@ -195,7 +196,7 @@ public class CardsViewingActivity extends SherlockActivity
 				}
 			});
 
-			((ViewPager) container).addView(cardTextView, 0);
+			container.addView(cardTextView, 0);
 
 			return cardTextView;
 		}
@@ -247,8 +248,8 @@ public class CardsViewingActivity extends SherlockActivity
 		}
 
 		@Override
-		public void destroyItem(View container, int position, Object object) {
-			((ViewPager) container).removeView((TextView) object);
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			container.removeView((View) object);
 
 			setDefaultCardSide(position);
 		}

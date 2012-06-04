@@ -147,7 +147,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			updateList();
 
 			if (listData.isEmpty()) {
-				setEmptyListText(getString(R.string.empty_cards));
+				setEmptyListText(R.string.empty_cards);
 			}
 		}
 
@@ -189,7 +189,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			setEmptyListText(getString(R.string.loading_cards));
+			setEmptyListText(R.string.loading_cards);
 		}
 
 		@Override
@@ -202,7 +202,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		@Override
 		protected void onPostExecute(Void result) {
 			if (cards.isEmpty()) {
-				setEmptyListText(getString(R.string.empty_cards));
+				setEmptyListText(R.string.empty_cards);
 			}
 			else {
 				fillList(cards);
