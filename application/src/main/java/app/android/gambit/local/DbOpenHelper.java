@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbOpenHelper extends SQLiteOpenHelper
 {
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "gambit.db";
 
 	public DbOpenHelper(Context context) {
@@ -86,8 +86,27 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
-		throw new DbException(String.format(
-			"'%s' database is currently not intended to be upgraded", DATABASE_NAME));
+		db.beginTransaction();
+
+		try {
+			dropTables(db);
+			createTables(db);
+
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+	private void dropTables(SQLiteDatabase db) {
+		dropTable(db, DbTableNames.DECKS);
+		dropTable(db, DbTableNames.CARDS);
+		dropTable(db, DbTableNames.DB_LAST_UPDATE_TIME);
+	}
+
+	private void dropTable(SQLiteDatabase db, String tableName) {
+		db.execSQL(String.format("drop table %s", tableName));
 	}
 
 	@Override
