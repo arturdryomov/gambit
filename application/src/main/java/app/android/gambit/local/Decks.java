@@ -171,24 +171,24 @@ public class Decks
 	}
 
 	private String buildDeckByCardIdSelectionQuery(long cardId) {
-		StringBuilder queryBulder = new StringBuilder();
+		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBulder.append("select ");
+		queryBuilder.append("select ");
 
-		queryBulder.append(String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.ID));
-		queryBulder.append(
+		queryBuilder.append(String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.ID));
+		queryBuilder.append(
 			String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.DECK_TITLE));
-		queryBulder.append(
+		queryBuilder.append(
 			String.format("%s.%s as %2$s ", DbTableNames.DECKS, DbFieldNames.DECK_CURRENT_CARD_INDEX));
 
-		queryBulder.append(
+		queryBuilder.append(
 			String.format("from %s inner join %s on %1$s.%s = %2$s.%s  ", DbTableNames.DECKS,
 				DbTableNames.CARDS, DbFieldNames.ID, DbFieldNames.CARD_DECK_ID));
 
-		queryBulder.append(
+		queryBuilder.append(
 			String.format("where %s.%s = %d", DbTableNames.CARDS, DbFieldNames.ID, cardId));
 
-		return queryBulder.toString();
+		return queryBuilder.toString();
 	}
 
 	public void deleteDeck(Deck deck) {
