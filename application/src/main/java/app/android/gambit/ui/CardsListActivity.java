@@ -243,7 +243,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_decks_and_cards, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards, menu);
 
 		return true;
 	}
@@ -253,10 +253,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 		switch (item.getItemId()) {
 			case R.id.menu_create_item:
 				callCardCreation();
-				return true;
-
-			case R.id.menu_sync:
-				// TODO: Call cards updating
 				return true;
 
 			default:

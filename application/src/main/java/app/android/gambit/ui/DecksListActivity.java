@@ -288,7 +288,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_decks_and_cards, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_decks, menu);
 
 		return true;
 	}
