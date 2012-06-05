@@ -56,7 +56,7 @@ public class DeckRenamingActivity extends DeckCreationActivity
 			deck = (Deck) IntentProcessor.getMessage(this);
 		}
 		catch (IntentCorruptedException e) {
-			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
+			UserAlerter.alert(activityContext, R.string.error_unspecified);
 
 			finish();
 		}

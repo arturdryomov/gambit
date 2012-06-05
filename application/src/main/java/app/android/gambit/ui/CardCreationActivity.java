@@ -79,7 +79,7 @@ public class CardCreationActivity extends FormActivity
 			deck = (Deck) IntentProcessor.getMessage(this);
 		}
 		catch (IntentCorruptedException e) {
-			UserAlerter.alert(activityContext, getString(R.string.error_unspecified));
+			UserAlerter.alert(activityContext, R.string.error_unspecified);
 
 			finish();
 		}
