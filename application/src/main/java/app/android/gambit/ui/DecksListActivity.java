@@ -359,14 +359,25 @@ public class DecksListActivity extends SimpleAdapterListActivity
 					try {
 						syncSpreadsheetKey = synchronizer.getExistingSpreadsheetKey(googleDocsAuthToken);
 
-						// TODO: Check if decks are empty and then just download remote decks
+						// If local decks are empty then just download remote decks
+						if (DbProvider.getInstance().getDecks().getDecksCount() == 0) {
+							synchronizer.syncFromRemoteToLocal(syncSpreadsheetKey, spreadsheetsAuthToken);
+
+							saveSyncSpreadsheetKey(syncSpreadsheetKey);
+
+							return new String();
+						}
 					}
 					catch (EntryNotFoundException e) {
 						syncSpreadsheetKey = synchronizer.createSpreadsheet(googleDocsAuthToken);
 
-						// TODO: Just upload local decks because spreadsheet was created right now
+						// Just upload local decks because spreadsheet was created right now
+						synchronizer.syncFromLocalToRemote(syncSpreadsheetKey, spreadsheetsAuthToken);
 
 						positiveMessage = getString(R.string.message_document_created);
+						saveSyncSpreadsheetKey(syncSpreadsheetKey);
+
+						return new String();
 					}
 
 					saveSyncSpreadsheetKey(syncSpreadsheetKey);
@@ -390,7 +401,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return getString(R.string.error_network);
 			}
 			catch (EntryNotFoundException e) {
-				return getString(R.string.error_unspecified);
+				removeSyncSpreadsheetKey();
+
+				// Try to resolve issue again without saved spreadsheet key
+				doInBackground();
 			}
 
 			return new String();
@@ -409,6 +423,16 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			SharedPreferences.Editor preferencesEditor = preferences.edit();
 
 			preferencesEditor.putString(PREFERENCE_SYNC_SPREADSHEET_KEY, syncSpreadsheetKey);
+
+			preferencesEditor.commit();
+		}
+
+		private void removeSyncSpreadsheetKey() {
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+				activityContext.getApplicationContext());
+			SharedPreferences.Editor preferencesEditor = preferences.edit();
+
+			preferencesEditor.remove(PREFERENCE_SYNC_SPREADSHEET_KEY);
 
 			preferencesEditor.commit();
 		}

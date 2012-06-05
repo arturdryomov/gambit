@@ -195,4 +195,15 @@ public class Synchronizer
 		}
 	}
 
+	public void syncFromLocalToRemote(String spreadsheetKey, String spreadsheetsAuthToken) {
+		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsAuthToken, spreadsheetKey);
+
+		syncFromLocalToRemote(remoteDecks);
+	}
+
+	public void syncFromRemoteToLocal(String spreadsheetKey, String spreadsheetsAuthToken) {
+		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsAuthToken, spreadsheetKey);
+
+		syncFromRemoteToLocal(remoteDecks);
+	}
 }
