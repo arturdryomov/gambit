@@ -4,6 +4,8 @@ package app.android.gambit.ui;
 import java.util.HashMap;
 import java.util.List;
 
+import android.accounts.Account;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,6 +20,10 @@ import android.widget.SimpleAdapter;
 import app.android.gambit.R;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
+import app.android.gambit.remote.EntryNotFoundException;
+import app.android.gambit.remote.FailedRequestException;
+import app.android.gambit.remote.Synchronizer;
+import app.android.gambit.remote.UnauthorizedException;
 import com.actionbarsherlock.view.Menu;
 
 
@@ -295,7 +301,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return true;
 
 			case R.id.menu_sync:
-				// TODO: Call decks updating
+				callUpdating();
 				return true;
 
 			default:
@@ -306,5 +312,92 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private void callDeckCreation() {
 		Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
 		activityContext.startActivity(callIntent);
+	}
+
+	private void callUpdating() {
+		new UpdateTaks().execute();
+	}
+
+	private class UpdateTaks extends AsyncTask<Void, Void, String>
+	{
+		private ProgressDialogShowHelper progressDialogShowHelper;
+
+		private String positiveMessage;
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+
+			progressDialogShowHelper = new ProgressDialogShowHelper();
+			progressDialogShowHelper.show(activityContext, R.string.loading_sync);
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			positiveMessage = new String();
+
+			try {
+				Activity activity = (Activity) activityContext;
+
+				Account account = AccountSelector.select(activity);
+
+				Authorizer authorizer = new Authorizer(activity);
+				String googleDocsAuthToken = authorizer.getToken(Authorizer.ServiceType.DOCUMENTS_LIST,
+					account);
+				String spreadsheetsAuthToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS,
+					account);
+
+				Synchronizer synchronizer = new Synchronizer();
+				String syncSpreadsheetKey;
+				try {
+					syncSpreadsheetKey = synchronizer.getExistingSpreadsheetKey(googleDocsAuthToken);
+				}
+				catch (EntryNotFoundException e) {
+					syncSpreadsheetKey = synchronizer.createSpreadsheet(googleDocsAuthToken);
+
+					positiveMessage = getString(R.string.message_document_created);
+				}
+
+				synchronizer.synchronize(syncSpreadsheetKey, spreadsheetsAuthToken);
+			}
+			catch (NoAccountRegisteredException e) {
+				return getString(R.string.error_no_google_accounts);
+			}
+			catch (AuthorizationCanceledException e) {
+				// Just ignore user cancel, he already knows that he did it
+			}
+			catch (AuthorizationFailedException e) {
+				return getString(R.string.error_unspecified);
+			}
+			catch (UnauthorizedException e) {
+				return getString(R.string.error_unspecified);
+			}
+			catch (FailedRequestException e) {
+				return getString(R.string.error_network);
+			}
+			catch (EntryNotFoundException e) {
+				return getString(R.string.error_unspecified);
+			}
+
+			return new String();
+		}
+
+		@Override
+		protected void onPostExecute(String errorMessage) {
+			super.onPostExecute(errorMessage);
+
+			progressDialogShowHelper.hide();
+
+			if (!errorMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, errorMessage);
+			}
+			else {
+				loadDecks();
+			}
+
+			if (!positiveMessage.isEmpty()) {
+				UserAlerter.alert(activityContext, positiveMessage);
+			}
+		}
 	}
 }

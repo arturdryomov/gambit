@@ -94,7 +94,7 @@ public class Synchronizer
 	 * @throws SyncException for any general unexpected error. This exception should not
 	 *  be caught.
 	 */
-	private String getExistingSpreadsheetKey(String googleDocsAuthToken) {
+	public String getExistingSpreadsheetKey(String googleDocsAuthToken) {
 		DocumentsListClient documentsListClient = new DocumentsListClient(googleDocsAuthToken);
 
 		List<DocumentEntry> documentEntries = documentsListClient.getDocumentFeed(Type.SPREADSHEET)
