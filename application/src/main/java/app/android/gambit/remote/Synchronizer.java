@@ -17,12 +17,25 @@ import app.android.gambit.remote.DocumentEntry.Type;
 
 public class Synchronizer
 {
+	private static final String SYNC_DOCUMENT_NAME = "Gambit flashcards";
+
 	/**
 	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
 	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
-	 * 	due to wrong request or absence of internet connection.
+	 *  due to wrong request or absence of internet connection.
 	 * @throws SyncException for any general unexpected error. This exception should not
-	 * 	be caught.
+	 *  be caught.
+	 */
+	public String createSpreadsheet(String googleDocsAuthToken) {
+		return createSpreadsheet(SYNC_DOCUMENT_NAME, googleDocsAuthToken);
+	}
+
+	/**
+	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 *  due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 *  be caught.
 	 */
 	public String createSpreadsheet(String spreadsheetTitle, String googleDocsAuthToken) {
 		InternetDateTime dateTimeBeforeInsertion = new InternetDateTime();
@@ -71,6 +84,33 @@ public class Synchronizer
 
 			return leftDate.compareTo(rightDate);
 		}
+	}
+
+	/**
+	 * @throws EntryNotFoundException if no existing spreadsheet can be found.
+	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 *  due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 *  be caught.
+	 */
+	private String getExistingSpreadsheetKey(String googleDocsAuthToken) {
+		DocumentsListClient documentsListClient = new DocumentsListClient(googleDocsAuthToken);
+
+		List<DocumentEntry> documentEntries = documentsListClient.getDocumentFeed(Type.SPREADSHEET)
+			.getEntries();
+
+		Comparator<DocumentEntry> comparator = Collections
+			.reverseOrder(new DocumentEntriesComparator());
+		Collections.sort(documentEntries, comparator);
+
+		for (DocumentEntry documentEntry : documentEntries) {
+			if (documentEntry.getTitle().equals(SYNC_DOCUMENT_NAME)) {
+				return documentEntry.getSpreadsheetKey();
+			}
+		}
+
+		throw new EntryNotFoundException();
 	}
 
 	/**
