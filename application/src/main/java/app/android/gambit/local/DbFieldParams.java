@@ -9,6 +9,7 @@ class DbFieldParams
 
 	public static final String DECK_TITLE = "text not null unique";
 	public static final String DECK_FOREIGN_ID;
+
 	static {
 		final String foreignKeyMask = "integer not null references %s(%s)";
 

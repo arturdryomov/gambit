@@ -42,7 +42,8 @@ class DbOpenHelper extends SQLiteOpenHelper
 
 		queryBuilder.append("(");
 		queryBuilder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
-		queryBuilder.append(String.format("%s %s, ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
+		queryBuilder.append(
+			String.format("%s %s, ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
 		queryBuilder.append(
 			String.format("%s %s", DbFieldNames.DECK_CURRENT_CARD_INDEX, DbFieldParams.INDEX));
 		queryBuilder.append(")");

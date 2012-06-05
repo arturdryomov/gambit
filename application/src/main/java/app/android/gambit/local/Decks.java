@@ -56,18 +56,19 @@ public class Decks
 		long id = databaseCursor.getLong(databaseCursor.getColumnIndexOrThrow(DbFieldNames.ID));
 		databaseValues.put(DbFieldNames.ID, id);
 
-		String title = databaseCursor.getString(databaseCursor.getColumnIndexOrThrow(DbFieldNames.DECK_TITLE));
+		String title = databaseCursor.getString(
+			databaseCursor.getColumnIndexOrThrow(DbFieldNames.DECK_TITLE));
 		databaseValues.put(DbFieldNames.DECK_TITLE, title);
 
-		int currentCardIndex = databaseCursor.getInt(databaseCursor
-			.getColumnIndexOrThrow(DbFieldNames.DECK_CURRENT_CARD_INDEX));
+		int currentCardIndex = databaseCursor.getInt(
+			databaseCursor.getColumnIndexOrThrow(DbFieldNames.DECK_CURRENT_CARD_INDEX));
 		databaseValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, currentCardIndex);
 
 		return databaseValues;
 	}
 
 	/**
-	 *	@throws AlreadyExistsException if deck with such title already exists.
+	 * @throws AlreadyExistsException if deck with such title already exists.
 	 */
 	public Deck createDeck(String title) {
 		database.beginTransaction();
@@ -107,7 +108,8 @@ public class Decks
 		StringBuilder queryBuilder = new StringBuilder();
 
 		queryBuilder.append(String.format("select count(*) from %s ", DbTableNames.DECKS));
-		queryBuilder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
+		queryBuilder.append(
+			String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, title));
 
 		return queryBuilder.toString();
 	}
@@ -157,8 +159,8 @@ public class Decks
 	public Deck getDeckByCardId(long cardId) {
 		Cursor databaseCursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
 		if (!databaseCursor.moveToFirst()) {
-			throw new DbException(String.format(
-				"There's no a deck that is a parent for card with id = %d", cardId));
+			throw new DbException(
+				String.format("There's no a deck that is a parent for card with id = %d", cardId));
 		}
 
 		Deck deck = new Deck(extractDeckDatabaseValues(databaseCursor));
@@ -174,14 +176,17 @@ public class Decks
 		queryBulder.append("select ");
 
 		queryBulder.append(String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.ID));
-		queryBulder.append(String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.DECK_TITLE));
+		queryBulder.append(
+			String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.DECK_TITLE));
 		queryBulder.append(
 			String.format("%s.%s as %2$s ", DbTableNames.DECKS, DbFieldNames.DECK_CURRENT_CARD_INDEX));
 
-		queryBulder.append(String.format("from %s inner join %s on %1$s.%s = %2$s.%s  ", DbTableNames.DECKS,
-			DbTableNames.CARDS, DbFieldNames.ID, DbFieldNames.CARD_DECK_ID));
+		queryBulder.append(
+			String.format("from %s inner join %s on %1$s.%s = %2$s.%s  ", DbTableNames.DECKS,
+				DbTableNames.CARDS, DbFieldNames.ID, DbFieldNames.CARD_DECK_ID));
 
-		queryBulder.append(String.format("where %s.%s = %d", DbTableNames.CARDS, DbFieldNames.ID, cardId));
+		queryBulder.append(
+			String.format("where %s.%s = %d", DbTableNames.CARDS, DbFieldNames.ID, cardId));
 
 		return queryBulder.toString();
 	}

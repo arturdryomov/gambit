@@ -156,7 +156,8 @@ public class Card implements Parcelable
 		return true;
 	}
 
-	public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>() {
+	public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>()
+	{
 		@Override
 		public Card createFromParcel(Parcel parcel) {
 			return new Card(parcel);
