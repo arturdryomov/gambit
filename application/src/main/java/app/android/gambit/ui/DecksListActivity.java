@@ -7,9 +7,11 @@ import java.util.List;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -44,7 +46,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void initializeList() {
 		SimpleAdapter decksAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.list_item_one_line, new String[] { LIST_ITEM_TEXT_ID }, new int[] { R.id.text });
+			R.layout.list_item_one_line, new String[] {LIST_ITEM_TEXT_ID}, new int[] {R.id.text});
 
 		setListAdapter(decksAdapter);
 
@@ -320,6 +322,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	private class UpdateTaks extends AsyncTask<Void, Void, String>
 	{
+		private static final String PREFERENCE_SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
+
 		private ProgressDialogShowHelper progressDialogShowHelper;
 
 		private String positiveMessage;
@@ -348,14 +352,24 @@ public class DecksListActivity extends SimpleAdapterListActivity
 					account);
 
 				Synchronizer synchronizer = new Synchronizer();
-				String syncSpreadsheetKey;
-				try {
-					syncSpreadsheetKey = synchronizer.getExistingSpreadsheetKey(googleDocsAuthToken);
-				}
-				catch (EntryNotFoundException e) {
-					syncSpreadsheetKey = synchronizer.createSpreadsheet(googleDocsAuthToken);
 
-					positiveMessage = getString(R.string.message_document_created);
+				String syncSpreadsheetKey = loadSyncSpreadsheetKey();
+
+				if (syncSpreadsheetKey.isEmpty()) {
+					try {
+						syncSpreadsheetKey = synchronizer.getExistingSpreadsheetKey(googleDocsAuthToken);
+
+						// TODO: Check if decks are empty and then just download remote decks
+					}
+					catch (EntryNotFoundException e) {
+						syncSpreadsheetKey = synchronizer.createSpreadsheet(googleDocsAuthToken);
+
+						// TODO: Just upload local decks because spreadsheet was created right now
+
+						positiveMessage = getString(R.string.message_document_created);
+					}
+
+					saveSyncSpreadsheetKey(syncSpreadsheetKey);
 				}
 
 				synchronizer.synchronize(syncSpreadsheetKey, spreadsheetsAuthToken);
@@ -380,6 +394,23 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 
 			return new String();
+		}
+
+		private String loadSyncSpreadsheetKey() {
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+				activityContext.getApplicationContext());
+
+			return preferences.getString(PREFERENCE_SYNC_SPREADSHEET_KEY, new String());
+		}
+
+		private void saveSyncSpreadsheetKey(String syncSpreadsheetKey) {
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+				activityContext.getApplicationContext());
+			SharedPreferences.Editor preferencesEditor = preferences.edit();
+
+			preferencesEditor.putString(PREFERENCE_SYNC_SPREADSHEET_KEY, syncSpreadsheetKey);
+
+			preferencesEditor.commit();
 		}
 
 		@Override
