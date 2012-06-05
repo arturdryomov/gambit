@@ -15,7 +15,7 @@ public class CardTests extends DatabaseTestCase
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		card = decks.createDeck(DECK_TITLE).addNewCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
+		card = decks.createDeck(DECK_TITLE).createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
 	}
 
 	public void testGetFrontSideText() {

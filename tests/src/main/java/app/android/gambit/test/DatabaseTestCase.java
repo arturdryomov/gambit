@@ -58,7 +58,7 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 			String frontSideText = String.format("Card %s in deck %s front", cardIndex, deck.getId());
 			String backSideText = String.format("Card %s in deck %s back", cardIndex, deck.getId());
 
-			deck.addNewCard(frontSideText, backSideText);
+			deck.createCard(frontSideText, backSideText);
 		}
 	}
 
@@ -70,7 +70,7 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 				String frontSideText = String.format("Card %s in deck %s front", cardIndex, deckIndex);
 				String backSideText = String.format("Card %s in deck %s back", cardIndex, deckIndex);
 
-				newDeck.addNewCard(frontSideText, backSideText);
+				newDeck.createCard(frontSideText, backSideText);
 			}
 		}
 	}

@@ -150,7 +150,7 @@ public class Synchronizer
 			Deck deck = decks.createDeck(remoteDeck.getTitle());
 
 			for (RemoteCard remoteCard : remoteDeck.getCards()) {
-				deck.addNewCard(remoteCard.getFrontSideText(), remoteCard.getBackSideText());
+				deck.createCard(remoteCard.getFrontSideText(), remoteCard.getBackSideText());
 			}
 		}
 	}
