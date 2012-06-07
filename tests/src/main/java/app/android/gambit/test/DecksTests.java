@@ -38,21 +38,4 @@ public class DecksTests extends DatabaseTestCase
 
 		assertEquals(0, decks.getDecksList().size());
 	}
-
-	public void testGetDeckById() {
-		Deck deck = decks.createDeck("New deck");
-
-		Deck deckById = decks.getDeckById(deck.getId());
-
-		assertEquals(deck, deckById);
-	}
-
-	public void testGetDeckByCardId() {
-		Deck deck = decks.createDeck("New deck");
-		long cardId = deck.createCard("Front side text", "Back side text").getId();
-
-		Deck deckByCardId = decks.getDeckByCardId(cardId);
-
-		assertEquals(deck, deckByCardId);
-	}
 }

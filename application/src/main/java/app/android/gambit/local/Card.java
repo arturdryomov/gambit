@@ -9,6 +9,8 @@ import android.os.Parcelable;
 
 public class Card implements Parcelable
 {
+	private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
+
 	private final SQLiteDatabase database;
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
@@ -117,7 +119,6 @@ public class Card implements Parcelable
 
 	@Override
 	public int hashCode() {
-		// hashCode() is not intended to be used
 		throw new UnsupportedOperationException();
 	}
 
@@ -184,7 +185,7 @@ public class Card implements Parcelable
 
 	@Override
 	public int describeContents() {
-		return 0;
+		return SPECIAL_PARCELABLE_OBJECTS_BITMASK;
 	}
 
 	@Override

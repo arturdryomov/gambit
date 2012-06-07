@@ -12,7 +12,7 @@ public class DbProvider
 	}
 
 	private static DbProvider instance;
-	private DbOpenHelper openHelper;
+	private DbOpenHelper databaseOpenHelper;
 	private Decks decks;
 	private LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
@@ -22,7 +22,7 @@ public class DbProvider
 
 	/**
 	 * @throws AlreadyInstantiatedException if this method is called more
-	 * than once.
+	 *  than once.
 	 */
 	public static DbProvider getInstance(Context context) {
 		if (instance == null) {
@@ -38,7 +38,7 @@ public class DbProvider
 			throw new AlreadyInstantiatedException();
 		}
 
-		openHelper = new DbOpenHelper(context.getApplicationContext());
+		databaseOpenHelper = new DbOpenHelper(context.getApplicationContext());
 
 		instance = this;
 	}
@@ -58,6 +58,6 @@ public class DbProvider
 	}
 
 	SQLiteDatabase getDatabase() {
-		return openHelper.getWritableDatabase();
+		return databaseOpenHelper.getWritableDatabase();
 	}
 }

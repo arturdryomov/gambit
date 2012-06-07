@@ -97,7 +97,8 @@ public class Decks
 		Cursor databaseCursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
 		databaseCursor.moveToFirst();
 
-		boolean contains = databaseCursor.getInt(0) > 0;
+		final int DECKS_COUNT_COLUMN_INDEX = 0;
+		boolean contains = databaseCursor.getInt(DECKS_COUNT_COLUMN_INDEX) > 0;
 
 		databaseCursor.close();
 
@@ -122,10 +123,7 @@ public class Decks
 		return database.insert(DbTableNames.DECKS, null, databaseValues);
 	}
 
-	/**
-	 * @throws DbException if there is no deck with id specified.
-	 */
-	public Deck getDeckById(long id) {
+	private Deck getDeckById(long id) {
 		Cursor databaseCursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
 		if (!databaseCursor.moveToFirst()) {
 			throw new DbException(String.format("There's no a deck with id = %d in database", id));
@@ -149,44 +147,6 @@ public class Decks
 
 		queryBuilder.append(String.format("from %s ", DbTableNames.DECKS));
 		queryBuilder.append(String.format("where %s = %d", DbFieldNames.ID, id));
-
-		return queryBuilder.toString();
-	}
-
-	/**
-	 * @throws DbException if there is no card with id specified.
-	 */
-	public Deck getDeckByCardId(long cardId) {
-		Cursor databaseCursor = database.rawQuery(buildDeckByCardIdSelectionQuery(cardId), null);
-		if (!databaseCursor.moveToFirst()) {
-			throw new DbException(
-				String.format("There's no a deck that is a parent for card with id = %d", cardId));
-		}
-
-		Deck deck = new Deck(extractDeckDatabaseValues(databaseCursor));
-
-		databaseCursor.close();
-
-		return deck;
-	}
-
-	private String buildDeckByCardIdSelectionQuery(long cardId) {
-		StringBuilder queryBuilder = new StringBuilder();
-
-		queryBuilder.append("select ");
-
-		queryBuilder.append(String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.ID));
-		queryBuilder.append(
-			String.format("%s.%s as %2$s, ", DbTableNames.DECKS, DbFieldNames.DECK_TITLE));
-		queryBuilder.append(
-			String.format("%s.%s as %2$s ", DbTableNames.DECKS, DbFieldNames.DECK_CURRENT_CARD_INDEX));
-
-		queryBuilder.append(
-			String.format("from %s inner join %s on %1$s.%s = %2$s.%s  ", DbTableNames.DECKS,
-				DbTableNames.CARDS, DbFieldNames.ID, DbFieldNames.CARD_DECK_ID));
-
-		queryBuilder.append(
-			String.format("where %s.%s = %d", DbTableNames.CARDS, DbFieldNames.ID, cardId));
 
 		return queryBuilder.toString();
 	}

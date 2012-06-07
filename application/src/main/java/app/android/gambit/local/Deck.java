@@ -15,6 +15,7 @@ import android.os.Parcelable;
 public class Deck implements Parcelable
 {
 	public static final int INVALID_CURRENT_CARD_INDEX = -1;
+	private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
 
 	private final SQLiteDatabase database;
 	private final Decks decks;
@@ -254,10 +255,7 @@ public class Deck implements Parcelable
 		return database.insert(DbTableNames.CARDS, null, databaseValues);
 	}
 
-	/**
-	 * @throws DbException if there is no card with id specified.
-	 */
-	public Card getCardById(long id) {
+	private Card getCardById(long id) {
 		Cursor databaseCursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!databaseCursor.moveToFirst()) {
 			throw new DbException(String.format("There's no a card with id = %d in database", id));
@@ -479,7 +477,7 @@ public class Deck implements Parcelable
 
 	@Override
 	public int describeContents() {
-		return 0;
+		return SPECIAL_PARCELABLE_OBJECTS_BITMASK;
 	}
 
 	@Override

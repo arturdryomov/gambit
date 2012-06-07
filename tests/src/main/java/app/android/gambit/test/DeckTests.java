@@ -89,14 +89,6 @@ public class DeckTests extends DatabaseTestCase
 		deck.shuffleCards();
 	}
 
-	public void testGetCardById() {
-		Card card = deck.createCard("Front text", "Back text");
-
-		Card cardById = deck.getCardById(card.getId());
-
-		assertEquals(card, cardById);
-	}
-
 	public void testGetSetCurrentCardIndex() {
 		fillDeckWithCards(deck);
 		final int currentCardIndex = 1;
