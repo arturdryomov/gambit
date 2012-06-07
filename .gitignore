@@ -1,7 +1,12 @@
-.classpath
-.project
-.settings
+# Android
 
-bin
-gen
-target
+bin/
+gen*/
+
+project.properties
+
+# Maven
+
+target/
+
+# Use global .gitignore for your IDE

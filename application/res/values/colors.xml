@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<color name="background_action_bar">#0099cc</color>
+	<color name="background_action_bar_item_pressed_start">#ffb218</color>
+	<color name="background_action_bar_item_pressed_end">#ffb639</color>
+	<color name="background_action_bar_item_focused_start">#f78e18</color>
+	<color name="background_action_bar_item_focused_end">#ef8a18</color>
+
+</resources>

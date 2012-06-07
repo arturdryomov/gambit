@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="app.android.gambit"
+	android:versionCode="1"
+	android:versionName="0.0.1">
+
+	<uses-sdk
+		android:minSdkVersion="10"
+		android:targetSdkVersion="14" />
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+
+	<application
+		android:name="GambitApplication"
+		android:icon="@drawable/ic_launcher_gambit"
+		android:label="@string/application_name"
+		android:theme="@style/Theme.Gambit">
+
+		<activity
+			android:name=".ui.DecksListActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity
+			android:name=".ui.DeckCreationActivity"
+			android:label="@string/title_new_deck">
+		</activity>
+
+		<activity
+			android:name=".ui.DeckRenamingActivity"
+			android:label="@string/title_rename_deck">
+		</activity>
+
+		<activity
+			android:name=".ui.CardCreationActivity"
+			android:label="@string/title_new_card">
+		</activity>
+
+		<activity
+			android:name=".ui.CardEditingActivity"
+			android:label="@string/title_edit_card">
+		</activity>
+
+		<activity
+			android:name=".ui.CardsListActivity"
+			android:label="@string/title_edit_cards">
+		</activity>
+
+		<activity
+			android:name=".ui.CardsViewingActivity"
+			android:label="@string/title_cards"
+			android:configChanges="keyboardHidden|orientation">
+		</activity>
+	</application>
+
+</manifest>
