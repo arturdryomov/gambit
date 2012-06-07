@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -393,7 +394,9 @@ public class DecksListActivity extends SimpleAdapterListActivity
 					saveSyncSpreadsheetKey(syncSpreadsheetKey);
 				}
 
+				Log.i("SYNC", "Start sync");
 				synchronizer.synchronize(syncSpreadsheetKey, spreadsheetsAuthToken);
+				Log.i("SYNC", "Finish sync");
 			}
 			catch (NoAccountRegisteredException e) {
 				return getString(R.string.error_no_google_accounts);
