@@ -38,7 +38,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	@Override
 	protected void initializeList() {
 		SimpleAdapter decksAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.list_item_one_line, new String[] { LIST_ITEM_TEXT_ID }, new int[] { R.id.text });
+			R.layout.list_item_one_line, new String[] {LIST_ITEM_TEXT_ID}, new int[] {R.id.text});
 
 		setListAdapter(decksAdapter);
 
@@ -282,7 +282,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_decks_and_cards, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_decks, menu);
 
 		return true;
 	}
@@ -295,7 +295,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return true;
 
 			case R.id.menu_sync:
-				// TODO: Call decks updating
+				callSyncing();
 				return true;
 
 			default:
@@ -306,5 +306,18 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private void callDeckCreation() {
 		Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
 		activityContext.startActivity(callIntent);
+	}
+
+	private void callSyncing() {
+		Runnable successRunnable = new Runnable()
+		{
+			@Override
+			public void run() {
+				loadDecks();
+			}
+		};
+
+		SyncOperator syncOperator = new SyncOperator(activityContext, successRunnable);
+		syncOperator.execute();
 	}
 }

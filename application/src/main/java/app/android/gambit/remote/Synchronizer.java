@@ -17,12 +17,25 @@ import app.android.gambit.remote.DocumentEntry.Type;
 
 public class Synchronizer
 {
+	private static final String SYNC_DOCUMENT_NAME = "Gambit flashcards";
+
 	/**
 	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
 	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
-	 * 	due to wrong request or absence of internet connection.
+	 *  due to wrong request or absence of internet connection.
 	 * @throws SyncException for any general unexpected error. This exception should not
-	 * 	be caught.
+	 *  be caught.
+	 */
+	public String createSpreadsheet(String googleDocsAuthToken) {
+		return createSpreadsheet(SYNC_DOCUMENT_NAME, googleDocsAuthToken);
+	}
+
+	/**
+	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 *  due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 *  be caught.
 	 */
 	public String createSpreadsheet(String spreadsheetTitle, String googleDocsAuthToken) {
 		InternetDateTime dateTimeBeforeInsertion = new InternetDateTime();
@@ -30,11 +43,11 @@ public class Synchronizer
 		DocumentsListClient client = new DocumentsListClient(googleDocsAuthToken);
 		client.uploadEmptyDocument(Type.SPREADSHEET, spreadsheetTitle);
 
-		return findJustInsertedSpeadsheetKey(spreadsheetTitle, googleDocsAuthToken,
+		return findJustInsertedSpreadsheetKey(spreadsheetTitle, googleDocsAuthToken,
 			dateTimeBeforeInsertion);
 	}
 
-	private String findJustInsertedSpeadsheetKey(String spreadsheetTitle, String googleDocsAuthToken,
+	private String findJustInsertedSpreadsheetKey(String spreadsheetTitle, String googleDocsAuthToken,
 		InternetDateTime dateTimeBeforeInsertion) {
 
 		/* Simply take first spreadsheet with proper title that was changed (assumed 'created')
@@ -47,8 +60,8 @@ public class Synchronizer
 
 		List<DocumentEntry> documentEntries = client.getDocumentFeed(Type.SPREADSHEET).getEntries();
 
-		Comparator<DocumentEntry> comparator = Collections
-			.reverseOrder(new DocumentEntriesComparator());
+		Comparator<DocumentEntry> comparator = Collections.reverseOrder(
+			new DocumentEntriesComparator());
 		Collections.sort(documentEntries, comparator);
 
 		for (DocumentEntry entry : documentEntries) {
@@ -74,12 +87,39 @@ public class Synchronizer
 	}
 
 	/**
+	 * @throws EntryNotFoundException if no existing spreadsheet can be found.
+	 * @throws UnauthorizedException if googleDocsAuthToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 *  due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 *  be caught.
+	 */
+	public String getExistingSpreadsheetKey(String googleDocsAuthToken) {
+		DocumentsListClient documentsListClient = new DocumentsListClient(googleDocsAuthToken);
+
+		List<DocumentEntry> documentEntries = documentsListClient.getDocumentFeed(
+			Type.SPREADSHEET).getEntries();
+
+		Comparator<DocumentEntry> comparator = Collections.reverseOrder(
+			new DocumentEntriesComparator());
+		Collections.sort(documentEntries, comparator);
+
+		for (DocumentEntry documentEntry : documentEntries) {
+			if (documentEntry.getTitle().equals(SYNC_DOCUMENT_NAME)) {
+				return documentEntry.getSpreadsheetKey();
+			}
+		}
+
+		throw new EntryNotFoundException();
+	}
+
+	/**
 	 * @throws EntryNotFoundException if no spreadsheet for spreadsheetKey can be found.
 	 * @throws UnauthorizedException if spreadsheetsToken is invalid or if it is expired.
 	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
-	 * 	due to wrong request or absence of internet connection.
+	 *  due to wrong request or absence of internet connection.
 	 * @throws SyncException for any general unexpected error. This exception should not
-	 * 	be caught.
+	 *  be caught.
 	 */
 	public void synchronize(String spreadsheetKey, String spreadsheetsAuthToken) {
 		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsAuthToken, spreadsheetKey);
@@ -155,4 +195,31 @@ public class Synchronizer
 		}
 	}
 
+	/**
+	 * @throws EntryNotFoundException if no spreadsheet for spreadsheetKey can be found.
+	 * @throws UnauthorizedException if spreadsheetsToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 *  due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 *  be caught.
+	 */
+	public void syncFromLocalToRemote(String spreadsheetKey, String spreadsheetsAuthToken) {
+		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsAuthToken, spreadsheetKey);
+
+		syncFromLocalToRemote(remoteDecks);
+	}
+
+	/**
+	 * @throws EntryNotFoundException if no spreadsheet for spreadsheetKey can be found.
+	 * @throws UnauthorizedException if spreadsheetsToken is invalid or if it is expired.
+	 * @throws FailedRequestException if HTTP request failed for some reason. This can be
+	 *  due to wrong request or absence of internet connection.
+	 * @throws SyncException for any general unexpected error. This exception should not
+	 *  be caught.
+	 */
+	public void syncFromRemoteToLocal(String spreadsheetKey, String spreadsheetsAuthToken) {
+		RemoteDecks remoteDecks = new RemoteDecks(spreadsheetsAuthToken, spreadsheetKey);
+
+		syncFromRemoteToLocal(remoteDecks);
+	}
 }

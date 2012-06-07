@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.google.api.client.googleapis.GoogleHeaders;
 import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpExecuteInterceptor;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -24,6 +25,8 @@ import com.google.api.client.xml.XmlNamespaceDictionary;
 public class GoogleDocsClient
 {
 	private static final int UNAUTHORIZED_STATUS_CODE = 401;
+
+	private static final int CONTENT_COMPRESSION_LOWER_LIMIT = 256;
 
 	private static final XmlNamespaceDictionary DICTIONARY;
 	static {
@@ -78,12 +81,24 @@ public class GoogleDocsClient
 
 	protected HttpRequest buildGetRequest(GoogleUrl url) {
 		try {
-			return requestFactory.buildGetRequest(url);
+			return requestFactory.buildGetRequest(url).setInterceptor(compressionSwitcher);
 		}
 		catch (IOException e) {
 			throw new SyncException(e);
 		}
 	}
+
+	private final HttpExecuteInterceptor compressionSwitcher = new HttpExecuteInterceptor()
+	{
+		@Override
+		public void intercept(HttpRequest httpRequest) throws IOException {
+			if (httpRequest.getContent() != null) {
+				if (httpRequest.getContent().getLength() >= CONTENT_COMPRESSION_LOWER_LIMIT) {
+					httpRequest.setEnableGZipContent(true);
+				}
+			}
+		}
+	};
 
 	protected <T> T processGetRequest(HttpRequest request, Class<T> dataClass) {
 		try {
@@ -96,7 +111,7 @@ public class GoogleDocsClient
 
 	protected HttpRequest buildPostRequest(GoogleUrl url, HttpContent content) {
 		try {
-			return requestFactory.buildPostRequest(url, content);
+			return requestFactory.buildPostRequest(url, content).setInterceptor(compressionSwitcher);
 		}
 		catch (IOException e) {
 			throw new SyncException(e);
@@ -109,7 +124,7 @@ public class GoogleDocsClient
 
 	protected HttpRequest buildPutRequest(GoogleUrl url, AtomContent content) {
 		try {
-			HttpRequest request = requestFactory.buildPutRequest(url, content);
+			HttpRequest request = requestFactory.buildPutRequest(url, content).setInterceptor(compressionSwitcher);
 			// Ask server to update regardless the corresponding value has been changed by another
 			// client or not
 			request.getHeaders().setIfMatch("*");
@@ -126,7 +141,7 @@ public class GoogleDocsClient
 
 	protected HttpRequest buildDeleteRequest(GoogleUrl url) {
 		try {
-			HttpRequest request = requestFactory.buildDeleteRequest(url);
+			HttpRequest request = requestFactory.buildDeleteRequest(url).setInterceptor(compressionSwitcher);
 			// Ask server to delete regardless the corresponding value has been changed by another
 			// client or not
 			request.getHeaders().setIfMatch("*");
@@ -161,5 +176,4 @@ public class GoogleDocsClient
 			return new FailedRequestException();
 		}
 	}
-
 }

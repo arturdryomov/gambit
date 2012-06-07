@@ -17,6 +17,8 @@ public class Authorizer
 	private static final String SPREADSHEETS_AUTH_TOKEN_TYPE = "wise";
 	private static final String DOCUMENTS_LIST_AUTH_TOKEN_TYPE = "writely";
 
+	private static final String ACCOUNT_TYPE = "com.google";
+
 	private final Activity activity;
 
 	public static enum ServiceType {
@@ -68,5 +70,11 @@ public class Authorizer
 			default:
 				throw new RuntimeException("Unknown service type");
 		}
+	}
+
+	public void invalidateToken(String authToken) {
+		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
+
+		accountManager.invalidateAuthToken(ACCOUNT_TYPE, authToken);
 	}
 }
