@@ -154,7 +154,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 			syncSpreadsheetKey = synchronizer.getExistingSpreadsheetKey(documentsListAuthToken);
 
 			// Local storage is empty, so try to download remote
-			if (DbProvider.getInstance().getDecks().getDecksCount() == 0) {
+			if (DbProvider.getInstance().getDecks().getDecksList().size() == 0) {
 				synchronizer.syncFromRemoteToLocal(syncSpreadsheetKey, spreadsheetsAuthToken);
 			}
 		}
