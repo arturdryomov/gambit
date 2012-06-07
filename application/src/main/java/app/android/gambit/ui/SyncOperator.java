@@ -23,7 +23,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private String documentsListAuthToken;
 	private String spreadsheetsAuthToken;
 
-	private boolean isTokensInvalidationEnabled;
+	private boolean isTokensInvalidationRequired;
 
 	private ProgressDialogShowHelper progressDialogShowHelper;
 
@@ -33,7 +33,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 		this.successRunnable = successRunnable;
 
-		isTokensInvalidationEnabled = false;
+		isTokensInvalidationRequired = false;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 			Account account = getAccount();
 
 			getAuthTokens(account);
-			if (isTokensInvalidationEnabled) {
+			if (isTokensInvalidationRequired) {
 				invalidateAuthTokens(account);
 			}
 		}
@@ -106,7 +106,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 	private String sync() {
 		try {
-			if (!isSyncSpreadsheetKeyInPreferences()) {
+			if (!haveSyncSpreadsheetKeyInPreferences()) {
 				syncFirstTime();
 			}
 			else {
@@ -114,9 +114,9 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 			}
 		}
 		catch (UnauthorizedException e) {
-			if (!isTokensInvalidationEnabled) {
+			if (!isTokensInvalidationRequired) {
 				// Run again and invalidate tokens
-				isTokensInvalidationEnabled = true;
+				isTokensInvalidationRequired = true;
 				doInBackground();
 			}
 			else {
@@ -126,7 +126,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		}
 		catch (EntryNotFoundException e) {
 			// Run again and force find or create spreadsheet
-			removeSyncSpreadsheetKey();
+			removeSyncSpreadsheetKeyFromPreferences();
 			return sync();
 		}
 		catch (FailedRequestException e) {
@@ -136,7 +136,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		return new String();
 	}
 
-	private boolean isSyncSpreadsheetKeyInPreferences() {
+	private boolean haveSyncSpreadsheetKeyInPreferences() {
 		return !loadSyncSpreadsheetKeyFromPreferences().isEmpty();
 	}
 
@@ -178,7 +178,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		synchronizer.synchronize(loadSyncSpreadsheetKeyFromPreferences(), spreadsheetsAuthToken);
 	}
 
-	private void removeSyncSpreadsheetKey() {
+	private void removeSyncSpreadsheetKeyFromPreferences() {
 		PreferencesOperator.remove(activityContext,
 			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
