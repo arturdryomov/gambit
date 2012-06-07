@@ -41,14 +41,14 @@ class AccountCreator
 			throw new SignUpCanceledException();
 		}
 		catch (AuthenticatorException e) {
-			throw new SignUpCanceledException();
+			throw new SignUpFailedException();
 		}
 		catch (IOException e) {
-			throw new SignUpCanceledException();
+			throw new SignUpFailedException();
 		}
 
 		if (!signUpResponse.containsKey(AccountManager.KEY_ACCOUNT_NAME)) {
-			throw new SignUpCanceledException();
+			throw new SignUpFailedException();
 		}
 
 		String accountName = signUpResponse.getString(AccountManager.KEY_ACCOUNT_NAME);

@@ -66,11 +66,14 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		catch (SignUpCanceledException e) {
 			// Skip sign up cancel, user already knows that he did it
 		}
+		catch (SignUpFailedException e) {
+			return activityContext.getString(R.string.error_network);
+		}
 		catch (AuthorizationCanceledException e) {
 			// Skip revoking auth access, user already knows that he did it
 		}
 		catch (AuthorizationFailedException e) {
-			return activityContext.getString(R.string.error_unspecified);
+			return activityContext.getString(R.string.error_network);
 		}
 
 		return new String();
