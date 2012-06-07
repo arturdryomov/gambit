@@ -10,8 +10,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import app.android.gambit.R;
 
 
@@ -27,7 +25,6 @@ public class AsyncAccountSelector
 		void onAccountObtained(Result result, Account account);
 	}
 
-	private static final String ACCOUNT_NAME = "google_account";
 	private static final String ACCOUNT_TYPE = "com.google";
 
 	private final Activity activity;
@@ -43,6 +40,9 @@ public class AsyncAccountSelector
 			notifyAccountWaiter(loadAccountNameFromPreferences());
 		}
 		else if (isSingleAccountRegistered()) {
+			String accountName = getSingleRegisteredAccount();
+
+			saveAccountNameToPreferences(accountName);
 			notifyAccountWaiter(getSingleRegisteredAccount());
 		}
 		else {
@@ -56,7 +56,8 @@ public class AsyncAccountSelector
 	}
 
 	private String loadAccountNameFromPreferences() {
-		String accountName = getPreference(ACCOUNT_NAME);
+		String accountName = PreferencesOperator.get(activity,
+			PreferencesOperator.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME);
 
 		if (isAccountRegistered(accountName)) {
 			return accountName;
@@ -64,13 +65,6 @@ public class AsyncAccountSelector
 		else {
 			return new String();
 		}
-	}
-
-	private String getPreference(String key) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activity.getApplicationContext());
-
-		return preferences.getString(key, new String());
 	}
 
 	private boolean isAccountRegistered(String accountName) {
@@ -127,6 +121,11 @@ public class AsyncAccountSelector
 		return getRegisteredAccountsNames().get(ACCOUNTS_INDEX_FOR_SINGLE_ACCOUNT);
 	}
 
+	private void saveAccountNameToPreferences(String accountName) {
+		PreferencesOperator.set(activity, PreferencesOperator.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME,
+			accountName);
+	}
+
 	private void selectAccountFromDialog() {
 		if (haveSomeAccountRegistered()) {
 			constructAccountsListDialog().show();
@@ -154,22 +153,12 @@ public class AsyncAccountSelector
 			public void onClick(DialogInterface dialog, int selectedAccountPosition) {
 				String selectedAccountName = accountsNamesList.get(selectedAccountPosition);
 
-				setPreference(ACCOUNT_NAME, selectedAccountName);
+				saveAccountNameToPreferences(selectedAccountName);
 
 				notifyAccountWaiter(selectedAccountName);
 			}
 		});
 
 		return dialogBuilder.create();
-	}
-
-	private void setPreference(String key, String value) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activity.getApplicationContext());
-		SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-		preferencesEditor.putString(key, value);
-
-		preferencesEditor.commit();
 	}
 }

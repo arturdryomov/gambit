@@ -4,9 +4,7 @@ package app.android.gambit.ui;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import app.android.gambit.R;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.remote.EntryNotFoundException;
@@ -17,25 +15,25 @@ import app.android.gambit.remote.UnauthorizedException;
 
 class SyncOperator extends AsyncTask<Void, Void, String>
 {
-	private static final String PREFERENCE_SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
-
-	private ProgressDialogShowHelper progressDialogShowHelper;
-
-	private String documentsListAuthToken;
-	private String spreadsheetsAuthToken;
-
-	private boolean isTokensInvalidationEnabled = false;
-
 	private final Context activityContext;
 	private final Activity activity;
 
 	private final Runnable successRunnable;
+
+	private String documentsListAuthToken;
+	private String spreadsheetsAuthToken;
+
+	private boolean isTokensInvalidationEnabled;
+
+	private ProgressDialogShowHelper progressDialogShowHelper;
 
 	public SyncOperator(Context activityContext, Runnable successRunnable) {
 		this.activityContext = activityContext;
 		this.activity = (Activity) activityContext;
 
 		this.successRunnable = successRunnable;
+
+		isTokensInvalidationEnabled = false;
 	}
 
 	@Override
@@ -48,19 +46,21 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 	@Override
 	protected String doInBackground(Void... params) {
+		String authorizationErrorMessage = authorize();
+		if (!authorizationErrorMessage.isEmpty()) {
+			return authorizationErrorMessage;
+		}
+
+		return sync();
+	}
+
+	private String authorize() {
 		try {
 			Account account = getAccount();
 
 			getAuthTokens(account);
 			if (isTokensInvalidationEnabled) {
 				invalidateAuthTokens(account);
-			}
-
-			if (!isSyncSpreadsheetKeyInPreferences()) {
-				syncFirstTime();
-			}
-			else {
-				syncNotFirstTime();
 			}
 		}
 		catch (SignUpCanceledException e) {
@@ -71,24 +71,6 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		}
 		catch (AuthorizationFailedException e) {
 			return activityContext.getString(R.string.error_unspecified);
-		}
-		catch (UnauthorizedException e) {
-			if (isTokensInvalidationEnabled) {
-				return activityContext.getString(R.string.error_unspecified);
-			}
-			else {
-				// Run again and invalidate tokens
-				isTokensInvalidationEnabled = true;
-				doInBackground();
-			}
-		}
-		catch (EntryNotFoundException e) {
-			// Run again and force find or create spreadsheet
-			removeSyncSpreadsheetKey();
-			doInBackground();
-		}
-		catch (FailedRequestException e) {
-			return activityContext.getString(R.string.error_network);
 		}
 
 		return new String();
@@ -119,6 +101,47 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		getAuthTokens(account);
 	}
 
+	private String sync() {
+		try {
+			if (!isSyncSpreadsheetKeyInPreferences()) {
+				syncFirstTime();
+			}
+			else {
+				syncNotFirstTime();
+			}
+		}
+		catch (UnauthorizedException e) {
+			if (!isTokensInvalidationEnabled) {
+				// Run again and invalidate tokens
+				isTokensInvalidationEnabled = true;
+				doInBackground();
+			}
+			else {
+				// Invalidation failed
+				return activityContext.getString(R.string.error_unspecified);
+			}
+		}
+		catch (EntryNotFoundException e) {
+			// Run again and force find or create spreadsheet
+			removeSyncSpreadsheetKey();
+			return sync();
+		}
+		catch (FailedRequestException e) {
+			return activityContext.getString(R.string.error_network);
+		}
+
+		return new String();
+	}
+
+	private boolean isSyncSpreadsheetKeyInPreferences() {
+		return !loadSyncSpreadsheetKeyFromPreferences().isEmpty();
+	}
+
+	private String loadSyncSpreadsheetKeyFromPreferences() {
+		return PreferencesOperator.get(activityContext,
+			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
+	}
+
 	private void syncFirstTime() {
 		Synchronizer synchronizer = new Synchronizer();
 
@@ -142,40 +165,19 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		saveSyncSpreadsheetKeyToPreferences(syncSpreadsheetKey);
 	}
 
+	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {
+		PreferencesOperator.set(activityContext, PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY,
+			syncSpreadsheetKey);
+	}
+
 	private void syncNotFirstTime() {
 		Synchronizer synchronizer = new Synchronizer();
 		synchronizer.synchronize(loadSyncSpreadsheetKeyFromPreferences(), spreadsheetsAuthToken);
 	}
 
-	private boolean isSyncSpreadsheetKeyInPreferences() {
-		return !loadSyncSpreadsheetKeyFromPreferences().isEmpty();
-	}
-
-	private String loadSyncSpreadsheetKeyFromPreferences() {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activityContext.getApplicationContext());
-
-		return preferences.getString(PREFERENCE_SYNC_SPREADSHEET_KEY, new String());
-	}
-
-	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activityContext.getApplicationContext());
-		SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-		preferencesEditor.putString(PREFERENCE_SYNC_SPREADSHEET_KEY, syncSpreadsheetKey);
-
-		preferencesEditor.commit();
-	}
-
 	private void removeSyncSpreadsheetKey() {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activityContext.getApplicationContext());
-		SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-		preferencesEditor.remove(PREFERENCE_SYNC_SPREADSHEET_KEY);
-
-		preferencesEditor.commit();
+		PreferencesOperator.remove(activityContext,
+			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
 
 	@Override
