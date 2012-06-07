@@ -17,7 +17,7 @@ public class DeckTests extends DatabaseTestCase
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		deck = decks.addNewDeck(DECK_TITLE);
+		deck = decks.createDeck(DECK_TITLE);
 	}
 
 	public void testGetId() {
@@ -39,7 +39,7 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testGetCardsCount() {
-		deck.addNewCard("Front text", "Back text");
+		deck.createCard("Front text", "Back text");
 
 		assertEquals(1, deck.getCardsCount());
 	}
@@ -57,7 +57,7 @@ public class DeckTests extends DatabaseTestCase
 		String cardFrontSideText = "Front side text";
 		String cardBackSideText = "Back side text";
 
-		Card card = deck.addNewCard(cardFrontSideText, cardBackSideText);
+		Card card = deck.createCard(cardFrontSideText, cardBackSideText);
 
 		assertEquals(1, deck.getCardsCount());
 		assertEquals(cardFrontSideText, card.getFrontSideText());
@@ -65,7 +65,7 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testDeleteCard() {
-		Card card = deck.addNewCard("Front text", "Back text");
+		Card card = deck.createCard("Front text", "Back text");
 
 		deck.deleteCard(card);
 
@@ -89,14 +89,6 @@ public class DeckTests extends DatabaseTestCase
 		deck.shuffleCards();
 	}
 
-	public void testGetCardById() {
-		Card card = deck.addNewCard("Front text", "Back text");
-
-		Card cardById = deck.getCardById(card.getId());
-
-		assertEquals(card, cardById);
-	}
-
 	public void testGetSetCurrentCardIndex() {
 		fillDeckWithCards(deck);
 		final int currentCardIndex = 1;
@@ -109,7 +101,7 @@ public class DeckTests extends DatabaseTestCase
 	public void testCurrentCardIndexIsZeroAfterInsertion() {
 		deck.setCurrentCardIndex(1);
 
-		deck.addNewCard("Front side text", "Back side text");
+		deck.createCard("Front side text", "Back side text");
 
 		assertEquals(0, deck.getCurrentCardIndex());
 	}

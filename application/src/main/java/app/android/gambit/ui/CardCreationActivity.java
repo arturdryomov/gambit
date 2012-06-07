@@ -63,7 +63,7 @@ public class CardCreationActivity extends FormActivity
 	{
 		@Override
 		protected Void doInBackground(Void... params) {
-			deck.addNewCard(frontSideText, backSideText);
+			deck.createCard(frontSideText, backSideText);
 
 			return null;
 		}

@@ -17,42 +17,25 @@ public class DecksTests extends DatabaseTestCase
 	}
 
 	public void testGetDecksCount() {
-		decks.addNewDeck("New deck");
+		decks.createDeck("New deck");
 
-		assertEquals(1, decks.getDecksCount());
+		assertEquals(1, decks.getDecksList().size());
 	}
 
 	public void testAddDeck() {
 		String deckTitle = "New deck";
 
-		Deck newDeck = decks.addNewDeck(deckTitle);
+		Deck newDeck = decks.createDeck(deckTitle);
 
-		assertEquals(1, decks.getDecksCount());
+		assertEquals(1, decks.getDecksList().size());
 		assertEquals(deckTitle, newDeck.getTitle());
 	}
 
 	public void testDeleteDeck() {
-		Deck deck = decks.addNewDeck("New deck");
+		Deck deck = decks.createDeck("New deck");
 
 		decks.deleteDeck(deck);
 
-		assertEquals(0, decks.getDecksCount());
-	}
-
-	public void testGetDeckById() {
-		Deck deck = decks.addNewDeck("New deck");
-
-		Deck deckById = decks.getDeckById(deck.getId());
-
-		assertEquals(deck, deckById);
-	}
-
-	public void testGetDeckByCardId() {
-		Deck deck = decks.addNewDeck("New deck");
-		long cardId = deck.addNewCard("Front side text", "Back side text").getId();
-
-		Deck deckByCardId = decks.getDeckByCardId(cardId);
-
-		assertEquals(deck, deckByCardId);
+		assertEquals(0, decks.getDecksList().size());
 	}
 }

@@ -34,10 +34,11 @@ class LastUpdateDateTimeHandler
 	}
 
 	private boolean recordExists() {
-		Cursor cursor = database.rawQuery(buildRecordsCountSelectingQuery(), null);
-		cursor.moveToFirst();
+		Cursor databaseCursor = database.rawQuery(buildRecordsCountSelectingQuery(), null);
+		databaseCursor.moveToFirst();
 
-		int recordsCount = cursor.getInt(0);
+		final int RECORDS_COUNT_COLUMN_INDEX = 0;
+		int recordsCount = databaseCursor.getInt(RECORDS_COUNT_COLUMN_INDEX);
 
 		return recordsCount > 0;
 	}
@@ -51,13 +52,13 @@ class LastUpdateDateTimeHandler
 	}
 
 	private String buildEmptyRecordInsertionQuery() {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder queryBuilder = new StringBuilder();
 
-		builder.append(String.format("insert into %s ", DbTableNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("(%s) ", DbFieldNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("values (%s)", "''"));
+		queryBuilder.append(String.format("insert into %s ", DbTableNames.DB_LAST_UPDATE_TIME));
+		queryBuilder.append(String.format("(%s) ", DbFieldNames.DB_LAST_UPDATE_TIME));
+		queryBuilder.append(String.format("values (%s)", "''"));
 
-		return builder.toString();
+		return queryBuilder.toString();
 	}
 
 	private void updateRecord(InternetDateTime dateTime) {
@@ -65,13 +66,13 @@ class LastUpdateDateTimeHandler
 	}
 
 	private String buildRecordUpdatingQuery(InternetDateTime dateTime) {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder queryBuilder = new StringBuilder();
 
-		builder.append(String.format("update %s ", DbTableNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("set %s='%s' ", DbFieldNames.DB_LAST_UPDATE_TIME,
-			dateTime.toString()));
+		queryBuilder.append(String.format("update %s ", DbTableNames.DB_LAST_UPDATE_TIME));
+		queryBuilder.append(
+			String.format("set %s='%s' ", DbFieldNames.DB_LAST_UPDATE_TIME, dateTime.toString()));
 
-		return builder.toString();
+		return queryBuilder.toString();
 	}
 
 	public InternetDateTime getLastUpdatedDateTime() {
@@ -89,10 +90,10 @@ class LastUpdateDateTimeHandler
 	private InternetDateTime tryGetLastUpdatedDateTime() {
 		ensureRecordExists();
 
-		Cursor cursor = database.rawQuery(buildRecordSelectingQuery(), null);
-		cursor.moveToFirst();
+		Cursor databaseCursor = database.rawQuery(buildRecordSelectingQuery(), null);
+		databaseCursor.moveToFirst();
 
-		String dateTimeAsString = cursor.getString(0);
+		String dateTimeAsString = databaseCursor.getString(0);
 
 		return new InternetDateTime(dateTimeAsString);
 	}
@@ -104,11 +105,11 @@ class LastUpdateDateTimeHandler
 	}
 
 	private String buildRecordSelectingQuery() {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder queryBuilder = new StringBuilder();
 
-		builder.append(String.format("select %s ", DbFieldNames.DB_LAST_UPDATE_TIME));
-		builder.append(String.format("from %s", DbTableNames.DB_LAST_UPDATE_TIME));
+		queryBuilder.append(String.format("select %s ", DbFieldNames.DB_LAST_UPDATE_TIME));
+		queryBuilder.append(String.format("from %s", DbTableNames.DB_LAST_UPDATE_TIME));
 
-		return builder.toString();
+		return queryBuilder.toString();
 	}
 }

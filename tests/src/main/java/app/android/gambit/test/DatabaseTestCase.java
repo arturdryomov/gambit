@@ -40,12 +40,12 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 	}
 
 	protected void fillDatabaseWithEmptyDecks() {
-		if (decks.getDecksCount() != 0) {
+		if (decks.getDecksList().size() != 0) {
 			return;
 		}
 
 		for (int deckIndex = 1; deckIndex <= DECKS_COUNT; deckIndex++) {
-			decks.addNewDeck(String.format("Deck %s", deckIndex + 1));
+			decks.createDeck(String.format("Deck %s", deckIndex + 1));
 		}
 	}
 
@@ -58,19 +58,19 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 			String frontSideText = String.format("Card %s in deck %s front", cardIndex, deck.getId());
 			String backSideText = String.format("Card %s in deck %s back", cardIndex, deck.getId());
 
-			deck.addNewCard(frontSideText, backSideText);
+			deck.createCard(frontSideText, backSideText);
 		}
 	}
 
 	protected void fillDatabase() {
 		for (int deckIndex = 1; deckIndex <= DECKS_COUNT; deckIndex++) {
-			Deck newDeck = decks.addNewDeck(String.format("Deck %s", deckIndex + 1));
+			Deck newDeck = decks.createDeck(String.format("Deck %s", deckIndex + 1));
 
 			for (int cardIndex = 1; cardIndex <= CARDS_COUNT; cardIndex++) {
 				String frontSideText = String.format("Card %s in deck %s front", cardIndex, deckIndex);
 				String backSideText = String.format("Card %s in deck %s back", cardIndex, deckIndex);
 
-				newDeck.addNewCard(frontSideText, backSideText);
+				newDeck.createCard(frontSideText, backSideText);
 			}
 		}
 	}

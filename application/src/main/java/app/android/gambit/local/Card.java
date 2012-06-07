@@ -9,6 +9,8 @@ import android.os.Parcelable;
 
 public class Card implements Parcelable
 {
+	private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
+
 	private final SQLiteDatabase database;
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
@@ -16,68 +18,31 @@ public class Card implements Parcelable
 	private String frontSideText;
 	private String backSideText;
 
-	Card(ContentValues values) {
+	Card(ContentValues databaseValues) {
 		database = DbProvider.getInstance().getDatabase();
 		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
-		setValues(values);
+		setValues(databaseValues);
 	}
 
-	private void setValues(ContentValues values) {
-		Long idAsLong = values.getAsLong(DbFieldNames.ID);
+	private void setValues(ContentValues databaseValues) {
+		Long idAsLong = databaseValues.getAsLong(DbFieldNames.ID);
 		if (idAsLong == null) {
 			throw new DbException();
 		}
 		id = idAsLong.longValue();
 
-		String frontSideAsString = values.getAsString(DbFieldNames.CARD_FRONT_SIDE_TEXT);
+		String frontSideAsString = databaseValues.getAsString(DbFieldNames.CARD_FRONT_SIDE_TEXT);
 		if (frontSideAsString == null) {
 			throw new DbException();
 		}
 		frontSideText = frontSideAsString;
 
-		String backSideAsString = values.getAsString(DbFieldNames.CARD_BACK_SIDE_TEXT);
+		String backSideAsString = databaseValues.getAsString(DbFieldNames.CARD_BACK_SIDE_TEXT);
 		if (backSideAsString == null) {
 			throw new DbException();
 		}
 		backSideText = backSideAsString;
-	}
-
-	public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>() {
-		@Override
-		public Card createFromParcel(Parcel parcel) {
-			return new Card(parcel);
-		}
-
-		@Override
-		public Card[] newArray(int size) {
-			return new Card[size];
-		}
-	};
-
-	private Card(Parcel parcel) {
-		database = DbProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
-
-		readFromParcel(parcel);
-	}
-
-	public void readFromParcel(Parcel parcel) {
-		id = parcel.readLong();
-		frontSideText = parcel.readString();
-		backSideText = parcel.readString();
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeLong(id);
-		parcel.writeString(frontSideText);
-		parcel.writeString(backSideText);
 	}
 
 	public String getFrontSideText() {
@@ -107,10 +72,10 @@ public class Card implements Parcelable
 	}
 
 	private void updateFrontSideText(String text) {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, text);
+		ContentValues databaseValues = new ContentValues();
+		databaseValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, text);
 
-		database.update(DbTableNames.CARDS, contentValues,
+		database.update(DbTableNames.CARDS, databaseValues,
 			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
@@ -141,10 +106,10 @@ public class Card implements Parcelable
 	}
 
 	private void updateBackSideText(String text) {
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, text);
+		ContentValues databaseValues = new ContentValues();
+		databaseValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, text);
 
-		database.update(DbTableNames.CARDS, contentValues,
+		database.update(DbTableNames.CARDS, databaseValues,
 			String.format("%s = %d", DbFieldNames.ID, id), null);
 	}
 
@@ -154,7 +119,6 @@ public class Card implements Parcelable
 
 	@Override
 	public int hashCode() {
-		// hashCode() is not intended to be used
 		throw new UnsupportedOperationException();
 	}
 
@@ -191,5 +155,43 @@ public class Card implements Parcelable
 		}
 
 		return true;
+	}
+
+	public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>()
+	{
+		@Override
+		public Card createFromParcel(Parcel parcel) {
+			return new Card(parcel);
+		}
+
+		@Override
+		public Card[] newArray(int size) {
+			return new Card[size];
+		}
+	};
+
+	private Card(Parcel parcel) {
+		database = DbProvider.getInstance().getDatabase();
+		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
+
+		readFromParcel(parcel);
+	}
+
+	public void readFromParcel(Parcel parcel) {
+		id = parcel.readLong();
+		frontSideText = parcel.readString();
+		backSideText = parcel.readString();
+	}
+
+	@Override
+	public int describeContents() {
+		return SPECIAL_PARCELABLE_OBJECTS_BITMASK;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeLong(id);
+		parcel.writeString(frontSideText);
+		parcel.writeString(backSideText);
 	}
 }
