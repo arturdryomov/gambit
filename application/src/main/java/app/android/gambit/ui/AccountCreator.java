@@ -25,7 +25,7 @@ class AccountCreator
 		return new AccountCreator(activity).createAccount();
 	}
 
-	public AccountCreator(Activity activity) {
+	private AccountCreator(Activity activity) {
 		this.activity = activity;
 	}
 

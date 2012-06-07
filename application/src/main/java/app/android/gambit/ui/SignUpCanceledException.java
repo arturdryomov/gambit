@@ -1,6 +1,6 @@
 package app.android.gambit.ui;
 
 
-public class SignUpCanceledException extends RuntimeException
+class SignUpCanceledException extends RuntimeException
 {
 }
