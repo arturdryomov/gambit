@@ -328,6 +328,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		private String positiveMessage;
 
+		private boolean isInvalidationForTokensEnabled = false;
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -350,6 +352,14 @@ public class DecksListActivity extends SimpleAdapterListActivity
 					account);
 				String spreadsheetsAuthToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS,
 					account);
+
+				if (isInvalidationForTokensEnabled) {
+					authorizer.invalidateToken(googleDocsAuthToken);
+					authorizer.invalidateToken(spreadsheetsAuthToken);
+
+					googleDocsAuthToken = authorizer.getToken(Authorizer.ServiceType.DOCUMENTS_LIST, account);
+					spreadsheetsAuthToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+				}
 
 				Synchronizer synchronizer = new Synchronizer();
 
@@ -395,7 +405,18 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return getString(R.string.error_unspecified);
 			}
 			catch (UnauthorizedException e) {
-				return getString(R.string.error_unspecified);
+				if (isInvalidationForTokensEnabled) {
+					// Invalidation failed
+
+					return getString(R.string.error_unspecified);
+				}
+				else {
+					// Try to invalidate token
+					isInvalidationForTokensEnabled = true;
+					removeSyncSpreadsheetKey();
+
+					doInBackground();
+				}
 			}
 			catch (FailedRequestException e) {
 				return getString(R.string.error_network);
