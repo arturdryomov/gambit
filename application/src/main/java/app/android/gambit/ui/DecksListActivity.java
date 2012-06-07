@@ -4,15 +4,10 @@ package app.android.gambit.ui;
 import java.util.HashMap;
 import java.util.List;
 
-import android.accounts.Account;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -23,10 +18,6 @@ import android.widget.SimpleAdapter;
 import app.android.gambit.R;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;
-import app.android.gambit.remote.EntryNotFoundException;
-import app.android.gambit.remote.FailedRequestException;
-import app.android.gambit.remote.Synchronizer;
-import app.android.gambit.remote.UnauthorizedException;
 import com.actionbarsherlock.view.Menu;
 
 
@@ -304,7 +295,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				return true;
 
 			case R.id.menu_sync:
-				callUpdating();
+				callSyncing();
 				return true;
 
 			default:
@@ -317,166 +308,16 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		activityContext.startActivity(callIntent);
 	}
 
-	private void callUpdating() {
-		new UpdateTaks().execute();
-	}
-
-	private class UpdateTaks extends AsyncTask<Void, Void, String>
-	{
-		private static final String PREFERENCE_SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
-
-		private ProgressDialogShowHelper progressDialogShowHelper;
-
-		private String positiveMessage;
-
-		private boolean isInvalidationForTokensEnabled = false;
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-			progressDialogShowHelper = new ProgressDialogShowHelper();
-			progressDialogShowHelper.show(activityContext, R.string.loading_sync);
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			positiveMessage = new String();
-
-			try {
-				Activity activity = (Activity) activityContext;
-
-				Account account = AccountSelector.select(activity);
-
-				Authorizer authorizer = new Authorizer(activity);
-				String googleDocsAuthToken = authorizer.getToken(Authorizer.ServiceType.DOCUMENTS_LIST,
-					account);
-				String spreadsheetsAuthToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS,
-					account);
-
-				if (isInvalidationForTokensEnabled) {
-					authorizer.invalidateToken(googleDocsAuthToken);
-					authorizer.invalidateToken(spreadsheetsAuthToken);
-
-					googleDocsAuthToken = authorizer.getToken(Authorizer.ServiceType.DOCUMENTS_LIST, account);
-					spreadsheetsAuthToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
-				}
-
-				Synchronizer synchronizer = new Synchronizer();
-
-				String syncSpreadsheetKey = loadSyncSpreadsheetKey();
-
-				if (syncSpreadsheetKey.isEmpty()) {
-					try {
-						syncSpreadsheetKey = synchronizer.getExistingSpreadsheetKey(googleDocsAuthToken);
-
-						// If local decks are empty then just download remote decks
-						if (DbProvider.getInstance().getDecks().getDecksCount() == 0) {
-							synchronizer.syncFromRemoteToLocal(syncSpreadsheetKey, spreadsheetsAuthToken);
-
-							saveSyncSpreadsheetKey(syncSpreadsheetKey);
-
-							return new String();
-						}
-					}
-					catch (EntryNotFoundException e) {
-						syncSpreadsheetKey = synchronizer.createSpreadsheet(googleDocsAuthToken);
-
-						// Just upload local decks because spreadsheet was created right now
-						synchronizer.syncFromLocalToRemote(syncSpreadsheetKey, spreadsheetsAuthToken);
-
-						positiveMessage = getString(R.string.message_document_created);
-						saveSyncSpreadsheetKey(syncSpreadsheetKey);
-
-						return new String();
-					}
-
-					saveSyncSpreadsheetKey(syncSpreadsheetKey);
-				}
-
-				Log.i("SYNC", "Start sync");
-				synchronizer.synchronize(syncSpreadsheetKey, spreadsheetsAuthToken);
-				Log.i("SYNC", "Finish sync");
-			}
-			catch (NoAccountRegisteredException e) {
-				return getString(R.string.error_no_google_accounts);
-			}
-			catch (AuthorizationCanceledException e) {
-				// Just ignore user cancel, he already knows that he did it
-			}
-			catch (AuthorizationFailedException e) {
-				return getString(R.string.error_unspecified);
-			}
-			catch (UnauthorizedException e) {
-				if (isInvalidationForTokensEnabled) {
-					// Invalidation failed
-
-					return getString(R.string.error_unspecified);
-				}
-				else {
-					// Try to invalidate token
-					isInvalidationForTokensEnabled = true;
-					removeSyncSpreadsheetKey();
-
-					doInBackground();
-				}
-			}
-			catch (FailedRequestException e) {
-				return getString(R.string.error_network);
-			}
-			catch (EntryNotFoundException e) {
-				removeSyncSpreadsheetKey();
-
-				// Try to resolve issue again without saved spreadsheet key
-				doInBackground();
-			}
-
-			return new String();
-		}
-
-		private String loadSyncSpreadsheetKey() {
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-				activityContext.getApplicationContext());
-
-			return preferences.getString(PREFERENCE_SYNC_SPREADSHEET_KEY, new String());
-		}
-
-		private void saveSyncSpreadsheetKey(String syncSpreadsheetKey) {
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-				activityContext.getApplicationContext());
-			SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-			preferencesEditor.putString(PREFERENCE_SYNC_SPREADSHEET_KEY, syncSpreadsheetKey);
-
-			preferencesEditor.commit();
-		}
-
-		private void removeSyncSpreadsheetKey() {
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-				activityContext.getApplicationContext());
-			SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-			preferencesEditor.remove(PREFERENCE_SYNC_SPREADSHEET_KEY);
-
-			preferencesEditor.commit();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			super.onPostExecute(errorMessage);
-
-			progressDialogShowHelper.hide();
-
-			if (!errorMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, errorMessage);
-			}
-			else {
+	private void callSyncing() {
+		Runnable successRunnable = new Runnable()
+		{
+			@Override
+			public void run() {
 				loadDecks();
 			}
+		};
 
-			if (!positiveMessage.isEmpty()) {
-				UserAlerter.alert(activityContext, positiveMessage);
-			}
-		}
+		SyncOperator syncOperator = new SyncOperator(activityContext, successRunnable);
+		syncOperator.execute();
 	}
 }
