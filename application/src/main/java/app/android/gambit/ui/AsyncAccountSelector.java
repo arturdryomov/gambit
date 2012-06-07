@@ -17,7 +17,8 @@ import app.android.gambit.R;
 
 public class AsyncAccountSelector
 {
-	public static enum Result {
+	public static enum Result
+	{
 		SUCCESS, NO_ACCOUNTS_REGISTERED
 	}
 
@@ -41,6 +42,9 @@ public class AsyncAccountSelector
 		if (haveAccountNameInPreferences()) {
 			notifyAccountWaiter(loadAccountNameFromPreferences());
 		}
+		else if (isSingleAccountRegistered()) {
+			notifyAccountWaiter(getSingleRegisteredAccount());
+		}
 		else {
 			selectAccountFromDialog();
 		}
@@ -63,8 +67,8 @@ public class AsyncAccountSelector
 	}
 
 	private String getPreference(String key) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity
-			.getApplicationContext());
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+			activity.getApplicationContext());
 
 		return preferences.getString(key, new String());
 	}
@@ -111,6 +115,18 @@ public class AsyncAccountSelector
 		return null;
 	}
 
+	private boolean isSingleAccountRegistered() {
+		final int ACCOUNTS_COUNT_FOR_SINGLE_ACCOUNT = 1;
+
+		return getRegisteredAccountsNames().size() == ACCOUNTS_COUNT_FOR_SINGLE_ACCOUNT;
+	}
+
+	private String getSingleRegisteredAccount() {
+		final int ACCOUNTS_INDEX_FOR_SINGLE_ACCOUNT = 0;
+
+		return getRegisteredAccountsNames().get(ACCOUNTS_INDEX_FOR_SINGLE_ACCOUNT);
+	}
+
 	private void selectAccountFromDialog() {
 		if (haveSomeAccountRegistered()) {
 			constructAccountsListDialog().show();
@@ -132,7 +148,8 @@ public class AsyncAccountSelector
 		String[] accountsNamesArray = new String[accountsNamesList.size()];
 		accountsNamesList.toArray(accountsNamesArray);
 
-		dialogBuilder.setItems(accountsNamesArray, new DialogInterface.OnClickListener() {
+		dialogBuilder.setItems(accountsNamesArray, new DialogInterface.OnClickListener()
+		{
 			@Override
 			public void onClick(DialogInterface dialog, int selectedAccountPosition) {
 				String selectedAccountName = accountsNamesList.get(selectedAccountPosition);
@@ -147,8 +164,8 @@ public class AsyncAccountSelector
 	}
 
 	private void setPreference(String key, String value) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity
-			.getApplicationContext());
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+			activity.getApplicationContext());
 		SharedPreferences.Editor preferencesEditor = preferences.edit();
 
 		preferencesEditor.putString(key, value);
