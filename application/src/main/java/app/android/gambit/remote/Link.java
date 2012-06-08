@@ -6,10 +6,10 @@ import com.google.api.client.util.Key;
 
 public class Link
 {
-	@Key
+	@Key("@href")
 	private String href;
 
-	@Key
+	@Key("@rel")
 	private String rel;
 
 	public String getHref() {

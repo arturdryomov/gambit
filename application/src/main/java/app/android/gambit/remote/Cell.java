@@ -6,7 +6,7 @@ import com.google.api.client.util.Key;
 
 public class Cell
 {
-	@Key
+	@Key("@row")
 	private int row;
 
 	@Key("@col")

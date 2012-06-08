@@ -6,13 +6,13 @@ import com.google.api.client.util.Key;
 
 public class Category
 {
-	@Key
+	@Key("@scheme")
 	private String scheme;
 
-	@Key
+	@Key("@term")
 	private String term;
 
-	@Key
+	@Key("@label")
 	private String label;
 
 	public Category() {
