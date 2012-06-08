@@ -6,10 +6,10 @@ import com.google.api.client.util.Key;
 
 public class Author
 {
-	@Key("name")
+	@Key
 	private String name;
 
-	@Key("email")
+	@Key
 	private String email;
 
 	public String getName() {
