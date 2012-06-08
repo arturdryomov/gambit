@@ -15,6 +15,19 @@ public class CellEntry
 	@Key
 	private String content;
 
+	public CellEntry() {
+		cell = new Cell();
+		id = new String();
+		content = new String();
+	}
+
+	public CellEntry(WorksheetEntry worksheet, Cell cell) {
+		this();
+
+		this.cell = cell;
+		id = worksheet.getCellEditUrl(cell.getRow(), cell.getColumn()).toString();
+	}
+
 	public Cell getCell() {
 		return cell;
 	}
@@ -29,18 +42,5 @@ public class CellEntry
 
 	public boolean isEmpty() {
 		return cell.isEmpty() && id.isEmpty() && content.isEmpty();
-	}
-
-	public CellEntry(WorksheetEntry worksheet, Cell cell) {
-		this();
-
-		this.cell = cell;
-		id = worksheet.getCellEditUrl(cell.getRow(), cell.getColumn()).toString();
-	}
-
-	public CellEntry() {
-		cell = new Cell(); // empty cell
-		id = new String();
-		content = new String();
 	}
 }
