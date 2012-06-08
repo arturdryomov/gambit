@@ -4,18 +4,6 @@ package app.android.gambit.remote;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.xml.atom.AtomContent;
 
-/*
- * TODO: Consider Google Spreadsheets limitations treating
- *
- * Google Spreadsheets have the following limitations:
- *   Total of 400,000 cells across all worksheets;
- *   256 columns per worksheet;
- *   200 worksheets per spreadsheet.
- *
- * Currently SpreadsheetsClient doesn't make any checks so
- * if an attempt to exceed the limits occurs, general
- * FailedRequestException will be thrown.
- */
 
 public class SpreadsheetsClient extends GoogleDocsClient
 {
@@ -55,8 +43,7 @@ public class SpreadsheetsClient extends GoogleDocsClient
 		return processGetRequest(request, CellFeed.class);
 	}
 
-	public void insertWorksheet(SpreadsheetEntry spreadsheet, String title, int rowCount,
-		int columnCount) {
+	public void insertWorksheet(SpreadsheetEntry spreadsheet, String title, int rowCount, int columnCount) {
 
 		WorksheetEntry entry = new WorksheetEntry(title, rowCount, columnCount);
 		AtomContent content = AtomContent.forEntry(getXmlNamespaceDictionary(), entry);

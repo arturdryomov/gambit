@@ -47,6 +47,7 @@ public class GoogleDocsClient
 
 	public GoogleDocsClient(String authToken) {
 		this.authToken = authToken;
+
 		setUpRequestFactory();
 	}
 
@@ -109,6 +110,27 @@ public class GoogleDocsClient
 		}
 	}
 
+	private HttpResponse processRequest(HttpRequest request) {
+		try {
+			return request.execute();
+		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromUnsuccessfulStatusCode(e.getStatusCode());
+		}
+		catch (IOException e) {
+			throw new FailedRequestException(e);
+		}
+	}
+
+	private FailedRequestException buildExceptionFromUnsuccessfulStatusCode(int statusCode) {
+		if (statusCode == UNAUTHORIZED_STATUS_CODE) {
+			return new UnauthorizedException();
+		}
+		else {
+			return new FailedRequestException();
+		}
+	}
+
 	protected HttpRequest buildPostRequest(GoogleUrl url, HttpContent content) {
 		try {
 			return requestFactory.buildPostRequest(url, content).setInterceptor(compressionSwitcher);
@@ -154,26 +176,5 @@ public class GoogleDocsClient
 
 	protected void processDeleteRequest(HttpRequest request) {
 		processRequest(request);
-	}
-
-	private HttpResponse processRequest(HttpRequest request) {
-		try {
-			return request.execute();
-		}
-		catch (HttpResponseException e) {
-			throw exceptionFromUnsuccessfulStatusCode(e.getStatusCode());
-		}
-		catch (IOException e) {
-			throw new FailedRequestException(e);
-		}
-	}
-
-	private FailedRequestException exceptionFromUnsuccessfulStatusCode(int statusCode) {
-		if (statusCode == UNAUTHORIZED_STATUS_CODE) {
-			return new UnauthorizedException();
-		}
-		else {
-			return new FailedRequestException();
-		}
 	}
 }
