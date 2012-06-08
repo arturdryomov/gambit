@@ -145,20 +145,20 @@ public class Synchronizer
 	}
 
 	private List<RemoteDeck> createRemoteDeckListFromDatabase() {
-		Decks decks = DbProvider.getInstance().getDecks();
+		Decks localDecks = DbProvider.getInstance().getDecks();
 		List<RemoteDeck> remoteDeckList = new ArrayList<RemoteDeck>();
 
-		for (Deck deck : decks.getDecksList()) {
+		for (Deck localDeck : localDecks.getDecksList()) {
 			RemoteDeck remoteDeck = new RemoteDeck();
 
-			remoteDeck.setTitle(deck.getTitle());
+			remoteDeck.setTitle(localDeck.getTitle());
 			remoteDeck.setCards(new ArrayList<RemoteCard>());
 
-			for (Card card : deck.getCardsList()) {
+			for (Card localCard : localDeck.getCardsList()) {
 				RemoteCard remoteCard = new RemoteCard();
 
-				remoteCard.setFrontSideText(card.getFrontSideText());
-				remoteCard.setBackSideText(card.getBackSideText());
+				remoteCard.setFrontSideText(localCard.getFrontSideText());
+				remoteCard.setBackSideText(localCard.getBackSideText());
 				remoteDeck.getCards().add(remoteCard);
 			}
 
@@ -182,15 +182,15 @@ public class Synchronizer
 	}
 
 	private void trySyncFromRemoteToLocal(RemoteDecks remoteDecks) {
-		Decks decks = DbProvider.getInstance().getDecks();
+		Decks localDecks = DbProvider.getInstance().getDecks();
 
-		decks.clear();
+		localDecks.clear();
 
 		for (RemoteDeck remoteDeck : remoteDecks.getDecks()) {
-			Deck deck = decks.createDeck(remoteDeck.getTitle());
+			Deck localDeck = localDecks.createDeck(remoteDeck.getTitle());
 
 			for (RemoteCard remoteCard : remoteDeck.getCards()) {
-				deck.createCard(remoteCard.getFrontSideText(), remoteCard.getBackSideText());
+				localDeck.createCard(remoteCard.getFrontSideText(), remoteCard.getBackSideText());
 			}
 		}
 	}
