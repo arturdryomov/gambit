@@ -21,26 +21,26 @@ public class DocumentsListUrl extends GoogleUrl
 	}
 
 	public static DocumentsListUrl documentsFeedUrl() {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder urlBuilder = new StringBuilder();
 
-		builder.append(ROOT_PATH);
-		builder.append(DOCUMENTS_FEED_PART);
-		builder.append(DIVIDER_PART);
-		builder.append(OWNER_PART);
+		urlBuilder.append(ROOT_PATH);
+		urlBuilder.append(DOCUMENTS_FEED_PART);
+		urlBuilder.append(DIVIDER_PART);
+		urlBuilder.append(OWNER_PART);
 
-		return new DocumentsListUrl(builder.toString());
+		return new DocumentsListUrl(urlBuilder.toString());
 	}
 
 	public static DocumentsListUrl documentsFeedUrl(DocumentEntry.Type type) {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder urlBuilder = new StringBuilder();
 
-		builder.append(ROOT_PATH);
-		builder.append(DOCUMENTS_FEED_PART);
-		builder.append(DIVIDER_PART);
-		builder.append(buildDocumentTypePart(type));
-		builder.append(OWNER_PART);
+		urlBuilder.append(ROOT_PATH);
+		urlBuilder.append(DOCUMENTS_FEED_PART);
+		urlBuilder.append(DIVIDER_PART);
+		urlBuilder.append(buildDocumentTypePart(type));
+		urlBuilder.append(OWNER_PART);
 
-		return new DocumentsListUrl(builder.toString());
+		return new DocumentsListUrl(urlBuilder.toString());
 	}
 
 	private static String buildDocumentTypePart(DocumentEntry.Type type) {
