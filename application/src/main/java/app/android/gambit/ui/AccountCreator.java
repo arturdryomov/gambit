@@ -20,6 +20,7 @@ class AccountCreator
 
 	/**
 	 * @throws SignUpCanceledException if user cancelled sign up.
+	 * @throws SignUpFailedException if an error occurred during authorization.
 	 */
 	public static Account create(Activity activity) {
 		return new AccountCreator(activity).createAccount();

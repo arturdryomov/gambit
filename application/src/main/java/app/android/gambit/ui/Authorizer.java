@@ -21,7 +21,8 @@ public class Authorizer
 
 	private final Activity activity;
 
-	public static enum ServiceType {
+	public static enum ServiceType
+	{
 		SPREADSHEETS, DOCUMENTS_LIST
 	}
 
@@ -30,8 +31,8 @@ public class Authorizer
 	}
 
 	/**
-	 *	@throws AuthorizationCanceledException if user cancelled authorization.
-	 *	@throws AuthorizationFailedException if an error occurred during authorization.
+	 * @throws AuthorizationCanceledException if user cancelled authorization.
+	 * @throws AuthorizationFailedException if an error occurred during authorization.
 	 */
 	public String getToken(ServiceType serviceType, Account account) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
@@ -39,8 +40,8 @@ public class Authorizer
 		String authType = authTypeFromServiceType(serviceType);
 
 		try {
-			authResponse = accountManager.getAuthToken(account, authType, null, activity, null, null)
-				.getResult();
+			authResponse = accountManager.getAuthToken(account, authType, null, activity, null,
+				null).getResult();
 		}
 		catch (OperationCanceledException e) {
 			throw new AuthorizationCanceledException();

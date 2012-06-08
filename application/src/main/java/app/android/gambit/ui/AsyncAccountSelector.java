@@ -43,7 +43,7 @@ public class AsyncAccountSelector
 			String accountName = getSingleRegisteredAccount();
 
 			saveAccountNameToPreferences(accountName);
-			notifyAccountWaiter(getSingleRegisteredAccount());
+			notifyAccountWaiter(accountName);
 		}
 		else {
 			selectAccountFromDialog();
@@ -110,9 +110,7 @@ public class AsyncAccountSelector
 	}
 
 	private boolean isSingleAccountRegistered() {
-		final int ACCOUNTS_COUNT_FOR_SINGLE_ACCOUNT = 1;
-
-		return getRegisteredAccountsNames().size() == ACCOUNTS_COUNT_FOR_SINGLE_ACCOUNT;
+		return getRegisteredAccountsNames().size() == 1;
 	}
 
 	private String getSingleRegisteredAccount() {
