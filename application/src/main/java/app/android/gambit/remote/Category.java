@@ -15,6 +15,19 @@ public class Category
 	@Key("@label")
 	private String label;
 
+	public Category() {
+		scheme = new String();
+		term = new String();
+		label = new String();
+	}
+
+	public Category(String scheme, String term) {
+		this();
+
+		this.scheme = scheme;
+		this.term = term;
+	}
+
 	public String getScheme() {
 		return scheme;
 	}
@@ -29,18 +42,5 @@ public class Category
 
 	public boolean isEmpty() {
 		return scheme.isEmpty() && term.isEmpty() && label.isEmpty();
-	}
-
-	public Category() {
-		scheme = new String();
-		term = new String();
-		label = new String();
-	}
-
-	public Category(String scheme, String term) {
-		this();
-
-		this.scheme = scheme;
-		this.term = term;
 	}
 }

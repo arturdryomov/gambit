@@ -24,7 +24,6 @@ public class RemoteCard
 
 	@Override
 	public int hashCode() {
-		// hashCode() is not intended to be used
 		throw new UnsupportedOperationException();
 	}
 

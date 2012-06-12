@@ -9,10 +9,10 @@ import com.google.api.client.util.Key;
 
 public class CellFeed
 {
-	@Key("title")
+	@Key
 	private String title;
 
-	@Key("author")
+	@Key
 	private Author author;
 
 	@Key("entry")

@@ -15,6 +15,16 @@ public class Cell
 	@Key("@inputValue")
 	private String value;
 
+	public Cell() {
+		value = new String();
+	}
+
+	public Cell(int row, int column, String value) {
+		this.row = row;
+		this.column = column;
+		this.value = value;
+	}
+
 	public int getRow() {
 		return row;
 	}
@@ -29,15 +39,5 @@ public class Cell
 
 	public boolean isEmpty() {
 		return getValue().isEmpty();
-	}
-
-	public Cell(int row, int column, String value) {
-		this.row = row;
-		this.column = column;
-		this.value = value;
-	}
-
-	public Cell() {
-		value = new String();
 	}
 }

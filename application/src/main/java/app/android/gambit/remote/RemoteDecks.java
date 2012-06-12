@@ -64,7 +64,7 @@ public class RemoteDecks
 		List<RemoteDeck> decks = new ArrayList<RemoteDeck>();
 
 		for (WorksheetEntry worksheetEntry : getWorksheetEntries()) {
-			decks.add(remoteDeckFromWorksheetEntry(worksheetEntry));
+			decks.add(constructRemoteDeckFromWorksheetEntry(worksheetEntry));
 		}
 
 		return decks;
@@ -74,7 +74,7 @@ public class RemoteDecks
 		return spreadsheetClient.getWorksheetFeed(spreadsheetEntry).getEntries();
 	}
 
-	private RemoteDeck remoteDeckFromWorksheetEntry(WorksheetEntry worksheetEntry) {
+	private RemoteDeck constructRemoteDeckFromWorksheetEntry(WorksheetEntry worksheetEntry) {
 		List<CellEntry> cellEntries = spreadsheetClient.getCellFeed(worksheetEntry).getEntries();
 
 		SortedMap<Integer, CardTexts> cardTextsMap = new TreeMap<Integer, CardTexts>();
@@ -88,7 +88,7 @@ public class RemoteDecks
 
 		RemoteDeck deck = new RemoteDeck();
 
-		deck.setCards(cardsListFromCardTextsMap(cardTextsMap));
+		deck.setCards(constructCardsListFromCardTextsMap(cardTextsMap));
 		deck.setTitle(worksheetEntry.getTitle());
 
 		return deck;
@@ -130,7 +130,7 @@ public class RemoteDecks
 		return newCardTextsMap;
 	}
 
-	private List<RemoteCard> cardsListFromCardTextsMap(SortedMap<Integer, CardTexts> cardTextsMap) {
+	private List<RemoteCard> constructCardsListFromCardTextsMap(SortedMap<Integer, CardTexts> cardTextsMap) {
 		List<RemoteCard> cards = new ArrayList<RemoteCard>();
 
 		for (Map.Entry<Integer, CardTexts> entry : cardTextsMap.entrySet()) {
@@ -180,7 +180,6 @@ public class RemoteDecks
 
 		// Insert a worksheet for every deck
 		for (RemoteDeck deck : decks) {
-			// TODO: Make sure rowCount not exeeds max possible row count
 			int rowCount = deck.getCards().size() * 2;
 			spreadsheetClient.insertWorksheet(spreadsheetEntry, deck.getTitle(), rowCount, columnCount);
 		}
