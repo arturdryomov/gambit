@@ -24,20 +24,11 @@
 	<string name="error_deck_already_exists">Deck with such name already exists.</string>
 	<string name="error_empty_card_front_text">Enter text for the front side of flashcard.</string>
 	<string name="error_empty_card_back_text">Enter text for the back side of flashcard.</string>
-	<string name="error_no_google_accounts">Your havn’t any Google accounts to sync.</string>
 	<string name="error_network">Trouble with network, check your connection state.</string>
-
-	<string name="message_document_created">Document with flashcards was delivered to your Google
-		Drive.</string>
 
 	<string name="hint_deck_name">Deck name</string>
 	<string name="hint_card_front_text">Front side text</string>
 	<string name="hint_card_back_text">Back side text</string>
-
-	<string name="button_create_deck">Create deck</string>
-	<string name="button_rename_deck">Rename deck</string>
-	<string name="button_create_card">Create flashcard</string>
-	<string name="button_update_card">Update flashcard</string>
 
 	<string name="menu_accept">Accept</string>
 	<string name="menu_delete">Delete</string>
