@@ -20,7 +20,7 @@ class AccountCreator
 
 	/**
 	 * @throws SignUpCanceledException if user cancelled sign up.
-	 * @throws SignUpFailedException if an error occurred during authorization.
+	 * @throws SignUpFailedException if an error occurred during sign up.
 	 */
 	public static Account create(Activity activity) {
 		return new AccountCreator(activity).createAccount();
@@ -53,7 +53,13 @@ class AccountCreator
 		}
 
 		String accountName = signUpResponse.getString(AccountManager.KEY_ACCOUNT_NAME);
-		return buildAccountFromName(accountName);
+
+		Account account = buildAccountFromName(accountName);
+		if (account == null) {
+			throw new SignUpFailedException();
+		}
+
+		return account;
 	}
 
 	private Account buildAccountFromName(String accountName) {
