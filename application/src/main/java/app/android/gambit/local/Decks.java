@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import app.android.gambit.InternetDateTime;
 
@@ -53,16 +54,11 @@ public class Decks
 	private ContentValues extractDeckDatabaseValues(Cursor databaseCursor) {
 		ContentValues databaseValues = new ContentValues();
 
-		long id = databaseCursor.getLong(databaseCursor.getColumnIndexOrThrow(DbFieldNames.ID));
-		databaseValues.put(DbFieldNames.ID, id);
-
-		String title = databaseCursor.getString(
-			databaseCursor.getColumnIndexOrThrow(DbFieldNames.DECK_TITLE));
-		databaseValues.put(DbFieldNames.DECK_TITLE, title);
-
-		int currentCardIndex = databaseCursor.getInt(
-			databaseCursor.getColumnIndexOrThrow(DbFieldNames.DECK_CURRENT_CARD_INDEX));
-		databaseValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, currentCardIndex);
+		DatabaseUtils.cursorLongToContentValues(databaseCursor, DbFieldNames.ID, databaseValues);
+		DatabaseUtils.cursorStringToContentValues(databaseCursor, DbFieldNames.DECK_TITLE,
+			databaseValues);
+		DatabaseUtils.cursorIntToContentValues(databaseCursor, DbFieldNames.DECK_CURRENT_CARD_INDEX,
+			databaseValues);
 
 		return databaseValues;
 	}

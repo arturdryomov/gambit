@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -198,24 +199,11 @@ public class Deck implements Parcelable
 	private ContentValues extractCardDatabaseValuesFromCursor(Cursor databaseCursor) {
 		ContentValues databaseValues = new ContentValues(databaseCursor.getCount());
 
-		int id = databaseCursor.getInt(databaseCursor.getColumnIndexOrThrow(DbFieldNames.ID));
-		databaseValues.put(DbFieldNames.ID, id);
-
-		int deckId = databaseCursor.getInt(
-			databaseCursor.getColumnIndexOrThrow(DbFieldNames.CARD_DECK_ID));
-		databaseValues.put(DbFieldNames.CARD_DECK_ID, deckId);
-
-		String frontSideText = databaseCursor.getString(
-			databaseCursor.getColumnIndexOrThrow(DbFieldNames.CARD_FRONT_SIDE_TEXT));
-		databaseValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, frontSideText);
-
-		String backSideText = databaseCursor.getString(
-			databaseCursor.getColumnIndexOrThrow(DbFieldNames.CARD_BACK_SIDE_TEXT));
-		databaseValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, backSideText);
-
-		int orderIndex = databaseCursor.getInt(
-			databaseCursor.getColumnIndexOrThrow(DbFieldNames.CARD_ORDER_INDEX));
-		databaseValues.put(DbFieldNames.CARD_ORDER_INDEX, orderIndex);
+		DatabaseUtils.cursorLongToContentValues(databaseCursor, DbFieldNames.ID, databaseValues);
+		DatabaseUtils.cursorStringToContentValues(databaseCursor, DbFieldNames.CARD_FRONT_SIDE_TEXT,
+			databaseValues);
+		DatabaseUtils.cursorStringToContentValues(databaseCursor, DbFieldNames.CARD_BACK_SIDE_TEXT,
+			databaseValues);
 
 		return databaseValues;
 	}
