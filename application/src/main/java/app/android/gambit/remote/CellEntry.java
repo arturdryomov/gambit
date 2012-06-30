@@ -1,6 +1,7 @@
 package app.android.gambit.remote;
 
 
+import android.text.TextUtils;
 import com.google.api.client.util.Key;
 
 
@@ -41,6 +42,6 @@ public class CellEntry
 	}
 
 	public boolean isEmpty() {
-		return cell.isEmpty() && id.isEmpty() && content.isEmpty();
+		return cell.isEmpty() && TextUtils.isEmpty(id) && TextUtils.isEmpty(content);
 	}
 }

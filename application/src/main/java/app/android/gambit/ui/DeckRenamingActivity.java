@@ -3,6 +3,7 @@ package app.android.gambit.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.EditText;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
@@ -42,7 +43,7 @@ public class DeckRenamingActivity extends DeckCreationActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (errorMessage.isEmpty()) {
+			if (TextUtils.isEmpty(errorMessage)) {
 				finish();
 			}
 			else {

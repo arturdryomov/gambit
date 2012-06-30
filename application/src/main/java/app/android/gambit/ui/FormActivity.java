@@ -2,6 +2,7 @@ package app.android.gambit.ui;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.EditText;
 import app.android.gambit.R;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -37,7 +38,7 @@ abstract class FormActivity extends SherlockActivity
 
 		String userDataErrorMessage = getUserDataErrorMessage();
 
-		if (userDataErrorMessage.isEmpty()) {
+		if (TextUtils.isEmpty(userDataErrorMessage)) {
 			performSubmitAction();
 		}
 		else {

@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import app.android.gambit.R;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.remote.EntryNotFoundException;
@@ -47,7 +48,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	@Override
 	protected String doInBackground(Void... params) {
 		String authorizationErrorMessage = authorize();
-		if (!authorizationErrorMessage.isEmpty()) {
+		if (!TextUtils.isEmpty(authorizationErrorMessage)) {
 			return authorizationErrorMessage;
 		}
 
@@ -137,7 +138,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private boolean haveSyncSpreadsheetKeyInPreferences() {
-		return !loadSyncSpreadsheetKeyFromPreferences().isEmpty();
+		return !TextUtils.isEmpty(loadSyncSpreadsheetKeyFromPreferences());
 	}
 
 	private String loadSyncSpreadsheetKeyFromPreferences() {
@@ -189,7 +190,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 		progressDialogShowHelper.hide();
 
-		if (!errorMessage.isEmpty()) {
+		if (!TextUtils.isEmpty(errorMessage)) {
 			UserAlerter.alert(activityContext, errorMessage);
 		}
 		else {

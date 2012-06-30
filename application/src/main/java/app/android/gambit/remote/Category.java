@@ -1,6 +1,7 @@
 package app.android.gambit.remote;
 
 
+import android.text.TextUtils;
 import com.google.api.client.util.Key;
 
 
@@ -41,6 +42,6 @@ public class Category
 	}
 
 	public boolean isEmpty() {
-		return scheme.isEmpty() && term.isEmpty() && label.isEmpty();
+		return TextUtils.isEmpty(scheme) && TextUtils.isEmpty(term) && TextUtils.isEmpty(label);
 	}
 }
