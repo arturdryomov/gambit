@@ -3,6 +3,7 @@ package app.android.gambit.remote;
 
 import java.io.IOException;
 
+import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.googleapis.GoogleHeaders;
 import com.google.api.client.googleapis.GoogleUrl;
 import com.google.api.client.http.HttpContent;
@@ -13,7 +14,6 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.xml.atom.AtomContent;
 import com.google.api.client.http.xml.atom.AtomParser;
 import com.google.api.client.xml.XmlNamespaceDictionary;
@@ -52,7 +52,7 @@ public class GoogleDocsClient
 	}
 
 	private void setUpRequestFactory() {
-		HttpTransport transport = new NetHttpTransport();
+		HttpTransport transport = AndroidHttp.newCompatibleTransport();
 		requestFactory = transport.createRequestFactory(new RequestInitializer());
 	}
 

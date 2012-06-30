@@ -3,6 +3,7 @@ package app.android.gambit.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import app.android.gambit.R;
 import app.android.gambit.local.Deck;
 
@@ -31,7 +32,7 @@ public class CardCreationActivity extends FormActivity
 	@Override
 	protected String getUserDataErrorMessage() {
 		String errorMessage = getFrontSideTextErrorMessage();
-		if (!errorMessage.isEmpty()) {
+		if (!TextUtils.isEmpty(errorMessage)) {
 			return errorMessage;
 		}
 
@@ -39,7 +40,7 @@ public class CardCreationActivity extends FormActivity
 	}
 
 	private String getFrontSideTextErrorMessage() {
-		if (frontSideText.isEmpty()) {
+		if (TextUtils.isEmpty(frontSideText)) {
 			return getString(R.string.error_empty_card_front_text);
 		}
 
@@ -47,7 +48,7 @@ public class CardCreationActivity extends FormActivity
 	}
 
 	private String getBackSideTextErrorMessage() {
-		if (backSideText.isEmpty()) {
+		if (TextUtils.isEmpty(backSideText)) {
 			return getString(R.string.error_empty_card_back_text);
 		}
 

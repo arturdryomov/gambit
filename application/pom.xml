@@ -83,6 +83,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<artifactId>google-http-client-android2</artifactId>
+			<version>1.9.0-beta</version>
+			<groupId>com.google.http-client</groupId>
+		</dependency>
 	</dependencies>
 
 	<build>

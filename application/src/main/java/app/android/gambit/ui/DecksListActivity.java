@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -266,7 +267,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (errorMessage.isEmpty()) {
+			if (TextUtils.isEmpty(errorMessage)) {
 				callCardsViewing(deck);
 			}
 			else {

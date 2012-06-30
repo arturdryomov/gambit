@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import android.text.TextUtils;
 import app.android.gambit.InternetDateTime;
 
 
@@ -34,7 +35,7 @@ public class RemoteDecks
 		}
 
 		public boolean isValid() {
-			return !front.isEmpty() && !back.isEmpty();
+			return !TextUtils.isEmpty(front) && !TextUtils.isEmpty(back);
 		}
 	}
 
@@ -104,7 +105,7 @@ public class RemoteDecks
 			return false;
 		}
 
-		return !cell.getValue().isEmpty();
+		return !TextUtils.isEmpty(cell.getValue());
 	}
 
 	private SortedMap<Integer, CardTexts> addCellValueToMap(

@@ -4,6 +4,7 @@ package app.android.gambit.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import app.android.gambit.R;
 import app.android.gambit.local.AlreadyExistsException;
 import app.android.gambit.local.DbProvider;
@@ -31,7 +32,7 @@ public class DeckCreationActivity extends FormActivity
 	}
 
 	private String getDeckNameErrorMessage() {
-		if (deckName.isEmpty()) {
+		if (TextUtils.isEmpty(deckName)) {
 			return getString(R.string.error_empty_deck_name);
 		}
 
@@ -61,7 +62,7 @@ public class DeckCreationActivity extends FormActivity
 
 		@Override
 		protected void onPostExecute(String errorMessage) {
-			if (errorMessage.isEmpty()) {
+			if (TextUtils.isEmpty(errorMessage)) {
 				callCardsEditing(deck);
 
 				finish();

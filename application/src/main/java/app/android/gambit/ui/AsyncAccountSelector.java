@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import app.android.gambit.R;
 
 
@@ -52,7 +53,7 @@ public class AsyncAccountSelector
 
 	private boolean haveAccountNameInPreferences() {
 		String accountName = loadAccountNameFromPreferences();
-		return !accountName.isEmpty();
+		return !TextUtils.isEmpty(accountName);
 	}
 
 	private String loadAccountNameFromPreferences() {
