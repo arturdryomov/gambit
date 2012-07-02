@@ -27,6 +27,18 @@
 			<groupId>com.actionbarsherlock</groupId>
 			<type>apklib</type>
 		</dependency>
+
+		<dependency>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+		</dependency>
+
+		<dependency>
+			<artifactId>utils</artifactId>
+			<version>1.07.00</version>
+			<groupId>org.ostermiller</groupId>
+		</dependency>
 	</dependencies>
 
 	<build>
