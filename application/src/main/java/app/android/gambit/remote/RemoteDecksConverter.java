@@ -134,9 +134,11 @@ class RemoteDecksConverter
 			return;
 		}
 
-		for (int i = 0; i < remoteDecks.size(); i++) {
-			WritableSheet sheet = spreadsheet.createSheet(remoteDecks.get(i).getTitle(), i);
-			fillSheet(sheet, remoteDecks.get(i));
+		for (int deckIndex = 0; deckIndex < remoteDecks.size(); deckIndex++) {
+			RemoteDeck remoteDeck = remoteDecks.get(deckIndex);
+
+			WritableSheet sheet = spreadsheet.createSheet(remoteDeck.getTitle(), deckIndex);
+			fillSheet(sheet, remoteDeck);
 		}
 	}
 
