@@ -9,13 +9,15 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.os.Bundle;
+import com.google.api.services.drive.DriveScopes;
 
 
 public class Authorizer
 {
-	// Defined by API
-	private static final String SPREADSHEETS_AUTH_TOKEN_TYPE = "wise";
-	private static final String DOCUMENTS_LIST_AUTH_TOKEN_TYPE = "writely";
+	private static final String DRIVE_AUTH_TOKEN_TYPE;
+	static {
+		DRIVE_AUTH_TOKEN_TYPE = String.format("oauth2:%s", DriveScopes.DRIVE);
+	}
 
 	private static final String ACCOUNT_TYPE = "com.google";
 
@@ -23,7 +25,7 @@ public class Authorizer
 
 	public static enum ServiceType
 	{
-		SPREADSHEETS, DOCUMENTS_LIST
+		DRIVE
 	}
 
 	public Authorizer(Activity activity) {
@@ -62,11 +64,8 @@ public class Authorizer
 
 	private String authTypeFromServiceType(ServiceType serviceType) {
 		switch (serviceType) {
-			case SPREADSHEETS:
-				return SPREADSHEETS_AUTH_TOKEN_TYPE;
-
-			case DOCUMENTS_LIST:
-				return DOCUMENTS_LIST_AUTH_TOKEN_TYPE;
+			case DRIVE:
+				return DRIVE_AUTH_TOKEN_TYPE;
 
 			default:
 				throw new RuntimeException("Unknown service type");

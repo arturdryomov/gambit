@@ -16,8 +16,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 	private final Runnable successRunnable;
 
-	private String documentsListAuthToken;
-	private String spreadsheetsAuthToken;
+	private String driveAuthToken;
 
 	private boolean isTokensInvalidationRequired;
 
@@ -87,15 +86,13 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private void getAuthTokens(Account account) {
 		Authorizer authorizer = new Authorizer(activity);
 
-		documentsListAuthToken = authorizer.getToken(Authorizer.ServiceType.DOCUMENTS_LIST, account);
-		spreadsheetsAuthToken = authorizer.getToken(Authorizer.ServiceType.SPREADSHEETS, account);
+		driveAuthToken = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
 	}
 
 	private void invalidateAuthTokens(Account account) {
 		Authorizer authorizer = new Authorizer(activity);
 
-		authorizer.invalidateToken(documentsListAuthToken);
-		authorizer.invalidateToken(spreadsheetsAuthToken);
+		authorizer.invalidateToken(driveAuthToken);
 
 		getAuthTokens(account);
 	}
