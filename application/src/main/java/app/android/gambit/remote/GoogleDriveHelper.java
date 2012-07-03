@@ -64,30 +64,6 @@ public class GoogleDriveHelper
 		}
 	}
 
-	public void uploadXlsData(String spreadsheetKey, InputStream data) {
-		File file = getFileByKey(spreadsheetKey);
-		uploadXlsData(file, data);
-	}
-
-	private File getFileByKey(String spreadsheetKey) {
-		try {
-			return driveService.files().get(spreadsheetKey).execute();
-		}
-		catch (IOException e) {
-			throw new SyncException();
-		}
-	}
-
-	private void uploadXlsData(File file, InputStream data) {
-		try {
-			AbstractInputStreamContent content = new InputStreamContent(MIME_XLS, data);
-			driveService.files().update(file.getId(), file, content);
-		}
-		catch (IOException e) {
-			throw new SyncException();
-		}
-	}
-
 	public String createSpreadsheetFromXlsData(InputStream data, String spreadsheetName) {
 		File file = buildSpreadsheetData(spreadsheetName);
 		return createSpreadsheetFromXlsData(data, file);
@@ -111,6 +87,30 @@ public class GoogleDriveHelper
 			File insertedFile = driveService.files().insert(file).execute();
 			uploadXlsData(insertedFile, data);
 			return insertedFile.getId();
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
+	}
+
+	public void uploadXlsData(String spreadsheetKey, InputStream data) {
+		File file = getFileByKey(spreadsheetKey);
+		uploadXlsData(file, data);
+	}
+
+	private File getFileByKey(String spreadsheetKey) {
+		try {
+			return driveService.files().get(spreadsheetKey).execute();
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
+	}
+
+	private void uploadXlsData(File file, InputStream data) {
+		try {
+			AbstractInputStreamContent content = new InputStreamContent(MIME_XLS, data);
+			driveService.files().update(file.getId(), file, content);
 		}
 		catch (IOException e) {
 			throw new SyncException();
