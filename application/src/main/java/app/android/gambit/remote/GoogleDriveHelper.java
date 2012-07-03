@@ -3,8 +3,8 @@ package app.android.gambit.remote;
 
 import java.io.IOException;
 
+import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpRequest;
 import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
@@ -22,8 +22,7 @@ class GoogleDriveHelper
 	}
 
 	private Drive buildDriveService(String authToken, String apiKey) {
-		// TODO: Change to compatible transport
-		HttpTransport httpTransport = new NetHttpTransport();
+		HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
 		JsonFactory jsonFactory = new JacksonFactory();
 		JsonHttpRequestInitializer requestInitializer = new DriveRequestInitializer(authToken, apiKey);
 
