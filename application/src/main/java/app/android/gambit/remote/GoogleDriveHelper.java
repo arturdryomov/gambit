@@ -27,6 +27,7 @@ public class GoogleDriveHelper
 {
 	public static final String MIME_XLS = "application/vnd.ms-excel";
 	public static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
+
 	private Drive driveService;
 
 	public GoogleDriveHelper(String authToken, String apiKey) {
@@ -94,8 +95,10 @@ public class GoogleDriveHelper
 
 	private File buildSpreadsheetData(String spreadsheetName) {
 		File file = new File();
+
 		file.setTitle(spreadsheetName);
 		file.setMimeType(MIME_GOOGLE_SPREADSHEET);
+
 		return file;
 	}
 
