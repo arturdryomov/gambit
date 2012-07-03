@@ -103,7 +103,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		InputStream xlsDataInputStream = generateXlsData(key);
 
 		// No exceptions is test pass criteria
-		driveHelper.createSpreadsheetFromXlsData(xlsDataInputStream, "New spreadsheet");
+		driveHelper.createSpreadsheetFromXlsData("New spreadsheet", xlsDataInputStream);
 	}
 
 	public void testDownloadXlsData() throws IOException {
