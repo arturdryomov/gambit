@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
 import com.Ostermiller.util.CircularByteBuffer;
 import jxl.Cell;
 import jxl.Sheet;
@@ -82,10 +83,21 @@ class RemoteDecksConverter
 		}
 
 		for (int rowIndex = CARDS_FIRST_ROW_INDEX; rowIndex < sheet.getRows(); rowIndex++) {
-			remoteCards.add(constructRemoteCard(sheet.getRow(rowIndex)));
+			Cell[] row = sheet.getRow(rowIndex);
+
+			if (!isCardDataEmpty(row)) {
+				remoteCards.add(constructRemoteCard(row));
+			}
 		}
 
 		return remoteCards;
+	}
+
+	private boolean isCardDataEmpty(Cell[] row) {
+		String frontSideText = row[FRONT_SIDE_COLUMN_INDEX].getContents();
+		String backSideText = row[BACK_SIDE_COLUMN_INDEX].getContents();
+
+		return TextUtils.isEmpty(frontSideText) && TextUtils.isEmpty(backSideText);
 	}
 
 	private RemoteCard constructRemoteCard(Cell[] row) {
