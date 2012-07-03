@@ -33,10 +33,10 @@ class RemoteDecksConverter
 	private static final int MINIMAL_ROWS_COUNT = 1;
 
 	public List<RemoteDeck> fromXlsData(InputStream xlsData) {
-		return constructRemoteDecks(getSpreadsheet(xlsData));
+		return constructRemoteDecks(getWorkbook(xlsData));
 	}
 
-	private Workbook getSpreadsheet(InputStream xlsData) {
+	private Workbook getWorkbook(InputStream xlsData) {
 		try {
 			return Workbook.getWorkbook(xlsData);
 		}
@@ -48,14 +48,14 @@ class RemoteDecksConverter
 		}
 	}
 
-	private List<RemoteDeck> constructRemoteDecks(Workbook spreadsheet) {
+	private List<RemoteDeck> constructRemoteDecks(Workbook workbook) {
 		List<RemoteDeck> remoteDecks = new ArrayList<RemoteDeck>();
 
-		if (spreadsheet.getNumberOfSheets() == 0) {
+		if (workbook.getNumberOfSheets() == 0) {
 			return remoteDecks;
 		}
 
-		for (Sheet sheet : spreadsheet.getSheets()) {
+		for (Sheet sheet : workbook.getSheets()) {
 			remoteDecks.add(constructRemoteDeck(sheet));
 		}
 
@@ -112,15 +112,15 @@ class RemoteDecksConverter
 	public InputStream toXlsData(List<RemoteDeck> remoteDecks) {
 		CircularByteBuffer dataBuffer = new CircularByteBuffer();
 
-		WritableWorkbook spreadsheet = createSpreadsheet(dataBuffer);
-		fillSpreadsheet(spreadsheet, remoteDecks);
-		saveSpreadsheet(spreadsheet);
+		WritableWorkbook workbook = createWorkbook(dataBuffer);
+		fillWorkbook(workbook, remoteDecks);
+		saveWorkbook(workbook);
 
 		return dataBuffer.getInputStream();
 	}
 
 
-	private WritableWorkbook createSpreadsheet(CircularByteBuffer dataBuffer) {
+	private WritableWorkbook createWorkbook(CircularByteBuffer dataBuffer) {
 		try {
 			return Workbook.createWorkbook(dataBuffer.getOutputStream());
 		}
@@ -129,7 +129,7 @@ class RemoteDecksConverter
 		}
 	}
 
-	private void fillSpreadsheet(WritableWorkbook spreadsheet, List<RemoteDeck> remoteDecks) {
+	private void fillWorkbook(WritableWorkbook workbook, List<RemoteDeck> remoteDecks) {
 		if (remoteDecks.isEmpty()) {
 			return;
 		}
@@ -137,7 +137,7 @@ class RemoteDecksConverter
 		for (int deckIndex = 0; deckIndex < remoteDecks.size(); deckIndex++) {
 			RemoteDeck remoteDeck = remoteDecks.get(deckIndex);
 
-			WritableSheet sheet = spreadsheet.createSheet(remoteDeck.getTitle(), deckIndex);
+			WritableSheet sheet = workbook.createSheet(remoteDeck.getTitle(), deckIndex);
 			fillSheet(sheet, remoteDeck);
 		}
 	}
@@ -181,10 +181,10 @@ class RemoteDecksConverter
 		}
 	}
 
-	private void saveSpreadsheet(WritableWorkbook spreadsheet) {
+	private void saveWorkbook(WritableWorkbook workbook) {
 		try {
-			spreadsheet.write();
-			spreadsheet.close();
+			workbook.write();
+			workbook.close();
 		}
 		catch (WriteException e) {
 			throw new ConvertingException();
