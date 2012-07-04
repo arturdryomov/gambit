@@ -12,6 +12,8 @@ import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.json.JsonHttpRequest;
@@ -112,8 +114,20 @@ public class GoogleDriveHelper
 		try {
 			return driveService.files().get(spreadsheetKey).execute();
 		}
+		catch (HttpResponseException e) {
+			throw exceptionFromStatusCode(e.getStatusCode());
+		}
 		catch (IOException e) {
 			throw new SyncException();
+		}
+	}
+
+	private RuntimeException exceptionFromStatusCode(int statusCode) {
+		if (statusCode == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
+			return new FileNotExistsException();
+		}
+		else {
+			return new SyncException();
 		}
 	}
 
@@ -145,11 +159,11 @@ public class GoogleDriveHelper
 		List<File> spreadsheetsByName = getSpreadsheetsByName(spreadsheetName);
 
 		if (spreadsheetsByName.isEmpty()) {
-			throw new SyncException(String.format("No spreadsheets with name '%s'", spreadsheetName));
+			throw new FileNotExistsException();
 		}
 
-		Collections.sort(spreadsheetsByName, Collections.reverseOrder(
-			new FileByModifiedDateComparator()));
+		Collections.sort(spreadsheetsByName,
+			Collections.reverseOrder(new FileByModifiedDateComparator()));
 
 		return spreadsheetsByName.get(0).getId();
 	}
