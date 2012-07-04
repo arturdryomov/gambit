@@ -27,6 +27,7 @@ public class GoogleDriveHelper
 {
 	public static final String MIME_XLS = "application/vnd.ms-excel";
 	public static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
+
 	private Drive driveService;
 
 	public GoogleDriveHelper(String authToken, String apiKey) {
@@ -63,43 +64,21 @@ public class GoogleDriveHelper
 		}
 	}
 
-	public void uploadXlsData(String spreadsheetKey, InputStream data) {
-		File file = getFileByKey(spreadsheetKey);
-		uploadXlsData(file, data);
+	public String createSpreadsheetFromXlsData(String spreadsheetName, InputStream data) {
+		File file = buildSpreadsheetFile(spreadsheetName);
+		return createSpreadsheetFromXlsData(file, data);
 	}
 
-	private File getFileByKey(String spreadsheetKey) {
-		try {
-			return driveService.files().get(spreadsheetKey).execute();
-		}
-		catch (IOException e) {
-			throw new SyncException();
-		}
-	}
-
-	private void uploadXlsData(File file, InputStream data) {
-		try {
-			AbstractInputStreamContent content = new InputStreamContent(MIME_XLS, data);
-			driveService.files().update(file.getId(), file, content);
-		}
-		catch (IOException e) {
-			throw new SyncException();
-		}
-	}
-
-	public String createSpreadsheetFromXlsData(InputStream data, String spreadsheetName) {
-		File file = buildSpreadsheetData(spreadsheetName);
-		return createSpreadsheetFromXlsData(data, file);
-	}
-
-	private File buildSpreadsheetData(String spreadsheetName) {
+	private File buildSpreadsheetFile(String spreadsheetName) {
 		File file = new File();
+
 		file.setTitle(spreadsheetName);
 		file.setMimeType(MIME_GOOGLE_SPREADSHEET);
+
 		return file;
 	}
 
-	private String createSpreadsheetFromXlsData(InputStream data, File file) {
+	private String createSpreadsheetFromXlsData(File file, InputStream data) {
 		try {
 			// TODO: This should be implemented with a single call to insert().
 			// No additional upload should be used. But insert(file, content)
@@ -108,6 +87,30 @@ public class GoogleDriveHelper
 			File insertedFile = driveService.files().insert(file).execute();
 			uploadXlsData(insertedFile, data);
 			return insertedFile.getId();
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
+	}
+
+	private void uploadXlsData(File file, InputStream data) {
+		try {
+			AbstractInputStreamContent fileContent = new InputStreamContent(MIME_XLS, data);
+			driveService.files().update(file.getId(), file, fileContent);
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
+	}
+
+	public void uploadXlsData(String spreadsheetKey, InputStream data) {
+		File file = getFileByKey(spreadsheetKey);
+		uploadXlsData(file, data);
+	}
+
+	private File getFileByKey(String spreadsheetKey) {
+		try {
+			return driveService.files().get(spreadsheetKey).execute();
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -139,29 +142,29 @@ public class GoogleDriveHelper
 	}
 
 	public String getNewestSpreadsheetKeyByName(String spreadsheetName) {
-		List<File> fileList = getSpreadsheetsByName(spreadsheetName);
+		List<File> spreadsheetsByName = getSpreadsheetsByName(spreadsheetName);
 
-		if (fileList.isEmpty()) {
+		if (spreadsheetsByName.isEmpty()) {
 			throw new SyncException(String.format("No spreadsheets with name '%s'", spreadsheetName));
 		}
 
-		Collections.sort(fileList, Collections.reverseOrder(new FileComparator()));
+		Collections.sort(spreadsheetsByName, Collections.reverseOrder(new FileComparator()));
 
-		return fileList.get(0).getId();
+		return spreadsheetsByName.get(0).getId();
 	}
 
 	private List<File> getSpreadsheetsByName(String spreadsheetName) {
 		try {
-			Drive.Files.List request = driveService.files().list();
-			request.setQ(buildQuery(spreadsheetName));
-			return request.execute().getItems();
+			Drive.Files.List listRequest = driveService.files().list();
+			listRequest.setQ(buildFileSelectionQuery(spreadsheetName));
+			return listRequest.execute().getItems();
 		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
 	}
 
-	private String buildQuery(String spreadsheetName) {
+	private String buildFileSelectionQuery(String spreadsheetName) {
 		StringBuilder queryBuilder = new StringBuilder();
 
 		queryBuilder.append("trashed=false");
