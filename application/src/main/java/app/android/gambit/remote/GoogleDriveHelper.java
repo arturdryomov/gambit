@@ -148,7 +148,8 @@ public class GoogleDriveHelper
 			throw new SyncException(String.format("No spreadsheets with name '%s'", spreadsheetName));
 		}
 
-		Collections.sort(spreadsheetsByName, Collections.reverseOrder(new FileComparator()));
+		Collections.sort(spreadsheetsByName, Collections.reverseOrder(
+			new FileByModifiedDateComparator()));
 
 		return spreadsheetsByName.get(0).getId();
 	}
@@ -180,7 +181,7 @@ public class GoogleDriveHelper
 		return string.replace("'", "\\'");
 	}
 
-	private static class FileComparator implements Comparator<File>
+	private static class FileByModifiedDateComparator implements Comparator<File>
 	{
 		@Override
 		public int compare(File first, File second) {
