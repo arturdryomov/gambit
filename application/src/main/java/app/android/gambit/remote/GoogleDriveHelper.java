@@ -89,7 +89,7 @@ public class GoogleDriveHelper
 		try {
 			AbstractInputStreamContent content = contentFromXlsData(data);
 			Drive.Files.Insert insertRequest = driveService.files().insert(file, content);
-			insertRequest.setConvert(true);
+			insertRequest.setConvert(Boolean.TRUE);
 			return insertRequest.execute().getId();
 		}
 		catch (IOException e) {
@@ -111,7 +111,7 @@ public class GoogleDriveHelper
 			AbstractInputStreamContent content = contentFromXlsData(data);
 			file.setMimeType(MIME_XLS);
 			Drive.Files.Update updateRequest = driveService.files().update(file.getId(), file, content);
-			updateRequest.setConvert(true);
+			updateRequest.setConvert(Boolean.TRUE);
 			updateRequest.execute();
 		}
 		catch (IOException e) {
