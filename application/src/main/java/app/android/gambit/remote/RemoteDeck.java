@@ -1,6 +1,7 @@
 package app.android.gambit.remote;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -8,6 +9,21 @@ public class RemoteDeck
 {
 	private String title;
 	private List<RemoteCard> cards;
+
+	public RemoteDeck() {
+		title = new String();
+		cards = new ArrayList<RemoteCard>();
+	}
+
+	public RemoteDeck(String title) {
+		this.title = title;
+		this.cards = new ArrayList<RemoteCard>();
+	}
+
+	public RemoteDeck(String title, List<RemoteCard> cards) {
+		this.title = title;
+		this.cards = cards;
+	}
 
 	public String getTitle() {
 		return title;
