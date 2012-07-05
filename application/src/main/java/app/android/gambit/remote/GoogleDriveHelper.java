@@ -10,12 +10,12 @@ import java.util.List;
 import app.android.gambit.InternetDateTime;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.AbstractInputStreamContent;
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.json.JsonHttpRequest;
 import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
@@ -71,7 +71,7 @@ public class GoogleDriveHelper
 		}
 	}
 
-	public String createSpreadsheetFromXlsData(String spreadsheetName, InputStream data) {
+	public String createSpreadsheetFromXlsData(String spreadsheetName, byte[] data) {
 		File file = buildSpreadsheetFile(spreadsheetName);
 		return createSpreadsheetFromXlsData(file, data);
 	}
@@ -85,34 +85,37 @@ public class GoogleDriveHelper
 		return file;
 	}
 
-	private String createSpreadsheetFromXlsData(File file, InputStream data) {
+	private String createSpreadsheetFromXlsData(File file, byte[] data) {
 		try {
-			// TODO: This should be implemented with a single call to insert().
-			// No additional upload should be used. But insert(file, content)
-			// won't work for some reason, it throws IllegalArgumentException somewhere
-			// in MediaHttpUploader.
-			File insertedFile = driveService.files().insert(file).execute();
-			uploadXlsData(insertedFile, data);
-			return insertedFile.getId();
+			AbstractInputStreamContent content = contentFromXlsData(data);
+			Drive.Files.Insert insertRequest = driveService.files().insert(file, content);
+			insertRequest.setConvert(true);
+			return insertRequest.execute().getId();
 		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
 	}
 
-	private void uploadXlsData(File file, InputStream data) {
-		try {
-			AbstractInputStreamContent fileContent = new InputStreamContent(MIME_XLS, data);
-			driveService.files().update(file.getId(), file, fileContent).execute();
-		}
-		catch (IOException e) {
-			throw new SyncException();
-		}
+	private AbstractInputStreamContent contentFromXlsData(byte[] data) {
+		return new ByteArrayContent(MIME_XLS, data);
 	}
 
-	public void uploadXlsData(String spreadsheetKey, InputStream data) {
+	public void uploadXlsData(String spreadsheetKey, byte[] data) {
 		File file = getFileByKey(spreadsheetKey);
 		uploadXlsData(file, data);
+	}
+
+	private void uploadXlsData(File file, byte[] data) {
+		try {
+			AbstractInputStreamContent content = contentFromXlsData(data);
+			Drive.Files.Update updateRequest = driveService.files().update(file.getId(), file, content);
+			updateRequest.setConvert(true);
+			updateRequest.execute();
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
 	}
 
 	private File getFileByKey(String spreadsheetKey) {
