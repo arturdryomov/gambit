@@ -3,12 +3,17 @@ package app.android.gambit.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.accounts.Account;
 import android.app.Activity;
 import android.test.InstrumentationTestCase;
 import app.android.gambit.InternetDateTime;
 import app.android.gambit.remote.GoogleDriveHelper;
+import app.android.gambit.remote.RemoteCard;
+import app.android.gambit.remote.RemoteDeck;
+import app.android.gambit.remote.RemoteDecksConverter;
 import app.android.gambit.ui.AccountSelector;
 import app.android.gambit.ui.Authorizer;
 import app.android.gambit.ui.DeckCreationActivity;
@@ -86,31 +91,51 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	}
 
 	public void testUploadXlsData() throws IOException {
+		InputStream xlsDataInputStream = generateXlsData();
 		String key = createNewSpreadsheet();
-		InputStream xlsDataInputStream = generateXlsData(key);
 
 		// No exceptions is test pass criteria
 		driveHelper.uploadXlsData(key, xlsDataInputStream);
 	}
 
-	private InputStream generateXlsData(String key) {
-		// TODO: Implement a smarter way to generate XLS data with no need to use Google Drive
-		return driveHelper.downloadXlsData(key);
+	private InputStream generateXlsData() {
+		RemoteDecksConverter converter = new RemoteDecksConverter();
+		return converter.toXlsData(generateRemoteDecks());
+	}
+
+	public List<RemoteDeck> generateRemoteDecks() {
+		final int DECKS_COUNT = 1;
+		final int CARDS_COUNT = 1;
+
+		List<RemoteDeck> decks = new ArrayList<RemoteDeck>();
+
+		for (int deckIndex = 0; deckIndex < DECKS_COUNT; deckIndex++) {
+
+			List<RemoteCard> cards = new ArrayList<RemoteCard>();
+			for (int cardIndex = 0; cardIndex < CARDS_COUNT; cardIndex++) {
+				cards.add(new RemoteCard(String.format("Front %s", cardIndex + 1),
+					String.format("Back %s", cardIndex + 1)));
+			}
+
+			decks.add(new RemoteDeck(String.format("Deck %s", deckIndex + 1), cards));
+		}
+
+		return decks;
 	}
 
 	public void testCreateSpreadsheetFromXlsData() throws IOException {
-		String key = createNewSpreadsheet();
-		InputStream xlsDataInputStream = generateXlsData(key);
+		InputStream xlsDataInputStream = generateXlsData();
 
 		// No exceptions is test pass criteria
 		driveHelper.createSpreadsheetFromXlsData("New spreadsheet", xlsDataInputStream);
 	}
 
 	public void testDownloadXlsData() throws IOException {
-		// TODO: Check whether obtain xls data is valid.
-		// Currently just make sure it returns something without throwing.
 		String key = createNewSpreadsheet();
+
 		InputStream xlsDataInputStream = driveHelper.downloadXlsData(key);
+
+		ensureXlsDataCorrect(xlsDataInputStream);
 	}
 
 	private String createNewSpreadsheet() throws IOException {
@@ -123,6 +148,14 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		file.setMimeType(MIME_GOOGLE_SPREADSHEET);
 
 		return driveService.files().insert(file).execute().getId();
+	}
+
+	private void ensureXlsDataCorrect(InputStream xlsData) {
+		RemoteDecksConverter converter = new RemoteDecksConverter();
+
+		// This will throw if xls data is invalid
+		@SuppressWarnings("unused")
+		List<RemoteDeck> decks = converter.fromXlsData(xlsData);
 	}
 
 	public void testGetNewestSpreadsheetKeyByName() throws IOException {
