@@ -13,6 +13,13 @@
 		<groupId>app.android</groupId>
 	</parent>
 
+	<repositories>
+		<repository>
+			<id>google-api-services</id>
+			<url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<artifactId>android</artifactId>
@@ -26,6 +33,34 @@
 			<version>4.1.0</version>
 			<groupId>com.actionbarsherlock</groupId>
 			<type>apklib</type>
+		</dependency>
+
+		<dependency>
+			<artifactId>google-api-services-drive</artifactId>
+			<version>v2-rev1-1.7.2-beta</version>
+			<groupId>com.google.apis</groupId>
+			<exclusions>
+				<exclusion>
+					<artifactId>xpp3</artifactId>
+					<groupId>xpp3</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<artifactId>google-http-client-android2</artifactId>
+			<version>1.10.3-beta</version>
+			<groupId>com.google.http-client</groupId>
+			<exclusions>
+				<exclusion>
+					<artifactId>google-http-client</artifactId>
+					<groupId>com.google.http-client</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
