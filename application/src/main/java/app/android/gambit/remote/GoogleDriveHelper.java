@@ -98,7 +98,7 @@ public class GoogleDriveHelper
 	private void uploadXlsData(File file, InputStream data) {
 		try {
 			AbstractInputStreamContent fileContent = new InputStreamContent(MIME_XLS, data);
-			driveService.files().update(file.getId(), file, fileContent);
+			driveService.files().update(file.getId(), file, fileContent).execute();
 		}
 		catch (IOException e) {
 			throw new SyncException();
