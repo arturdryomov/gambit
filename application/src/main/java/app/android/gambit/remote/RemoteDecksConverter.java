@@ -1,13 +1,14 @@
 package app.android.gambit.remote;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.text.TextUtils;
-import com.Ostermiller.util.CircularByteBuffer;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -109,19 +110,19 @@ public class RemoteDecksConverter
 		return remoteCard;
 	}
 
-	public InputStream toXlsData(List<RemoteDeck> remoteDecks) {
-		CircularByteBuffer dataBuffer = new CircularByteBuffer(CircularByteBuffer.INFINITE_SIZE);
+	public byte[] toXlsData(List<RemoteDeck> remoteDecks) {
+		ByteArrayOutputStream xlsDataStream = new ByteArrayOutputStream();
 
-		WritableWorkbook workbook = createWorkbook(dataBuffer);
+		WritableWorkbook workbook = createWorkbook(xlsDataStream);
 		fillWorkbook(workbook, remoteDecks);
 		saveWorkbook(workbook);
 
-		return dataBuffer.getInputStream();
+		return xlsDataStream.toByteArray();
 	}
 
-	private WritableWorkbook createWorkbook(CircularByteBuffer dataBuffer) {
+	private WritableWorkbook createWorkbook(OutputStream dataStream) {
 		try {
-			return Workbook.createWorkbook(dataBuffer.getOutputStream());
+			return Workbook.createWorkbook(dataStream);
 		}
 		catch (IOException e) {
 			throw new ConvertingException();
