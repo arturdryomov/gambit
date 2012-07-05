@@ -80,7 +80,7 @@ public class GoogleDriveHelper
 		File file = new File();
 
 		file.setTitle(spreadsheetName);
-		file.setMimeType(MIME_GOOGLE_SPREADSHEET);
+		file.setMimeType(MIME_XLS);
 
 		return file;
 	}
@@ -109,6 +109,7 @@ public class GoogleDriveHelper
 	private void uploadXlsData(File file, byte[] data) {
 		try {
 			AbstractInputStreamContent content = contentFromXlsData(data);
+			file.setMimeType(MIME_XLS);
 			Drive.Files.Update updateRequest = driveService.files().update(file.getId(), file, content);
 			updateRequest.setConvert(true);
 			updateRequest.execute();
