@@ -18,7 +18,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 
 
-class RemoteDecksConverter
+public class RemoteDecksConverter
 {
 	private static final int HEADER_ROW_INDEX = 0;
 	private static final String HEADER_FRONT_SIDE = "Front Side Text";
@@ -110,7 +110,7 @@ class RemoteDecksConverter
 	}
 
 	public InputStream toXlsData(List<RemoteDeck> remoteDecks) {
-		CircularByteBuffer dataBuffer = new CircularByteBuffer();
+		CircularByteBuffer dataBuffer = new CircularByteBuffer(CircularByteBuffer.INFINITE_SIZE);
 
 		WritableWorkbook workbook = createWorkbook(dataBuffer);
 		fillWorkbook(workbook, remoteDecks);
@@ -118,7 +118,6 @@ class RemoteDecksConverter
 
 		return dataBuffer.getInputStream();
 	}
-
 
 	private WritableWorkbook createWorkbook(CircularByteBuffer dataBuffer) {
 		try {
