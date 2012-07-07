@@ -151,7 +151,7 @@ public class GoogleDriveHelper
 	}
 
 	public InputStream downloadXlsData(String spreadsheetKey) {
-		File file = getFileByKey(spreadsheetKey, FIELD_EXPORT_LINKS);
+		File file = getFileByKey(spreadsheetKey, buildFields(FIELD_EXPORT_LINKS));
 		GenericUrl xlsExportUrl = getXlsExportUrl(file);
 		return downloadFileContent(xlsExportUrl);
 	}
