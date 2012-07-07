@@ -160,7 +160,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		RemoteCard remoteCard = new RemoteCard();
 
 		remoteCard.setFrontSideText(String.format("Front side #%d", cardIndex));
-		remoteCard.setBackSideText(String.format("Back side #d", cardIndex));
+		remoteCard.setBackSideText(String.format("Back side #%d", cardIndex));
 
 		return remoteCard;
 	}
