@@ -190,7 +190,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		assertTrue(afterCreation.isAfter(dateTime));
 	}
 
-	public InternetDateTime addSecondsToDateTime(InternetDateTime dateTime, int seconds) {
+	private InternetDateTime addSecondsToDateTime(InternetDateTime dateTime, int seconds) {
 		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
 		calendar.setTime(dateTime.toDate());
 
