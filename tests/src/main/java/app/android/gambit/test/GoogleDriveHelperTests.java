@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.test.InstrumentationTestCase;
 import app.android.gambit.InternetDateTime;
 import app.android.gambit.remote.ConvertingException;
+import app.android.gambit.remote.FileNotExistsException;
 import app.android.gambit.remote.GoogleDriveHelper;
 import app.android.gambit.remote.RemoteCard;
 import app.android.gambit.remote.RemoteDeck;
@@ -34,6 +35,8 @@ import com.google.api.services.drive.model.File;
 
 public class GoogleDriveHelperTests extends InstrumentationTestCase
 {
+	private static final String TESTING_SPREADSHEET_NAME = "Spreadsheet for Gambit testing purposes";
+
 	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
 
 	private static String authToken;
@@ -91,16 +94,37 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 	@Override
 	protected void tearDown() throws Exception {
+		removeTestingSpreadsheets();
 		hostActivity.finish();
 
 		super.tearDown();
+	}
+
+	private void removeTestingSpreadsheets() {
+		while (true) {
+			try {
+				removeSpreadsheet(driveHelper.getNewestSpreadsheetKey(TESTING_SPREADSHEET_NAME));
+			}
+			catch (FileNotExistsException e) {
+				return;
+			}
+		}
+	}
+
+	private void removeSpreadsheet(String spreadsheetKey) {
+		try {
+			driveService.files().delete(spreadsheetKey).execute();
+		}
+		catch (IOException e) {
+			throw new RuntimeException();
+		}
 	}
 
 	public void testCreateSpreadsheet() {
 		byte[] xlsData = generateXlsData();
 
 		try {
-			driveHelper.createSpreadsheet("New spreadsheet", xlsData);
+			driveHelper.createSpreadsheet(TESTING_SPREADSHEET_NAME, xlsData);
 		}
 		catch (RuntimeException e) {
 			fail();
@@ -135,7 +159,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 	public void testUpdateSpreadsheet() {
 		byte[] xlsData = generateXlsData();
-		String spreadsheetKey = createSpreadsheet();
+		String spreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
 
 		try {
 			driveHelper.updateSpreadsheet(spreadsheetKey, xlsData);
@@ -143,10 +167,6 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		catch (RuntimeException e) {
 			fail();
 		}
-	}
-
-	private String createSpreadsheet() {
-		return createSpreadsheet("Test file");
 	}
 
 	private String createSpreadsheet(String spreadsheetName) {
@@ -163,7 +183,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	}
 
 	public void testDownloadXlsData() {
-		String spreadsheetKey = createSpreadsheet();
+		String spreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
 
 		InputStream xlsData = driveHelper.downloadXlsData(spreadsheetKey);
 
@@ -184,10 +204,8 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	}
 
 	public void testGetNewestSpreadsheetKey() {
-		final String SPREADSHEET_NAME = "Test spreadsheet";
-
-		String expectedSpreadsheetKey = createSpreadsheet(SPREADSHEET_NAME);
-		String obtainedSpreadsheetKey = driveHelper.getNewestSpreadsheetKey(SPREADSHEET_NAME);
+		String expectedSpreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
+		String obtainedSpreadsheetKey = driveHelper.getNewestSpreadsheetKey(TESTING_SPREADSHEET_NAME);
 
 		assertEquals(expectedSpreadsheetKey, obtainedSpreadsheetKey);
 	}
@@ -198,7 +216,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		InternetDateTime timeBeforeCreation = addSecondsToDateTime(new InternetDateTime(),
 			-TIME_DELTA_IN_SECONDS);
 
-		String spreadsheetKey = createSpreadsheet();
+		String spreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
 		InternetDateTime spreadsheetModifiedTime = driveHelper.getSpreadsheetUpdateTime(spreadsheetKey);
 
 		InternetDateTime timeAfterCreation = addSecondsToDateTime(new InternetDateTime(),
