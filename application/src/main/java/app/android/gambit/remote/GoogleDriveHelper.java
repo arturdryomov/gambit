@@ -147,7 +147,7 @@ public class GoogleDriveHelper
 
 			getRequest.setFields(responseFields);
 
-			return driveService.files().get(spreadsheetKey).execute();
+			return getRequest.execute();
 		}
 		catch (HttpResponseException e) {
 			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
