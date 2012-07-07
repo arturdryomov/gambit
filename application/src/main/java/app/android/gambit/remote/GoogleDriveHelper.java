@@ -24,6 +24,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveRequest;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.Permission;
 
 
 public class GoogleDriveHelper
@@ -36,8 +37,14 @@ public class GoogleDriveHelper
 	private static final String RESPONSE_FIELD_ID = "id";
 	private static final String RESPONSE_FIELD_EXPORT_LINKS = "exportLinks";
 	private static final String RESPONSE_FIELD_MODIFIED_DATE = "modifiedDate";
-	private static final String RESPONSE_LIST_REQUEST_ITEMS_PREFIX = "items";
+	private static final String RESPONSE_FIELD_PERMISSION_ID = "permissionId";
+	private static final String RESPONSE_FIELD_ROLE = "role";
+
+	private static final String RESPONSE_LIST_ITEMS_PREFIX = "items";
 	private static final String RESPONSE_FIELDS_DELIMITER = ",";
+
+	private static final String PERMISSION_ROLE_OWNER = "owner";
+	private static final String PERMISSION_ROLE_WRITER = "writer";
 
 	private Drive driveService;
 
@@ -198,7 +205,13 @@ public class GoogleDriveHelper
 		Collections.sort(spreadsheetsWithName,
 			Collections.reverseOrder(new FileByModifiedDateComparator()));
 
-		return spreadsheetsWithName.get(0).getId();
+		for (File spreadsheetFile : spreadsheetsWithName) {
+			if (isFileWritable(spreadsheetFile)) {
+				return spreadsheetFile.getId();
+			}
+		}
+
+		throw new FileNotExistsException();
 	}
 
 	private List<File> getSpreadsheetsWithName(String spreadsheetName) {
@@ -206,7 +219,7 @@ public class GoogleDriveHelper
 			Drive.Files.List listRequest = driveService.files().list();
 
 			listRequest.setQ(buildFileSelectionQuery(spreadsheetName));
-			listRequest.setFields(buildResponseFieldsForListRequest(
+			listRequest.setFields(buildResponseFieldsList(
 				buildResponseFields(RESPONSE_FIELD_ID, RESPONSE_FIELD_MODIFIED_DATE)));
 
 			return listRequest.execute().getItems();
@@ -219,8 +232,6 @@ public class GoogleDriveHelper
 	private String buildFileSelectionQuery(String spreadsheetName) {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		// TODO: Owner field should also be specified to track only user's files
-		// This will require passing Account or something to GoogleDriveHelper
 		queryBuilder.append("trashed = false");
 		queryBuilder.append(" and ");
 		queryBuilder.append(String.format("mimeType = '%s'", MIME_GOOGLE_SPREADSHEET));
@@ -234,8 +245,8 @@ public class GoogleDriveHelper
 		return string.replace("'", "\\'");
 	}
 
-	private String buildResponseFieldsForListRequest(String responseFields) {
-		return String.format("%s(%s)", RESPONSE_LIST_REQUEST_ITEMS_PREFIX, responseFields);
+	private String buildResponseFieldsList(String responseFields) {
+		return String.format("%s(%s)", RESPONSE_LIST_ITEMS_PREFIX, responseFields);
 	}
 
 	private static class FileByModifiedDateComparator implements Comparator<File>
@@ -257,6 +268,57 @@ public class GoogleDriveHelper
 				return 0;
 			}
 		}
+	}
+
+	private boolean isFileWritable(File file) {
+		String userPermissionId = getUserPermissionId();
+
+		for (Permission permission : getFilePermissions(file)) {
+			if (isUserHaveWritablePermission(userPermissionId, permission)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private String getUserPermissionId() {
+		try {
+			Drive.About.Get getRequest = driveService.about().get();
+
+			getRequest.setFields(buildResponseFields(RESPONSE_FIELD_PERMISSION_ID));
+
+			return getRequest.execute().getPermissionId();
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
+	}
+
+	private List<Permission> getFilePermissions(File file) {
+		try {
+			Drive.Permissions.List getRequest = driveService.permissions().list(file.getId());
+
+			getRequest.setFields(
+				buildResponseFieldsList(buildResponseFields(RESPONSE_FIELD_ID, RESPONSE_FIELD_ROLE)));
+
+			return getRequest.execute().getItems();
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
+	}
+
+	private boolean isUserHaveWritablePermission(String userPermissionId, Permission permission) {
+		if (!permission.getId().equals(userPermissionId)) {
+			return false;
+		}
+
+		if (permission.getRole().equals(PERMISSION_ROLE_OWNER)) {
+			return true;
+		}
+
+		return permission.getRole().equals(PERMISSION_ROLE_WRITER);
 	}
 
 	public InternetDateTime getSpreadsheetUpdateTime(String spreadsheetKey) {
