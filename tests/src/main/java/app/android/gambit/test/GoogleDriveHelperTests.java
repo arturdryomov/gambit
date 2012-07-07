@@ -33,9 +33,10 @@ import com.google.api.services.drive.model.File;
 
 public class GoogleDriveHelperTests extends InstrumentationTestCase
 {
+	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
+
 	private static String authToken;
 	private static Activity hostActivity;
-	public static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
 
 	private GoogleDriveHelper driveHelper;
 	private Drive driveService; // Needed to prepare some testing data
@@ -90,15 +91,15 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	@Override
 	protected void tearDown() throws Exception {
 		hostActivity.finish();
+
 		super.tearDown();
 	}
 
-	public void testUpdateSpreadsheet() throws IOException {
+	public void testCreateSpreadsheet() throws IOException {
 		byte[] xlsData = generateXlsData();
-		String spreadsheetKey = createSpreadsheet();
 
 		// No exceptions is test pass criteria
-		driveHelper.updateSpreadsheet(spreadsheetKey, xlsData);
+		driveHelper.createSpreadsheet("New spreadsheet", xlsData);
 	}
 
 	private byte[] generateXlsData() {
@@ -113,8 +114,8 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		List<RemoteDeck> remoteDecks = new ArrayList<RemoteDeck>();
 
 		for (int deckIndex = 0; deckIndex < DECKS_COUNT; deckIndex++) {
-
 			List<RemoteCard> remoteCards = new ArrayList<RemoteCard>();
+
 			for (int cardIndex = 0; cardIndex < CARDS_COUNT; cardIndex++) {
 				remoteCards.add(new RemoteCard(String.format("Front %s", cardIndex + 1),
 					String.format("Back %s", cardIndex + 1)));
@@ -126,19 +127,12 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		return remoteDecks;
 	}
 
-	public void testCreateSpreadsheet() throws IOException {
+	public void testUpdateSpreadsheet() throws IOException {
 		byte[] xlsData = generateXlsData();
-
-		// No exceptions is test pass criteria
-		driveHelper.createSpreadsheet("New spreadsheet", xlsData);
-	}
-
-	public void testDownloadXlsData() throws IOException {
 		String spreadsheetKey = createSpreadsheet();
 
-		InputStream xlsDataInputStream = driveHelper.downloadXlsData(spreadsheetKey);
-
-		ensureXlsDataCorrect(xlsDataInputStream);
+		// No exceptions is test pass criteria
+		driveHelper.updateSpreadsheet(spreadsheetKey, xlsData);
 	}
 
 	private String createSpreadsheet() throws IOException {
@@ -151,6 +145,14 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		spreadsheetFile.setMimeType(MIME_GOOGLE_SPREADSHEET);
 
 		return driveService.files().insert(spreadsheetFile).execute().getId();
+	}
+
+	public void testDownloadXlsData() throws IOException {
+		String spreadsheetKey = createSpreadsheet();
+
+		InputStream xlsDataInputStream = driveHelper.downloadXlsData(spreadsheetKey);
+
+		ensureXlsDataCorrect(xlsDataInputStream);
 	}
 
 	private void ensureXlsDataCorrect(InputStream xlsData) {
