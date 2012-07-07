@@ -221,11 +221,11 @@ public class GoogleDriveHelper
 
 		// TODO: Owner field should also be specified to track only user's files
 		// This will require passing Account or something to GoogleDriveHelper
-		queryBuilder.append("trashed=false");
+		queryBuilder.append("trashed = false");
 		queryBuilder.append(" and ");
-		queryBuilder.append(String.format("mimeType='%s'", MIME_GOOGLE_SPREADSHEET));
+		queryBuilder.append(String.format("mimeType = '%s'", MIME_GOOGLE_SPREADSHEET));
 		queryBuilder.append(" and ");
-		queryBuilder.append(String.format("title='%s'", escapeSingleQuote(spreadsheetName)));
+		queryBuilder.append(String.format("title = '%s'", escapeSingleQuote(spreadsheetName)));
 
 		return queryBuilder.toString();
 	}
