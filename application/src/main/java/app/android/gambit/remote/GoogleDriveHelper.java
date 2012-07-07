@@ -158,11 +158,12 @@ public class GoogleDriveHelper
 	}
 
 	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
-		if (httpStatusCode == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
-			return new FileNotExistsException();
-		}
-		else {
-			return new SyncException();
+		switch (httpStatusCode) {
+			case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
+				return new FileNotExistsException();
+
+			default:
+				return new SyncException();
 		}
 	}
 
