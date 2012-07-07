@@ -88,7 +88,6 @@ public class GoogleDriveHelper
 		File file = new File();
 
 		file.setTitle(spreadsheetName);
-		file.setMimeType(MIME_XLS);
 
 		return file;
 	}
