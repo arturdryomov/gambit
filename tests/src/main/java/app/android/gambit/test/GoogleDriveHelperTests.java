@@ -98,7 +98,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		String key = createNewSpreadsheet();
 
 		// No exceptions is test pass criteria
-		driveHelper.uploadXlsData(key, xlsData);
+		driveHelper.updateSpreadsheet(key, xlsData);
 	}
 
 	private byte[] generateXlsData() {
@@ -130,7 +130,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		byte[] xlsData = generateXlsData();
 
 		// No exceptions is test pass criteria
-		driveHelper.createSpreadsheetFromXlsData("New spreadsheet", xlsData);
+		driveHelper.createSpreadsheet("New spreadsheet", xlsData);
 	}
 
 	public void testDownloadXlsData() throws IOException {
@@ -165,7 +165,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		final String SPREADSHEET_NAME = "Test spreadsheet";
 
 		String realKey = createNewSpreadsheet(SPREADSHEET_NAME);
-		String obtainedKey = driveHelper.getNewestSpreadsheetKeyByName(SPREADSHEET_NAME);
+		String obtainedKey = driveHelper.getNewestSpreadsheetKey(SPREADSHEET_NAME);
 
 		assertEquals(realKey, obtainedKey);
 	}

@@ -79,9 +79,11 @@ public class GoogleDriveHelper
 		}
 	}
 
-	public String createSpreadsheetFromXlsData(String spreadsheetName, byte[] data) {
-		File file = buildSpreadsheetFile(spreadsheetName);
-		return createSpreadsheetFromXlsData(file, data);
+	public String createSpreadsheet(String spreadsheetName, byte[] xlsData) {
+		File spreadsheetFile = buildSpreadsheetFile(spreadsheetName);
+		AbstractInputStreamContent xlsContent = buildXlsContent(xlsData);
+
+		return createSpreadsheet(spreadsheetFile, xlsContent);
 	}
 
 	private File buildSpreadsheetFile(String spreadsheetName) {
@@ -92,10 +94,13 @@ public class GoogleDriveHelper
 		return file;
 	}
 
-	private String createSpreadsheetFromXlsData(File file, byte[] data) {
+	private AbstractInputStreamContent buildXlsContent(byte[] xlsData) {
+		return new ByteArrayContent(MIME_XLS, xlsData);
+	}
+
+	private String createSpreadsheet(File spreadsheetFile, AbstractInputStreamContent xlsContent) {
 		try {
-			AbstractInputStreamContent content = contentFromXlsData(data);
-			Drive.Files.Insert insertRequest = driveService.files().insert(file, content);
+			Drive.Files.Insert insertRequest = driveService.files().insert(spreadsheetFile, xlsContent);
 
 			insertRequest.setConvert(Boolean.TRUE);
 			insertRequest.setFields(buildResponseFields(RESPONSE_FIELD_ID));
@@ -107,22 +112,18 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private AbstractInputStreamContent contentFromXlsData(byte[] data) {
-		return new ByteArrayContent(MIME_XLS, data);
-	}
-
 	private String buildResponseFields(String... responseFields) {
 		return TextUtils.join(RESPONSE_FIELDS_DELIMITER, responseFields);
 	}
 
-	public void uploadXlsData(String spreadsheetKey, byte[] data) {
+	public void updateSpreadsheet(String spreadsheetKey, byte[] xlsData) {
 		try {
-			AbstractInputStreamContent content = contentFromXlsData(data);
-			Drive.Files.Update updateRequest = driveService.files().update(spreadsheetKey, null, content);
+			AbstractInputStreamContent xlsContent = buildXlsContent(xlsData);
+
+			Drive.Files.Update updateRequest = driveService.files().update(spreadsheetKey, null,
+				xlsContent);
 
 			updateRequest.setConvert(Boolean.TRUE);
-
-			// We actually need nothing, but there can't be empty response
 			updateRequest.setFields(buildResponseFields(RESPONSE_FIELD_ID));
 
 			updateRequest.execute();
@@ -133,27 +134,31 @@ public class GoogleDriveHelper
 	}
 
 	public InputStream downloadXlsData(String spreadsheetKey) {
-		File file = getFileByKey(spreadsheetKey, buildResponseFields(RESPONSE_FIELD_EXPORT_LINKS));
-		GenericUrl xlsExportUrl = getXlsExportUrl(file);
+		File spreadsheetFile = getFile(spreadsheetKey,
+			buildResponseFields(RESPONSE_FIELD_EXPORT_LINKS));
+		GenericUrl xlsExportUrl = getXlsExportUrl(spreadsheetFile);
+
 		return downloadFileContent(xlsExportUrl);
 	}
 
-	private File getFileByKey(String spreadsheetKey, String responseFields) {
+	private File getFile(String spreadsheetKey, String responseFields) {
 		try {
 			Drive.Files.Get getRequest = driveService.files().get(spreadsheetKey);
+
 			getRequest.setFields(responseFields);
+
 			return driveService.files().get(spreadsheetKey).execute();
 		}
 		catch (HttpResponseException e) {
-			throw exceptionFromStatusCode(e.getStatusCode());
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
 	}
 
-	private RuntimeException exceptionFromStatusCode(int statusCode) {
-		if (statusCode == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
+	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
+		if (httpStatusCode == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
 			return new FileNotExistsException();
 		}
 		else {
@@ -161,39 +166,41 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private GenericUrl getXlsExportUrl(File file) {
-		if (!file.getExportLinks().keySet().contains(MIME_XLS)) {
+	private GenericUrl getXlsExportUrl(File spreadsheetFile) {
+		if (!spreadsheetFile.getExportLinks().keySet().contains(MIME_XLS)) {
 			throw new SyncException("No XLS export for file provided");
 		}
 
-		return new GenericUrl(file.getExportLinks().get(MIME_XLS));
+		return new GenericUrl(spreadsheetFile.getExportLinks().get(MIME_XLS));
 	}
 
-	private InputStream downloadFileContent(GenericUrl contentsUrl) {
+	private InputStream downloadFileContent(GenericUrl fileUrl) {
 		try {
-			contentsUrl.set(URL_OAUTH_TOKEN_PARAMETER, authToken);
-			HttpRequest request = driveService.getRequestFactory().buildGetRequest(contentsUrl);
-			return request.execute().getContent();
+			fileUrl.set(URL_OAUTH_TOKEN_PARAMETER, authToken);
+
+			HttpRequest getRequest = driveService.getRequestFactory().buildGetRequest(fileUrl);
+
+			return getRequest.execute().getContent();
 		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
 	}
 
-	public String getNewestSpreadsheetKeyByName(String spreadsheetName) {
-		List<File> spreadsheetsByName = getSpreadsheetsByName(spreadsheetName);
+	public String getNewestSpreadsheetKey(String spreadsheetName) {
+		List<File> spreadsheetsWithName = getSpreadsheetsWithName(spreadsheetName);
 
-		if (spreadsheetsByName.isEmpty()) {
+		if (spreadsheetsWithName.isEmpty()) {
 			throw new FileNotExistsException();
 		}
 
-		Collections.sort(spreadsheetsByName,
+		Collections.sort(spreadsheetsWithName,
 			Collections.reverseOrder(new FileByModifiedDateComparator()));
 
-		return spreadsheetsByName.get(0).getId();
+		return spreadsheetsWithName.get(0).getId();
 	}
 
-	private List<File> getSpreadsheetsByName(String spreadsheetName) {
+	private List<File> getSpreadsheetsWithName(String spreadsheetName) {
 		try {
 			Drive.Files.List listRequest = driveService.files().list();
 
@@ -233,15 +240,16 @@ public class GoogleDriveHelper
 	private static class FileByModifiedDateComparator implements Comparator<File>
 	{
 		@Override
-		public int compare(File first, File second) {
-			InternetDateTime firstTime = new InternetDateTime(first.getModifiedDate().toStringRfc3339());
-			InternetDateTime secondTime = new InternetDateTime(
-				second.getModifiedDate().toStringRfc3339());
+		public int compare(File firstSpreadsheetFile, File secondSpreadsheetFile) {
+			InternetDateTime firstFileModifiedTime = new InternetDateTime(
+				firstSpreadsheetFile.getModifiedDate().toStringRfc3339());
+			InternetDateTime secondFileModifiedTime = new InternetDateTime(
+				secondSpreadsheetFile.getModifiedDate().toStringRfc3339());
 
-			if (firstTime.isBefore(secondTime)) {
+			if (firstFileModifiedTime.isBefore(secondFileModifiedTime)) {
 				return -1;
 			}
-			else if (firstTime.isAfter(secondTime)) {
+			else if (firstFileModifiedTime.isAfter(secondFileModifiedTime)) {
 				return 1;
 			}
 			else {
@@ -251,7 +259,9 @@ public class GoogleDriveHelper
 	}
 
 	public InternetDateTime getSpreadsheetUpdateTime(String spreadsheetKey) {
-		File file = getFileByKey(spreadsheetKey, buildResponseFields(RESPONSE_FIELD_MODIFIED_DATE));
-		return new InternetDateTime(file.getModifiedDate().toStringRfc3339());
+		File spreadsheetFile = getFile(spreadsheetKey,
+			buildResponseFields(RESPONSE_FIELD_MODIFIED_DATE));
+
+		return new InternetDateTime(spreadsheetFile.getModifiedDate().toStringRfc3339());
 	}
 }
