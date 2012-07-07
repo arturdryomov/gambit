@@ -141,15 +141,6 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private RuntimeException exceptionFromStatusCode(int statusCode) {
-		if (statusCode == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
-			return new FileNotExistsException();
-		}
-		else {
-			return new SyncException();
-		}
-	}
-
 	public InputStream downloadXlsData(String spreadsheetKey) {
 		File file = getFileByKey(spreadsheetKey, buildFields(FIELD_EXPORT_LINKS));
 		GenericUrl xlsExportUrl = getXlsExportUrl(file);
@@ -167,6 +158,15 @@ public class GoogleDriveHelper
 		}
 		catch (IOException e) {
 			throw new SyncException();
+		}
+	}
+
+	private RuntimeException exceptionFromStatusCode(int statusCode) {
+		if (statusCode == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
+			return new FileNotExistsException();
+		}
+		else {
+			return new SyncException();
 		}
 	}
 
@@ -216,10 +216,6 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private String fieldsForList(String fields) {
-		return String.format("%s(%s)", FIELD_LIST_PREFIX, fields);
-	}
-
 	private String buildFileSelectionQuery(String spreadsheetName) {
 		StringBuilder queryBuilder = new StringBuilder();
 
@@ -236,6 +232,10 @@ public class GoogleDriveHelper
 
 	private String escapeSingleQuote(String string) {
 		return string.replace("'", "\\'");
+	}
+
+	private String fieldsForList(String fields) {
+		return String.format("%s(%s)", FIELD_LIST_PREFIX, fields);
 	}
 
 	private static class FileByModifiedDateComparator implements Comparator<File>
