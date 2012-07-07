@@ -137,7 +137,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		return remoteDecksConverter.toXlsData(generateRemoteDecks());
 	}
 
-	public List<RemoteDeck> generateRemoteDecks() {
+	private List<RemoteDeck> generateRemoteDecks() {
 		final int DECKS_COUNT = 1;
 		final int CARDS_COUNT = 1;
 
@@ -147,14 +147,31 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 			List<RemoteCard> remoteCards = new ArrayList<RemoteCard>();
 
 			for (int cardIndex = 0; cardIndex < CARDS_COUNT; cardIndex++) {
-				remoteCards.add(new RemoteCard(String.format("Front %s", cardIndex + 1),
-					String.format("Back %s", cardIndex + 1)));
+				remoteCards.add(generateRemoteCard(cardIndex));
 			}
 
-			remoteDecks.add(new RemoteDeck(String.format("Deck %s", deckIndex + 1), remoteCards));
+			remoteDecks.add(generateRemoteDeck(deckIndex, remoteCards));
 		}
 
 		return remoteDecks;
+	}
+
+	private RemoteCard generateRemoteCard(int cardIndex) {
+		RemoteCard remoteCard = new RemoteCard();
+
+		remoteCard.setFrontSideText(String.format("Front side #%d", cardIndex));
+		remoteCard.setBackSideText(String.format("Back side #d", cardIndex));
+
+		return remoteCard;
+	}
+
+	private RemoteDeck generateRemoteDeck(int deckIndex, List<RemoteCard> remoteCards) {
+		RemoteDeck remoteDeck = new RemoteDeck();
+
+		remoteDeck.setTitle(String.format("Deck #%d", deckIndex + 1));
+		remoteDeck.setCards(remoteCards);
+
+		return remoteDeck;
 	}
 
 	public void testUpdateSpreadsheet() {
