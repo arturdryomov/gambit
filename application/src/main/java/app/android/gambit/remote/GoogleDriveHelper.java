@@ -27,9 +27,9 @@ import com.google.api.services.drive.model.File;
 
 public class GoogleDriveHelper
 {
-	public static final String MIME_XLS = "application/vnd.ms-excel";
-	public static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
-	public static final String OAUTH_TOKEN_PARAM = "oauth_token";
+	private static final String MIME_XLS = "application/vnd.ms-excel";
+	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
+	private static final String OAUTH_TOKEN_PARAM = "oauth_token";
 
 	private Drive driveService;
 
@@ -192,6 +192,8 @@ public class GoogleDriveHelper
 	private String buildFileSelectionQuery(String spreadsheetName) {
 		StringBuilder queryBuilder = new StringBuilder();
 
+		// TODO: Owner field should also be specified to track only user's files
+		// This will require passing Account or something to GoogleDriveHelper
 		queryBuilder.append("trashed=false");
 		queryBuilder.append(" and ");
 		queryBuilder.append(String.format("mimeType='%s'", MIME_GOOGLE_SPREADSHEET));
