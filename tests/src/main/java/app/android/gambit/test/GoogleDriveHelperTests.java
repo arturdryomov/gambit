@@ -4,7 +4,10 @@ package app.android.gambit.test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.accounts.Account;
 import android.app.Activity;
@@ -170,18 +173,29 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	public void testGetSpreadsheetUpdateTime() throws IOException, InterruptedException {
 		// We need time delta because we're going to compare local date with
 		// date on Google servers. There obviously might be some difference.
-		final int TIME_DELTA_IN_MILLIS = 60 * 1000;
+		final int TIME_DELTA_IN_SECONDS = 60;
 
-		InternetDateTime beforeCreation = new InternetDateTime();
-		Thread.sleep(TIME_DELTA_IN_MILLIS);
+		InternetDateTime beforeCreation = addSecondsToDateTime(new InternetDateTime(),
+			-TIME_DELTA_IN_SECONDS);
 
 		String key = createNewSpreadsheet();
 		InternetDateTime dateTime = driveHelper.getSpreadsheetUpdateTime(key);
-		Thread.sleep(TIME_DELTA_IN_MILLIS);
 
-		InternetDateTime afterCreation = new InternetDateTime();
+		InternetDateTime afterCreation = addSecondsToDateTime(new InternetDateTime(),
+			TIME_DELTA_IN_SECONDS);
 
+		// This is not a strict check, but it will at least make sure driveHelper
+		// doesn't return nonsense
 		assertTrue(beforeCreation.isBefore(dateTime));
 		assertTrue(afterCreation.isAfter(dateTime));
+	}
+
+	public InternetDateTime addSecondsToDateTime(InternetDateTime dateTime, int seconds) {
+		Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		calendar.setTime(dateTime.toDate());
+
+		calendar.add(Calendar.SECOND, seconds);
+
+		return new InternetDateTime(calendar.getTime());
 	}
 }
