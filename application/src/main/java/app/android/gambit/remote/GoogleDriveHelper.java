@@ -30,7 +30,8 @@ public class GoogleDriveHelper
 {
 	private static final String MIME_XLS = "application/vnd.ms-excel";
 	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
-	private static final String OAUTH_TOKEN_PARAM = "oauth_token";
+
+	private static final String URL_OAUTH_TOKEN_PARAMETER = "oauth_token";
 
 	private static final String RESPONSE_FIELD_ID = "id";
 	private static final String RESPONSE_FIELD_EXPORT_LINKS = "exportLinks";
@@ -171,7 +172,7 @@ public class GoogleDriveHelper
 
 	private InputStream downloadFileContent(GenericUrl contentsUrl) {
 		try {
-			contentsUrl.set(OAUTH_TOKEN_PARAM, authToken);
+			contentsUrl.set(URL_OAUTH_TOKEN_PARAMETER, authToken);
 			HttpRequest request = driveService.getRequestFactory().buildGetRequest(contentsUrl);
 			return request.execute().getContent();
 		}
