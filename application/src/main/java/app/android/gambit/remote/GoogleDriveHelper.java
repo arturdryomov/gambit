@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.text.TextUtils;
 import app.android.gambit.InternetDateTime;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.AbstractInputStreamContent;
@@ -35,6 +36,7 @@ public class GoogleDriveHelper
 	private static final String RESPONSE_FIELD_EXPORT_LINKS = "exportLinks";
 	private static final String RESPONSE_FIELD_MODIFIED_DATE = "modifiedDate";
 	private static final String RESPONSE_LIST_REQUEST_ITEMS_PREFIX = "items";
+	private static final String RESPONSE_FIELDS_DELIMITER = ",";
 
 	private Drive driveService;
 
@@ -110,17 +112,7 @@ public class GoogleDriveHelper
 	}
 
 	private String buildResponseFields(String... responseFields) {
-		StringBuilder responseFieldsBuilder = new StringBuilder();
-
-		for (String responseField : responseFields) {
-			responseFieldsBuilder.append(responseField);
-			responseFieldsBuilder.append(",");
-		}
-
-		// Remove last extra comma
-		responseFieldsBuilder.deleteCharAt(responseFieldsBuilder.length() - 1);
-
-		return responseFieldsBuilder.toString();
+		return TextUtils.join(RESPONSE_FIELDS_DELIMITER, responseFields);
 	}
 
 	public void uploadXlsData(String spreadsheetKey, byte[] data) {
