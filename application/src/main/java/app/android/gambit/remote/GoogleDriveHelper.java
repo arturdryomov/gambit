@@ -31,6 +31,12 @@ public class GoogleDriveHelper
 	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
 	private static final String OAUTH_TOKEN_PARAM = "oauth_token";
 
+	private static final String FIELD_ID = "id";
+	private static final String FIELD_EXPORT_LINKS = "exportLinks";
+	private static final String FIELD_MODIFIED_DATE = "modifiedDate";
+
+	private static final String FIELD_LIST_PREFIX = "items";
+
 	private Drive driveService;
 
 	private String authToken;
@@ -89,7 +95,10 @@ public class GoogleDriveHelper
 		try {
 			AbstractInputStreamContent content = contentFromXlsData(data);
 			Drive.Files.Insert insertRequest = driveService.files().insert(file, content);
+
 			insertRequest.setConvert(Boolean.TRUE);
+			insertRequest.setFields(buildFields(FIELD_ID));
+
 			return insertRequest.execute().getId();
 		}
 		catch (IOException e) {
@@ -101,30 +110,31 @@ public class GoogleDriveHelper
 		return new ByteArrayContent(MIME_XLS, data);
 	}
 
-	public void uploadXlsData(String spreadsheetKey, byte[] data) {
-		File file = getFileByKey(spreadsheetKey);
-		uploadXlsData(file, data);
+	private String buildFields(String... fields) {
+		StringBuilder builder = new StringBuilder();
+
+		for (String field : fields) {
+			builder.append(field);
+			builder.append(",");
+		}
+
+		// Remove last extra comma
+		builder.deleteCharAt(builder.length() - 1);
+
+		return builder.toString();
 	}
 
-	private void uploadXlsData(File file, byte[] data) {
+	public void uploadXlsData(String spreadsheetKey, byte[] data) {
 		try {
 			AbstractInputStreamContent content = contentFromXlsData(data);
-			file.setMimeType(MIME_XLS);
-			Drive.Files.Update updateRequest = driveService.files().update(file.getId(), file, content);
-			updateRequest.setConvert(Boolean.TRUE);
-			updateRequest.execute();
-		}
-		catch (IOException e) {
-			throw new SyncException();
-		}
-	}
+			Drive.Files.Update updateRequest = driveService.files().update(spreadsheetKey, null, content);
 
-	private File getFileByKey(String spreadsheetKey) {
-		try {
-			return driveService.files().get(spreadsheetKey).execute();
-		}
-		catch (HttpResponseException e) {
-			throw exceptionFromStatusCode(e.getStatusCode());
+			updateRequest.setConvert(Boolean.TRUE);
+
+			// We actually need nothing, but there can't be empty response
+			updateRequest.setFields(buildFields(FIELD_ID));
+
+			updateRequest.execute();
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -141,9 +151,23 @@ public class GoogleDriveHelper
 	}
 
 	public InputStream downloadXlsData(String spreadsheetKey) {
-		File file = getFileByKey(spreadsheetKey);
+		File file = getFileByKey(spreadsheetKey, FIELD_EXPORT_LINKS);
 		GenericUrl xlsExportUrl = getXlsExportUrl(file);
 		return downloadFileContent(xlsExportUrl);
+	}
+
+	private File getFileByKey(String spreadsheetKey, String fields) {
+		try {
+			Drive.Files.Get getRequest = driveService.files().get(spreadsheetKey);
+			getRequest.setFields(fields);
+			return driveService.files().get(spreadsheetKey).execute();
+		}
+		catch (HttpResponseException e) {
+			throw exceptionFromStatusCode(e.getStatusCode());
+		}
+		catch (IOException e) {
+			throw new SyncException();
+		}
 	}
 
 	private GenericUrl getXlsExportUrl(File file) {
@@ -181,12 +205,19 @@ public class GoogleDriveHelper
 	private List<File> getSpreadsheetsByName(String spreadsheetName) {
 		try {
 			Drive.Files.List listRequest = driveService.files().list();
+
 			listRequest.setQ(buildFileSelectionQuery(spreadsheetName));
+			listRequest.setFields(fieldsForList(buildFields(FIELD_ID, FIELD_MODIFIED_DATE)));
+
 			return listRequest.execute().getItems();
 		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
+	}
+
+	private String fieldsForList(String fields) {
+		return String.format("%s(%s)", FIELD_LIST_PREFIX, fields);
 	}
 
 	private String buildFileSelectionQuery(String spreadsheetName) {
@@ -228,7 +259,7 @@ public class GoogleDriveHelper
 	}
 
 	public InternetDateTime getSpreadsheetUpdateTime(String spreadsheetKey) {
-		File file = getFileByKey(spreadsheetKey);
+		File file = getFileByKey(spreadsheetKey, buildFields(FIELD_MODIFIED_DATE));
 		return new InternetDateTime(file.getModifiedDate().toStringRfc3339());
 	}
 }
