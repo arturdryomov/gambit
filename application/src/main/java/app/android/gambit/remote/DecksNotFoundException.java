@@ -1,6 +1,6 @@
 package app.android.gambit.remote;
 
 
-public class DecksNotFoundException extends SyncException
+class DecksNotFoundException extends SyncException
 {
 }
