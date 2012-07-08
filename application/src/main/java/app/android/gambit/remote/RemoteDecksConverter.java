@@ -95,6 +95,14 @@ public class RemoteDecksConverter
 	}
 
 	private boolean isCardDataEmpty(Cell[] row) {
+		if (row == null) {
+			return true;
+		}
+
+		if (row.length == 0) {
+			return true;
+		}
+
 		String frontSideText = row[FRONT_SIDE_COLUMN_INDEX].getContents();
 		String backSideText = row[BACK_SIDE_COLUMN_INDEX].getContents();
 
