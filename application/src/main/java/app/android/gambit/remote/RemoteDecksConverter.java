@@ -95,6 +95,14 @@ public class RemoteDecksConverter
 	}
 
 	private boolean isCardDataEmpty(Cell[] row) {
+		if (row == null) {
+			return true;
+		}
+
+		if (row.length == 0) {
+			return true;
+		}
+
 		String frontSideText = row[FRONT_SIDE_COLUMN_INDEX].getContents();
 		String backSideText = row[BACK_SIDE_COLUMN_INDEX].getContents();
 
@@ -131,7 +139,7 @@ public class RemoteDecksConverter
 
 	private void fillWorkbook(WritableWorkbook workbook, List<RemoteDeck> remoteDecks) {
 		if (remoteDecks.isEmpty()) {
-			return;
+			throw new DecksNotFoundException();
 		}
 
 		for (int deckIndex = 0; deckIndex < remoteDecks.size(); deckIndex++) {

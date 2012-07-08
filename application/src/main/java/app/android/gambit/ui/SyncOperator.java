@@ -7,6 +7,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import app.android.gambit.R;
+import app.android.gambit.remote.SyncException;
+import app.android.gambit.remote.Synchronizer;
 
 
 class SyncOperator extends AsyncTask<Void, Void, String>
@@ -17,6 +19,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private final Runnable successRunnable;
 
 	private String driveAuthToken;
+	private String apiKey;
 
 	private boolean isTokensInvalidationRequired;
 
@@ -53,6 +56,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		try {
 			Account account = getAccount();
 
+			getApiKey();
 			getAuthTokens(account);
 			if (isTokensInvalidationRequired) {
 				invalidateAuthTokens(account);
@@ -83,6 +87,10 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		}
 	}
 
+	private void getApiKey() {
+		apiKey = activity.getString(R.string.google_api_key);
+	}
+
 	private void getAuthTokens(Account account) {
 		Authorizer authorizer = new Authorizer(activity);
 
@@ -98,14 +106,28 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private String sync() {
-		if (!haveSyncSpreadsheetKeyInPreferences()) {
-			// TODO: Sync with key
+		try {
+			trySync();
 		}
-		else {
-			// TODO: Sync without key
+		catch (SyncException e) {
+			return activity.getString(R.string.error_unspecified);
 		}
 
 		return new String();
+	}
+
+	private void trySync() {
+		Synchronizer synchronizer = new Synchronizer(driveAuthToken, apiKey);
+		String spreadsheetKey;
+
+		if (!haveSyncSpreadsheetKeyInPreferences()) {
+			spreadsheetKey = synchronizer.sync();
+		}
+		else {
+			spreadsheetKey = synchronizer.sync(loadSyncSpreadsheetKeyFromPreferences());
+		}
+
+		saveSyncSpreadsheetKeyToPreferences(spreadsheetKey);
 	}
 
 	private boolean haveSyncSpreadsheetKeyInPreferences() {
@@ -120,11 +142,6 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {
 		PreferencesOperator.set(activityContext, PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY,
 			syncSpreadsheetKey);
-	}
-
-	private void removeSyncSpreadsheetKeyFromPreferences() {
-		PreferencesOperator.remove(activityContext,
-			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
 
 	@Override
