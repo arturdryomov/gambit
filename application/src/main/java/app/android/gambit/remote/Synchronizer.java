@@ -30,7 +30,7 @@ public class Synchronizer
 
 			return spreadsheetKey;
 		}
-		catch (FileNotExistsException e) {
+		catch (SpreadsheetNotExistsException e) {
 			return sync();
 		}
 		catch (DecksNotFoundException e) {
@@ -137,7 +137,7 @@ public class Synchronizer
 
 			syncFirstTimeWithExistingDriveSpreadsheet(spreadsheetKey);
 		}
-		catch (FileNotExistsException e) {
+		catch (SpreadsheetNotExistsException e) {
 			spreadsheetKey = createDriveSpreadsheet();
 		}
 

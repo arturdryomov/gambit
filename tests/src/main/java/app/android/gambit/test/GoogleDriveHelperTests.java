@@ -14,7 +14,7 @@ import android.app.Activity;
 import android.test.InstrumentationTestCase;
 import app.android.gambit.InternetDateTime;
 import app.android.gambit.remote.ConvertingException;
-import app.android.gambit.remote.FileNotExistsException;
+import app.android.gambit.remote.SpreadsheetNotExistsException;
 import app.android.gambit.remote.GoogleDriveHelper;
 import app.android.gambit.remote.RemoteCard;
 import app.android.gambit.remote.RemoteDeck;
@@ -105,7 +105,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 			try {
 				removeSpreadsheet(driveHelper.getNewestSpreadsheetKey(TESTING_SPREADSHEET_NAME));
 			}
-			catch (FileNotExistsException e) {
+			catch (SpreadsheetNotExistsException e) {
 				return;
 			}
 		}

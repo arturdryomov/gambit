@@ -167,7 +167,7 @@ public class GoogleDriveHelper
 	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
 		switch (httpStatusCode) {
 			case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
-				return new FileNotExistsException();
+				return new SpreadsheetNotExistsException();
 
 			default:
 				return new SyncException();
@@ -199,7 +199,7 @@ public class GoogleDriveHelper
 		List<File> spreadsheetsWithName = getSpreadsheetsWithName(spreadsheetName);
 
 		if (spreadsheetsWithName.isEmpty()) {
-			throw new FileNotExistsException();
+			throw new SpreadsheetNotExistsException();
 		}
 
 		Collections.sort(spreadsheetsWithName,
@@ -211,7 +211,7 @@ public class GoogleDriveHelper
 			}
 		}
 
-		throw new FileNotExistsException();
+		throw new SpreadsheetNotExistsException();
 	}
 
 	private List<File> getSpreadsheetsWithName(String spreadsheetName) {
