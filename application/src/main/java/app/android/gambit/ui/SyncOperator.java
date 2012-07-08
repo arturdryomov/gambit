@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import app.android.gambit.R;
+import app.android.gambit.remote.SyncException;
 import app.android.gambit.remote.Synchronizer;
 
 
@@ -105,6 +106,17 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private String sync() {
+		try {
+			trySync();
+		}
+		catch (SyncException e) {
+			return activity.getString(R.string.error_unspecified);
+		}
+
+		return new String();
+	}
+
+	private void trySync() {
 		Synchronizer synchronizer = new Synchronizer(driveAuthToken, apiKey);
 		String spreadsheetKey;
 
@@ -116,8 +128,6 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		}
 
 		saveSyncSpreadsheetKeyToPreferences(spreadsheetKey);
-
-		return new String();
 	}
 
 	private boolean haveSyncSpreadsheetKeyInPreferences() {
