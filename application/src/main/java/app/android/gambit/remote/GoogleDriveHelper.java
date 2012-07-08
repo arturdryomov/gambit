@@ -273,8 +273,8 @@ public class GoogleDriveHelper
 	private boolean isFileWritable(File file) {
 		String userPermissionId = getUserPermissionId();
 
-		for (Permission permission : getFilePermissions(file)) {
-			if (isUserHaveWritablePermission(userPermissionId, permission)) {
+		for (Permission filePermission : getFilePermissions(file)) {
+			if (isUserHaveWritablePermission(userPermissionId, filePermission)) {
 				return true;
 			}
 		}
@@ -309,16 +309,16 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private boolean isUserHaveWritablePermission(String userPermissionId, Permission permission) {
-		if (!permission.getId().equals(userPermissionId)) {
+	private boolean isUserHaveWritablePermission(String userPermissionId, Permission filePermission) {
+		if (!filePermission.getId().equals(userPermissionId)) {
 			return false;
 		}
 
-		if (permission.getRole().equals(PERMISSION_ROLE_OWNER)) {
+		if (filePermission.getRole().equals(PERMISSION_ROLE_OWNER)) {
 			return true;
 		}
 
-		return permission.getRole().equals(PERMISSION_ROLE_WRITER);
+		return filePermission.getRole().equals(PERMISSION_ROLE_WRITER);
 	}
 
 	public InternetDateTime getSpreadsheetUpdateTime(String spreadsheetKey) {
