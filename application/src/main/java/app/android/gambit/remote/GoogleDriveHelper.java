@@ -114,6 +114,9 @@ public class GoogleDriveHelper
 
 			return insertRequest.execute().getId();
 		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
+		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
@@ -121,6 +124,19 @@ public class GoogleDriveHelper
 
 	private String buildResponseFields(String... responseFields) {
 		return TextUtils.join(RESPONSE_FIELDS_DELIMITER, responseFields);
+	}
+
+	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
+		switch (httpStatusCode) {
+			case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
+				return new SpreadsheetNotExistsException();
+
+			case HttpStatusCodes.STATUS_CODE_UNAUTHORIZED:
+				return new UnauthorizedException();
+
+			default:
+				return new SyncException();
+		}
 	}
 
 	public void updateSpreadsheet(String spreadsheetKey, byte[] xlsData) {
@@ -134,6 +150,9 @@ public class GoogleDriveHelper
 			updateRequest.setFields(buildResponseFields(RESPONSE_FIELD_ID));
 
 			updateRequest.execute();
+		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -164,16 +183,6 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
-		switch (httpStatusCode) {
-			case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
-				return new SpreadsheetNotExistsException();
-
-			default:
-				return new SyncException();
-		}
-	}
-
 	private GenericUrl getXlsExportUrl(File spreadsheetFile) {
 		if (!spreadsheetFile.getExportLinks().keySet().contains(MIME_XLS)) {
 			throw new SyncException("No XLS export for file provided");
@@ -189,6 +198,9 @@ public class GoogleDriveHelper
 			HttpRequest getRequest = driveService.getRequestFactory().buildGetRequest(fileUrl);
 
 			return getRequest.execute().getContent();
+		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -223,6 +235,9 @@ public class GoogleDriveHelper
 				buildResponseFields(RESPONSE_FIELD_ID, RESPONSE_FIELD_MODIFIED_DATE)));
 
 			return listRequest.execute().getItems();
+		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -290,6 +305,9 @@ public class GoogleDriveHelper
 
 			return getRequest.execute().getPermissionId();
 		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
+		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
@@ -303,6 +321,9 @@ public class GoogleDriveHelper
 				buildResponseFieldsList(buildResponseFields(RESPONSE_FIELD_ID, RESPONSE_FIELD_ROLE)));
 
 			return getRequest.execute().getItems();
+		}
+		catch (HttpResponseException e) {
+			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();

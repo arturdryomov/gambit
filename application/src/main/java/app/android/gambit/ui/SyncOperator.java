@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import app.android.gambit.R;
 import app.android.gambit.remote.SyncException;
 import app.android.gambit.remote.Synchronizer;
+import app.android.gambit.remote.UnauthorizedException;
 
 
 class SyncOperator extends AsyncTask<Void, Void, String>
@@ -105,6 +106,15 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private String sync() {
 		try {
 			trySync();
+		}
+		catch (UnauthorizedException e) {
+			if (isTokensInvalidationRequired) {
+				return activity.getString(R.string.error_unspecified);
+			}
+			else {
+				isTokensInvalidationRequired = true;
+				doInBackground();
+			}
 		}
 		catch (SyncException e) {
 			return activity.getString(R.string.error_unspecified);
