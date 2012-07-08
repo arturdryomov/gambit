@@ -46,9 +46,9 @@ public class GoogleDriveHelper
 	private static final String PERMISSION_ROLE_OWNER = "owner";
 	private static final String PERMISSION_ROLE_WRITER = "writer";
 
-	private Drive driveService;
+	private final Drive driveService;
 
-	private String authToken;
+	private final String authToken;
 
 	public GoogleDriveHelper(String authToken, String apiKey) {
 		this.authToken = authToken;
