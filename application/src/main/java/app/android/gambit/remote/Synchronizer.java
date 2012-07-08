@@ -33,6 +33,9 @@ public class Synchronizer
 		catch (FileNotExistsException e) {
 			return sync();
 		}
+		catch (DecksNotFoundException e) {
+			return sync();
+		}
 	}
 
 	private void trySync(String spreadsheetKey) {

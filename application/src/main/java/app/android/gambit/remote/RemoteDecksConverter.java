@@ -139,7 +139,7 @@ public class RemoteDecksConverter
 
 	private void fillWorkbook(WritableWorkbook workbook, List<RemoteDeck> remoteDecks) {
 		if (remoteDecks.isEmpty()) {
-			return;
+			throw new DecksNotFoundException();
 		}
 
 		for (int deckIndex = 0; deckIndex < remoteDecks.size(); deckIndex++) {
