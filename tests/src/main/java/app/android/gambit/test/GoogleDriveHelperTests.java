@@ -176,7 +176,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 	public void testUpdateSpreadsheet() {
 		byte[] xlsData = generateXlsData();
-		String spreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
+		String spreadsheetKey = createTestingSpreadsheet();
 
 		try {
 			driveHelper.updateSpreadsheet(spreadsheetKey, xlsData);
@@ -186,9 +186,9 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		}
 	}
 
-	private String createSpreadsheet(String spreadsheetName) {
+	private String createTestingSpreadsheet() {
 		File spreadsheetFile = new File();
-		spreadsheetFile.setTitle(spreadsheetName);
+		spreadsheetFile.setTitle(TESTING_SPREADSHEET_NAME);
 		spreadsheetFile.setMimeType(MIME_GOOGLE_SPREADSHEET);
 
 		try {
@@ -200,7 +200,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	}
 
 	public void testDownloadXlsData() {
-		String spreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
+		String spreadsheetKey = createTestingSpreadsheet();
 
 		InputStream xlsData = driveHelper.downloadXlsData(spreadsheetKey);
 
@@ -221,7 +221,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	}
 
 	public void testGetNewestSpreadsheetKey() {
-		String expectedSpreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
+		String expectedSpreadsheetKey = createTestingSpreadsheet();
 		String obtainedSpreadsheetKey = driveHelper.getNewestSpreadsheetKey(TESTING_SPREADSHEET_NAME);
 
 		assertEquals(expectedSpreadsheetKey, obtainedSpreadsheetKey);
@@ -233,7 +233,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 		InternetDateTime timeBeforeCreation = addSecondsToDateTime(new InternetDateTime(),
 			-TIME_DELTA_IN_SECONDS);
 
-		String spreadsheetKey = createSpreadsheet(TESTING_SPREADSHEET_NAME);
+		String spreadsheetKey = createTestingSpreadsheet();
 		InternetDateTime spreadsheetModifiedTime = driveHelper.getSpreadsheetUpdateTime(spreadsheetKey);
 
 		InternetDateTime timeAfterCreation = addSecondsToDateTime(new InternetDateTime(),
