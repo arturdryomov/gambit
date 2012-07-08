@@ -67,6 +67,12 @@
 			<artifactId>jxl</artifactId>
 			<version>2.6.12</version>
 			<groupId>net.sourceforge.jexcelapi</groupId>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
