@@ -13,6 +13,8 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.test.InstrumentationTestCase;
 import app.android.gambit.InternetDateTime;
+import app.android.gambit.remote.ConvertingException;
+import app.android.gambit.remote.FileNotExistsException;
 import app.android.gambit.remote.GoogleDriveHelper;
 import app.android.gambit.remote.RemoteCard;
 import app.android.gambit.remote.RemoteDeck;
@@ -33,12 +35,15 @@ import com.google.api.services.drive.model.File;
 
 public class GoogleDriveHelperTests extends InstrumentationTestCase
 {
-	private static String token;
+	private static final String TESTING_SPREADSHEET_NAME = "Spreadsheet for Gambit testing purposes";
+
+	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
+
+	private static String authToken;
 	private static Activity hostActivity;
-	public static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
 
 	private GoogleDriveHelper driveHelper;
-	private Drive driveService; // Needed to prepare some testing data
+	private Drive driveService;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -46,7 +51,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 		ensureAuthorized();
 
-		driveHelper = new GoogleDriveHelper(token, getApiKey());
+		driveHelper = new GoogleDriveHelper(authToken, getApiKey());
 		driveService = buildDriveService();
 	}
 
@@ -55,12 +60,12 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 			hostActivity = launchActivity("app.android.gambit", DeckCreationActivity.class, null);
 		}
 
-		if (token == null) {
+		if (authToken == null) {
 			Account account = AccountSelector.select(hostActivity);
 			Authorizer authorizer = new Authorizer(hostActivity);
-			token = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
-			authorizer.invalidateToken(token);
-			token = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
+			authToken = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
+			authorizer.invalidateToken(authToken);
+			authToken = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
 		}
 	}
 
@@ -79,7 +84,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 			public void initialize(JsonHttpRequest jsonHttpRequest) throws IOException {
 				DriveRequest driveRequest = (DriveRequest) jsonHttpRequest;
 
-				driveRequest.setOauthToken(token);
+				driveRequest.setOauthToken(authToken);
 				driveRequest.setKey(getApiKey());
 			}
 		});
@@ -89,105 +94,153 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 	@Override
 	protected void tearDown() throws Exception {
+		removeTestingSpreadsheets();
 		hostActivity.finish();
+
 		super.tearDown();
 	}
 
-	public void testUploadXlsData() throws IOException {
-		byte[] xlsData = generateXlsData();
-		String key = createNewSpreadsheet();
+	private void removeTestingSpreadsheets() {
+		while (true) {
+			try {
+				removeSpreadsheet(driveHelper.getNewestSpreadsheetKey(TESTING_SPREADSHEET_NAME));
+			}
+			catch (FileNotExistsException e) {
+				return;
+			}
+		}
+	}
 
-		// No exceptions is test pass criteria
-		driveHelper.updateSpreadsheet(key, xlsData);
+	private void removeSpreadsheet(String spreadsheetKey) {
+		try {
+			driveService.files().delete(spreadsheetKey).execute();
+		}
+		catch (IOException e) {
+			throw new RuntimeException();
+		}
+	}
+
+	public void testCreateSpreadsheet() {
+		byte[] xlsData = generateXlsData();
+
+		try {
+			driveHelper.createSpreadsheet(TESTING_SPREADSHEET_NAME, xlsData);
+		}
+		catch (RuntimeException e) {
+			fail();
+		}
 	}
 
 	private byte[] generateXlsData() {
-		RemoteDecksConverter converter = new RemoteDecksConverter();
-		return converter.toXlsData(generateRemoteDecks());
+		RemoteDecksConverter remoteDecksConverter = new RemoteDecksConverter();
+
+		return remoteDecksConverter.toXlsData(generateRemoteDecks());
 	}
 
-	public List<RemoteDeck> generateRemoteDecks() {
+	private List<RemoteDeck> generateRemoteDecks() {
 		final int DECKS_COUNT = 1;
 		final int CARDS_COUNT = 1;
 
-		List<RemoteDeck> decks = new ArrayList<RemoteDeck>();
+		List<RemoteDeck> remoteDecks = new ArrayList<RemoteDeck>();
 
 		for (int deckIndex = 0; deckIndex < DECKS_COUNT; deckIndex++) {
+			List<RemoteCard> remoteCards = new ArrayList<RemoteCard>();
 
-			List<RemoteCard> cards = new ArrayList<RemoteCard>();
 			for (int cardIndex = 0; cardIndex < CARDS_COUNT; cardIndex++) {
-				cards.add(new RemoteCard(String.format("Front %s", cardIndex + 1),
-					String.format("Back %s", cardIndex + 1)));
+				remoteCards.add(generateRemoteCard(cardIndex));
 			}
 
-			decks.add(new RemoteDeck(String.format("Deck %s", deckIndex + 1), cards));
+			remoteDecks.add(generateRemoteDeck(deckIndex, remoteCards));
 		}
 
-		return decks;
+		return remoteDecks;
 	}
 
-	public void testCreateSpreadsheetFromXlsData() throws IOException {
+	private RemoteCard generateRemoteCard(int cardIndex) {
+		RemoteCard remoteCard = new RemoteCard();
+
+		remoteCard.setFrontSideText(String.format("Front side #%d", cardIndex));
+		remoteCard.setBackSideText(String.format("Back side #%d", cardIndex));
+
+		return remoteCard;
+	}
+
+	private RemoteDeck generateRemoteDeck(int deckIndex, List<RemoteCard> remoteCards) {
+		RemoteDeck remoteDeck = new RemoteDeck();
+
+		remoteDeck.setTitle(String.format("Deck #%d", deckIndex + 1));
+		remoteDeck.setCards(remoteCards);
+
+		return remoteDeck;
+	}
+
+	public void testUpdateSpreadsheet() {
 		byte[] xlsData = generateXlsData();
+		String spreadsheetKey = createTestingSpreadsheet();
 
-		// No exceptions is test pass criteria
-		driveHelper.createSpreadsheet("New spreadsheet", xlsData);
+		try {
+			driveHelper.updateSpreadsheet(spreadsheetKey, xlsData);
+		}
+		catch (RuntimeException e) {
+			fail();
+		}
 	}
 
-	public void testDownloadXlsData() throws IOException {
-		String key = createNewSpreadsheet();
+	private String createTestingSpreadsheet() {
+		File spreadsheetFile = new File();
+		spreadsheetFile.setTitle(TESTING_SPREADSHEET_NAME);
+		spreadsheetFile.setMimeType(MIME_GOOGLE_SPREADSHEET);
 
-		InputStream xlsDataInputStream = driveHelper.downloadXlsData(key);
-
-		ensureXlsDataCorrect(xlsDataInputStream);
+		try {
+			return driveService.files().insert(spreadsheetFile).execute().getId();
+		}
+		catch (IOException e) {
+			throw new RuntimeException();
+		}
 	}
 
-	private String createNewSpreadsheet() throws IOException {
-		return createNewSpreadsheet("Test file");
+	public void testDownloadXlsData() {
+		String spreadsheetKey = createTestingSpreadsheet();
+
+		InputStream xlsData = driveHelper.downloadXlsData(spreadsheetKey);
+
+		assertTrue(isXlsDataCorrect(xlsData));
 	}
 
-	private String createNewSpreadsheet(String spreadsheetName) throws IOException {
-		File file = new File();
-		file.setTitle(spreadsheetName);
-		file.setMimeType(MIME_GOOGLE_SPREADSHEET);
+	private boolean isXlsDataCorrect(InputStream xlsData) {
+		RemoteDecksConverter remoteDecksConverter = new RemoteDecksConverter();
 
-		return driveService.files().insert(file).execute().getId();
+		try {
+			remoteDecksConverter.fromXlsData(xlsData);
+		}
+		catch (ConvertingException e) {
+			return false;
+		}
+
+		return true;
 	}
 
-	private void ensureXlsDataCorrect(InputStream xlsData) {
-		RemoteDecksConverter converter = new RemoteDecksConverter();
+	public void testGetNewestSpreadsheetKey() {
+		String expectedSpreadsheetKey = createTestingSpreadsheet();
+		String obtainedSpreadsheetKey = driveHelper.getNewestSpreadsheetKey(TESTING_SPREADSHEET_NAME);
 
-		// This will throw if xls data is invalid
-		@SuppressWarnings("unused")
-		List<RemoteDeck> decks = converter.fromXlsData(xlsData);
+		assertEquals(expectedSpreadsheetKey, obtainedSpreadsheetKey);
 	}
 
-	public void testGetNewestSpreadsheetKeyByName() throws IOException {
-		final String SPREADSHEET_NAME = "Test spreadsheet";
-
-		String realKey = createNewSpreadsheet(SPREADSHEET_NAME);
-		String obtainedKey = driveHelper.getNewestSpreadsheetKey(SPREADSHEET_NAME);
-
-		assertEquals(realKey, obtainedKey);
-	}
-
-	public void testGetSpreadsheetUpdateTime() throws IOException, InterruptedException {
-		// We need time delta because we're going to compare local date with
-		// date on Google servers. There obviously might be some difference.
+	public void testGetSpreadsheetUpdateTime() {
 		final int TIME_DELTA_IN_SECONDS = 60;
 
-		InternetDateTime beforeCreation = addSecondsToDateTime(new InternetDateTime(),
+		InternetDateTime timeBeforeCreation = addSecondsToDateTime(new InternetDateTime(),
 			-TIME_DELTA_IN_SECONDS);
 
-		String key = createNewSpreadsheet();
-		InternetDateTime dateTime = driveHelper.getSpreadsheetUpdateTime(key);
+		String spreadsheetKey = createTestingSpreadsheet();
+		InternetDateTime spreadsheetModifiedTime = driveHelper.getSpreadsheetUpdateTime(spreadsheetKey);
 
-		InternetDateTime afterCreation = addSecondsToDateTime(new InternetDateTime(),
+		InternetDateTime timeAfterCreation = addSecondsToDateTime(new InternetDateTime(),
 			TIME_DELTA_IN_SECONDS);
 
-		// This is not a strict check, but it will at least make sure driveHelper
-		// doesn't return nonsense
-		assertTrue(beforeCreation.isBefore(dateTime));
-		assertTrue(afterCreation.isAfter(dateTime));
+		assertTrue(timeBeforeCreation.isBefore(spreadsheetModifiedTime));
+		assertTrue(timeAfterCreation.isAfter(spreadsheetModifiedTime));
 	}
 
 	private InternetDateTime addSecondsToDateTime(InternetDateTime dateTime, int seconds) {
