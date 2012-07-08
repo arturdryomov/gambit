@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import app.android.gambit.R;
+import app.android.gambit.remote.Synchronizer;
 
 
 class SyncOperator extends AsyncTask<Void, Void, String>
@@ -17,6 +18,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private final Runnable successRunnable;
 
 	private String driveAuthToken;
+	private String apiKey;
 
 	private boolean isTokensInvalidationRequired;
 
@@ -53,6 +55,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		try {
 			Account account = getAccount();
 
+			getApiKey();
 			getAuthTokens(account);
 			if (isTokensInvalidationRequired) {
 				invalidateAuthTokens(account);
@@ -83,6 +86,10 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		}
 	}
 
+	private void getApiKey() {
+		apiKey = activity.getString(R.string.google_api_key);
+	}
+
 	private void getAuthTokens(Account account) {
 		Authorizer authorizer = new Authorizer(activity);
 
@@ -98,11 +105,15 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private String sync() {
+		Synchronizer synchronizer = new Synchronizer(driveAuthToken, apiKey);
+
 		if (!haveSyncSpreadsheetKeyInPreferences()) {
-			// TODO: Sync with key
+			String spreadsheetKey = synchronizer.sync();
+			saveSyncSpreadsheetKeyToPreferences(spreadsheetKey);
+
 		}
 		else {
-			// TODO: Sync without key
+			synchronizer.sync(loadSyncSpreadsheetKeyFromPreferences());
 		}
 
 		return new String();
