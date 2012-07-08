@@ -24,7 +24,18 @@ public class Synchronizer
 		remoteDecksConverter = new RemoteDecksConverter();
 	}
 
-	public void sync(String spreadsheetKey) {
+	public String sync(String spreadsheetKey) {
+		try {
+			trySync(spreadsheetKey);
+
+			return spreadsheetKey;
+		}
+		catch (FileNotExistsException e) {
+			return sync();
+		}
+	}
+
+	private void trySync(String spreadsheetKey) {
 		if (isDriveSpreadsheetNewerThanLocalDatabase(spreadsheetKey)) {
 			syncFromDriveSpreadsheetToLocalDatabase(spreadsheetKey);
 		}

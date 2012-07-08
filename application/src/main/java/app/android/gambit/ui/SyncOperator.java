@@ -106,15 +106,16 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 	private String sync() {
 		Synchronizer synchronizer = new Synchronizer(driveAuthToken, apiKey);
+		String spreadsheetKey;
 
 		if (!haveSyncSpreadsheetKeyInPreferences()) {
-			String spreadsheetKey = synchronizer.sync();
-			saveSyncSpreadsheetKeyToPreferences(spreadsheetKey);
-
+			spreadsheetKey = synchronizer.sync();
 		}
 		else {
-			synchronizer.sync(loadSyncSpreadsheetKeyFromPreferences());
+			spreadsheetKey = synchronizer.sync(loadSyncSpreadsheetKeyFromPreferences());
 		}
+
+		saveSyncSpreadsheetKeyToPreferences(spreadsheetKey);
 
 		return new String();
 	}
@@ -131,11 +132,6 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {
 		PreferencesOperator.set(activityContext, PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY,
 			syncSpreadsheetKey);
-	}
-
-	private void removeSyncSpreadsheetKeyFromPreferences() {
-		PreferencesOperator.remove(activityContext,
-			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
 
 	@Override
