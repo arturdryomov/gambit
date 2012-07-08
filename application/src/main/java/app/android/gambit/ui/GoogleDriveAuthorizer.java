@@ -12,7 +12,7 @@ import android.os.Bundle;
 import com.google.api.services.drive.DriveScopes;
 
 
-public class Authorizer
+public class GoogleDriveAuthorizer
 {
 	private static final String DRIVE_AUTH_TOKEN_TYPE;
 	static {
@@ -23,12 +23,7 @@ public class Authorizer
 
 	private final Activity activity;
 
-	public static enum ServiceType
-	{
-		DRIVE
-	}
-
-	public Authorizer(Activity activity) {
+	public GoogleDriveAuthorizer(Activity activity) {
 		this.activity = activity;
 	}
 
@@ -36,14 +31,13 @@ public class Authorizer
 	 * @throws AuthorizationCanceledException if user cancelled authorization.
 	 * @throws AuthorizationFailedException if an error occurred during authorization.
 	 */
-	public String getToken(ServiceType serviceType, Account account) {
+	public String getToken(Account account) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 		Bundle authResponse;
-		String authType = authTypeFromServiceType(serviceType);
 
 		try {
-			authResponse = accountManager.getAuthToken(account, authType, null, activity, null,
-				null).getResult();
+			authResponse = accountManager.getAuthToken(account, DRIVE_AUTH_TOKEN_TYPE, null, activity,
+				null, null).getResult();
 		}
 		catch (OperationCanceledException e) {
 			throw new AuthorizationCanceledException();
@@ -60,16 +54,6 @@ public class Authorizer
 		}
 
 		return authResponse.getString(AccountManager.KEY_AUTHTOKEN);
-	}
-
-	private String authTypeFromServiceType(ServiceType serviceType) {
-		switch (serviceType) {
-			case DRIVE:
-				return DRIVE_AUTH_TOKEN_TYPE;
-
-			default:
-				throw new RuntimeException("Unknown service type");
-		}
 	}
 
 	public void invalidateToken(String authToken) {

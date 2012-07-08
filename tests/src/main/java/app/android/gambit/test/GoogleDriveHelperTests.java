@@ -20,7 +20,7 @@ import app.android.gambit.remote.RemoteCard;
 import app.android.gambit.remote.RemoteDeck;
 import app.android.gambit.remote.RemoteDecksConverter;
 import app.android.gambit.ui.AccountSelector;
-import app.android.gambit.ui.Authorizer;
+import app.android.gambit.ui.GoogleDriveAuthorizer;
 import app.android.gambit.ui.DeckCreationActivity;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
@@ -62,10 +62,10 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 		if (authToken == null) {
 			Account account = AccountSelector.select(hostActivity);
-			Authorizer authorizer = new Authorizer(hostActivity);
-			authToken = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
-			authorizer.invalidateToken(authToken);
-			authToken = authorizer.getToken(Authorizer.ServiceType.DRIVE, account);
+			GoogleDriveAuthorizer googleDriveAuthorizer = new GoogleDriveAuthorizer(hostActivity);
+			authToken = googleDriveAuthorizer.getToken(account);
+			googleDriveAuthorizer.invalidateToken(authToken);
+			authToken = googleDriveAuthorizer.getToken(account);
 		}
 	}
 
