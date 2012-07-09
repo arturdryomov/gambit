@@ -155,6 +155,11 @@ public class Synchronizer
 
 	private String createDriveSpreadsheet() {
 		List<RemoteDeck> remoteDecks = readRemoteDecksFromLocalDatabase();
+
+		if (remoteDecks.isEmpty()) {
+			throw new DecksNotFoundException();
+		}
+
 		byte[] xlsData = remoteDecksConverter.toXlsData(remoteDecks);
 
 		return driveHelper.createSpreadsheet(SYNC_SPREADSHEET_NAME, xlsData);
