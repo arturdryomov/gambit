@@ -7,12 +7,15 @@ import app.android.gambit.local.Card;
 import app.android.gambit.local.Deck;
 
 
-class IntentFactory
+final class IntentFactory
 {
 	public static final String MESSAGE_ID;
 
 	static {
 		MESSAGE_ID = String.format("%s.message", IntentFactory.class.getPackage().getName());
+	}
+
+	private IntentFactory() {
 	}
 
 	public static Intent createDeckCreationIntent(Context context) {

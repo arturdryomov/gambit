@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-class IntentProcessor
+final class IntentProcessor
 {
+	private IntentProcessor() {
+	}
+
 	public static Object getMessage(Activity activity) {
 		Bundle messageData = activity.getIntent().getExtras();
 
