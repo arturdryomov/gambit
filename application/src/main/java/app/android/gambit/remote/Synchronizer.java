@@ -24,6 +24,11 @@ public class Synchronizer
 		remoteDecksConverter = new RemoteDecksConverter();
 	}
 
+	/**
+	 * @throws NothingToSyncException if there are no local and remote data to sync.
+	 * @throws UnauthorizedException if something wrong with authorization.
+	 * @throws SyncException if general error had happened.
+	 */
 	public String sync(String spreadsheetKey) {
 		try {
 			trySync(spreadsheetKey);
@@ -129,6 +134,11 @@ public class Synchronizer
 		return remoteDeck;
 	}
 
+	/**
+	 * @throws NothingToSyncException if there are no local and remote data to sync.
+	 * @throws UnauthorizedException if something wrong with authorization.
+	 * @throws SyncException if general error had happened.
+	 */
 	public String sync() {
 		String spreadsheetKey;
 
