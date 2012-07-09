@@ -75,8 +75,11 @@ public class Card implements Parcelable
 		ContentValues databaseValues = new ContentValues();
 		databaseValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, text);
 
-		database.update(DbTableNames.CARDS, databaseValues,
-			String.format("%s = %d", DbFieldNames.ID, id), null);
+		database.update(DbTableNames.CARDS, databaseValues, buildCardSelectionClause(), null);
+	}
+
+	private String buildCardSelectionClause() {
+		return String.format("%s = %d", DbFieldNames.ID, id);
 	}
 
 	public String getBackSideText() {
@@ -109,8 +112,7 @@ public class Card implements Parcelable
 		ContentValues databaseValues = new ContentValues();
 		databaseValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, text);
 
-		database.update(DbTableNames.CARDS, databaseValues,
-			String.format("%s = %d", DbFieldNames.ID, id), null);
+		database.update(DbTableNames.CARDS, databaseValues, buildCardSelectionClause(), null);
 	}
 
 	public long getId() {
