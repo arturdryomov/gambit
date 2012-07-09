@@ -23,13 +23,7 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 		decks = DbProvider.getInstance(getContext()).getDecks();
 		decks.beginTransaction();
 
-		emptyDatabase();
-	}
-
-	protected void emptyDatabase() {
-		for (Deck deck : decks.getDecksList()) {
-			decks.deleteDeck(deck);
-		}
+		decks.clear();
 	}
 
 	@Override
@@ -59,19 +53,6 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 			String backSideText = String.format("Card %d in deck %d back", cardIndex, deck.getId());
 
 			deck.createCard(frontSideText, backSideText);
-		}
-	}
-
-	protected void fillDatabase() {
-		for (int deckIndex = 1; deckIndex <= DECKS_COUNT; deckIndex++) {
-			Deck newDeck = decks.createDeck(String.format("Deck %s", deckIndex + 1));
-
-			for (int cardIndex = 1; cardIndex <= CARDS_COUNT; cardIndex++) {
-				String frontSideText = String.format("Card %s in deck %s front", cardIndex, deckIndex);
-				String backSideText = String.format("Card %s in deck %s back", cardIndex, deckIndex);
-
-				newDeck.createCard(frontSideText, backSideText);
-			}
 		}
 	}
 }
