@@ -90,15 +90,9 @@ public class Decks
 	}
 
 	public boolean containsDeckWithTitle(String title) {
-		Cursor databaseCursor = database.rawQuery(buildDeckWithTitlePresenceQuery(title), null);
-		databaseCursor.moveToFirst();
+		String presenceQuery = buildDeckWithTitlePresenceQuery(title);
 
-		final int DECKS_COUNT_COLUMN_INDEX = 0;
-		boolean contains = databaseCursor.getInt(DECKS_COUNT_COLUMN_INDEX) > 0;
-
-		databaseCursor.close();
-
-		return contains;
+		return DatabaseUtils.longForQuery(database, presenceQuery, null) > 0;
 	}
 
 	private String buildDeckWithTitlePresenceQuery(String title) {

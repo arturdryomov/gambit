@@ -104,15 +104,10 @@ public class Deck implements Parcelable
 		return getCardsCount() == 0;
 	}
 
-	public int getCardsCount() {
-		Cursor databaseCursor = database.rawQuery(buildCardsCountSelectionQuery(), null);
-		databaseCursor.moveToFirst();
+	public long getCardsCount() {
+		String cardsCountingQuery = buildCardsCountSelectionQuery();
 
-		final int CARDS_COUNT_COLUMN_INDEX = 0;
-		int cardsCount = databaseCursor.getInt(CARDS_COUNT_COLUMN_INDEX);
-		databaseCursor.close();
-
-		return cardsCount;
+		return DatabaseUtils.longForQuery(database, cardsCountingQuery, null);
 	}
 
 	private String buildCardsCountSelectionQuery() {
@@ -231,7 +226,7 @@ public class Deck implements Parcelable
 
 	private long insertCard(String frontSideText, String backSideText) {
 		// Append to the end
-		int newCardOrderIndex = getCardsCount();
+		long newCardOrderIndex = getCardsCount();
 
 		ContentValues databaseValues = new ContentValues();
 
