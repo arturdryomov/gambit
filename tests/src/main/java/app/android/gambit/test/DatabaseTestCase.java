@@ -45,7 +45,7 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 		}
 
 		for (int deckIndex = 1; deckIndex <= DECKS_COUNT; deckIndex++) {
-			decks.createDeck(String.format("Deck %s", deckIndex + 1));
+			decks.createDeck(String.format("Deck %d", deckIndex));
 		}
 	}
 
@@ -55,8 +55,8 @@ public abstract class DatabaseTestCase extends AndroidTestCase
 		}
 
 		for (int cardIndex = 1; cardIndex <= CARDS_COUNT; cardIndex++) {
-			String frontSideText = String.format("Card %s in deck %s front", cardIndex, deck.getId());
-			String backSideText = String.format("Card %s in deck %s back", cardIndex, deck.getId());
+			String frontSideText = String.format("Card %d in deck %d front", cardIndex, deck.getId());
+			String backSideText = String.format("Card %d in deck %d back", cardIndex, deck.getId());
 
 			deck.createCard(frontSideText, backSideText);
 		}

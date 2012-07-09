@@ -6,9 +6,10 @@ import app.android.gambit.local.Card;
 
 public class CardTests extends DatabaseTestCase
 {
+	private static final String DECK_TITLE = "Title";
 	private static final String CARD_BACK_SIDE_TEXT = "Back text";
 	private static final String CARD_FRONT_SIDE_TEXT = "Front text";
-	private static final String DECK_TITLE = "Title";
+
 	private Card card;
 
 	@Override

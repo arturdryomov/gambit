@@ -11,6 +11,7 @@ import app.android.gambit.local.Deck;
 public class DeckTests extends DatabaseTestCase
 {
 	private static final String DECK_TITLE = "Title";
+
 	private Deck deck;
 
 	@Override
