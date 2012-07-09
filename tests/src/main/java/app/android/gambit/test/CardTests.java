@@ -6,9 +6,9 @@ import app.android.gambit.local.Card;
 
 public class CardTests extends DatabaseTestCase
 {
-	private static final String DECK_TITLE = "Title";
-	private static final String CARD_BACK_SIDE_TEXT = "Back text";
-	private static final String CARD_FRONT_SIDE_TEXT = "Front text";
+	private static final String DECK_TITLE = "deck";
+	private static final String CARD_BACK_SIDE_TEXT = "back side text";
+	private static final String CARD_FRONT_SIDE_TEXT = "front side text";
 
 	private Card card;
 
@@ -17,6 +17,12 @@ public class CardTests extends DatabaseTestCase
 		super.setUp();
 
 		card = decks.createDeck(DECK_TITLE).createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
+	}
+
+	public void testGetId() {
+		long cardId = card.getId();
+
+		assertTrue(cardId >= 0);
 	}
 
 	public void testGetFrontSideText() {
@@ -28,7 +34,7 @@ public class CardTests extends DatabaseTestCase
 	}
 
 	public void testSetFrontSideText() {
-		String newFrontSideText = "New front side text";
+		String newFrontSideText = String.format("new %s", CARD_FRONT_SIDE_TEXT);
 
 		card.setFrontSideText(newFrontSideText);
 
@@ -36,7 +42,7 @@ public class CardTests extends DatabaseTestCase
 	}
 
 	public void testSetBackSideText() {
-		String newBackSideText = "New back side text";
+		String newBackSideText = String.format("new %s", CARD_BACK_SIDE_TEXT);
 
 		card.setBackSideText(newBackSideText);
 
