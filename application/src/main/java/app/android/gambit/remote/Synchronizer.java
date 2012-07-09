@@ -157,7 +157,7 @@ public class Synchronizer
 		List<RemoteDeck> remoteDecks = readRemoteDecksFromLocalDatabase();
 
 		if (remoteDecks.isEmpty()) {
-			throw new DecksNotFoundException();
+			throw new NothingToSyncException();
 		}
 
 		byte[] xlsData = remoteDecksConverter.toXlsData(remoteDecks);

@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import app.android.gambit.R;
-import app.android.gambit.remote.DecksNotFoundException;
+import app.android.gambit.remote.NothingToSyncException;
 import app.android.gambit.remote.SyncException;
 import app.android.gambit.remote.Synchronizer;
 import app.android.gambit.remote.UnauthorizedException;
@@ -108,7 +108,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 		try {
 			trySync();
 		}
-		catch (DecksNotFoundException e) {
+		catch (NothingToSyncException e) {
 			return activity.getString(R.string.error_nothing_to_sync);
 		}
 		catch (UnauthorizedException e) {
