@@ -75,18 +75,24 @@ public class DeckTests extends DatabaseTestCase
 	public void testResetCardsOrder() {
 		fillDeckWithCards(deck);
 
-		// If no exception thrown, assume everything's fine
-		// TODO: Invent a smarter test case
-		deck.resetCardsOrder();
+		try {
+			deck.resetCardsOrder();
+		}
+		catch (Exception e) {
+			fail();
+		}
 	}
 
 	@Suppress
 	public void testShuffleCardsOrder() {
 		fillDeckWithCards(deck);
 
-		// If no exception thrown, assume everything's fine
-		// TODO: Invent a smarter test case
-		deck.shuffleCards();
+		try {
+			deck.shuffleCards();
+		}
+		catch (Exception e) {
+			fail();
+		}
 	}
 
 	public void testGetSetCurrentCardIndex() {
