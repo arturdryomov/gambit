@@ -289,7 +289,7 @@ public class GoogleDriveHelper
 		String userPermissionId = getUserPermissionId();
 
 		for (Permission filePermission : getFilePermissions(file)) {
-			if (isUserHaveWritablePermission(userPermissionId, filePermission)) {
+			if (doesUserHaveWritablePermission(userPermissionId, filePermission)) {
 				return true;
 			}
 		}
@@ -330,7 +330,7 @@ public class GoogleDriveHelper
 		}
 	}
 
-	private boolean isUserHaveWritablePermission(String userPermissionId, Permission filePermission) {
+	private boolean doesUserHaveWritablePermission(String userPermissionId, Permission filePermission) {
 		if (!filePermission.getId().equals(userPermissionId)) {
 			return false;
 		}
