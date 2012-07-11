@@ -57,8 +57,7 @@ public class AsyncAccountSelector
 	}
 
 	private String loadAccountNameFromPreferences() {
-		String accountName = PreferencesOperator.get(activity,
-			PreferencesOperator.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME);
+		String accountName = Preferences.get(activity, Preferences.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME);
 
 		if (isAccountRegistered(accountName)) {
 			return accountName;
@@ -121,8 +120,7 @@ public class AsyncAccountSelector
 	}
 
 	private void saveAccountNameToPreferences(String accountName) {
-		PreferencesOperator.set(activity, PreferencesOperator.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME,
-			accountName);
+		Preferences.set(activity, Preferences.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME, accountName);
 	}
 
 	private void selectAccountFromDialog() {

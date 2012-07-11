@@ -142,8 +142,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private String loadSyncSpreadsheetKeyFromPreferences() {
-		return PreferencesOperator.get(activityContext,
-			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
+		return Preferences.get(activityContext, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
 
 	private void syncFirstTime() {
@@ -170,7 +169,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {
-		PreferencesOperator.set(activityContext, PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY,
+		Preferences.set(activityContext, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY,
 			syncSpreadsheetKey);
 	}
 
@@ -180,8 +179,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	}
 
 	private void removeSyncSpreadsheetKeyFromPreferences() {
-		PreferencesOperator.remove(activityContext,
-			PreferencesOperator.PREFERENCE_SYNC_SPREADSHEET_KEY);
+		Preferences.remove(activityContext, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
 
 	@Override

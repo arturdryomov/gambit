@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 
-final class PreferencesOperator
+final class Preferences
 {
 	public static final String PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME = "sync_google_account_name";
 	public static final String PREFERENCE_SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
 
-	private PreferencesOperator() {
+	private Preferences() {
 	}
 
 	public static void set(Context activityContext, String key, String value) {
