@@ -14,7 +14,7 @@ import app.android.gambit.remote.Synchronizer;
 import app.android.gambit.remote.UnauthorizedException;
 
 
-class SyncOperator extends AsyncTask<Void, Void, String>
+class SyncTask extends AsyncTask<Void, Void, String>
 {
 	private final Context activityContext;
 	private final Activity activity;
@@ -28,7 +28,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 	private ProgressDialogHelper progressDialogHelper;
 
-	public SyncOperator(Context activityContext, Runnable successRunnable) {
+	public SyncTask(Context activityContext, Runnable successRunnable) {
 		this.activityContext = activityContext;
 		this.activity = (Activity) activityContext;
 
