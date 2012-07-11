@@ -26,7 +26,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 
 	private boolean isTokensInvalidationRequired;
 
-	private ProgressDialogShowHelper progressDialogShowHelper;
+	private ProgressDialogHelper progressDialogHelper;
 
 	public SyncOperator(Context activityContext, Runnable successRunnable) {
 		this.activityContext = activityContext;
@@ -41,8 +41,8 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	protected void onPreExecute() {
 		super.onPreExecute();
 
-		progressDialogShowHelper = new ProgressDialogShowHelper();
-		progressDialogShowHelper.show(activityContext, R.string.loading_sync);
+		progressDialogHelper = new ProgressDialogHelper();
+		progressDialogHelper.show(activityContext, R.string.loading_sync);
 	}
 
 	@Override
@@ -186,7 +186,7 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 	protected void onPostExecute(String errorMessage) {
 		super.onPostExecute(errorMessage);
 
-		progressDialogShowHelper.hide();
+		progressDialogHelper.hide();
 
 		if (!TextUtils.isEmpty(errorMessage)) {
 			UserAlerter.alert(activityContext, errorMessage);
