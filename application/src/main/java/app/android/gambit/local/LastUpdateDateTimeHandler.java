@@ -3,7 +3,7 @@ package app.android.gambit.local;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import app.android.gambit.InternetDateTime;
+import app.android.gambit.remote.InternetDateTime;
 
 
 class LastUpdateDateTimeHandler

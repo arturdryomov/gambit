@@ -1,4 +1,4 @@
-package app.android.gambit;
+package app.android.gambit.remote;
 
 
 import java.util.Date;

@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import app.android.gambit.InternetDateTime;
 import app.android.gambit.local.Card;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;

@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import android.test.AndroidTestCase;
-import app.android.gambit.InternetDateTime;
+import app.android.gambit.remote.InternetDateTime;
 
 
 public class InternetDateTimeTests extends AndroidTestCase
