@@ -109,7 +109,8 @@ class SyncOperator extends AsyncTask<Void, Void, String>
 			trySync();
 		}
 		catch (NothingToSyncException e) {
-			return activity.getString(R.string.error_nothing_to_sync);
+			// No local and no remote data means equal data and successful sync
+			return new String();
 		}
 		catch (UnauthorizedException e) {
 			if (isTokensInvalidationRequired) {

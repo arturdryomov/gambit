@@ -25,7 +25,6 @@
 	<string name="error_empty_card_front_text">Enter text for the front side of flashcard.</string>
 	<string name="error_empty_card_back_text">Enter text for the back side of flashcard.</string>
 	<string name="error_network">Trouble with network, check your connection state.</string>
-	<string name="error_nothing_to_sync">Nothing to sync.</string>
 
 	<string name="hint_deck_name">Deck name</string>
 	<string name="hint_card_front_text">Front side text</string>
