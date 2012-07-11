@@ -145,16 +145,16 @@ public class Synchronizer
 		try {
 			spreadsheetKey = driveHelper.getNewestSpreadsheetKey(SYNC_SPREADSHEET_NAME);
 
-			syncFirstTimeWithExistingDriveSpreadsheet(spreadsheetKey);
+			syncFirstTimeToExistingDriveSpreadsheet(spreadsheetKey);
 		}
 		catch (SpreadsheetNotExistsException e) {
-			spreadsheetKey = createDriveSpreadsheet();
+			spreadsheetKey = syncToNewDriveSpreadsheet();
 		}
 
 		return spreadsheetKey;
 	}
 
-	private void syncFirstTimeWithExistingDriveSpreadsheet(String spreadsheetKey) {
+	private void syncFirstTimeToExistingDriveSpreadsheet(String spreadsheetKey) {
 		if (DbProvider.getInstance().getDecks().getDecksList().isEmpty()) {
 			syncFromDriveSpreadsheetToLocalDatabase(spreadsheetKey);
 		}
@@ -163,7 +163,7 @@ public class Synchronizer
 		}
 	}
 
-	private String createDriveSpreadsheet() {
+	private String syncToNewDriveSpreadsheet() {
 		List<RemoteDeck> remoteDecks = readRemoteDecksFromLocalDatabase();
 
 		if (remoteDecks.isEmpty()) {
