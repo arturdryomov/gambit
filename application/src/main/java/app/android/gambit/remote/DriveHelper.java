@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.text.TextUtils;
-import app.android.gambit.InternetDateTime;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.ByteArrayContent;

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.android.gambit.InternetDateTime;
 import app.android.gambit.local.Card;
 import app.android.gambit.local.DbProvider;
 import app.android.gambit.local.Deck;

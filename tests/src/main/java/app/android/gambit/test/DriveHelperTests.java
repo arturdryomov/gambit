@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import android.accounts.Account;
 import android.app.Activity;
 import android.test.InstrumentationTestCase;
-import app.android.gambit.InternetDateTime;
+import app.android.gambit.remote.InternetDateTime;
 import app.android.gambit.remote.ConvertingException;
 import app.android.gambit.remote.DriveHelper;
 import app.android.gambit.remote.SpreadsheetNotExistsException;
