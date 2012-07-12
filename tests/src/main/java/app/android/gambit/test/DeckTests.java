@@ -41,6 +41,10 @@ public class DeckTests extends DatabaseTestCase
 		assertEquals(newDeckTitle, deck.getTitle());
 	}
 
+	public void testCheckEmptiness() {
+		assertTrue(deck.isEmpty());
+	}
+
 	public void testGetCardsCount() {
 		deck.createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
 
