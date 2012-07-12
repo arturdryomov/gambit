@@ -8,7 +8,7 @@ import android.text.format.Time;
 
 public class InternetDateTime
 {
-	private Time time;
+	private final Time time;
 
 	public InternetDateTime() {
 		time = new Time(Time.TIMEZONE_UTC);
