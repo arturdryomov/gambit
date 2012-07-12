@@ -13,19 +13,13 @@ import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpExecuteInterceptor;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.HttpUnsuccessfulResponseHandler;
-import com.google.api.client.http.json.JsonHttpRequest;
 import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveRequest;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
 
@@ -64,66 +58,6 @@ public class GoogleDriveHelper
 		driveServiceBuilder.setJsonHttpRequestInitializer(jsonRequestInitializer);
 
 		return driveServiceBuilder.build();
-	}
-
-	private static class DriveJsonRequestInitializer implements JsonHttpRequestInitializer
-	{
-		private final String apiKey;
-
-		public DriveJsonRequestInitializer(String apiKey) {
-			this.apiKey = apiKey;
-		}
-
-		@Override
-		public void initialize(JsonHttpRequest jsonHttpRequest) throws IOException {
-			DriveRequest driveRequest = (DriveRequest) jsonHttpRequest;
-
-			driveRequest.setKey(apiKey);
-		}
-	}
-
-	private static class DriveHttpRequestInitializer implements HttpRequestInitializer, HttpUnsuccessfulResponseHandler, HttpExecuteInterceptor
-	{
-		private static final String OAUTH_TOKEN_TYPE = "Bearer";
-
-		private final String authToken;
-
-		public DriveHttpRequestInitializer(String authToken) {
-			this.authToken = authToken;
-		}
-
-		@Override
-		public void initialize(HttpRequest httpRequest) throws IOException {
-			httpRequest.setInterceptor(DriveHttpRequestInitializer.this);
-			httpRequest.setUnsuccessfulResponseHandler(DriveHttpRequestInitializer.this);
-		}
-
-		@Override
-		public void intercept(HttpRequest httpRequest) throws IOException {
-			httpRequest.getHeaders().setAuthorization(buildAuthorizationHeader());
-		}
-
-		private String buildAuthorizationHeader() {
-			return String.format("%s %s", OAUTH_TOKEN_TYPE, authToken);
-		}
-
-		@Override
-		public boolean handleResponse(HttpRequest httpRequest, HttpResponse httpResponse, boolean supportsRetry) throws IOException {
-			throw buildExceptionFromHttpStatusCode(httpResponse.getStatusCode());
-		}
-
-		private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
-			switch (httpStatusCode) {
-				case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
-					return new SpreadsheetNotExistsException();
-
-				case HttpStatusCodes.STATUS_CODE_UNAUTHORIZED:
-					return new UnauthorizedException();
-
-				default:
-					return new SyncException();
-			}
-		}
 	}
 
 	public String createSpreadsheet(String spreadsheetName, byte[] xlsData) {
