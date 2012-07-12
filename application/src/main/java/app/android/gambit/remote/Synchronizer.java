@@ -16,11 +16,11 @@ public class Synchronizer
 {
 	private static final String SYNC_SPREADSHEET_NAME = "Gambit flashcards";
 
-	private final GoogleDriveHelper driveHelper;
+	private final DriveHelper driveHelper;
 	private final RemoteDecksConverter remoteDecksConverter;
 
 	public Synchronizer(String authToken, String apiKey) {
-		driveHelper = new GoogleDriveHelper(authToken, apiKey);
+		driveHelper = new DriveHelper(authToken, apiKey);
 		remoteDecksConverter = new RemoteDecksConverter();
 	}
 

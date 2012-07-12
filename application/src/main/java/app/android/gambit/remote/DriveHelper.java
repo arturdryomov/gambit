@@ -24,7 +24,7 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
 
 
-public class GoogleDriveHelper
+public class DriveHelper
 {
 	private static final String MIME_XLS = "application/vnd.ms-excel";
 	private static final String MIME_GOOGLE_SPREADSHEET = "application/vnd.google-apps.spreadsheet";
@@ -43,7 +43,7 @@ public class GoogleDriveHelper
 
 	private final Drive driveService;
 
-	public GoogleDriveHelper(String authToken, String apiKey) {
+	public DriveHelper(String authToken, String apiKey) {
 		driveService = buildDriveService(authToken, apiKey);
 	}
 

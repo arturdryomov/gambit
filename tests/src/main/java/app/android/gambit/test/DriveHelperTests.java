@@ -14,8 +14,8 @@ import android.app.Activity;
 import android.test.InstrumentationTestCase;
 import app.android.gambit.InternetDateTime;
 import app.android.gambit.remote.ConvertingException;
+import app.android.gambit.remote.DriveHelper;
 import app.android.gambit.remote.SpreadsheetNotExistsException;
-import app.android.gambit.remote.GoogleDriveHelper;
 import app.android.gambit.remote.RemoteCard;
 import app.android.gambit.remote.RemoteDeck;
 import app.android.gambit.remote.RemoteDecksConverter;
@@ -33,7 +33,7 @@ import com.google.api.services.drive.DriveRequest;
 import com.google.api.services.drive.model.File;
 
 
-public class GoogleDriveHelperTests extends InstrumentationTestCase
+public class DriveHelperTests extends InstrumentationTestCase
 {
 	private static final String TESTING_SPREADSHEET_NAME = "Spreadsheet for Gambit testing purposes";
 
@@ -42,7 +42,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 	private static String authToken;
 	private static Activity hostActivity;
 
-	private GoogleDriveHelper driveHelper;
+	private DriveHelper driveHelper;
 	private Drive driveService;
 
 	@Override
@@ -51,7 +51,7 @@ public class GoogleDriveHelperTests extends InstrumentationTestCase
 
 		ensureAuthorized();
 
-		driveHelper = new GoogleDriveHelper(authToken, getApiKey());
+		driveHelper = new DriveHelper(authToken, getApiKey());
 		driveService = buildDriveService();
 	}
 
