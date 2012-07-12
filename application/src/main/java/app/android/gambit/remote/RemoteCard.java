@@ -11,11 +11,6 @@ public class RemoteCard
 		backSideText = new String();
 	}
 
-	public RemoteCard(String frontSideText, String backSideText) {
-		this.frontSideText = frontSideText;
-		this.backSideText = backSideText;
-	}
-
 	public String getFrontSideText() {
 		return frontSideText;
 	}

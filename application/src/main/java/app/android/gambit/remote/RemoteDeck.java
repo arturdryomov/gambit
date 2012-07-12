@@ -15,16 +15,6 @@ public class RemoteDeck
 		cards = new ArrayList<RemoteCard>();
 	}
 
-	public RemoteDeck(String title) {
-		this.title = title;
-		this.cards = new ArrayList<RemoteCard>();
-	}
-
-	public RemoteDeck(String title, List<RemoteCard> cards) {
-		this.title = title;
-		this.cards = cards;
-	}
-
 	public String getTitle() {
 		return title;
 	}

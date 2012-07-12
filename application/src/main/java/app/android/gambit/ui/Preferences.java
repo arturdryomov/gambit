@@ -30,14 +30,4 @@ final class Preferences
 
 		return preferences.getString(key, new String());
 	}
-
-	public static void remove(Context activityContext, String key) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activityContext.getApplicationContext());
-		SharedPreferences.Editor preferencesEditor = preferences.edit();
-
-		preferencesEditor.remove(key);
-
-		preferencesEditor.commit();
-	}
 }
