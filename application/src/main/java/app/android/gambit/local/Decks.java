@@ -89,7 +89,7 @@ public class Decks
 		return deck;
 	}
 
-	public boolean containsDeckWithTitle(String title) {
+	boolean containsDeckWithTitle(String title) {
 		String presenceQuery = buildDeckWithTitlePresenceQuery(title);
 
 		return DatabaseUtils.longForQuery(database, presenceQuery, null) > 0;
