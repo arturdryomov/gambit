@@ -1,6 +1,6 @@
 package app.android.gambit.remote;
 
 
-public class UnauthorizedException extends FailedRequestException
+public class UnauthorizedException extends SyncException
 {
 }

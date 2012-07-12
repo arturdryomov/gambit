@@ -2,6 +2,7 @@ package app.android.gambit.local;
 
 
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import app.android.gambit.remote.InternetDateTime;
 
@@ -34,13 +35,9 @@ class LastUpdateDateTimeHandler
 	}
 
 	private boolean recordExists() {
-		Cursor databaseCursor = database.rawQuery(buildRecordsCountSelectingQuery(), null);
-		databaseCursor.moveToFirst();
+		String recordsCountSelectionQuery = buildRecordsCountSelectingQuery();
 
-		final int RECORDS_COUNT_COLUMN_INDEX = 0;
-		int recordsCount = databaseCursor.getInt(RECORDS_COUNT_COLUMN_INDEX);
-
-		return recordsCount > 0;
+		return DatabaseUtils.longForQuery(database, recordsCountSelectionQuery, null) > 0;
 	}
 
 	private String buildRecordsCountSelectingQuery() {

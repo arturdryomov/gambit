@@ -5,8 +5,11 @@ import android.content.Context;
 import android.widget.Toast;
 
 
-class UserAlerter
+final class UserAlerter
 {
+	private UserAlerter() {
+	}
+
 	public static void alert(Context context, String text) {
 		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 	}

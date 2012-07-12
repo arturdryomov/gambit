@@ -10,7 +10,10 @@ import app.android.gambit.local.Deck;
 
 public class DeckTests extends DatabaseTestCase
 {
-	private static final String DECK_TITLE = "Title";
+	private static final String DECK_TITLE = "deck";
+	private static final String CARD_BACK_SIDE_TEXT = "back side text";
+	private static final String CARD_FRONT_SIDE_TEXT = "front side text";
+
 	private Deck deck;
 
 	@Override
@@ -31,7 +34,7 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testSetTitle() {
-		String newDeckTitle = "New title";
+		String newDeckTitle = String.format("new %s", DECK_TITLE);
 
 		deck.setTitle(newDeckTitle);
 
@@ -39,7 +42,7 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testGetCardsCount() {
-		deck.createCard("Front text", "Back text");
+		deck.createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
 
 		assertEquals(1, deck.getCardsCount());
 	}
@@ -54,18 +57,15 @@ public class DeckTests extends DatabaseTestCase
 	}
 
 	public void testAddCard() {
-		String cardFrontSideText = "Front side text";
-		String cardBackSideText = "Back side text";
-
-		Card card = deck.createCard(cardFrontSideText, cardBackSideText);
+		Card card = deck.createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
 
 		assertEquals(1, deck.getCardsCount());
-		assertEquals(cardFrontSideText, card.getFrontSideText());
-		assertEquals(cardBackSideText, card.getBackSideText());
+		assertEquals(CARD_FRONT_SIDE_TEXT, card.getFrontSideText());
+		assertEquals(CARD_BACK_SIDE_TEXT, card.getBackSideText());
 	}
 
 	public void testDeleteCard() {
-		Card card = deck.createCard("Front text", "Back text");
+		Card card = deck.createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
 
 		deck.deleteCard(card);
 
@@ -75,18 +75,24 @@ public class DeckTests extends DatabaseTestCase
 	public void testResetCardsOrder() {
 		fillDeckWithCards(deck);
 
-		// If no exception thrown, assume everything's fine
-		// TODO: Invent a smarter test case
-		deck.resetCardsOrder();
+		try {
+			deck.resetCardsOrder();
+		}
+		catch (Exception e) {
+			fail();
+		}
 	}
 
 	@Suppress
 	public void testShuffleCardsOrder() {
 		fillDeckWithCards(deck);
 
-		// If no exception thrown, assume everything's fine
-		// TODO: Invent a smarter test case
-		deck.shuffleCards();
+		try {
+			deck.shuffleCards();
+		}
+		catch (Exception e) {
+			fail();
+		}
 	}
 
 	public void testGetSetCurrentCardIndex() {
@@ -101,7 +107,7 @@ public class DeckTests extends DatabaseTestCase
 	public void testCurrentCardIndexIsZeroAfterInsertion() {
 		deck.setCurrentCardIndex(1);
 
-		deck.createCard("Front side text", "Back side text");
+		deck.createCard(CARD_FRONT_SIDE_TEXT, CARD_BACK_SIDE_TEXT);
 
 		assertEquals(0, deck.getCurrentCardIndex());
 	}

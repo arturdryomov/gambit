@@ -318,7 +318,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 		};
 
-		SyncOperator syncOperator = new SyncOperator(activityContext, successRunnable);
-		syncOperator.execute();
+		SynchronizationTask synchronizationTask = new SynchronizationTask(activityContext,
+			successRunnable);
+		synchronizationTask.execute();
 	}
 }

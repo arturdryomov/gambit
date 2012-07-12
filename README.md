@@ -18,3 +18,11 @@ Building process is very simple:
 
 * `mvn -f application/pom.xml clean package` command builds application APK that you could find in `application/target` directory.
 * `mvn clean install` will build application and run tests.
+
+## Contributing
+
+Pull requests are welcome! But there is one notice. If you would want to
+test synchronization you should modify `application/res/values/keys.xml` file
+to access Google API. After that you should run command
+`git update-index --skip-worktree application/res/values/keys.xml` to prevent
+adding private information to repository.

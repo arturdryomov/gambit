@@ -8,6 +8,8 @@ import app.android.gambit.local.Deck;
 
 public class DecksTests extends DatabaseTestCase
 {
+	private static final String DECK_TITLE = "deck";
+
 	public void testGetDecksList() {
 		fillDatabaseWithEmptyDecks();
 
@@ -17,24 +19,30 @@ public class DecksTests extends DatabaseTestCase
 	}
 
 	public void testGetDecksCount() {
-		decks.createDeck("New deck");
+		decks.createDeck(DECK_TITLE);
 
 		assertEquals(1, decks.getDecksList().size());
 	}
 
 	public void testAddDeck() {
-		String deckTitle = "New deck";
-
-		Deck newDeck = decks.createDeck(deckTitle);
+		Deck deck = decks.createDeck(DECK_TITLE);
 
 		assertEquals(1, decks.getDecksList().size());
-		assertEquals(deckTitle, newDeck.getTitle());
+		assertEquals(DECK_TITLE, deck.getTitle());
 	}
 
 	public void testDeleteDeck() {
-		Deck deck = decks.createDeck("New deck");
+		Deck deck = decks.createDeck(DECK_TITLE);
 
 		decks.deleteDeck(deck);
+
+		assertEquals(0, decks.getDecksList().size());
+	}
+
+	public void testClearDecks() {
+		fillDatabaseWithEmptyDecks();
+
+		decks.clear();
 
 		assertEquals(0, decks.getDecksList().size());
 	}
