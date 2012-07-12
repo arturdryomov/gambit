@@ -14,9 +14,11 @@ import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.HttpUnsuccessfulResponseHandler;
 import com.google.api.client.http.json.JsonHttpRequest;
 import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
@@ -59,20 +61,23 @@ public class GoogleDriveHelper
 	private Drive buildDriveService(String authToken, String apiKey) {
 		HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
 		JsonFactory jsonFactory = new JacksonFactory();
-		JsonHttpRequestInitializer requestInitializer = new DriveRequestInitializer(authToken, apiKey);
+		JsonHttpRequestInitializer jsonRequestInitializer = new DriveJsonRequestInitializer(authToken,
+			apiKey);
+		HttpRequestInitializer httpRequestInitializer = new DriveHttpRequestInitializer();
 
 		Drive.Builder driveServiceBuilder = new Drive.Builder(httpTransport, jsonFactory, null);
-		driveServiceBuilder.setJsonHttpRequestInitializer(requestInitializer);
+		driveServiceBuilder.setJsonHttpRequestInitializer(jsonRequestInitializer);
+		driveServiceBuilder.setHttpRequestInitializer(httpRequestInitializer);
 
 		return driveServiceBuilder.build();
 	}
 
-	private static class DriveRequestInitializer implements JsonHttpRequestInitializer
+	private static class DriveJsonRequestInitializer implements JsonHttpRequestInitializer
 	{
 		private final String authToken;
 		private final String apiKey;
 
-		public DriveRequestInitializer(String authToken, String apiKey) {
+		public DriveJsonRequestInitializer(String authToken, String apiKey) {
 			this.authToken = authToken;
 			this.apiKey = apiKey;
 		}
@@ -83,6 +88,33 @@ public class GoogleDriveHelper
 
 			driveRequest.setOauthToken(authToken);
 			driveRequest.setKey(apiKey);
+		}
+	}
+
+	private class DriveHttpRequestInitializer implements HttpRequestInitializer
+	{
+		@Override
+		public void initialize(HttpRequest httpRequest) throws IOException {
+			httpRequest.setUnsuccessfulResponseHandler(new HttpUnsuccessfulResponseHandler()
+			{
+				@Override
+				public boolean handleResponse(HttpRequest httpRequest, HttpResponse httpResponse, boolean b) throws IOException {
+					throw buildExceptionFromHttpStatusCode(httpResponse.getStatusCode());
+				}
+			});
+		}
+	}
+
+	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
+		switch (httpStatusCode) {
+			case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
+				return new SpreadsheetNotExistsException();
+
+			case HttpStatusCodes.STATUS_CODE_UNAUTHORIZED:
+				return new UnauthorizedException();
+
+			default:
+				return new SyncException();
 		}
 	}
 
@@ -114,9 +146,6 @@ public class GoogleDriveHelper
 
 			return insertRequest.execute().getId();
 		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
-		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
@@ -124,19 +153,6 @@ public class GoogleDriveHelper
 
 	private String buildResponseFields(String... responseFields) {
 		return TextUtils.join(RESPONSE_FIELDS_DELIMITER, responseFields);
-	}
-
-	private RuntimeException buildExceptionFromHttpStatusCode(int httpStatusCode) {
-		switch (httpStatusCode) {
-			case HttpStatusCodes.STATUS_CODE_NOT_FOUND:
-				return new SpreadsheetNotExistsException();
-
-			case HttpStatusCodes.STATUS_CODE_UNAUTHORIZED:
-				return new UnauthorizedException();
-
-			default:
-				return new SyncException();
-		}
 	}
 
 	public void updateSpreadsheet(String spreadsheetKey, byte[] xlsData) {
@@ -150,9 +166,6 @@ public class GoogleDriveHelper
 			updateRequest.setFields(buildResponseFields(RESPONSE_FIELD_ID));
 
 			updateRequest.execute();
-		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -175,9 +188,6 @@ public class GoogleDriveHelper
 
 			return getRequest.execute();
 		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
-		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
@@ -198,9 +208,6 @@ public class GoogleDriveHelper
 			HttpRequest getRequest = driveService.getRequestFactory().buildGetRequest(fileUrl);
 
 			return getRequest.execute().getContent();
-		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -235,9 +242,6 @@ public class GoogleDriveHelper
 				buildResponseFields(RESPONSE_FIELD_ID, RESPONSE_FIELD_MODIFIED_DATE)));
 
 			return listRequest.execute().getItems();
-		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
@@ -305,9 +309,6 @@ public class GoogleDriveHelper
 
 			return getRequest.execute().getPermissionId();
 		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
-		}
 		catch (IOException e) {
 			throw new SyncException();
 		}
@@ -321,9 +322,6 @@ public class GoogleDriveHelper
 				buildResponseFieldsList(buildResponseFields(RESPONSE_FIELD_ID, RESPONSE_FIELD_ROLE)));
 
 			return getRequest.execute().getItems();
-		}
-		catch (HttpResponseException e) {
-			throw buildExceptionFromHttpStatusCode(e.getStatusCode());
 		}
 		catch (IOException e) {
 			throw new SyncException();
