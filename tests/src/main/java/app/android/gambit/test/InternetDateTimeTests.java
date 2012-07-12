@@ -73,4 +73,18 @@ public class InternetDateTimeTests extends AndroidTestCase
 
 		assertEquals("2000-10-21T21:56:12.000Z", converted);
 	}
+
+	public void testCheckIsAfter() {
+		InternetDateTime dateTimeBefore = new InternetDateTime("2000-10-21T21:56:12.123Z");
+		InternetDateTime dateTimeAfter = new InternetDateTime("2000-10-21T22:56:12.123Z");
+
+		assertTrue(dateTimeAfter.isAfter(dateTimeBefore));
+	}
+
+	public void testCheckIsBefore() {
+		InternetDateTime dateTimeBefore = new InternetDateTime("2000-10-21T21:56:12.123Z");
+		InternetDateTime dateTimeAfter = new InternetDateTime("2000-10-21T22:56:12.123Z");
+
+		assertTrue(dateTimeBefore.isBefore(dateTimeAfter));
+	}
 }
