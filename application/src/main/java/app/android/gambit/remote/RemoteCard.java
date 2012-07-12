@@ -6,6 +6,16 @@ public class RemoteCard
 	private String frontSideText;
 	private String backSideText;
 
+	public RemoteCard() {
+		frontSideText = new String();
+		backSideText = new String();
+	}
+
+	public RemoteCard(String frontSideText, String backSideText) {
+		this.frontSideText = frontSideText;
+		this.backSideText = backSideText;
+	}
+
 	public String getFrontSideText() {
 		return frontSideText;
 	}
