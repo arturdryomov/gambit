@@ -1,7 +1,7 @@
 package app.android.gambit.local;
 
 
-public class DbException extends RuntimeException
+class DbException extends RuntimeException
 {
 	public DbException() {
 	}
