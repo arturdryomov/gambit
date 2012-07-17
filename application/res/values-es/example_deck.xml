@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="android_version_froyo">Yogur helado</string>
+	<string name="android_version_gingerbread">Pan de jengibre</string>
+	<string name="android_version_honeycomb">Panal</string>
+	<string name="android_version_ice_cream_sandwich">Sándwich de helado</string>
+	<string name="android_version_jelly_bean">Jelly Bean</string>
+</resources>
