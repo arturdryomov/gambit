@@ -13,6 +13,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import app.android.gambit.R;
+import app.android.gambit.ui.Preferences;
 
 
 public class ExampleDeckBuilder
@@ -33,7 +34,12 @@ public class ExampleDeckBuilder
 	}
 
 	public boolean shouldBuildDeck() {
-		throw new RuntimeException("Not implemented");
+		if (Preferences.getBoolean(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED)) {
+			return false;
+		}
+
+		Decks decks = DbProvider.getInstance().getDecks();
+		return decks.getDecksList().isEmpty();
 	}
 
 	public void buildDeck() {
@@ -43,6 +49,8 @@ public class ExampleDeckBuilder
 
 		try {
 			writeDeck(decks);
+			Preferences.set(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED, true);
+
 			decks.setTransactionSuccessful();
 		}
 		finally {
