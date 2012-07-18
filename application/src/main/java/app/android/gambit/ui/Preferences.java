@@ -14,35 +14,35 @@ final class Preferences
 	private Preferences() {
 	}
 
-	public static void set(Context activityContext, String key, String value) {
-		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(activityContext);
+	public static void set(Context context, String key, String value) {
+		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(context);
 
 		preferencesEditor.putString(key, value);
 
 		preferencesEditor.commit();
 	}
 
-	private static SharedPreferences.Editor getPreferencesEditor(Context activityContext) {
-		return getSharedPreferences(activityContext).edit();
+	private static SharedPreferences.Editor getPreferencesEditor(Context context) {
+		return getSharedPreferences(context).edit();
 	}
 
-	private static SharedPreferences getSharedPreferences(Context activityContext) {
-		return PreferenceManager.getDefaultSharedPreferences(activityContext.getApplicationContext());
+	private static SharedPreferences getSharedPreferences(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
-	public static void set(Context activityContext, String key, boolean value) {
-		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(activityContext);
+	public static void set(Context context, String key, boolean value) {
+		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(context);
 
 		preferencesEditor.putBoolean(key, value);
 
 		preferencesEditor.commit();
 	}
 
-	public static String getString(Context activityContext, String key) {
-		return getSharedPreferences(activityContext).getString(key, new String());
+	public static String getString(Context context, String key) {
+		return getSharedPreferences(context).getString(key, new String());
 	}
 
-	public static boolean getBoolean(Context activityContext, String key) {
-		return getSharedPreferences(activityContext).getBoolean(key, false);
+	public static boolean getBoolean(Context context, String key) {
+		return getSharedPreferences(context).getBoolean(key, false);
 	}
 }
