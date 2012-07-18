@@ -18,14 +18,15 @@ import app.android.gambit.ui.Preferences;
 
 public class ExampleDeckBuilder
 {
-	private static final String[] SUPPORTED_LANGUAGE_CODES = {"de", "es", "fr", "it"};
-	private static final int[] ANDROID_VERSIONS_RESOURCES = {
+	public static final int[] ANDROID_VERSIONS_RESOURCES = {
 		R.string.android_version_froyo,
 		R.string.android_version_gingerbread,
 		R.string.android_version_honeycomb,
 		R.string.android_version_ice_cream_sandwich,
 		R.string.android_version_jelly_bean
 	};
+
+	private static final String[] SUPPORTED_LANGUAGE_CODES = {"de", "es", "fr", "it"};
 
 	private final Context context;
 	private final Decks decks;

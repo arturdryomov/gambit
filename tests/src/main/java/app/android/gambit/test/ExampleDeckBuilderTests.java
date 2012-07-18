@@ -9,14 +9,6 @@ import app.android.gambit.local.ExampleDeckBuilder;
 
 public class ExampleDeckBuilderTests extends DatabaseTestCase
 {
-	private static final int[] ANDROID_VERSIONS_RESOURCES = {
-		string.android_version_froyo,
-		string.android_version_gingerbread,
-		string.android_version_honeycomb,
-		string.android_version_ice_cream_sandwich,
-		string.android_version_jelly_bean
-	};
-
 	private ExampleDeckBuilder exampleDeckBuilder;
 
 	@Override
@@ -35,7 +27,7 @@ public class ExampleDeckBuilderTests extends DatabaseTestCase
 		assertEquals(deck.getTitle(), getContext().getString(string.example_deck_title));
 
 		int cardsListSize = deck.getCardsList().size();
-		assertEquals(ANDROID_VERSIONS_RESOURCES.length, cardsListSize);
+		assertEquals(ExampleDeckBuilder.ANDROID_VERSIONS_RESOURCES.length, cardsListSize);
 
 		for (int cardIndex = 0; cardIndex < cardsListSize; cardIndex++) {
 			assertValidCard(deck, cardIndex);
@@ -43,7 +35,8 @@ public class ExampleDeckBuilderTests extends DatabaseTestCase
 	}
 
 	private void assertValidCard(Deck deck, int cardIndex) {
-		String expectedFrontSideText = getContext().getString(ANDROID_VERSIONS_RESOURCES[cardIndex]);
+		String expectedFrontSideText = getContext().getString(
+			ExampleDeckBuilder.ANDROID_VERSIONS_RESOURCES[cardIndex]);
 		String actualFrontSideText = deck.getCardsList().get(cardIndex).getFrontSideText();
 
 		assertEquals(expectedFrontSideText, actualFrontSideText);
