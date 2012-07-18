@@ -12,6 +12,8 @@ public class DbProvider
 	}
 
 	private static DbProvider instance;
+
+	private Context context;
 	private DbOpenHelper databaseOpenHelper;
 	private Decks decks;
 	private LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
@@ -41,12 +43,25 @@ public class DbProvider
 		databaseOpenHelper = new DbOpenHelper(context.getApplicationContext());
 
 		instance = this;
+
+		this.context = context;
 	}
 
 	public Decks getDecks() {
 		if (decks == null) {
-			decks = new Decks();
+			decks = createDecks();
 		}
+		return decks;
+	}
+
+	private Decks createDecks() {
+		Decks decks = new Decks();
+
+		ExampleDeckBuilder exampleDeckBuilder = new ExampleDeckBuilder(context, decks);
+		if (exampleDeckBuilder.shouldBuildDeck()) {
+			exampleDeckBuilder.buildDeck();
+		}
+
 		return decks;
 	}
 
