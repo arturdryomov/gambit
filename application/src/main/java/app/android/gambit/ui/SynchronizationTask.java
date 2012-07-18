@@ -147,7 +147,7 @@ class SynchronizationTask extends AsyncTask<Void, Void, String>
 	}
 
 	private String loadSyncSpreadsheetKeyFromPreferences() {
-		return Preferences.get(activity, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY);
+		return Preferences.getString(activity, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY);
 	}
 
 	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {

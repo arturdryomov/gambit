@@ -57,7 +57,8 @@ public class AsyncAccountSelector
 	}
 
 	private String loadAccountNameFromPreferences() {
-		String accountName = Preferences.get(activity, Preferences.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME);
+		String accountName = Preferences.getString(activity,
+			Preferences.PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME);
 
 		if (isAccountRegistered(accountName)) {
 			return accountName;

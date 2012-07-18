@@ -15,19 +15,34 @@ final class Preferences
 	}
 
 	public static void set(Context activityContext, String key, String value) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activityContext.getApplicationContext());
-		SharedPreferences.Editor preferencesEditor = preferences.edit();
+		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(activityContext);
 
 		preferencesEditor.putString(key, value);
 
 		preferencesEditor.commit();
 	}
 
-	public static String get(Context activityContext, String key) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-			activityContext.getApplicationContext());
+	private static SharedPreferences.Editor getPreferencesEditor(Context activityContext) {
+		return getSharedPreferences(activityContext).edit();
+	}
 
-		return preferences.getString(key, new String());
+	private static SharedPreferences getSharedPreferences(Context activityContext) {
+		return PreferenceManager.getDefaultSharedPreferences(activityContext.getApplicationContext());
+	}
+
+	public static void set(Context activityContext, String key, boolean value) {
+		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(activityContext);
+
+		preferencesEditor.putBoolean(key, value);
+
+		preferencesEditor.commit();
+	}
+
+	public static String getString(Context activityContext, String key) {
+		return getSharedPreferences(activityContext).getString(key, new String());
+	}
+
+	public static boolean getBoolean(Context activityContext, String key) {
+		return getSharedPreferences(activityContext).getBoolean(key, false);
 	}
 }
