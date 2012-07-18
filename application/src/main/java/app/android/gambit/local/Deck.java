@@ -19,7 +19,6 @@ public class Deck implements Parcelable
 	private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
 
 	private final SQLiteDatabase database;
-	private final Decks decks;
 	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	private long id;
@@ -28,7 +27,6 @@ public class Deck implements Parcelable
 
 	Deck(ContentValues databaseValues) {
 		database = DbProvider.getInstance().getDatabase();
-		decks = DbProvider.getInstance().getDecks();
 		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
 		setValues(databaseValues);
@@ -78,6 +76,7 @@ public class Deck implements Parcelable
 			return;
 		}
 
+		Decks decks = DbProvider.getInstance().getDecks();
 		if (decks.containsDeckWithTitle(title)) {
 			throw new AlreadyExistsException();
 		}
@@ -447,7 +446,6 @@ public class Deck implements Parcelable
 
 	private Deck(Parcel parcel) {
 		database = DbProvider.getInstance().getDatabase();
-		decks = DbProvider.getInstance().getDecks();
 		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 
 		readFromParcel(parcel);
