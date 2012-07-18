@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 
-final class Preferences
+public final class Preferences
 {
 	public static final String PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME = "sync_google_account_name";
 	public static final String PREFERENCE_SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
