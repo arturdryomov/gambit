@@ -28,9 +28,11 @@ public class ExampleDeckBuilder
 	};
 
 	private final Context context;
+	private final Decks decks;
 
-	public ExampleDeckBuilder(Context context) {
+	public ExampleDeckBuilder(Context context, Decks decks) {
 		this.context = context;
+		this.decks = decks;
 	}
 
 	public boolean shouldBuildDeck() {
@@ -38,13 +40,10 @@ public class ExampleDeckBuilder
 			return false;
 		}
 
-		Decks decks = DbProvider.getInstance().getDecks();
 		return decks.getDecksList().isEmpty();
 	}
 
 	public void buildDeck() {
-		Decks decks = DbProvider.getInstance().getDecks();
-
 		decks.beginTransaction();
 
 		try {
