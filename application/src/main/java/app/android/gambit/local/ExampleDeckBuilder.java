@@ -73,10 +73,6 @@ public class ExampleDeckBuilder
 		return buildTextsFromLocale(Locale.ENGLISH);
 	}
 
-	private List<String> buildBackSideTexts() {
-		return buildTextsFromLocale(selectLocaleForBackText());
-	}
-
 	private List<String> buildTextsFromLocale(Locale locale) {
 		Locale currentLocale = getCurrentLocale();
 
@@ -97,6 +93,15 @@ public class ExampleDeckBuilder
 		return Locale.getDefault();
 	}
 
+	private Resources buildResourcesFromLocale(Locale locale) {
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+		AssetManager assetManager = context.getResources().getAssets();
+		Configuration configuration = new Configuration(context.getResources().getConfiguration());
+		configuration.locale = locale;
+
+		return new Resources(assetManager, displayMetrics, configuration);
+	}
+
 	private List<String> buildTextsWithResources(Resources resources) {
 		List<String> texts = new ArrayList<String>();
 
@@ -107,13 +112,8 @@ public class ExampleDeckBuilder
 		return texts;
 	}
 
-	private Resources buildResourcesFromLocale(Locale locale) {
-		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-		AssetManager assetManager = context.getResources().getAssets();
-		Configuration configuration = new Configuration(context.getResources().getConfiguration());
-		configuration.locale = locale;
-
-		return new Resources(assetManager, displayMetrics, configuration);
+	private List<String> buildBackSideTexts() {
+		return buildTextsFromLocale(selectLocaleForBackText());
 	}
 
 	private Locale selectLocaleForBackText() {
