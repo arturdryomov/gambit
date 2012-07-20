@@ -74,7 +74,7 @@ public class ExampleDeckWriter
 	}
 
 	private List<String> buildTexts(Locale locale) {
-		Locale currentLocale = getCurrentLocale();
+		Locale originalLocale = getCurrentLocale();
 
 		Resources resources = buildResources(locale);
 
@@ -82,10 +82,7 @@ public class ExampleDeckWriter
 			return buildTexts(resources);
 		}
 		finally {
-			// We have to create Resources with original locale to avoid
-			// weird behaviour. See http://stackoverflow.com/a/6526588/519177
-			// with comments for further information.
-			buildResources(currentLocale);
+			restoreLocale(originalLocale);
 		}
 	}
 
@@ -110,6 +107,11 @@ public class ExampleDeckWriter
 		}
 
 		return texts;
+	}
+
+	private void restoreLocale(Locale locale) {
+		// Recreate Resources with original locale to avoid weird things
+		buildResources(locale);
 	}
 
 	private List<String> buildBackSideTexts() {
