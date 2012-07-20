@@ -57,9 +57,9 @@ public class DbProvider
 	private Decks createDecks() {
 		Decks decks = new Decks();
 
-		ExampleDeckBuilder exampleDeckBuilder = new ExampleDeckBuilder(context, decks);
-		if (exampleDeckBuilder.shouldBuildDeck()) {
-			exampleDeckBuilder.buildDeck();
+		ExampleDeckWriter exampleDeckWriter = new ExampleDeckWriter(context, decks);
+		if (exampleDeckWriter.shouldWriteDeck()) {
+			exampleDeckWriter.writeDeck();
 		}
 
 		return decks;

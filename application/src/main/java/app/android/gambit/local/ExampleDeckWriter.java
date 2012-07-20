@@ -16,7 +16,7 @@ import app.android.gambit.R;
 import app.android.gambit.ui.Preferences;
 
 
-public class ExampleDeckBuilder
+public class ExampleDeckWriter
 {
 	public static final int[] ANDROID_VERSIONS_RESOURCES = {
 		R.string.android_version_froyo,
@@ -31,12 +31,12 @@ public class ExampleDeckBuilder
 	private final Context context;
 	private final Decks decks;
 
-	public ExampleDeckBuilder(Context context, Decks decks) {
+	public ExampleDeckWriter(Context context, Decks decks) {
 		this.context = context;
 		this.decks = decks;
 	}
 
-	public boolean shouldBuildDeck() {
+	public boolean shouldWriteDeck() {
 		if (Preferences.getBoolean(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED)) {
 			return false;
 		}
@@ -44,7 +44,7 @@ public class ExampleDeckBuilder
 		return decks.getDecksList().isEmpty();
 	}
 
-	public void buildDeck() {
+	public void writeDeck() {
 		decks.beginTransaction();
 
 		try {
