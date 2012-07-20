@@ -70,22 +70,22 @@ public class ExampleDeckWriter
 	}
 
 	private List<String> buildFrontSideTexts() {
-		return buildTextsFromLocale(Locale.ENGLISH);
+		return buildTexts(Locale.ENGLISH);
 	}
 
-	private List<String> buildTextsFromLocale(Locale locale) {
+	private List<String> buildTexts(Locale locale) {
 		Locale currentLocale = getCurrentLocale();
 
-		Resources resources = buildResourcesFromLocale(locale);
+		Resources resources = buildResources(locale);
 
 		try {
-			return buildTextsWithResources(resources);
+			return buildTexts(resources);
 		}
 		finally {
 			// We have to create Resources with original locale to avoid
 			// weird behaviour. See http://stackoverflow.com/a/6526588/519177
 			// with comments for further information.
-			buildResourcesFromLocale(currentLocale);
+			buildResources(currentLocale);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class ExampleDeckWriter
 		return Locale.getDefault();
 	}
 
-	private Resources buildResourcesFromLocale(Locale locale) {
+	private Resources buildResources(Locale locale) {
 		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 		AssetManager assetManager = context.getResources().getAssets();
 		Configuration configuration = new Configuration(context.getResources().getConfiguration());
@@ -102,7 +102,7 @@ public class ExampleDeckWriter
 		return new Resources(assetManager, displayMetrics, configuration);
 	}
 
-	private List<String> buildTextsWithResources(Resources resources) {
+	private List<String> buildTexts(Resources resources) {
 		List<String> texts = new ArrayList<String>();
 
 		for (int androidVersionResource : ANDROID_VERSIONS_RESOURCES) {
@@ -113,7 +113,7 @@ public class ExampleDeckWriter
 	}
 
 	private List<String> buildBackSideTexts() {
-		return buildTextsFromLocale(selectLocaleForBackText());
+		return buildTexts(selectLocaleForBackText());
 	}
 
 	private Locale selectLocaleForBackText() {
