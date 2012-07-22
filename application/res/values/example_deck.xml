@@ -3,6 +3,8 @@
 
 	<string name="example_deck_title">Android Versions</string>
 
+	<string name="example_deck_title_language">English</string>
+
 	<string name="android_version_froyo">Froyo</string>
 	<string name="android_version_gingerbread">Gingerbread</string>
 	<string name="android_version_honeycomb">Honeycomb</string>

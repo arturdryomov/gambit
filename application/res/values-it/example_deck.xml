@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<string name="example_deck_title_language">Italian</string>
+
 	<string name="android_version_froyo">Yogurt gelato</string>
 	<string name="android_version_gingerbread">Panpepato</string>
 	<string name="android_version_honeycomb">Favo</string>

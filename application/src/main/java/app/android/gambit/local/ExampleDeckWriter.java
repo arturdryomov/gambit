@@ -31,9 +31,39 @@ public class ExampleDeckWriter
 	private final Context context;
 	private final Decks decks;
 
+	private final Locale localeForFrontText;
+	private final Locale localeForBackText;
+
 	public ExampleDeckWriter(Context context, Decks decks) {
 		this.context = context;
 		this.decks = decks;
+
+		localeForFrontText = Locale.ENGLISH;
+		localeForBackText = selectLocaleForBackText();
+	}
+
+	private Locale selectLocaleForBackText() {
+		if (isCurrentLocaleSupported()) {
+			return getCurrentLocale();
+		}
+		else {
+			return getRandomSupportedLocale();
+		}
+	}
+
+	private boolean isCurrentLocaleSupported() {
+		String currentLanguageCode = getCurrentLocale().getLanguage();
+		return Arrays.asList(SUPPORTED_LANGUAGE_CODES).contains(currentLanguageCode);
+	}
+
+	private Locale getCurrentLocale() {
+		return Locale.getDefault();
+	}
+
+	private Locale getRandomSupportedLocale() {
+		Random random = new Random();
+		int languageIndex = random.nextInt(SUPPORTED_LANGUAGE_CODES.length);
+		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
 	}
 
 	public boolean shouldWriteDeck() {
@@ -59,18 +89,46 @@ public class ExampleDeckWriter
 	}
 
 	private void writeDeck(Decks decks) {
-		Deck deck = decks.createDeck(context.getString(R.string.example_deck_title));
+		String deckTitle = String.format("%s (%s → %s)",
+			context.getString(R.string.example_deck_title),
+			getExampleDeckTitleLanguage(localeForFrontText),
+			getExampleDeckTitleLanguage(localeForBackText));
 
-		List<String> frontSideTexts = buildFrontSideTexts();
-		List<String> backSideTexts = buildBackSideTexts();
+		Deck deck = decks.createDeck(deckTitle);
+
+		List<String> frontSideTexts = buildTexts(localeForFrontText);
+		List<String> backSideTexts = buildTexts(localeForBackText);
 
 		for (int i = 0; i < frontSideTexts.size(); i++) {
 			deck.createCard(frontSideTexts.get(i), backSideTexts.get(i));
 		}
 	}
 
-	private List<String> buildFrontSideTexts() {
-		return buildTexts(Locale.ENGLISH);
+	private String getExampleDeckTitleLanguage(Locale locale) {
+		Locale originalLocale = getCurrentLocale();
+
+		Resources resources = buildResources(locale);
+
+		try {
+			return resources.getString(R.string.example_deck_title_language);
+		}
+		finally {
+			restoreLocale(originalLocale);
+		}
+	}
+
+	private Resources buildResources(Locale locale) {
+		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+		AssetManager assetManager = context.getResources().getAssets();
+		Configuration configuration = new Configuration(context.getResources().getConfiguration());
+		configuration.locale = locale;
+
+		return new Resources(assetManager, displayMetrics, configuration);
+	}
+
+	private void restoreLocale(Locale locale) {
+		// Recreate Resources with original locale to avoid weird things
+		buildResources(locale);
 	}
 
 	private List<String> buildTexts(Locale locale) {
@@ -86,19 +144,6 @@ public class ExampleDeckWriter
 		}
 	}
 
-	private Locale getCurrentLocale() {
-		return Locale.getDefault();
-	}
-
-	private Resources buildResources(Locale locale) {
-		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-		AssetManager assetManager = context.getResources().getAssets();
-		Configuration configuration = new Configuration(context.getResources().getConfiguration());
-		configuration.locale = locale;
-
-		return new Resources(assetManager, displayMetrics, configuration);
-	}
-
 	private List<String> buildTexts(Resources resources) {
 		List<String> texts = new ArrayList<String>();
 
@@ -107,34 +152,5 @@ public class ExampleDeckWriter
 		}
 
 		return texts;
-	}
-
-	private void restoreLocale(Locale locale) {
-		// Recreate Resources with original locale to avoid weird things
-		buildResources(locale);
-	}
-
-	private List<String> buildBackSideTexts() {
-		return buildTexts(selectLocaleForBackText());
-	}
-
-	private Locale selectLocaleForBackText() {
-		if (isCurrentLocaleSupported()) {
-			return getCurrentLocale();
-		}
-		else {
-			return getRandomSupportedLocale();
-		}
-	}
-
-	private boolean isCurrentLocaleSupported() {
-		String currentLanguageCode = getCurrentLocale().getLanguage();
-		return Arrays.asList(SUPPORTED_LANGUAGE_CODES).contains(currentLanguageCode);
-	}
-
-	private Locale getRandomSupportedLocale() {
-		Random random = new Random();
-		int languageIndex = random.nextInt(SUPPORTED_LANGUAGE_CODES.length);
-		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
 	}
 }

@@ -24,7 +24,7 @@ public class ExampleDeckWriterTests extends DatabaseTestCase
 		assertEquals(1, decks.getDecksList().size());
 
 		Deck deck = decks.getDecksList().get(0);
-		assertEquals(deck.getTitle(), getContext().getString(string.example_deck_title));
+		assertTrue(deck.getTitle().startsWith(getContext().getString(string.example_deck_title)));
 
 		int cardsListSize = deck.getCardsList().size();
 		assertEquals(ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES.length, cardsListSize);
