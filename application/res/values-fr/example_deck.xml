@@ -2,8 +2,8 @@
 <resources>
 
 	<string name="android_version_froyo">Yaourt glacé</string>
-	<string name="android_version_gingerbread">Pain d\'épices</string>
-	<string name="android_version_honeycomb">Alvéole d\'abeille</string>
+	<string name="android_version_gingerbread">Pain d’épices</string>
+	<string name="android_version_honeycomb">Alvéole d’abeille</string>
 	<string name="android_version_ice_cream_sandwich">Sandwich à la crème glacée</string>
 	<string name="android_version_jelly_bean">Bonbon haricot</string>
 
