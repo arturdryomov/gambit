@@ -78,7 +78,7 @@ public class ExampleDeckWriter
 		decks.beginTransaction();
 
 		try {
-			writeDeck(decks);
+			tryWriteDeck();
 			Preferences.set(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED, true);
 
 			decks.setTransactionSuccessful();
@@ -88,13 +88,8 @@ public class ExampleDeckWriter
 		}
 	}
 
-	private void writeDeck(Decks decks) {
-		String deckTitle = String.format("%s (%s → %s)",
-			context.getString(R.string.example_deck_title),
-			getExampleDeckTitleLanguage(localeForFrontText),
-			getExampleDeckTitleLanguage(localeForBackText));
-
-		Deck deck = decks.createDeck(deckTitle);
+	private void tryWriteDeck() {
+		Deck deck = buildDeck();
 
 		List<String> frontSideTexts = buildTexts(localeForFrontText);
 		List<String> backSideTexts = buildTexts(localeForBackText);
@@ -102,6 +97,15 @@ public class ExampleDeckWriter
 		for (int i = 0; i < frontSideTexts.size(); i++) {
 			deck.createCard(frontSideTexts.get(i), backSideTexts.get(i));
 		}
+	}
+
+	private Deck buildDeck() {
+		String deckTitle = String.format("%s (%s → %s)",
+			context.getString(R.string.example_deck_title),
+			getExampleDeckTitleLanguage(localeForFrontText),
+			getExampleDeckTitleLanguage(localeForBackText));
+
+		return decks.createDeck(deckTitle);
 	}
 
 	private String getExampleDeckTitleLanguage(Locale locale) {
