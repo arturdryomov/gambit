@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="example_deck_title_language">German</string>
+
+	<string name="android_version_froyo">Frozen Yogurt</string>
+	<string name="android_version_gingerbread">Lebkuchen</string>
+	<string name="android_version_honeycomb">Bienenwabe</string>
+	<string name="android_version_ice_cream_sandwich">Ice Cream Sandwich</string>
+	<string name="android_version_jelly_bean">Geleebohne</string>
+
+</resources>

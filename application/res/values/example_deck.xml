@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="example_deck_title">Android Versions</string>
+
+	<string name="example_deck_title_language">English</string>
+
+	<string name="android_version_froyo">Froyo</string>
+	<string name="android_version_gingerbread">Gingerbread</string>
+	<string name="android_version_honeycomb">Honeycomb</string>
+	<string name="android_version_ice_cream_sandwich">Ice Cream Sandwich</string>
+	<string name="android_version_jelly_bean">Jelly Bean</string>
+
+</resources>
