@@ -4,7 +4,7 @@
 	<dimen name="margin_top_form_item">10dp</dimen>
 
 	<dimen name="padding_horizontal_list_item">8dp</dimen>
-	<dimen name="padding_body_layout">20dp</dimen>
+	<dimen name="padding_form_layout">20dp</dimen>
 
 	<dimen name="text_size_one_line_list_item">18sp</dimen>
 

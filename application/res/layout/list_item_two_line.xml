@@ -5,19 +5,19 @@
 
 	<TextView
 		android:id="@+id/test_second_line"
+		android:singleLine="true"
+		android:textColor="?android:attr/textColorSecondaryInverse"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:singleLine="true"
-		android:textColor="?android:attr/textColorSecondaryInverse" />
+		android:layout_alignParentBottom="true" />
 
 	<TextView
 		android:id="@+id/text_first_line"
+		android:singleLine="true"
+		android:textColor="?android:attr/textColorPrimary"
+		android:layout_above="@id/test_second_line"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_above="@id/test_second_line"
-		android:layout_alignParentTop="true"
-		android:singleLine="true"
-		android:textColor="?android:attr/textColorPrimary" />
+		android:layout_alignParentTop="true" />
 
 </RelativeLayout>
