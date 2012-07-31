@@ -62,11 +62,11 @@ public class CardCreationActivity extends FormActivity
 	@Override
 	protected void setUpErrorMessages() {
 		if (isFrontSideTextEmpty()) {
-			setFrontSideTextErrorMessage(getString(R.string.error_empty_card_front_text));
+			setFrontSideTextErrorMessage(getString(R.string.error_empty_field));
 		}
 
 		if (isBackSideTextEmpty()) {
-			setBackSideTextErrorMessage(getString(R.string.error_empty_card_back_text));
+			setBackSideTextErrorMessage(getString(R.string.error_empty_field));
 		}
 	}
 

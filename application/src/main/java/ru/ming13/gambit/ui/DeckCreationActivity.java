@@ -55,7 +55,7 @@ public class DeckCreationActivity extends FormActivity
 	@Override
 	protected void setUpErrorMessages() {
 		if (isDeckNameEmpty()) {
-			setDeckNameErrorMessage(getString(R.string.error_empty_deck_name));
+			setDeckNameErrorMessage(getString(R.string.error_empty_field));
 		}
 	}
 
