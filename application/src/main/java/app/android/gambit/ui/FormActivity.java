@@ -25,6 +25,10 @@ abstract class FormActivity extends SherlockActivity
 				checkAndAcceptUserData();
 				return true;
 
+			case R.id.menu_cancel:
+				finish();
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}

@@ -30,6 +30,7 @@
 	<string name="hint_card_back_text">Back side text</string>
 
 	<string name="menu_accept">Accept</string>
+	<string name="menu_cancel">Cancel</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_rename">Rename</string>
 	<string name="menu_edit">Edit</string>
