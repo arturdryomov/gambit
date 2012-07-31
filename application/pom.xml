@@ -96,12 +96,7 @@
 						<configuration>
 							<proguard>
 								<skip>false</skip>
-								<config>proguard.cfg</config>
 							</proguard>
-							<zipalign>
-								<skip>false</skip>
-								<outputApk>${project.build.directory}/${project.artifactId}-${project.version}-aligned.apk</outputApk>
-							</zipalign>
 						</configuration>
 						<executions>
 							<execution>
