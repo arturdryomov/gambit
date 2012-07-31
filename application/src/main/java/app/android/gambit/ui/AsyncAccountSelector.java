@@ -115,9 +115,9 @@ public class AsyncAccountSelector
 	}
 
 	private String getSingleRegisteredAccount() {
-		final int ACCOUNTS_INDEX_FOR_SINGLE_ACCOUNT = 0;
+		final int SINGLE_ACCOUNT_INDEX = 0;
 
-		return getRegisteredAccountsNames().get(ACCOUNTS_INDEX_FOR_SINGLE_ACCOUNT);
+		return getRegisteredAccountsNames().get(SINGLE_ACCOUNT_INDEX);
 	}
 
 	private void saveAccountNameToPreferences(String accountName) {
@@ -126,7 +126,7 @@ public class AsyncAccountSelector
 
 	private void selectAccountFromDialog() {
 		if (haveSomeAccountRegistered()) {
-			constructAccountsListDialog().show();
+			buildAccountsListDialog().show();
 		}
 		else {
 			notifyAccountWaiter(new String());
@@ -137,7 +137,7 @@ public class AsyncAccountSelector
 		return !getRegisteredAccountsNames().isEmpty();
 	}
 
-	private Dialog constructAccountsListDialog() {
+	private Dialog buildAccountsListDialog() {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
 		dialogBuilder.setTitle(activity.getString(R.string.title_choose_google_account));
 

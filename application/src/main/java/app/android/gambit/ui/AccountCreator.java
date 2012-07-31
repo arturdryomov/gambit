@@ -23,14 +23,14 @@ class AccountCreator
 	 * @throws SignUpFailedException if an error occurred during sign up.
 	 */
 	public static Account create(Activity activity) {
-		return new AccountCreator(activity).createAccount();
+		return new AccountCreator(activity).create();
 	}
 
 	private AccountCreator(Activity activity) {
 		this.activity = activity;
 	}
 
-	private Account createAccount() {
+	private Account create() {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 		Bundle signUpResponse;
 

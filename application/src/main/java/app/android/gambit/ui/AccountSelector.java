@@ -19,12 +19,12 @@ public class AccountSelector
 	 * @throws NoAccountRegisteredException if there is no registered accounts
 	 *  and user has nothing to select from.
 	 */
-	public static Account select(Activity dialogParentActivity) {
-		return new AccountSelector(dialogParentActivity).select();
+	public static Account select(Activity activity) {
+		return new AccountSelector(activity).select();
 	}
 
-	private AccountSelector(Activity dialogParentActivity) {
-		activity = dialogParentActivity;
+	private AccountSelector(Activity activity) {
+		this.activity = activity;
 	}
 
 	private Account select() {
