@@ -21,7 +21,11 @@
 		<item name="actionBarStyle">@style/Theme.Gambit.ActionBar</item>
 		<item name="android:actionBarStyle">@style/Theme.Gambit.ActionBar</item>
 
+		<!-- Show orange action bar button background on tap only on pre-Honeycomb devices. -->
 		<item name="actionBarItemBackground">@drawable/background_action_bar_item</item>
+
+		<!-- Fix pre-Honeycomb too light EditText error messages. -->
+		<item name="android:textColorSecondaryInverse">@android:color/secondary_text_light</item>
 	</style>
 
 	<style name="Theme.Gambit.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
