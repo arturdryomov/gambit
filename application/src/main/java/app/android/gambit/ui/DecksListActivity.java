@@ -3,6 +3,7 @@ package app.android.gambit.ui;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,29 +23,75 @@ import app.android.gambit.local.Deck;
 import com.actionbarsherlock.view.Menu;
 
 
-public class DecksListActivity extends SimpleAdapterListActivity
+public class DecksListActivity extends AdaptedListActivity
 {
 	private static final String LIST_ITEM_TEXT_ID = "text";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_list);
 		super.onCreate(savedInstanceState);
 
 		// This is main activity that sets application launcher label. If title will be set in
 		//   AndroidManifest.xml then launcher sign will be not correct.
-		setTitle();
+		setUpActivityTitle();
+
+		setUpCardsContextMenu();
 	}
 
 	@Override
-	protected void initializeList() {
-		SimpleAdapter decksAdapter = new SimpleAdapter(this, listData, R.layout.list_item_one_line,
-			new String[] {LIST_ITEM_TEXT_ID}, new int[] {R.id.text});
+	protected SimpleAdapter buildListAdapter() {
+		String[] listColumnNames = {LIST_ITEM_TEXT_ID};
+		int[] listColumnCorrespondingResources = {R.id.text};
 
-		setListAdapter(decksAdapter);
+		return new SimpleAdapter(this, list, R.layout.list_item_one_line, listColumnNames,
+			listColumnCorrespondingResources);
+	}
 
-		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	@Override
+	protected Map<String, Object> buildListItem(Object itemObject) {
+		Deck deck = (Deck) itemObject;
 
+		HashMap<String, Object> listItem = new HashMap<String, Object>();
+
+		listItem.put(LIST_ITEM_TEXT_ID, deck.getTitle());
+		listItem.put(LIST_ITEM_OBJECT_ID, deck);
+
+		return listItem;
+	}
+
+	@Override
+	protected void callListPopulation() {
+		new LoadDecksTask().execute();
+	}
+
+	private class LoadDecksTask extends AsyncTask<Void, Void, Void>
+	{
+		private List<Deck> decks;
+
+		@Override
+		protected void onPreExecute() {
+			setEmptyListText(R.string.loading_decks);
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			decks = DbProvider.getInstance().getDecks().getDecksList();
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			if (decks.isEmpty()) {
+				setEmptyListText(R.string.empty_decks);
+			}
+			else {
+				populateList(decks);
+			}
+		}
+	}
+
+	private void setUpCardsContextMenu() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getListView().setOnItemLongClickListener(actionModeListener);
 		}
@@ -126,7 +173,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	}
 
 	private Deck getDeck(int deckPosition) {
-		return (Deck) getObject(deckPosition);
+		return (Deck) getListItemObject(deckPosition);
 	}
 
 	private void callCardsEditing(int deckPosition) {
@@ -154,10 +201,10 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			listData.remove(deckPosition);
-			updateList();
+			list.remove(deckPosition);
+			refreshListContent();
 
-			if (listData.isEmpty()) {
+			if (list.isEmpty()) {
 				setEmptyListText(R.string.empty_decks);
 			}
 		}
@@ -170,58 +217,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		}
 	}
 
-	private void setTitle() {
+	private void setUpActivityTitle() {
 		getSupportActionBar().setTitle(R.string.title_decks);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		loadDecks();
-	}
-
-	private void loadDecks() {
-		new LoadDecksTask().execute();
-	}
-
-	private class LoadDecksTask extends AsyncTask<Void, Void, Void>
-	{
-		private List<Deck> decks;
-
-		@Override
-		protected void onPreExecute() {
-			setEmptyListText(R.string.loading_decks);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			decks = DbProvider.getInstance().getDecks().getDecksList();
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			if (decks.isEmpty()) {
-				setEmptyListText(R.string.empty_decks);
-			}
-			else {
-				fillList(decks);
-			}
-		}
-	}
-
-	@Override
-	protected void addItemToList(Object itemData) {
-		Deck deck = (Deck) itemData;
-
-		HashMap<String, Object> deckItem = new HashMap<String, Object>();
-
-		deckItem.put(LIST_ITEM_TEXT_ID, deck.getTitle());
-		deckItem.put(LIST_ITEM_OBJECT_ID, deck);
-
-		listData.add(deckItem);
 	}
 
 	@Override
@@ -314,7 +311,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 		{
 			@Override
 			public void run() {
-				loadDecks();
+				callListPopulation();
 			}
 		};
 

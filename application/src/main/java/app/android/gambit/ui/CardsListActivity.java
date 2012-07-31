@@ -3,6 +3,7 @@ package app.android.gambit.ui;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -21,7 +22,7 @@ import app.android.gambit.local.Deck;
 import com.actionbarsherlock.view.Menu;
 
 
-public class CardsListActivity extends SimpleAdapterListActivity
+public class CardsListActivity extends AdaptedListActivity
 {
 	private Deck deck;
 
@@ -30,22 +31,68 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_list);
 		super.onCreate(savedInstanceState);
 
 		processReceivedDeck();
+
+		setUpCardsContextMenu();
 	}
 
 	@Override
-	protected void initializeList() {
-		SimpleAdapter cardsAdapter = new SimpleAdapter(this, listData, R.layout.list_item_two_line,
-			new String[] {LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID},
-			new int[] {R.id.text_first_line, R.id.test_second_line});
+	protected SimpleAdapter buildListAdapter() {
+		String[] listColumnNames = {LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID};
+		int[] listColumnCorrespondingResources = {R.id.text_first_line, R.id.test_second_line};
 
-		setListAdapter(cardsAdapter);
+		return new SimpleAdapter(this, list, R.layout.list_item_two_line, listColumnNames,
+			listColumnCorrespondingResources);
+	}
 
-		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+	@Override
+	protected Map<String, Object> buildListItem(Object itemObject) {
+		Card card = (Card) itemObject;
 
+		HashMap<String, Object> listItem = new HashMap<String, Object>();
+
+		listItem.put(LIST_ITEM_OBJECT_ID, card);
+		listItem.put(LIST_ITEM_FRONT_TEXT_ID, card.getFrontSideText());
+		listItem.put(LIST_ITEM_BACK_TEXT_ID, card.getBackSideText());
+
+		return listItem;
+	}
+
+	@Override
+	protected void callListPopulation() {
+		new LoadCardsTask().execute();
+	}
+
+	private class LoadCardsTask extends AsyncTask<Void, Void, Void>
+	{
+		private List<Card> cards;
+
+		@Override
+		protected void onPreExecute() {
+			setEmptyListText(R.string.loading_cards);
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			cards = deck.getCardsList();
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			if (cards.isEmpty()) {
+				setEmptyListText(R.string.empty_cards);
+			}
+			else {
+				populateList(cards);
+			}
+		}
+	}
+
+	private void setUpCardsContextMenu() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getListView().setOnItemLongClickListener(actionModeListener);
 		}
@@ -122,7 +169,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	private Card getCard(int cardPosition) {
-		return (Card) getObject(cardPosition);
+		return (Card) getListItemObject(cardPosition);
 	}
 
 	private void callCardDeleting(int cardPosition) {
@@ -143,10 +190,10 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 		@Override
 		protected void onPreExecute() {
-			listData.remove(cardPosition);
-			updateList();
+			list.remove(cardPosition);
+			refreshListContent();
 
-			if (listData.isEmpty()) {
+			if (list.isEmpty()) {
 				setEmptyListText(R.string.empty_cards);
 			}
 		}
@@ -168,57 +215,6 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 			finish();
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		loadCards();
-	}
-
-	private void loadCards() {
-		new LoadCardsTask().execute();
-	}
-
-	private class LoadCardsTask extends AsyncTask<Void, Void, Void>
-	{
-		private List<Card> cards;
-
-		@Override
-		protected void onPreExecute() {
-			setEmptyListText(R.string.loading_cards);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			cards = deck.getCardsList();
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			if (cards.isEmpty()) {
-				setEmptyListText(R.string.empty_cards);
-			}
-			else {
-				fillList(cards);
-			}
-		}
-	}
-
-	@Override
-	protected void addItemToList(Object itemData) {
-		Card card = (Card) itemData;
-
-		HashMap<String, Object> cardItem = new HashMap<String, Object>();
-
-		cardItem.put(LIST_ITEM_FRONT_TEXT_ID, card.getFrontSideText());
-		cardItem.put(LIST_ITEM_BACK_TEXT_ID, card.getBackSideText());
-		cardItem.put(LIST_ITEM_OBJECT_ID, card);
-
-		listData.add(cardItem);
 	}
 
 	@Override
