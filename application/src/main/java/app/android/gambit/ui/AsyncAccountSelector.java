@@ -152,7 +152,6 @@ public class AsyncAccountSelector
 				String selectedAccountName = accountsNamesList.get(selectedAccountPosition);
 
 				saveAccountNameToPreferences(selectedAccountName);
-
 				notifyAccountWaiter(selectedAccountName);
 			}
 		});

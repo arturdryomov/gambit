@@ -48,18 +48,17 @@ class AccountCreator
 			throw new SignUpFailedException();
 		}
 
+		return extractAccount(signUpResponse);
+	}
+
+	private Account extractAccount(Bundle signUpResponse) {
 		if (!signUpResponse.containsKey(AccountManager.KEY_ACCOUNT_NAME)) {
 			throw new SignUpFailedException();
 		}
 
 		String accountName = signUpResponse.getString(AccountManager.KEY_ACCOUNT_NAME);
 
-		Account account = buildAccountFromName(accountName);
-		if (account == null) {
-			throw new SignUpFailedException();
-		}
-
-		return account;
+		return buildAccountFromName(accountName);
 	}
 
 	private Account buildAccountFromName(String accountName) {
@@ -71,6 +70,6 @@ class AccountCreator
 			}
 		}
 
-		return null;
+		throw new SignUpFailedException();
 	}
 }
