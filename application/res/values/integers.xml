@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<integer name="maximum_deck_name_length">30</integer>
+
+</resources>

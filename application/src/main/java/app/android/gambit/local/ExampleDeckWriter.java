@@ -100,9 +100,7 @@ public class ExampleDeckWriter
 	}
 
 	private Deck buildDeck() {
-		String deckTitle = String.format("%s (%s → %s)",
-			context.getString(R.string.example_deck_title),
-			getExampleDeckTitleLanguage(localeForFrontText),
+		String deckTitle = String.format("%s (%s)", context.getString(R.string.example_deck_title),
 			getExampleDeckTitleLanguage(localeForBackText));
 
 		return decks.createDeck(deckTitle);
