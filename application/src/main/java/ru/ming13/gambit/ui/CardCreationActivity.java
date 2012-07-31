@@ -20,6 +20,7 @@ package ru.ming13.gambit.ui;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Deck;
 
@@ -46,29 +47,39 @@ public class CardCreationActivity extends FormActivity
 	}
 
 	@Override
-	protected String getUserDataErrorMessage() {
-		String errorMessage = getFrontSideTextErrorMessage();
-		if (!TextUtils.isEmpty(errorMessage)) {
-			return errorMessage;
-		}
-
-		return getBackSideTextErrorMessage();
+	protected boolean isUserDataCorrect() {
+		return !isFrontSideTextEmpty() && !isBackSideTextEmpty();
 	}
 
-	private String getFrontSideTextErrorMessage() {
-		if (TextUtils.isEmpty(frontSideText)) {
-			return getString(R.string.error_empty_card_front_text);
-		}
-
-		return new String();
+	private boolean isFrontSideTextEmpty() {
+		return TextUtils.isEmpty(frontSideText);
 	}
 
-	private String getBackSideTextErrorMessage() {
-		if (TextUtils.isEmpty(backSideText)) {
-			return getString(R.string.error_empty_card_back_text);
+	private boolean isBackSideTextEmpty() {
+		return TextUtils.isEmpty(backSideText);
+	}
+
+	@Override
+	protected void setUpErrorMessages() {
+		if (isFrontSideTextEmpty()) {
+			setFrontSideTextErrorMessage(getString(R.string.error_empty_card_front_text));
 		}
 
-		return new String();
+		if (isBackSideTextEmpty()) {
+			setBackSideTextErrorMessage(getString(R.string.error_empty_card_back_text));
+		}
+	}
+
+	private void setFrontSideTextErrorMessage(String errorMessage) {
+		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side_text);
+
+		frontSideTextEdit.setError(errorMessage);
+	}
+
+	private void setBackSideTextErrorMessage(String errorMessage) {
+		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side_text);
+
+		backSideTextEdit.setError(errorMessage);
 	}
 
 	@Override
