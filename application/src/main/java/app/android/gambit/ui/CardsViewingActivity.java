@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
@@ -25,19 +24,19 @@ import com.actionbarsherlock.app.SherlockActivity;
 
 public class CardsViewingActivity extends SherlockActivity
 {
-	private final Context activityContext = this;
-
 	private final List<HashMap<String, Object>> cardsData;
 
 	private static final String CARDS_DATA_BACK_SIDE_TEXT_ID = "back_side";
 	private static final String CARDS_DATA_FRONT_SIDE_TEXT_ID = "front_side";
 	private static final String CARDS_DATA_CURRENT_SIDE_ID = "current_side";
 
-	private static enum CardSide {
+	private static enum CardSide
+	{
 		FRONT, BACK
 	}
 
-	private static enum CardsOrder {
+	private static enum CardsOrder
+	{
 		DEFAULT, STRAIGHT, SHUFFLE
 	}
 
@@ -73,7 +72,8 @@ public class CardsViewingActivity extends SherlockActivity
 		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		sensorListener = new ShakeListener();
 
-		sensorListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
+		sensorListener.setOnShakeListener(new ShakeListener.OnShakeListener()
+		{
 			@Override
 			public void onShake() {
 				if (!isLoadingInProgress) {
@@ -180,13 +180,14 @@ public class CardsViewingActivity extends SherlockActivity
 
 		@Override
 		public Object instantiateItem(ViewGroup container, final int position) {
-			TextView cardTextView = new TextView(activityContext);
+			TextView cardTextView = new TextView(CardsViewingActivity.this);
 
 			cardTextView.setText(getCardText(position));
 			cardTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 			cardTextView.setTextSize(CARD_TEXT_SIZE);
 
-			cardTextView.setOnClickListener(new OnClickListener() {
+			cardTextView.setOnClickListener(new OnClickListener()
+			{
 				@Override
 				public void onClick(View view) {
 					TextView cardView = (TextView) view;
@@ -275,7 +276,7 @@ public class CardsViewingActivity extends SherlockActivity
 			deck = (Deck) IntentProcessor.getMessage(this);
 		}
 		catch (IntentCorruptedException e) {
-			UserAlerter.alert(activityContext, R.string.error_unspecified);
+			UserAlerter.alert(this, R.string.error_unspecified);
 
 			finish();
 		}

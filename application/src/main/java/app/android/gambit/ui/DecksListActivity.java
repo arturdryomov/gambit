@@ -38,8 +38,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 
 	@Override
 	protected void initializeList() {
-		SimpleAdapter decksAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.list_item_one_line, new String[] {LIST_ITEM_TEXT_ID}, new int[] {R.id.text});
+		SimpleAdapter decksAdapter = new SimpleAdapter(this, listData, R.layout.list_item_one_line,
+			new String[] {LIST_ITEM_TEXT_ID}, new int[] {R.id.text});
 
 		setListAdapter(decksAdapter);
 
@@ -121,7 +121,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private void callDeckRenaming(int deckPosition) {
 		Deck deck = getDeck(deckPosition);
 
-		Intent callIntent = IntentFactory.createDeckEditingIntent(activityContext, deck);
+		Intent callIntent = IntentFactory.createDeckEditingIntent(this, deck);
 		startActivity(callIntent);
 	}
 
@@ -132,7 +132,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	private void callCardsEditing(int deckPosition) {
 		Deck deck = getDeck(deckPosition);
 
-		Intent callIntent = IntentFactory.createCardsEditingIntent(activityContext, deck);
+		Intent callIntent = IntentFactory.createCardsEditingIntent(this, deck);
 		startActivity(callIntent);
 	}
 
@@ -271,13 +271,13 @@ public class DecksListActivity extends SimpleAdapterListActivity
 				callCardsViewing(deck);
 			}
 			else {
-				UserAlerter.alert(activityContext, errorMessage);
+				UserAlerter.alert(DecksListActivity.this, errorMessage);
 			}
 		}
 	}
 
 	private void callCardsViewing(Deck deck) {
-		Intent callIntent = IntentFactory.createCardsViewingIntent(activityContext, deck);
+		Intent callIntent = IntentFactory.createCardsViewingIntent(this, deck);
 		startActivity(callIntent);
 	}
 
@@ -305,8 +305,8 @@ public class DecksListActivity extends SimpleAdapterListActivity
 	}
 
 	private void callDeckCreation() {
-		Intent callIntent = IntentFactory.createDeckCreationIntent(activityContext);
-		activityContext.startActivity(callIntent);
+		Intent callIntent = IntentFactory.createDeckCreationIntent(this);
+		startActivity(callIntent);
 	}
 
 	private void callSyncing() {
@@ -318,8 +318,7 @@ public class DecksListActivity extends SimpleAdapterListActivity
 			}
 		};
 
-		SynchronizationTask synchronizationTask = new SynchronizationTask(activityContext,
-			successRunnable);
+		SynchronizationTask synchronizationTask = new SynchronizationTask(this, successRunnable);
 		synchronizationTask.execute();
 	}
 }

@@ -1,7 +1,6 @@
 package app.android.gambit.ui;
 
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.widget.EditText;
 import app.android.gambit.R;
@@ -12,8 +11,6 @@ import com.actionbarsherlock.view.MenuItem;
 
 abstract class FormActivity extends SherlockActivity
 {
-	protected final Context activityContext = this;
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.menu_action_bar_item_editing, menu);
@@ -42,7 +39,7 @@ abstract class FormActivity extends SherlockActivity
 			performSubmitAction();
 		}
 		else {
-			UserAlerter.alert(activityContext, userDataErrorMessage);
+			UserAlerter.alert(this, userDataErrorMessage);
 		}
 	}
 

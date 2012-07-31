@@ -47,7 +47,7 @@ public class DeckRenamingActivity extends DeckCreationActivity
 				finish();
 			}
 			else {
-				UserAlerter.alert(activityContext, errorMessage);
+				UserAlerter.alert(DeckRenamingActivity.this, errorMessage);
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public class DeckRenamingActivity extends DeckCreationActivity
 			deck = (Deck) IntentProcessor.getMessage(this);
 		}
 		catch (IntentCorruptedException e) {
-			UserAlerter.alert(activityContext, R.string.error_unspecified);
+			UserAlerter.alert(this, R.string.error_unspecified);
 
 			finish();
 		}
@@ -65,6 +65,7 @@ public class DeckRenamingActivity extends DeckCreationActivity
 
 	private void setUpReceivedDeckData() {
 		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
+
 		deckNameEdit.setText(deck.getTitle());
 	}
 }

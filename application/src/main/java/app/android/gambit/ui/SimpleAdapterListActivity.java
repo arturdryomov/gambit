@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -15,8 +14,6 @@ import com.actionbarsherlock.app.SherlockListActivity;
 
 abstract class SimpleAdapterListActivity extends SherlockListActivity
 {
-	protected final Context activityContext = this;
-
 	protected final List<HashMap<String, Object>> listData;
 	protected static final String LIST_ITEM_OBJECT_ID = "object";
 

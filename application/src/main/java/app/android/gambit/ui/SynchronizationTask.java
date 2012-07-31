@@ -3,7 +3,6 @@ package app.android.gambit.ui;
 
 import android.accounts.Account;
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import app.android.gambit.R;
@@ -26,8 +25,8 @@ class SynchronizationTask extends AsyncTask<Void, Void, String>
 
 	private ProgressDialogHelper progressDialogHelper;
 
-	public SynchronizationTask(Context activityContext, Runnable successRunnable) {
-		this.activity = (Activity) activityContext;
+	public SynchronizationTask(Activity activity, Runnable successRunnable) {
+		this.activity = activity;
 		this.successRunnable = successRunnable;
 
 		isTokensInvalidationRequired = false;

@@ -46,7 +46,7 @@ public class CardEditingActivity extends CardCreationActivity
 			card = (Card) IntentProcessor.getMessage(this);
 		}
 		catch (IntentCorruptedException e) {
-			UserAlerter.alert(activityContext, R.string.error_unspecified);
+			UserAlerter.alert(this, R.string.error_unspecified);
 
 			finish();
 		}

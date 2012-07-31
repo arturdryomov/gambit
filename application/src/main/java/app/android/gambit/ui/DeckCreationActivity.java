@@ -68,13 +68,13 @@ public class DeckCreationActivity extends FormActivity
 				finish();
 			}
 			else {
-				UserAlerter.alert(activityContext, errorMessage);
+				UserAlerter.alert(DeckCreationActivity.this, errorMessage);
 			}
 		}
 	}
 
 	private void callCardsEditing(Deck deck) {
-		Intent callIntent = IntentFactory.createCardsEditingIntent(activityContext, deck);
+		Intent callIntent = IntentFactory.createCardsEditingIntent(this, deck);
 		startActivity(callIntent);
 	}
 }

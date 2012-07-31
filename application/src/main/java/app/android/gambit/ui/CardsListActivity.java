@@ -38,9 +38,9 @@ public class CardsListActivity extends SimpleAdapterListActivity
 
 	@Override
 	protected void initializeList() {
-		SimpleAdapter cardsAdapter = new SimpleAdapter(activityContext, listData,
-			R.layout.list_item_two_line, new String[] { LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID },
-			new int[] { R.id.text_first_line, R.id.test_second_line});
+		SimpleAdapter cardsAdapter = new SimpleAdapter(this, listData, R.layout.list_item_two_line,
+			new String[] {LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID},
+			new int[] {R.id.text_first_line, R.id.test_second_line});
 
 		setListAdapter(cardsAdapter);
 
@@ -117,7 +117,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	private void callCardEditing(int cardPosition) {
 		Card card = getCard(cardPosition);
 
-		Intent callIntent = IntentFactory.createCardEditingIntent(activityContext, card);
+		Intent callIntent = IntentFactory.createCardEditingIntent(this, card);
 		startActivity(callIntent);
 	}
 
@@ -164,7 +164,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 			deck = (Deck) IntentProcessor.getMessage(this);
 		}
 		catch (IntentCorruptedException e) {
-			UserAlerter.alert(activityContext, R.string.error_unspecified);
+			UserAlerter.alert(this, R.string.error_unspecified);
 
 			finish();
 		}
@@ -261,7 +261,7 @@ public class CardsListActivity extends SimpleAdapterListActivity
 	}
 
 	private void callCardCreation() {
-		Intent callIntent = IntentFactory.createCardCreationIntent(activityContext, deck);
+		Intent callIntent = IntentFactory.createCardCreationIntent(this, deck);
 		startActivity(callIntent);
 	}
 }
