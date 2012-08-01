@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.AlreadyExistsException;
 import ru.ming13.gambit.local.DbProvider;
@@ -43,16 +44,25 @@ public class DeckCreationActivity extends FormActivity
 	}
 
 	@Override
-	protected String getUserDataErrorMessage() {
-		return getDeckNameErrorMessage();
+	protected boolean isUserDataCorrect() {
+		return !isDeckNameEmpty();
 	}
 
-	private String getDeckNameErrorMessage() {
-		if (TextUtils.isEmpty(deckName)) {
-			return getString(R.string.error_empty_deck_name);
-		}
+	private boolean isDeckNameEmpty() {
+		return TextUtils.isEmpty(deckName);
+	}
 
-		return new String();
+	@Override
+	protected void setUpErrorMessages() {
+		if (isDeckNameEmpty()) {
+			setDeckNameErrorMessage(getString(R.string.error_empty_field));
+		}
+	}
+
+	protected void setDeckNameErrorMessage(String errorMessage) {
+		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
+
+		deckNameEdit.setError(errorMessage);
 	}
 
 	@Override
@@ -84,7 +94,7 @@ public class DeckCreationActivity extends FormActivity
 				finish();
 			}
 			else {
-				UserAlerter.alert(DeckCreationActivity.this, errorMessage);
+				setDeckNameErrorMessage(errorMessage);
 			}
 		}
 	}

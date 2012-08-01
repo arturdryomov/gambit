@@ -63,7 +63,7 @@ public class DeckRenamingActivity extends DeckCreationActivity
 				finish();
 			}
 			else {
-				UserAlerter.alert(DeckRenamingActivity.this, errorMessage);
+				setDeckNameErrorMessage(errorMessage);
 			}
 		}
 	}

@@ -17,12 +17,11 @@
 package ru.ming13.gambit.ui;
 
 
-import android.text.TextUtils;
 import android.widget.EditText;
-import ru.ming13.gambit.R;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import ru.ming13.gambit.R;
 
 
 abstract class FormActivity extends SherlockActivity
@@ -53,13 +52,11 @@ abstract class FormActivity extends SherlockActivity
 	private void checkAndAcceptUserData() {
 		readUserDataFromFields();
 
-		String userDataErrorMessage = getUserDataErrorMessage();
-
-		if (TextUtils.isEmpty(userDataErrorMessage)) {
+		if (isUserDataCorrect()) {
 			performSubmitAction();
 		}
 		else {
-			UserAlerter.alert(this, userDataErrorMessage);
+			setUpErrorMessages();
 		}
 	}
 
@@ -71,7 +68,9 @@ abstract class FormActivity extends SherlockActivity
 		return editText.getText().toString().trim();
 	}
 
-	protected abstract String getUserDataErrorMessage();
+	protected abstract boolean isUserDataCorrect();
 
 	protected abstract void performSubmitAction();
+
+	protected abstract void setUpErrorMessages();
 }
