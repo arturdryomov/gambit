@@ -27,7 +27,7 @@ The building process is very simple:
 * Run `mvn -f application/pom.xml -P release clean package` to build APK.
 * Run `mvn clean install` to build application and run tests.
 
-If you want to use Google Drive sync you must obtain your own Google API key.
+For correct building you should set up Google API key.
 Look at `application/res/xml/keys.template.xml` for details.
 
 ## Acknowledgements
