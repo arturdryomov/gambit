@@ -9,7 +9,7 @@ Gambit is a really simple flashcard viewer for Android.
 * Simple UI — no pasarán things that you’ll never use.
 * Shuffle your cards if you want to give yourself an extra
 training. Just shake your phone and it’ll be done.
-* There are thousands of cards and you’d forgotten where did you stop?
+* You have thousands of cards and you forgot where stopped?
 No problem — Gambit remembers your current position in deck.
 * Sync with “big brother” — Gambit knows how to sync with Google Drive
 and will create spreadsheet you can modify easily.
