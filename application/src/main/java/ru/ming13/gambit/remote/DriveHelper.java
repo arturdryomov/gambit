@@ -49,6 +49,7 @@ public class DriveHelper
 	private static final String RESPONSE_FIELD_MODIFIED_DATE = "modifiedDate";
 	private static final String RESPONSE_FIELD_PERMISSION_ID = "permissionId";
 	private static final String RESPONSE_FIELD_ROLE = "role";
+	private static final String RESPONSE_FIELD_LABELS = "labels";
 
 	private static final String RESPONSE_LIST_ITEMS_PREFIX = "items";
 	private static final String RESPONSE_FIELDS_DELIMITER = ",";
@@ -300,5 +301,11 @@ public class DriveHelper
 			buildResponseFields(RESPONSE_FIELD_MODIFIED_DATE));
 
 		return new InternetDateTime(spreadsheetFile.getModifiedDate().toStringRfc3339());
+	}
+
+	public boolean isSpreadsheetTrashed(String spreadsheetKey) {
+		File spreadsheetFile = getFile(spreadsheetKey, buildResponseFields(RESPONSE_FIELD_LABELS));
+
+		return spreadsheetFile.getLabels().getTrashed().booleanValue();
 	}
 }

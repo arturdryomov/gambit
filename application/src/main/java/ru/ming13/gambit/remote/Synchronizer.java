@@ -46,6 +46,7 @@ public class Synchronizer
 	 */
 	public String sync(String spreadsheetKey) {
 		try {
+			checkSpreadsheetForTrashing(spreadsheetKey);
 			trySync(spreadsheetKey);
 
 			return spreadsheetKey;
@@ -55,6 +56,12 @@ public class Synchronizer
 		}
 		catch (DecksNotFoundException e) {
 			return sync();
+		}
+	}
+
+	private void checkSpreadsheetForTrashing(String spreadsheetKey) {
+		if (driveHelper.isSpreadsheetTrashed(spreadsheetKey)) {
+			throw new SpreadsheetNotExistsException();
 		}
 	}
 
