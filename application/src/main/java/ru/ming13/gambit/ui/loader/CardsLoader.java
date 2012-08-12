@@ -31,7 +31,7 @@ public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 {
 	private final Deck deck;
 
-	public CardsLoader newInstance(Context context, Deck deck) {
+	public static CardsLoader newInstance(Context context, Deck deck) {
 		return new CardsLoader(context, deck);
 	}
 
