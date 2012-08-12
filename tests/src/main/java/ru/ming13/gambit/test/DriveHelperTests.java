@@ -44,7 +44,7 @@ import ru.ming13.gambit.remote.RemoteCard;
 import ru.ming13.gambit.remote.RemoteDeck;
 import ru.ming13.gambit.remote.RemoteDecksConverter;
 import ru.ming13.gambit.remote.SpreadsheetNotExistsException;
-import ru.ming13.gambit.ui.DeckCreationActivity;
+import ru.ming13.gambit.ui.activity.DeckCreationActivity;
 import ru.ming13.gambit.ui.account.AccountSelector;
 import ru.ming13.gambit.ui.account.GoogleDriveAuthorizer;
 

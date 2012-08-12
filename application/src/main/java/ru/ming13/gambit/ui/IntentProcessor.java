@@ -21,7 +21,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-final class IntentProcessor
+public final class IntentProcessor
 {
 	private IntentProcessor() {
 	}

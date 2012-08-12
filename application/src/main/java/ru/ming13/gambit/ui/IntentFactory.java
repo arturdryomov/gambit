@@ -21,9 +21,15 @@ import android.content.Context;
 import android.content.Intent;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.ui.activity.CardCreationActivity;
+import ru.ming13.gambit.ui.activity.CardEditingActivity;
+import ru.ming13.gambit.ui.activity.CardsListActivity;
+import ru.ming13.gambit.ui.activity.CardsViewingActivity;
+import ru.ming13.gambit.ui.activity.DeckCreationActivity;
+import ru.ming13.gambit.ui.activity.DeckRenamingActivity;
 
 
-final class IntentFactory
+public final class IntentFactory
 {
 	public static final String MESSAGE_ID;
 

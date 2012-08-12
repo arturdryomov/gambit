@@ -21,7 +21,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 
-final class UserAlerter
+public final class UserAlerter
 {
 	private UserAlerter() {
 	}

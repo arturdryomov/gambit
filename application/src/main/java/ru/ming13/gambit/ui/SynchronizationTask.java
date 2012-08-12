@@ -36,7 +36,7 @@ import ru.ming13.gambit.ui.account.SignUpCanceledException;
 import ru.ming13.gambit.ui.account.SignUpFailedException;
 
 
-class SynchronizationTask extends AsyncTask<Void, Void, String>
+public class SynchronizationTask extends AsyncTask<Void, Void, String>
 {
 	private final Activity activity;
 

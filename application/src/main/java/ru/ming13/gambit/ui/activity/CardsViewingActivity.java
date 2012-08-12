@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.activity;
 
 
 import java.util.ArrayList;
@@ -36,6 +36,10 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
 import com.actionbarsherlock.app.SherlockActivity;
+import ru.ming13.gambit.ui.IntentCorruptedException;
+import ru.ming13.gambit.ui.IntentProcessor;
+import ru.ming13.gambit.ui.ShakeListener;
+import ru.ming13.gambit.ui.UserAlerter;
 
 
 public class CardsViewingActivity extends SherlockActivity

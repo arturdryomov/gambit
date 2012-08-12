@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.activity;
 
 
 import android.os.AsyncTask;
@@ -23,6 +23,9 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.ui.IntentCorruptedException;
+import ru.ming13.gambit.ui.IntentProcessor;
+import ru.ming13.gambit.ui.UserAlerter;
 
 
 public class CardCreationActivity extends FormActivity

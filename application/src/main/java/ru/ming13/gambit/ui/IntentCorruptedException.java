@@ -17,6 +17,6 @@
 package ru.ming13.gambit.ui;
 
 
-class IntentCorruptedException extends RuntimeException
+public class IntentCorruptedException extends RuntimeException
 {
 }
