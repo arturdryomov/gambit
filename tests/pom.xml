@@ -47,7 +47,7 @@
 		<dependency>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
-			<groupId>app.android</groupId>
+			<groupId>ru.ming13.gambit</groupId>
 			<scope>provided</scope>
 			<type>apk</type>
 		</dependency>
@@ -55,7 +55,7 @@
 		<dependency>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
-			<groupId>app.android</groupId>
+			<groupId>ru.ming13.gambit</groupId>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
