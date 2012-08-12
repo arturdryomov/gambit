@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.account;
 
-class AuthorizationCanceledException extends RuntimeException
+
+public class SignUpFailedException extends RuntimeException
 {
 }

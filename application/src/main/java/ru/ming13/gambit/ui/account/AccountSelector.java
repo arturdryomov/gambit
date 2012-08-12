@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.account;
 
 
 import java.util.concurrent.CountDownLatch;
@@ -33,7 +33,7 @@ public class AccountSelector
 
 	/**
 	 * @throws NoAccountRegisteredException if there is no registered accounts
-	 *  and user has nothing to select from.
+	 * and user has nothing to select from.
 	 */
 	public static Account select(Activity activity) {
 		return new AccountSelector(activity).select();

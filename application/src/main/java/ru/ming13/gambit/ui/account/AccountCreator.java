@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.account;
 
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-class AccountCreator
+public class AccountCreator
 {
 	private static final String ACCOUNT_TYPE = "com.google";
 	private static final String ACCOUNT_SIGN_UP_TOKEN_TYPE = "ah";

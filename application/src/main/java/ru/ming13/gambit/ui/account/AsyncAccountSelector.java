@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.account;
 
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.ui.Preferences;
 
 
 public class AsyncAccountSelector

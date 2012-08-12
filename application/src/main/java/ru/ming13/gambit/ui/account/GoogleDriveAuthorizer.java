@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.account;
 
 
 import java.io.IOException;
@@ -31,6 +31,7 @@ import com.google.api.services.drive.DriveScopes;
 public class GoogleDriveAuthorizer
 {
 	private static final String DRIVE_AUTH_TOKEN_TYPE;
+
 	static {
 		DRIVE_AUTH_TOKEN_TYPE = String.format("oauth2:%s", DriveScopes.DRIVE);
 	}

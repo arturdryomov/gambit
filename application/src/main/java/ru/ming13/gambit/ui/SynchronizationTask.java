@@ -26,6 +26,14 @@ import ru.ming13.gambit.remote.NothingToSyncException;
 import ru.ming13.gambit.remote.SyncException;
 import ru.ming13.gambit.remote.Synchronizer;
 import ru.ming13.gambit.remote.UnauthorizedException;
+import ru.ming13.gambit.ui.account.AccountCreator;
+import ru.ming13.gambit.ui.account.AccountSelector;
+import ru.ming13.gambit.ui.account.AuthorizationCanceledException;
+import ru.ming13.gambit.ui.account.AuthorizationFailedException;
+import ru.ming13.gambit.ui.account.GoogleDriveAuthorizer;
+import ru.ming13.gambit.ui.account.NoAccountRegisteredException;
+import ru.ming13.gambit.ui.account.SignUpCanceledException;
+import ru.ming13.gambit.ui.account.SignUpFailedException;
 
 
 class SynchronizationTask extends AsyncTask<Void, Void, String>
