@@ -110,7 +110,7 @@ public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
 
 	private LoaderResult<Card> modifyCard() {
 		card.setFrontSideText(frontSideText);
-		card.setBackSideText(frontSideText);
+		card.setBackSideText(backSideText);
 
 		return buildSuccessResult();
 	}
