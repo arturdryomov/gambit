@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.intent;
 
 
-import android.app.ProgressDialog;
-import android.content.Context;
+import android.app.Activity;
+import android.os.Bundle;
 
 
-public class ProgressDialogHelper
+public final class IntentProcessor
 {
-	private ProgressDialog progressDialog = null;
-
-	public void show(Context context, String text) {
-		progressDialog = ProgressDialog.show(context, new String(), text);
+	private IntentProcessor() {
 	}
 
-	public void show(Context context, int textResourceId) {
-		show(context, context.getString(textResourceId));
-	}
+	public static Object getMessage(Activity activity) {
+		Bundle messageData = activity.getIntent().getExtras();
 
-	public void hide() {
-		if (progressDialog != null) {
-			progressDialog.dismiss();
+		Object message = messageData.getParcelable(IntentFactory.MESSAGE_ID);
+
+		if (message == null) {
+			throw new IntentCorruptedException();
 		}
+
+		return message;
 	}
 }

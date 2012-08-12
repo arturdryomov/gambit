@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.util;
 
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.content.Context;
+import android.widget.Toast;
 
 
-public final class IntentProcessor
+public final class UserAlerter
 {
-	private IntentProcessor() {
+	private UserAlerter() {
 	}
 
-	public static Object getMessage(Activity activity) {
-		Bundle messageData = activity.getIntent().getExtras();
+	public static void alert(Context context, String text) {
+		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+	}
 
-		Object message = messageData.getParcelable(IntentFactory.MESSAGE_ID);
-
-		if (message == null) {
-			throw new IntentCorruptedException();
-		}
-
-		return message;
+	public static void alert(Context context, int textResourceId) {
+		alert(context, context.getString(textResourceId));
 	}
 }

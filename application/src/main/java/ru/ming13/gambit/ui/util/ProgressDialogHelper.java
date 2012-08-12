@@ -14,23 +14,28 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.util;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.widget.Toast;
 
 
-public final class UserAlerter
+public class ProgressDialogHelper
 {
-	private UserAlerter() {
+	private ProgressDialog progressDialog = null;
+
+	public void show(Context context, String text) {
+		progressDialog = ProgressDialog.show(context, new String(), text);
 	}
 
-	public static void alert(Context context, String text) {
-		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+	public void show(Context context, int textResourceId) {
+		show(context, context.getString(textResourceId));
 	}
 
-	public static void alert(Context context, int textResourceId) {
-		alert(context, context.getString(textResourceId));
+	public void hide() {
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 	}
 }

@@ -28,7 +28,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.ui.Preferences;
+import ru.ming13.gambit.ui.util.Preferences;
 
 
 public class AsyncAccountSelector

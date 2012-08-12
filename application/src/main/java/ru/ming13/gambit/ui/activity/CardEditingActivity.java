@@ -22,9 +22,9 @@ import android.os.Bundle;
 import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Card;
-import ru.ming13.gambit.ui.IntentCorruptedException;
-import ru.ming13.gambit.ui.IntentProcessor;
-import ru.ming13.gambit.ui.UserAlerter;
+import ru.ming13.gambit.ui.intent.IntentCorruptedException;
+import ru.ming13.gambit.ui.intent.IntentProcessor;
+import ru.ming13.gambit.ui.util.UserAlerter;
 
 
 public class CardEditingActivity extends CardCreationActivity

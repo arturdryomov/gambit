@@ -26,7 +26,7 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.AlreadyExistsException;
 import ru.ming13.gambit.local.DbProvider;
 import ru.ming13.gambit.local.Deck;
-import ru.ming13.gambit.ui.IntentFactory;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
 public class DeckCreationActivity extends FormActivity

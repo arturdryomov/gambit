@@ -37,9 +37,9 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.DbProvider;
 import ru.ming13.gambit.local.Deck;
 import com.actionbarsherlock.view.Menu;
-import ru.ming13.gambit.ui.IntentFactory;
-import ru.ming13.gambit.ui.SynchronizationTask;
-import ru.ming13.gambit.ui.UserAlerter;
+import ru.ming13.gambit.ui.intent.IntentFactory;
+import ru.ming13.gambit.ui.util.SynchronizationTask;
+import ru.ming13.gambit.ui.util.UserAlerter;
 
 
 public class DecksListActivity extends AdaptedListActivity

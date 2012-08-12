@@ -29,7 +29,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.ui.Preferences;
+import ru.ming13.gambit.ui.util.Preferences;
 
 
 public class ExampleDeckWriter

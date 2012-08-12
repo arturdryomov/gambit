@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui;
+package ru.ming13.gambit.ui.intent;
 
 
 public class IntentCorruptedException extends RuntimeException
