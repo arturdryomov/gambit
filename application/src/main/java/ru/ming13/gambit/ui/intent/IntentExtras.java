@@ -17,24 +17,21 @@
 package ru.ming13.gambit.ui.intent;
 
 
-import android.app.Activity;
-import android.os.Bundle;
-
-
-public final class IntentProcessor
+public final class IntentExtras
 {
-	private IntentProcessor() {
+	private IntentExtras() {
 	}
 
-	public static Object getMessage(Activity activity) {
-		Bundle messageData = activity.getIntent().getExtras();
+	public static final String DECK;
+	public static final String CARD;
 
-		Object message = messageData.getParcelable(IntentFactory.MESSAGE_ID);
+	private static final String EXTRA_PREFIX = IntentFactory.class.getPackage().getName();
 
-		if (message == null) {
-			throw new IntentCorruptedException();
-		}
+	private static final String DECK_POSTFIX = "deck";
+	private static final String CARD_POSTFIX = "card";
 
-		return message;
+	static {
+		DECK = String.format("%s.%s", EXTRA_PREFIX, DECK_POSTFIX);
+		CARD = String.format("%s.%s", EXTRA_PREFIX, CARD_POSTFIX);
 	}
 }

@@ -32,14 +32,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import com.actionbarsherlock.view.Menu;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
-import com.actionbarsherlock.view.Menu;
-import ru.ming13.gambit.ui.intent.IntentCorruptedException;
+import ru.ming13.gambit.ui.intent.IntentException;
+import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.intent.IntentFactory;
-import ru.ming13.gambit.ui.intent.IntentProcessor;
-import ru.ming13.gambit.ui.util.UserAlerter;
 
 
 public class CardsListActivity extends AdaptedListActivity
@@ -227,13 +226,10 @@ public class CardsListActivity extends AdaptedListActivity
 	}
 
 	private void processReceivedDeck() {
-		try {
-			deck = (Deck) IntentProcessor.getMessage(this);
-		}
-		catch (IntentCorruptedException e) {
-			UserAlerter.alert(this, R.string.error_unspecified);
+		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
-			finish();
+		if (deck == null) {
+			throw new IntentException();
 		}
 	}
 

@@ -28,7 +28,7 @@ abstract class FormActivity extends SherlockActivity
 {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_item_editing, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_form, menu);
 
 		return true;
 	}

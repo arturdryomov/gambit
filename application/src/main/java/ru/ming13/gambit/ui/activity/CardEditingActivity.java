@@ -22,9 +22,8 @@ import android.os.Bundle;
 import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Card;
-import ru.ming13.gambit.ui.intent.IntentCorruptedException;
-import ru.ming13.gambit.ui.intent.IntentProcessor;
-import ru.ming13.gambit.ui.util.UserAlerter;
+import ru.ming13.gambit.ui.intent.IntentException;
+import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
 public class CardEditingActivity extends CardCreationActivity
@@ -61,13 +60,10 @@ public class CardEditingActivity extends CardCreationActivity
 
 	@Override
 	protected void processReceivedData() {
-		try {
-			card = (Card) IntentProcessor.getMessage(this);
-		}
-		catch (IntentCorruptedException e) {
-			UserAlerter.alert(this, R.string.error_unspecified);
+		card = getIntent().getParcelableExtra(IntentExtras.CARD);
 
-			finish();
+		if (card == null) {
+			throw new IntentException();
 		}
 	}
 

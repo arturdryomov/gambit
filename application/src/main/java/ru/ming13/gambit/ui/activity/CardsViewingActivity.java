@@ -32,14 +32,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockActivity;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
-import com.actionbarsherlock.app.SherlockActivity;
-import ru.ming13.gambit.ui.intent.IntentCorruptedException;
-import ru.ming13.gambit.ui.intent.IntentProcessor;
+import ru.ming13.gambit.ui.intent.IntentException;
+import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.util.ShakeListener;
-import ru.ming13.gambit.ui.util.UserAlerter;
 
 
 public class CardsViewingActivity extends SherlockActivity
@@ -292,13 +291,10 @@ public class CardsViewingActivity extends SherlockActivity
 	}
 
 	private void processReceivedDeck() {
-		try {
-			deck = (Deck) IntentProcessor.getMessage(this);
-		}
-		catch (IntentCorruptedException e) {
-			UserAlerter.alert(this, R.string.error_unspecified);
+		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
-			finish();
+		if (deck == null) {
+			throw new IntentException();
 		}
 	}
 

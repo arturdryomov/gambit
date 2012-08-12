@@ -31,12 +31,6 @@ import ru.ming13.gambit.ui.activity.DeckRenamingActivity;
 
 public final class IntentFactory
 {
-	public static final String MESSAGE_ID;
-
-	static {
-		MESSAGE_ID = String.format("%s.message", IntentFactory.class.getPackage().getName());
-	}
-
 	private IntentFactory() {
 	}
 
@@ -46,35 +40,35 @@ public final class IntentFactory
 
 	public static Intent createDeckEditingIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, DeckRenamingActivity.class);
-		intent.putExtra(MESSAGE_ID, deck);
+		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
 	}
 
 	public static Intent createCardsEditingIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, CardsListActivity.class);
-		intent.putExtra(MESSAGE_ID, deck);
+		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
 	}
 
 	public static Intent createCardCreationIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, CardCreationActivity.class);
-		intent.putExtra(MESSAGE_ID, deck);
+		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
 	}
 
 	public static Intent createCardEditingIntent(Context context, Card card) {
 		Intent intent = new Intent(context, CardEditingActivity.class);
-		intent.putExtra(MESSAGE_ID, card);
+		intent.putExtra(IntentExtras.CARD, card);
 
 		return intent;
 	}
 
 	public static Intent createCardsViewingIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, CardsViewingActivity.class);
-		intent.putExtra(MESSAGE_ID, deck);
+		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
 	}

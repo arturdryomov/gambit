@@ -24,9 +24,8 @@ import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.AlreadyExistsException;
 import ru.ming13.gambit.local.Deck;
-import ru.ming13.gambit.ui.intent.IntentCorruptedException;
-import ru.ming13.gambit.ui.intent.IntentProcessor;
-import ru.ming13.gambit.ui.util.UserAlerter;
+import ru.ming13.gambit.ui.intent.IntentException;
+import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
 public class DeckRenamingActivity extends DeckCreationActivity
@@ -72,18 +71,15 @@ public class DeckRenamingActivity extends DeckCreationActivity
 	}
 
 	private void processReceivedDeck() {
-		try {
-			deck = (Deck) IntentProcessor.getMessage(this);
-		}
-		catch (IntentCorruptedException e) {
-			UserAlerter.alert(this, R.string.error_unspecified);
+		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
-			finish();
+		if (deck == null) {
+			throw new IntentException();
 		}
 	}
 
 	private void setUpReceivedDeckData() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
+		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_title);
 
 		deckNameEdit.setText(deck.getTitle());
 	}

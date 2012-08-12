@@ -23,9 +23,8 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Deck;
-import ru.ming13.gambit.ui.intent.IntentCorruptedException;
-import ru.ming13.gambit.ui.intent.IntentProcessor;
-import ru.ming13.gambit.ui.util.UserAlerter;
+import ru.ming13.gambit.ui.intent.IntentException;
+import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
 public class CardCreationActivity extends FormActivity
@@ -106,13 +105,10 @@ public class CardCreationActivity extends FormActivity
 	}
 
 	protected void processReceivedData() {
-		try {
-			deck = (Deck) IntentProcessor.getMessage(this);
-		}
-		catch (IntentCorruptedException e) {
-			UserAlerter.alert(this, R.string.error_unspecified);
+		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
-			finish();
+		if (deck == null) {
+			throw new IntentException();
 		}
 	}
 }

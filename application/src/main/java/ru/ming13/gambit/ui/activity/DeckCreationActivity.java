@@ -35,13 +35,13 @@ public class DeckCreationActivity extends FormActivity
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_deck_creation);
+		setContentView(R.layout.fragment_deck_operation);
 		super.onCreate(savedInstanceState);
 	}
 
 	@Override
 	protected void readUserDataFromFields() {
-		deckName = getTextFromEdit(R.id.edit_deck_name);
+		deckName = getTextFromEdit(R.id.edit_deck_title);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class DeckCreationActivity extends FormActivity
 	}
 
 	protected void setDeckNameErrorMessage(String errorMessage) {
-		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_name);
+		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_title);
 
 		deckNameEdit.setError(errorMessage);
 	}
