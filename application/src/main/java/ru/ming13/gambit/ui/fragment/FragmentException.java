@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.intent;
+package ru.ming13.gambit.ui.fragment;
 
 
-public class IntentCorruptedException extends RuntimeException
+public class FragmentException extends RuntimeException
 {
 }

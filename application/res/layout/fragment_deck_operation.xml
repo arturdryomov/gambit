@@ -22,7 +22,7 @@
 		style="@style/FormLayout">
 
 		<EditText
-			android:id="@+id/edit_deck_name"
+			android:id="@+id/edit_deck_title"
 			android:singleLine="true"
 			android:inputType="text"
 			android:hint="@string/hint_deck_name"

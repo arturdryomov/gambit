@@ -18,90 +18,36 @@ package ru.ming13.gambit.ui.activity;
 
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.EditText;
-import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.AlreadyExistsException;
-import ru.ming13.gambit.local.DbProvider;
+import android.support.v4.app.Fragment;
 import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.ui.fragment.DeckOperationFragment;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
-public class DeckCreationActivity extends FormActivity
+public class DeckCreationActivity extends FragmentWrapperActivity implements DeckOperationFragment.FormCallback
 {
-	protected String deckName;
-
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.fragment_deck_operation);
-		super.onCreate(savedInstanceState);
+	protected Fragment buildFragment() {
+		return DeckOperationFragment.newCreationInstance();
 	}
 
 	@Override
-	protected void readUserDataFromFields() {
-		deckName = getTextFromEdit(R.id.edit_deck_title);
+	public <Data> void onAccept(Data data) {
+		Deck deck = (Deck) data;
+
+		callCardsActivity(deck);
+
+		finish();
+	}
+
+	private void callCardsActivity(Deck deck) {
+		Intent intent = IntentFactory.createCardsEditingIntent(this, deck);
+
+		startActivity(intent);
 	}
 
 	@Override
-	protected boolean isUserDataCorrect() {
-		return !isDeckNameEmpty();
-	}
-
-	private boolean isDeckNameEmpty() {
-		return TextUtils.isEmpty(deckName);
-	}
-
-	@Override
-	protected void setUpErrorMessages() {
-		if (isDeckNameEmpty()) {
-			setDeckNameErrorMessage(getString(R.string.error_empty_field));
-		}
-	}
-
-	protected void setDeckNameErrorMessage(String errorMessage) {
-		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_title);
-
-		deckNameEdit.setError(errorMessage);
-	}
-
-	@Override
-	protected void performSubmitAction() {
-		new CreateDeckTask().execute();
-	}
-
-	private class CreateDeckTask extends AsyncTask<Void, Void, String>
-	{
-		private Deck deck;
-
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deck = DbProvider.getInstance().getDecks().createDeck(deckName);
-			}
-			catch (AlreadyExistsException e) {
-				return getString(R.string.error_deck_already_exists);
-			}
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (TextUtils.isEmpty(errorMessage)) {
-				callCardsEditing(deck);
-
-				finish();
-			}
-			else {
-				setDeckNameErrorMessage(errorMessage);
-			}
-		}
-	}
-
-	private void callCardsEditing(Deck deck) {
-		Intent callIntent = IntentFactory.createCardsEditingIntent(this, deck);
-		startActivity(callIntent);
+	public void onCancel() {
+		finish();
 	}
 }

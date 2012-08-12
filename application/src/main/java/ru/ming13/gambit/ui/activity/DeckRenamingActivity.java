@@ -17,70 +17,37 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.EditText;
-import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.AlreadyExistsException;
+import android.support.v4.app.Fragment;
 import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.ui.fragment.DeckOperationFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
-public class DeckRenamingActivity extends DeckCreationActivity
+public class DeckRenamingActivity extends FragmentWrapperActivity implements DeckOperationFragment.FormCallback
 {
-	private Deck deck;
-
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		processReceivedDeck();
-		setUpReceivedDeckData();
+	protected Fragment buildFragment() {
+		return DeckOperationFragment.newRenamingInstance(extractReceivedDeck());
 	}
 
-	@Override
-	protected void performSubmitAction() {
-		new UpdateDeckTask().execute();
-	}
-
-	private class UpdateDeckTask extends AsyncTask<Void, Void, String>
-	{
-		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				deck.setTitle(deckName);
-			}
-			catch (AlreadyExistsException e) {
-				return getString(R.string.error_deck_already_exists);
-			}
-
-			return new String();
-		}
-
-		@Override
-		protected void onPostExecute(String errorMessage) {
-			if (TextUtils.isEmpty(errorMessage)) {
-				finish();
-			}
-			else {
-				setDeckNameErrorMessage(errorMessage);
-			}
-		}
-	}
-
-	private void processReceivedDeck() {
-		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Deck extractReceivedDeck() {
+		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
 		if (deck == null) {
 			throw new IntentException();
 		}
+
+		return deck;
 	}
 
-	private void setUpReceivedDeckData() {
-		EditText deckNameEdit = (EditText) findViewById(R.id.edit_deck_title);
+	@Override
+	public <Data> void onAccept(Data data) {
+		finish();
+	}
 
-		deckNameEdit.setText(deck.getTitle());
+	@Override
+	public void onCancel() {
+		finish();
 	}
 }
