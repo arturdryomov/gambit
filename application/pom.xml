@@ -26,7 +26,7 @@
 	<parent>
 		<artifactId>gambit-parent</artifactId>
 		<version>0.0.1</version>
-		<groupId>app.android</groupId>
+		<groupId>ru.ming13.gambit</groupId>
 	</parent>
 
 	<repositories>
