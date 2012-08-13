@@ -17,61 +17,37 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.widget.EditText;
-import ru.ming13.gambit.R;
+import android.support.v4.app.Fragment;
 import ru.ming13.gambit.local.Card;
+import ru.ming13.gambit.ui.fragment.CardOperationFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
-public class CardEditingActivity extends CardCreationActivity
+public class CardEditingActivity extends FragmentWrapperActivity implements CardOperationFragment.FormCallback
 {
-	private Card card;
-
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		setUpReceivedCardData();
+	protected Fragment buildFragment() {
+		return CardOperationFragment.newModificationInstance(extractReceivedCard());
 	}
 
-	@Override
-	protected void performSubmitAction() {
-		new UpdateCardTask().execute();
-	}
-
-	private class UpdateCardTask extends AsyncTask<Void, Void, Void>
-	{
-		@Override
-		protected Void doInBackground(Void... params) {
-			card.setFrontSideText(frontSideText);
-			card.setBackSideText(backSideText);
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			finish();
-		}
-	}
-
-	@Override
-	protected void processReceivedData() {
-		card = getIntent().getParcelableExtra(IntentExtras.CARD);
+	private Card extractReceivedCard() {
+		Card card = getIntent().getParcelableExtra(IntentExtras.CARD);
 
 		if (card == null) {
 			throw new IntentException();
 		}
+
+		return card;
 	}
 
-	private void setUpReceivedCardData() {
-		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side_text);
-		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side_text);
+	@Override
+	public <Data> void onAccept(Data data) {
+		finish();
+	}
 
-		frontSideTextEdit.setText(card.getFrontSideText());
-		backSideTextEdit.setText(card.getBackSideText());
+	@Override
+	public void onCancel() {
+		finish();
 	}
 }

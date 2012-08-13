@@ -17,98 +17,37 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.widget.EditText;
-import ru.ming13.gambit.R;
+import android.support.v4.app.Fragment;
 import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.ui.fragment.CardOperationFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
-public class CardCreationActivity extends FormActivity
+public class CardCreationActivity extends FragmentWrapperActivity implements CardOperationFragment.FormCallback
 {
-	private Deck deck;
-
-	protected String frontSideText;
-	protected String backSideText;
-
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_card_creation);
-		super.onCreate(savedInstanceState);
-
-		processReceivedData();
+	protected Fragment buildFragment() {
+		return CardOperationFragment.newCreationInstance(extractReceivedDeck());
 	}
 
-	@Override
-	protected void readUserDataFromFields() {
-		frontSideText = getTextFromEdit(R.id.edit_front_side_text);
-		backSideText = getTextFromEdit(R.id.edit_back_side_text);
-	}
-
-	@Override
-	protected boolean isUserDataCorrect() {
-		return !isFrontSideTextEmpty() && !isBackSideTextEmpty();
-	}
-
-	private boolean isFrontSideTextEmpty() {
-		return TextUtils.isEmpty(frontSideText);
-	}
-
-	private boolean isBackSideTextEmpty() {
-		return TextUtils.isEmpty(backSideText);
-	}
-
-	@Override
-	protected void setUpErrorMessages() {
-		if (isFrontSideTextEmpty()) {
-			setFrontSideTextErrorMessage(getString(R.string.error_empty_field));
-		}
-
-		if (isBackSideTextEmpty()) {
-			setBackSideTextErrorMessage(getString(R.string.error_empty_field));
-		}
-	}
-
-	private void setFrontSideTextErrorMessage(String errorMessage) {
-		EditText frontSideTextEdit = (EditText) findViewById(R.id.edit_front_side_text);
-
-		frontSideTextEdit.setError(errorMessage);
-	}
-
-	private void setBackSideTextErrorMessage(String errorMessage) {
-		EditText backSideTextEdit = (EditText) findViewById(R.id.edit_back_side_text);
-
-		backSideTextEdit.setError(errorMessage);
-	}
-
-	@Override
-	protected void performSubmitAction() {
-		new CreateCardTask().execute();
-	}
-
-	private class CreateCardTask extends AsyncTask<Void, Void, Void>
-	{
-		@Override
-		protected Void doInBackground(Void... params) {
-			deck.createCard(frontSideText, backSideText);
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			finish();
-		}
-	}
-
-	protected void processReceivedData() {
-		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Deck extractReceivedDeck() {
+		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
 		if (deck == null) {
 			throw new IntentException();
 		}
+
+		return deck;
+	}
+
+	@Override
+	public <Data> void onAccept(Data data) {
+		finish();
+	}
+
+	@Override
+	public void onCancel() {
+		finish();
 	}
 }
