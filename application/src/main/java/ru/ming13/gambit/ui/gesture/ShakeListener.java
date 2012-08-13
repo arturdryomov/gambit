@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.util;
+package ru.ming13.gambit.ui.gesture;
 
 
 import android.hardware.Sensor;

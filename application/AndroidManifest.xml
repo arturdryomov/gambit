@@ -72,8 +72,7 @@
 
 		<activity
 			android:name=".ui.activity.CardsViewingActivity"
-			android:label="@string/title_cards"
-			android:configChanges="keyboardHidden|orientation">
+			android:label="@string/title_cards">
 		</activity>
 	</application>
 

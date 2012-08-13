@@ -97,7 +97,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 		public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
 			cardsFragment.setEmptyListText(R.string.loading_cards);
 
-			return CardsLoader.newInstance(cardsFragment.getActivity(), cardsFragment.deck);
+			return CardsLoader.newCurrentOrderInstance(cardsFragment.getActivity(), cardsFragment.deck);
 		}
 
 		@Override

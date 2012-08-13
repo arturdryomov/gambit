@@ -29,16 +29,32 @@ import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
 public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 {
-	private final Deck deck;
-
-	public static CardsLoader newInstance(Context context, Deck deck) {
-		return new CardsLoader(context, deck);
+	private static enum Order {
+		CURRENT, SHUFFLE, ORIGINAL
 	}
 
-	private CardsLoader(Context context, Deck deck) {
+	private final Order order;
+
+	private final Deck deck;
+
+	public static CardsLoader newCurrentOrderInstance(Context context, Deck deck) {
+		return new CardsLoader(context, deck, Order.CURRENT);
+	}
+
+	private CardsLoader(Context context, Deck deck, Order order) {
 		super(context);
 
 		this.deck = deck;
+
+		this.order = order;
+	}
+
+	public static CardsLoader newShuffleOrderInstance(Context context, Deck deck) {
+		return new CardsLoader(context, deck, Order.SHUFFLE);
+	}
+
+	public static CardsLoader newOriginalOrderInstance(Context context, Deck deck) {
+		return new CardsLoader(context, deck, Order.ORIGINAL);
 	}
 
 	@Override
@@ -50,6 +66,19 @@ public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 
 	@Override
 	public LoaderResult<List<Card>> loadInBackground() {
+		switch (order) {
+			case CURRENT:
+				break;
+
+			case SHUFFLE:
+				deck.shuffleCards();
+				break;
+
+			case ORIGINAL:
+				deck.resetCardsOrder();
+				break;
+		}
+
 		List<Card> cards = deck.getCardsList();
 
 		return buildSuccessResult(cards);

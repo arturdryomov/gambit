@@ -17,352 +17,228 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.ui.gesture.ShakeListener;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
-import ru.ming13.gambit.ui.util.ShakeListener;
+import ru.ming13.gambit.ui.loader.CardsLoader;
+import ru.ming13.gambit.ui.loader.DeckOperationLoader;
+import ru.ming13.gambit.ui.loader.Loaders;
+import ru.ming13.gambit.ui.loader.result.LoaderResult;
+import ru.ming13.gambit.ui.pager.CardsPagerAdapter;
 
 
-public class CardsViewingActivity extends SherlockActivity
+public class CardsViewingActivity extends SherlockFragmentActivity implements ShakeListener.OnShakeListener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
 {
-	private final List<HashMap<String, Object>> cardsData;
-
-	private static final String CARDS_DATA_BACK_SIDE_TEXT_ID = "back_side";
-	private static final String CARDS_DATA_FRONT_SIDE_TEXT_ID = "front_side";
-	private static final String CARDS_DATA_CURRENT_SIDE_ID = "current_side";
-
-	private static enum CardSide
-	{
-		FRONT, BACK
-	}
-
 	private static enum CardsOrder
 	{
-		DEFAULT, STRAIGHT, SHUFFLE
+		CURRENT, SHUFFLE, ORIGINAL
 	}
 
 	private Deck deck;
 
+	private CardsOrder cardsOrder = CardsOrder.CURRENT;
+
 	private SensorManager sensorManager;
 	private Sensor accelerometer;
-	private ShakeListener sensorListener;
-	private boolean isLoadingInProgress;
-
-	public CardsViewingActivity() {
-		super();
-
-		cardsData = new ArrayList<HashMap<String, Object>>();
-
-		isLoadingInProgress = false;
-	}
+	private ShakeListener shakeListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_cards_viewing);
+		setContentView(R.layout.activity_pager);
 
-		initializeSensor();
+		deck = extractReceivedDeck();
 
-		processReceivedDeck();
+		setUpShakeListener();
 
-		loadCards(CardsOrder.DEFAULT);
+		populatePager();
 	}
 
-	private void initializeSensor() {
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sensorListener = new ShakeListener();
-
-		sensorListener.setOnShakeListener(new ShakeListener.OnShakeListener()
-		{
-			@Override
-			public void onShake() {
-				if (!isLoadingInProgress) {
-					loadCards(CardsOrder.SHUFFLE);
-				}
-			}
-		});
-	}
-
-	private void loadCards(CardsOrder cardsOrder) {
-		new LoadCardsTask(cardsOrder).execute();
-	}
-
-	private class LoadCardsTask extends AsyncTask<Void, Void, Void>
-	{
-		private final CardsOrder cardsOrder;
-
-		public LoadCardsTask(CardsOrder cardsOrder) {
-			this.cardsOrder = cardsOrder;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			if (isLoadingInProgress) {
-				cancel(true);
-			}
-			else {
-				isLoadingInProgress = true;
-			}
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			switch (cardsOrder) {
-				case SHUFFLE:
-					deck.shuffleCards();
-					break;
-
-				case STRAIGHT:
-					deck.resetCardsOrder();
-					break;
-
-				case DEFAULT:
-					break;
-
-				default:
-					break;
-			}
-
-			fillCardsList(deck.getCardsList());
-
-			return null;
-		}
-
-		private void fillCardsList(List<Card> cards) {
-			cardsData.clear();
-
-			for (Card card : cards) {
-				addCardToCardsList(card);
-			}
-		}
-
-		private void addCardToCardsList(Card card) {
-			HashMap<String, Object> cardItem = new HashMap<String, Object>();
-
-			cardItem.put(CARDS_DATA_FRONT_SIDE_TEXT_ID, card.getFrontSideText());
-			cardItem.put(CARDS_DATA_BACK_SIDE_TEXT_ID, card.getBackSideText());
-			cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, CardSide.FRONT);
-
-			cardsData.add(cardItem);
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			initializeCardsAdapter();
-
-			if (cardsOrder == CardsOrder.DEFAULT) {
-				restoreCurrentCardPosition();
-			}
-
-			isLoadingInProgress = false;
-		}
-
-		private void initializeCardsAdapter() {
-			CardsAdapter cardsAdapter = new CardsAdapter();
-			ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
-
-			cardsPager.setAdapter(cardsAdapter);
-		}
-
-		private void restoreCurrentCardPosition() {
-			setCurrentCardPosition(deck.getCurrentCardIndex());
-		}
-	}
-
-	private class CardsAdapter extends PagerAdapter
-	{
-		private static final int CARD_TEXT_SIZE = 30;
-
-		@Override
-		public int getCount() {
-			return cardsData.size();
-		}
-
-		@Override
-		public Object instantiateItem(ViewGroup container, final int position) {
-			TextView cardTextView = new TextView(CardsViewingActivity.this);
-
-			cardTextView.setText(getCardText(position));
-			cardTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-			cardTextView.setTextSize(CARD_TEXT_SIZE);
-
-			cardTextView.setOnClickListener(new OnClickListener()
-			{
-				@Override
-				public void onClick(View view) {
-					TextView cardView = (TextView) view;
-
-					invertCardSide(position);
-					cardView.setText(getCardText(position));
-				}
-			});
-
-			container.addView(cardTextView, 0);
-
-			return cardTextView;
-		}
-
-		private void invertCardSide(int position) {
-			HashMap<String, Object> cardItem = cardsData.get(position);
-
-			CardSide cardSide = (CardSide) cardItem.get(CARDS_DATA_CURRENT_SIDE_ID);
-			CardSide invertedCardSide;
-
-			switch (cardSide) {
-				case FRONT:
-					invertedCardSide = CardSide.BACK;
-					break;
-
-				case BACK:
-					invertedCardSide = CardSide.FRONT;
-					break;
-
-				default:
-					invertedCardSide = CardSide.FRONT;
-					break;
-			}
-
-			setCardSide(invertedCardSide, position);
-		}
-
-		private void setCardSide(CardSide cardSide, int position) {
-			HashMap<String, Object> cardItem = cardsData.get(position);
-
-			cardItem.put(CARDS_DATA_CURRENT_SIDE_ID, cardSide);
-		}
-
-		private String getCardText(int position) {
-			HashMap<String, Object> cardItem = cardsData.get(position);
-
-			CardSide cardSide = (CardSide) cardItem.get(CARDS_DATA_CURRENT_SIDE_ID);
-
-			switch (cardSide) {
-				case FRONT:
-					return (String) cardItem.get(CARDS_DATA_FRONT_SIDE_TEXT_ID);
-
-				case BACK:
-					return (String) cardItem.get(CARDS_DATA_BACK_SIDE_TEXT_ID);
-
-				default:
-					return new String();
-			}
-		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView((View) object);
-
-			setDefaultCardSide(position);
-		}
-
-		private void setDefaultCardSide(int position) {
-			setCardSide(CardSide.FRONT, position);
-		}
-
-		@Override
-		public boolean isViewFromObject(View view, Object object) {
-			return view == object;
-		}
-	}
-
-	private void setCurrentCardPosition(int position) {
-		ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
-
-		cardsPager.setCurrentItem(position);
-	}
-
-	private void processReceivedDeck() {
-		deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Deck extractReceivedDeck() {
+		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
 
 		if (deck == null) {
 			throw new IntentException();
 		}
+
+		return deck;
+	}
+
+	private void setUpShakeListener() {
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		shakeListener = new ShakeListener();
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+	public void onShake() {
+		shuffleCards();
+	}
+
+	private void shuffleCards() {
+		cardsOrder = CardsOrder.SHUFFLE;
+
+		populatePager();
+	}
+
+	private void populatePager() {
+		getSupportLoaderManager().restartLoader(Loaders.CARDS, null, this);
+	}
+
+	@Override
+	public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		switch (cardsOrder) {
+			case CURRENT:
+				return CardsLoader.newCurrentOrderInstance(this, deck);
+
+			case SHUFFLE:
+				return CardsLoader.newShuffleOrderInstance(this, deck);
+
+			case ORIGINAL:
+				return CardsLoader.newOriginalOrderInstance(this, deck);
+
+			default:
+				return CardsLoader.newCurrentOrderInstance(this, deck);
+		}
+	}
+
+	@Override
+	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
+		List<Card> cards = cardsLoaderResult.getData();
+
+		setUpCardsPagerAdapter(cards);
+		setUpCurrentCardIndex();
+	}
+
+	private void setUpCardsPagerAdapter(List<Card> cards) {
+		ViewPager cardsPager = getCardsPager();
+		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(), cards);
+
+		cardsPager.setAdapter(cardsPagerAdapter);
+
+		cardsPager.getAdapter().notifyDataSetChanged();
+	}
+
+	private void setUpCurrentCardIndex() {
+		if (cardsOrder == CardsOrder.CURRENT) {
+			int currentCardIndex = deck.getCurrentCardIndex();
+
+			getCardsPager().setCurrentItem(currentCardIndex);
+		}
+	}
+
+	private ViewPager getCardsPager() {
+		return (ViewPager) findViewById(R.id.pager);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_viewing, menu);
 
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-		switch (item.getItemId()) {
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case R.id.menu_back:
+				setCurrentCardToFirst();
+				return true;
+
 			case R.id.menu_shuffle:
-				loadCards(CardsOrder.SHUFFLE);
+				shuffleCards();
 				return true;
 
 			case R.id.menu_reset:
-				loadCards(CardsOrder.STRAIGHT);
-				return true;
-
-			case R.id.menu_back:
-				goToFirstCard();
-
+				resetCardsOrder();
 				return true;
 
 			default:
-				return super.onOptionsItemSelected(item);
+				return super.onOptionsItemSelected(menuItem);
 		}
 	}
 
-	private void goToFirstCard() {
-		setCurrentCardPosition(0);
+	private void setCurrentCardToFirst() {
+		ViewPager cardsPager = getCardsPager();
+
+		cardsPager.setCurrentItem(0);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+	private void resetCardsOrder() {
+		cardsOrder = CardsOrder.ORIGINAL;
 
-		sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+		populatePager();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		storeCurrentCardPosition();
+		saveCurrentCardIndex();
 
-		sensorManager.unregisterListener(sensorListener);
+		sensorManager.unregisterListener(shakeListener);
 	}
 
-	private void storeCurrentCardPosition() {
-		new StoreCardsPositionTask().execute();
+	private void saveCurrentCardIndex() {
+		int currentCardIndex = getCardsPager().getCurrentItem();
+		CurrentCardIndexChangingLoaderCallback currentCardIndexChangingLoaderCallback = new CurrentCardIndexChangingLoaderCallback(
+			this, deck, currentCardIndex);
+
+		getSupportLoaderManager().restartLoader(Loaders.DECK_OPERATION, null,
+			currentCardIndexChangingLoaderCallback);
 	}
 
-	private class StoreCardsPositionTask extends AsyncTask<Void, Void, Void>
+	private static class CurrentCardIndexChangingLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Deck>>
 	{
+		private Context context;
+
+		private Deck deck;
+		private int currentCardIndex;
+
+		public CurrentCardIndexChangingLoaderCallback(Context context, Deck deck, int currentCardIndex) {
+			this.context = context;
+
+			this.deck = deck;
+			this.currentCardIndex = currentCardIndex;
+		}
+
 		@Override
-		protected Void doInBackground(Void... params) {
-			deck.setCurrentCardIndex(getCurrentCardPosition());
-
-			return null;
+		public Loader<LoaderResult<Deck>> onCreateLoader(int loaderId, Bundle loaderArguments) {
+			return DeckOperationLoader.newCurrentCardIndexChangingLoader(context, deck, currentCardIndex);
 		}
 
-		private int getCurrentCardPosition() {
-			ViewPager cardsPager = (ViewPager) findViewById(R.id.pager_cards);
-
-			return cardsPager.getCurrentItem();
+		@Override
+		public void onLoadFinished(Loader<LoaderResult<Deck>> deckOperationLoader, LoaderResult<Deck> deckOperationLoaderResult) {
 		}
+
+		@Override
+		public void onLoaderReset(Loader<LoaderResult<Deck>> deckOperationLoader) {
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		sensorManager.registerListener(shakeListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
 	}
 }
