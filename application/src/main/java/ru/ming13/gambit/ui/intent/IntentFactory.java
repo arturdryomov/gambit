@@ -22,7 +22,7 @@ import android.content.Intent;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
-import ru.ming13.gambit.ui.activity.CardEditingActivity;
+import ru.ming13.gambit.ui.activity.CardModificationActivity;
 import ru.ming13.gambit.ui.activity.CardsListActivity;
 import ru.ming13.gambit.ui.activity.CardsViewingActivity;
 import ru.ming13.gambit.ui.activity.DeckCreationActivity;
@@ -38,14 +38,14 @@ public final class IntentFactory
 		return new Intent(context, DeckCreationActivity.class);
 	}
 
-	public static Intent createDeckEditingIntent(Context context, Deck deck) {
+	public static Intent createDeckRenamingIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, DeckRenamingActivity.class);
 		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
 	}
 
-	public static Intent createCardsEditingIntent(Context context, Deck deck) {
+	public static Intent createCardsListIntent(Context context, Deck deck) {
 		Intent intent = new Intent(context, CardsListActivity.class);
 		intent.putExtra(IntentExtras.DECK, deck);
 
@@ -59,8 +59,8 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardEditingIntent(Context context, Card card) {
-		Intent intent = new Intent(context, CardEditingActivity.class);
+	public static Intent createCardModificationIntent(Context context, Card card) {
+		Intent intent = new Intent(context, CardModificationActivity.class);
 		intent.putExtra(IntentExtras.CARD, card);
 
 		return intent;

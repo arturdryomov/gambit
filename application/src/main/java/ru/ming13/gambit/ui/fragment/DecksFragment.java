@@ -150,13 +150,13 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 	}
 
 	private void callDeckRenaming(Deck deck) {
-		Intent intent = IntentFactory.createDeckEditingIntent(getActivity(), deck);
+		Intent intent = IntentFactory.createDeckRenamingIntent(getActivity(), deck);
 
 		startActivity(intent);
 	}
 
 	private void callCardsEditing(Deck deck) {
-		Intent intent = IntentFactory.createCardsEditingIntent(getActivity(), deck);
+		Intent intent = IntentFactory.createCardsListIntent(getActivity(), deck);
 
 		startActivity(intent);
 	}

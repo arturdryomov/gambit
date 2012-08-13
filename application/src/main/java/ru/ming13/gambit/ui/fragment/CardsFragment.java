@@ -156,7 +156,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 	private void callCardModification(int cardListPosition) {
 		Card card = getListItemObject(cardListPosition);
 
-		Intent intent = IntentFactory.createCardEditingIntent(getActivity(), card);
+		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), card);
 
 		startActivity(intent);
 	}

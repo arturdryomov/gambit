@@ -61,7 +61,7 @@
 		</activity>
 
 		<activity
-			android:name=".ui.activity.CardEditingActivity"
+			android:name=".ui.activity.CardModificationActivity"
 			android:label="@string/title_edit_card">
 		</activity>
 

@@ -41,7 +41,7 @@ public class DeckCreationActivity extends FragmentWrapperActivity implements Dec
 	}
 
 	private void callCardsActivity(Deck deck) {
-		Intent intent = IntentFactory.createCardsEditingIntent(this, deck);
+		Intent intent = IntentFactory.createCardsListIntent(this, deck);
 
 		startActivity(intent);
 	}
