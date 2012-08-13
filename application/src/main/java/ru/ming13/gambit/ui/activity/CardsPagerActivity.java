@@ -83,6 +83,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		shakeListener = new ShakeListener();
+
+		shakeListener.setOnShakeListener(this);
 	}
 
 	@Override
