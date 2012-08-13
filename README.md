@@ -4,6 +4,8 @@ This repository contains the source code for the Gambit Android app.
 
 Gambit is a really simple flashcard viewer for Android.
 
+![Screenshot](http://img4.imageshack.us/img4/856/shotua.png)
+
 ## Features
 
 * Simple UI — no pasarán things that you’ll never use.
