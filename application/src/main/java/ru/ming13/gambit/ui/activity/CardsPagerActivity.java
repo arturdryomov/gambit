@@ -42,7 +42,7 @@ import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.pager.CardsPagerAdapter;
 
 
-public class CardsViewingActivity extends SherlockFragmentActivity implements ShakeListener.OnShakeListener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
+public class CardsPagerActivity extends SherlockFragmentActivity implements ShakeListener.OnShakeListener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
 {
 	private static enum CardsOrder
 	{

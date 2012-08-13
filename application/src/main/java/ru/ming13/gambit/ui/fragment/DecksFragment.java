@@ -156,7 +156,7 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 	}
 
 	private void callCardsEditing(Deck deck) {
-		Intent intent = IntentFactory.createCardsListIntent(getActivity(), deck);
+		Intent intent = IntentFactory.createCardsIntent(getActivity(), deck);
 
 		startActivity(intent);
 	}
@@ -216,7 +216,7 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 	}
 
 	private void callCardsViewing(Deck deck) {
-		Intent intent = IntentFactory.createCardsViewingIntent(getActivity(), deck);
+		Intent intent = IntentFactory.createCardsPagerIntent(getActivity(), deck);
 
 		startActivity(intent);
 	}

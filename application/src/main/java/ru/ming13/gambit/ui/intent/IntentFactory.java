@@ -23,8 +23,8 @@ import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
 import ru.ming13.gambit.ui.activity.CardModificationActivity;
-import ru.ming13.gambit.ui.activity.CardsListActivity;
-import ru.ming13.gambit.ui.activity.CardsViewingActivity;
+import ru.ming13.gambit.ui.activity.CardsActivity;
+import ru.ming13.gambit.ui.activity.CardsPagerActivity;
 import ru.ming13.gambit.ui.activity.DeckCreationActivity;
 import ru.ming13.gambit.ui.activity.DeckRenamingActivity;
 
@@ -45,8 +45,8 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardsListIntent(Context context, Deck deck) {
-		Intent intent = new Intent(context, CardsListActivity.class);
+	public static Intent createCardsIntent(Context context, Deck deck) {
+		Intent intent = new Intent(context, CardsActivity.class);
 		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
@@ -66,8 +66,8 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardsViewingIntent(Context context, Deck deck) {
-		Intent intent = new Intent(context, CardsViewingActivity.class);
+	public static Intent createCardsPagerIntent(Context context, Deck deck) {
+		Intent intent = new Intent(context, CardsPagerActivity.class);
 		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
