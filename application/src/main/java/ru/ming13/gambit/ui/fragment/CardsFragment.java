@@ -53,9 +53,24 @@ public class CardsFragment extends AdaptedListFragment<Card>
 	public static CardsFragment newInstance(Deck deck) {
 		CardsFragment cardsFragment = new CardsFragment();
 
-		cardsFragment.deck = deck;
+		cardsFragment.setArguments(buildArguments(deck));
 
 		return cardsFragment;
+	}
+
+	private static Bundle buildArguments(Deck deck) {
+		Bundle bundle = new Bundle();
+
+		bundle.putParcelable(FragmentArguments.DECK, deck);
+
+		return bundle;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		deck = getArguments().getParcelable(FragmentArguments.DECK);
 	}
 
 	@Override

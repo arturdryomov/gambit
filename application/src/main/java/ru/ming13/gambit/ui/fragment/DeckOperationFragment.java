@@ -46,7 +46,7 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 	public static DeckOperationFragment newCreationInstance() {
 		DeckOperationFragment deckOperationFragment = new DeckOperationFragment();
 
-		deckOperationFragment.operation = Operation.CREATE;
+		deckOperationFragment.setArguments(buildArguments(Operation.CREATE));
 
 		return deckOperationFragment;
 	}
@@ -54,10 +54,34 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 	public static DeckOperationFragment newRenamingInstance(Deck deck) {
 		DeckOperationFragment deckOperationFragment = new DeckOperationFragment();
 
-		deckOperationFragment.operation = Operation.RENAME;
-		deckOperationFragment.deck = deck;
+		deckOperationFragment.setArguments(buildArguments(Operation.RENAME, deck));
 
 		return deckOperationFragment;
+	}
+
+	private static Bundle buildArguments(Operation operation) {
+		Bundle bundle = new Bundle();
+
+		bundle.putSerializable(FragmentArguments.OPERATION, operation);
+
+		return bundle;
+	}
+
+	private static Bundle buildArguments(Operation operation, Deck deck) {
+		Bundle bundle = new Bundle();
+
+		bundle.putParcelable(FragmentArguments.DECK, deck);
+		bundle.putSerializable(FragmentArguments.OPERATION, operation);
+
+		return bundle;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		operation = (Operation) getArguments().getSerializable(FragmentArguments.OPERATION);
+		deck = getArguments().getParcelable(FragmentArguments.DECK);
 	}
 
 	@Override

@@ -49,8 +49,7 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 	public static CardOperationFragment newCreationInstance(Deck deck) {
 		CardOperationFragment cardOperationFragment = new CardOperationFragment();
 
-		cardOperationFragment.operation = Operation.CREATE;
-		cardOperationFragment.deck = deck;
+		cardOperationFragment.setArguments(buildArguments(Operation.CREATE, deck));
 
 		return cardOperationFragment;
 	}
@@ -58,10 +57,36 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 	public static CardOperationFragment newModificationInstance(Card card) {
 		CardOperationFragment cardOperationFragment = new CardOperationFragment();
 
-		cardOperationFragment.operation = Operation.MODIFY;
-		cardOperationFragment.card = card;
+		cardOperationFragment.setArguments(buildArguments(Operation.MODIFY, card));
 
 		return cardOperationFragment;
+	}
+
+	private static Bundle buildArguments(Operation operation, Deck deck) {
+		Bundle arguments = new Bundle();
+
+		arguments.putSerializable(FragmentArguments.OPERATION, operation);
+		arguments.putParcelable(FragmentArguments.DECK, deck);
+
+		return arguments;
+	}
+
+	private static Bundle buildArguments(Operation operation, Card card) {
+		Bundle arguments = new Bundle();
+
+		arguments.putSerializable(FragmentArguments.OPERATION, operation);
+		arguments.putParcelable(FragmentArguments.CARD, card);
+
+		return arguments;
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		operation = (Operation) getArguments().getSerializable(FragmentArguments.OPERATION);
+		deck = getArguments().getParcelable(FragmentArguments.DECK);
+		card = getArguments().getParcelable(FragmentArguments.CARD);
 	}
 
 	@Override

@@ -17,10 +17,13 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-final class Arguments
+final class FragmentArguments
 {
-	private Arguments() {
+	private FragmentArguments() {
 	}
 
+	public static final String DECK = "deck";
 	public static final String CARD = "card";
+
+	public static final String OPERATION = "operation";
 }

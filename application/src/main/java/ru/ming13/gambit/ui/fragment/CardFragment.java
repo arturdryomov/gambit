@@ -48,7 +48,7 @@ public class CardFragment extends SherlockFragment
 	private static Bundle buildArguments(Card card) {
 		Bundle arguments = new Bundle();
 
-		arguments.putParcelable(Arguments.CARD, card);
+		arguments.putParcelable(FragmentArguments.CARD, card);
 
 		return arguments;
 	}
@@ -57,7 +57,7 @@ public class CardFragment extends SherlockFragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		card = getArguments().getParcelable(Arguments.CARD);
+		card = getArguments().getParcelable(FragmentArguments.CARD);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class CardFragment extends SherlockFragment
 	@Override
 	public void onStart() {
 		super.onStart();
-		;
+
 		setUpCardClickListener();
 
 		setCurrentCardText();
