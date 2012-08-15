@@ -211,10 +211,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	private static class CurrentCardIndexChangingLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Deck>>
 	{
-		private Context context;
+		private final Context context;
 
-		private Deck deck;
-		private int currentCardIndex;
+		private final Deck deck;
+		private final int currentCardIndex;
 
 		public CurrentCardIndexChangingLoaderCallback(Context context, Deck deck, int currentCardIndex) {
 			this.context = context;
