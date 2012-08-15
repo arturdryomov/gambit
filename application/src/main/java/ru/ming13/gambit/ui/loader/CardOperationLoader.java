@@ -39,7 +39,7 @@ public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
 	private String frontSideText;
 	private String backSideText;
 
-	public static CardOperationLoader newCreationLoader(Context context, Deck deck, String frontSideText, String backSideText) {
+	public static CardOperationLoader newCreationInstance(Context context, Deck deck, String frontSideText, String backSideText) {
 		CardOperationLoader cardOperationLoader = new CardOperationLoader(context, Operation.CREATE);
 
 		cardOperationLoader.deck = deck;
@@ -55,7 +55,7 @@ public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
 		this.operation = operation;
 	}
 
-	public static CardOperationLoader newModificationLoader(Context context, Card card, String frontSideText, String backSideText) {
+	public static CardOperationLoader newModificationInstance(Context context, Card card, String frontSideText, String backSideText) {
 		CardOperationLoader cardOperationLoader = new CardOperationLoader(context, Operation.MODIFY);
 
 		cardOperationLoader.card = card;
@@ -65,7 +65,7 @@ public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
 		return cardOperationLoader;
 	}
 
-	public static CardOperationLoader newDeletionLoader(Context context, Deck deck, Card card) {
+	public static CardOperationLoader newDeletionInstance(Context context, Deck deck, Card card) {
 		CardOperationLoader cardOperationLoader = new CardOperationLoader(context, Operation.DELETE);
 
 		cardOperationLoader.deck = deck;

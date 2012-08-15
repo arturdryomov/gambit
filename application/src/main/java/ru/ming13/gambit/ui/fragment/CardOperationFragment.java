@@ -147,11 +147,11 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 	public Loader<LoaderResult<Card>> onCreateLoader(int loaderId, Bundle loaderArguments) {
 		switch (operation) {
 			case CREATE:
-				return CardOperationLoader.newCreationLoader(getActivity(), deck, frontSideText,
+				return CardOperationLoader.newCreationInstance(getActivity(), deck, frontSideText,
 					backSideText);
 
 			case MODIFY:
-				return CardOperationLoader.newModificationLoader(getActivity(), card, frontSideText,
+				return CardOperationLoader.newModificationInstance(getActivity(), card, frontSideText,
 					backSideText);
 
 			default:

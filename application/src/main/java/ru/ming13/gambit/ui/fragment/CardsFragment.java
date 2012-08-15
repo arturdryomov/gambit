@@ -215,7 +215,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 
 		@Override
 		public Loader<LoaderResult<Card>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-			return CardOperationLoader.newDeletionLoader(context, deck, card);
+			return CardOperationLoader.newDeletionInstance(context, deck, card);
 		}
 
 		@Override

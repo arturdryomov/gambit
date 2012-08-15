@@ -66,6 +66,14 @@ public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 
 	@Override
 	public LoaderResult<List<Card>> loadInBackground() {
+		applyOrderToCards();
+
+		List<Card> cards = deck.getCardsList();
+
+		return buildSuccessResult(cards);
+	}
+
+	private void applyOrderToCards() {
 		switch (order) {
 			case CURRENT:
 				break;
@@ -78,10 +86,6 @@ public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 				deck.resetCardsOrder();
 				break;
 		}
-
-		List<Card> cards = deck.getCardsList();
-
-		return buildSuccessResult(cards);
 	}
 
 	private LoaderResult<List<Card>> buildSuccessResult(List<Card> cards) {
