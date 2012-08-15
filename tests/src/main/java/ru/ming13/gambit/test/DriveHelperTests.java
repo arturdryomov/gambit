@@ -78,10 +78,10 @@ public class DriveHelperTests extends InstrumentationTestCase
 
 		if (authToken == null) {
 			Account account = AccountSelector.select(hostActivity);
-			GoogleDriveAuthorizer googleDriveAuthorizer = new GoogleDriveAuthorizer(hostActivity);
-			authToken = googleDriveAuthorizer.getToken(account);
-			googleDriveAuthorizer.invalidateToken(authToken);
-			authToken = googleDriveAuthorizer.getToken(account);
+
+			authToken = GoogleDriveAuthorizer.getToken(hostActivity, account);
+			GoogleDriveAuthorizer.invalidateToken(hostActivity, authToken);
+			authToken = GoogleDriveAuthorizer.getToken(hostActivity, account);
 		}
 	}
 

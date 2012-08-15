@@ -40,15 +40,19 @@ public class GoogleDriveAuthorizer
 
 	private final Activity activity;
 
-	public GoogleDriveAuthorizer(Activity activity) {
-		this.activity = activity;
-	}
-
 	/**
 	 * @throws AuthorizationCanceledException if user cancelled authorization.
 	 * @throws AuthorizationFailedException if an error occurred during authorization.
 	 */
-	public String getToken(Account account) {
+	public static String getToken(Activity activity, Account account) {
+		return new GoogleDriveAuthorizer(activity).getToken(account);
+	}
+
+	private GoogleDriveAuthorizer(Activity activity) {
+		this.activity = activity;
+	}
+
+	private String getToken(Account account) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 		Bundle authResponse;
 
@@ -73,7 +77,11 @@ public class GoogleDriveAuthorizer
 		return authResponse.getString(AccountManager.KEY_AUTHTOKEN);
 	}
 
-	public void invalidateToken(String authToken) {
+	public static void invalidateToken(Activity activity, String authToken) {
+		new GoogleDriveAuthorizer(activity).invalidateToken(authToken);
+	}
+
+	private void invalidateToken(String authToken) {
 		AccountManager accountManager = AccountManager.get(activity.getApplicationContext());
 
 		accountManager.invalidateAuthToken(ACCOUNT_TYPE, authToken);

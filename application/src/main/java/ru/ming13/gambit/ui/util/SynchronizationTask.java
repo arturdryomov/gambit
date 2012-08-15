@@ -114,15 +114,11 @@ public class SynchronizationTask extends AsyncTask<Void, Void, String>
 	}
 
 	private void getAuthToken(Account account) {
-		GoogleDriveAuthorizer googleDriveAuthorizer = new GoogleDriveAuthorizer(activity);
-
-		driveAuthToken = googleDriveAuthorizer.getToken(account);
+		driveAuthToken = GoogleDriveAuthorizer.getToken(activity, account);
 	}
 
 	private void invalidateAuthToken(Account account) {
-		GoogleDriveAuthorizer googleDriveAuthorizer = new GoogleDriveAuthorizer(activity);
-
-		googleDriveAuthorizer.invalidateToken(driveAuthToken);
+		GoogleDriveAuthorizer.invalidateToken(activity, driveAuthToken);
 
 		getAuthToken(account);
 	}
