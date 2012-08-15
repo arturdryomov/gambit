@@ -29,7 +29,8 @@ import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
 public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 {
-	private static enum Order {
+	private static enum Order
+	{
 		CURRENT, SHUFFLE, ORIGINAL
 	}
 

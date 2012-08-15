@@ -24,7 +24,8 @@ import android.preference.PreferenceManager;
 
 public final class Preferences
 {
-	public static final class Keys {
+	public static final class Keys
+	{
 		private Keys() {
 		}
 

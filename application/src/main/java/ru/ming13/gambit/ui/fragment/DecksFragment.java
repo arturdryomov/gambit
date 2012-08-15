@@ -230,7 +230,7 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_create_item:
-					callDeckCreation();
+				callDeckCreation();
 				return true;
 
 			default:
