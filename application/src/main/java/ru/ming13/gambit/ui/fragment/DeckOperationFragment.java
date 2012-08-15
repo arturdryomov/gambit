@@ -51,14 +51,6 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 		return deckOperationFragment;
 	}
 
-	public static DeckOperationFragment newRenamingInstance(Deck deck) {
-		DeckOperationFragment deckOperationFragment = new DeckOperationFragment();
-
-		deckOperationFragment.setArguments(buildArguments(Operation.RENAME, deck));
-
-		return deckOperationFragment;
-	}
-
 	private static Bundle buildArguments(Operation operation) {
 		Bundle bundle = new Bundle();
 
@@ -67,11 +59,19 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 		return bundle;
 	}
 
+	public static DeckOperationFragment newRenamingInstance(Deck deck) {
+		DeckOperationFragment deckOperationFragment = new DeckOperationFragment();
+
+		deckOperationFragment.setArguments(buildArguments(Operation.RENAME, deck));
+
+		return deckOperationFragment;
+	}
+
 	private static Bundle buildArguments(Operation operation, Deck deck) {
 		Bundle bundle = new Bundle();
 
-		bundle.putParcelable(FragmentArguments.DECK, deck);
 		bundle.putSerializable(FragmentArguments.OPERATION, operation);
+		bundle.putParcelable(FragmentArguments.DECK, deck);
 
 		return bundle;
 	}
@@ -119,12 +119,8 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 	@Override
 	protected void setUpErrorMessages() {
 		if (isDeckNameEmpty()) {
-			setDeckTitleErrorMessage(getString(R.string.error_empty_field));
+			setErrorToEdit(R.id.edit_deck_title, R.string.error_empty_field);
 		}
-	}
-
-	private void setDeckTitleErrorMessage(String errorMessage) {
-		setErrorToEdit(R.id.edit_deck_title, errorMessage);
 	}
 
 	@Override
@@ -150,7 +146,7 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 	public void onLoadFinished(Loader<LoaderResult<Deck>> deckOperationLoader, LoaderResult<Deck> deckOperationLoaderResult) {
 		switch (deckOperationLoaderResult.getStatus()) {
 			case ERROR:
-				setDeckTitleErrorMessage(deckOperationLoaderResult.getErrorMessage());
+				setErrorToEdit(R.id.edit_deck_title, deckOperationLoaderResult.getErrorMessage());
 				return;
 
 			case SUCCESS:

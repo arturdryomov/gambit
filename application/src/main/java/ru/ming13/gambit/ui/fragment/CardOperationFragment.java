@@ -54,14 +54,6 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 		return cardOperationFragment;
 	}
 
-	public static CardOperationFragment newModificationInstance(Card card) {
-		CardOperationFragment cardOperationFragment = new CardOperationFragment();
-
-		cardOperationFragment.setArguments(buildArguments(Operation.MODIFY, card));
-
-		return cardOperationFragment;
-	}
-
 	private static Bundle buildArguments(Operation operation, Deck deck) {
 		Bundle arguments = new Bundle();
 
@@ -69,6 +61,14 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 		arguments.putParcelable(FragmentArguments.DECK, deck);
 
 		return arguments;
+	}
+
+	public static CardOperationFragment newModificationInstance(Card card) {
+		CardOperationFragment cardOperationFragment = new CardOperationFragment();
+
+		cardOperationFragment.setArguments(buildArguments(Operation.MODIFY, card));
+
+		return cardOperationFragment;
 	}
 
 	private static Bundle buildArguments(Operation operation, Card card) {
@@ -130,20 +130,12 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 	@Override
 	protected void setUpErrorMessages() {
 		if (isFrontSideTextEmpty()) {
-			setFrontSideTextErrorMessage(getString(R.string.error_empty_field));
+			setErrorToEdit(R.id.edit_front_side_text, R.string.error_empty_field);
 		}
 
 		if (isBackSideTextEmpty()) {
-			setBackSideTextErrorMessage(getString(R.string.error_empty_field));
+			setErrorToEdit(R.id.edit_back_side_text, R.string.error_empty_field);
 		}
-	}
-
-	private void setFrontSideTextErrorMessage(String errorMessage) {
-		setErrorToEdit(R.id.edit_front_side_text, errorMessage);
-	}
-
-	private void setBackSideTextErrorMessage(String errorMessage) {
-		setErrorToEdit(R.id.edit_back_side_text, errorMessage);
 	}
 
 	@Override

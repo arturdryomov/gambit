@@ -138,6 +138,10 @@ abstract class FormFragment extends SherlockFragment
 		getEdit(editTextId).setText(text);
 	}
 
+	protected void setErrorToEdit(int editTextId, int errorMessageResourceId) {
+		getEdit(editTextId).setError(getString(errorMessageResourceId));
+	}
+
 	protected void setErrorToEdit(int editTextId, String errorMessage) {
 		getEdit(editTextId).setError(errorMessage);
 	}

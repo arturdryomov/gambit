@@ -17,6 +17,6 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-public class FragmentException extends RuntimeException
+class FragmentException extends RuntimeException
 {
 }
