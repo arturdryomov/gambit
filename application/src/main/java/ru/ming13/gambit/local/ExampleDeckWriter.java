@@ -83,7 +83,7 @@ public class ExampleDeckWriter
 	}
 
 	public boolean shouldWriteDeck() {
-		if (Preferences.getBoolean(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED)) {
+		if (Preferences.getBoolean(context, Preferences.Keys.EXAMPLE_DECK_CREATED)) {
 			return false;
 		}
 
@@ -95,7 +95,7 @@ public class ExampleDeckWriter
 
 		try {
 			tryWriteDeck();
-			Preferences.set(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED, true);
+			Preferences.set(context, Preferences.Keys.EXAMPLE_DECK_CREATED, true);
 
 			decks.setTransactionSuccessful();
 		}

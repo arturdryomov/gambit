@@ -24,9 +24,14 @@ import android.preference.PreferenceManager;
 
 public final class Preferences
 {
-	public static final String PREFERENCE_SYNC_GOOGLE_ACCOUNT_NAME = "sync_google_account_name";
-	public static final String PREFERENCE_SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
-	public static final String PREFERENCE_EXAMPLE_DECK_CREATED = "example_deck_created";
+	public static final class Keys {
+		private Keys() {
+		}
+
+		public static final String SYNC_GOOGLE_ACCOUNT_NAME = "sync_google_account_name";
+		public static final String SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
+		public static final String EXAMPLE_DECK_CREATED = "example_deck_created";
+	}
 
 	private Preferences() {
 	}

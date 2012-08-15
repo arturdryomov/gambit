@@ -166,11 +166,11 @@ public class SynchronizationTask extends AsyncTask<Void, Void, String>
 	}
 
 	private String loadSyncSpreadsheetKeyFromPreferences() {
-		return Preferences.getString(activity, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY);
+		return Preferences.getString(activity, Preferences.Keys.SYNC_SPREADSHEET_KEY);
 	}
 
 	private void saveSyncSpreadsheetKeyToPreferences(String syncSpreadsheetKey) {
-		Preferences.set(activity, Preferences.PREFERENCE_SYNC_SPREADSHEET_KEY, syncSpreadsheetKey);
+		Preferences.set(activity, Preferences.Keys.SYNC_SPREADSHEET_KEY, syncSpreadsheetKey);
 	}
 
 	@Override
