@@ -40,7 +40,7 @@ public class SynchronizationTask extends AsyncTask<Void, Void, Void>
 		SUCCESS, FAIL, WRONG_AUTHENTICATION
 	}
 
-	private final SynchronizationCallback synchronizationCallback;
+	private SynchronizationCallback synchronizationCallback;
 
 	private final String authToken;
 	private final String apiKey;
@@ -60,6 +60,10 @@ public class SynchronizationTask extends AsyncTask<Void, Void, Void>
 		this.apiKey = apiKey;
 
 		spreadsheetKey = new String();
+	}
+
+	public void setSynchronizationCallback(SynchronizationCallback synchronizationCallback) {
+		this.synchronizationCallback = synchronizationCallback;
 	}
 
 	public void setSpreadsheetKey(String spreadsheetKey) {

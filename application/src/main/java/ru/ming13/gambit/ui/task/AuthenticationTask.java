@@ -51,9 +51,9 @@ public class AuthenticationTask extends AsyncTask<Void, Void, String>
 		SUCCESS, CANCEL, FAIL
 	}
 
-	private final Activity activity;
+	private Activity activity;
 
-	private final AuthenticationCallback authenticationCallback;
+	private AuthenticationCallback authenticationCallback;
 
 	private final Mode mode;
 
@@ -73,6 +73,14 @@ public class AuthenticationTask extends AsyncTask<Void, Void, String>
 
 	public static AuthenticationTask newInvalidationInstance(Activity activity, AuthenticationCallback authenticationCallback) {
 		return new AuthenticationTask(activity, authenticationCallback, Mode.WITH_INVALIDATION);
+	}
+
+	public void setActivity(Activity activity) {
+		this.activity = activity;
+	}
+
+	public void setAuthenticationCallback(AuthenticationCallback authenticationCallback) {
+		this.authenticationCallback = authenticationCallback;
 	}
 
 	@Override
