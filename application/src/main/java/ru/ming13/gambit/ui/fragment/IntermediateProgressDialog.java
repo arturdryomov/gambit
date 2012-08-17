@@ -27,7 +27,7 @@ public class IntermediateProgressDialog extends SherlockDialogFragment
 {
 	public static final String TAG = "progress_dialog";
 
-	private static boolean CANCELABLE = false;
+	private static final boolean CANCELABLE = false;
 
 	public static IntermediateProgressDialog newInstance(String message) {
 		IntermediateProgressDialog progressDialog = new IntermediateProgressDialog();
