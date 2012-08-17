@@ -103,7 +103,7 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 	}
 
 	private void callSynchronization(String authToken) {
-		synchronizationTask = SynchronizationTask.newInstance(this, authToken, getApiKey());
+		synchronizationTask = SynchronizationTask.newInstance(this, this, authToken, getApiKey());
 		synchronizationTask.execute();
 	}
 
@@ -187,6 +187,7 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 		SynchronizationTask synchronizationTask = (SynchronizationTask) lastInstance.get(
 			LastInstanceKeys.SYNCHRONIZATION_TASK);
 
+		synchronizationTask.setContext(this);
 		synchronizationTask.setSynchronizationCallback(this);
 	}
 }

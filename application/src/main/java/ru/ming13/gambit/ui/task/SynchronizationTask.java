@@ -17,14 +17,17 @@
 package ru.ming13.gambit.ui.task;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import ru.ming13.gambit.remote.NothingToSyncException;
 import ru.ming13.gambit.remote.SyncException;
 import ru.ming13.gambit.remote.Synchronizer;
 import ru.ming13.gambit.remote.UnauthorizedException;
+import ru.ming13.gambit.ui.util.Preferences;
 
 
-public class SynchronizationTask extends AsyncTask<Void, Void, Void>
+public class SynchronizationTask extends AsyncTask<Void, Void, String>
 {
 	public interface SynchronizationCallback
 	{
@@ -40,42 +43,44 @@ public class SynchronizationTask extends AsyncTask<Void, Void, Void>
 		SUCCESS, FAIL, WRONG_AUTHENTICATION
 	}
 
+	private Context context;
+
 	private SynchronizationCallback synchronizationCallback;
 
 	private final String authToken;
 	private final String apiKey;
 
-	private String spreadsheetKey;
-
 	private Result result;
 
-	public static SynchronizationTask newInstance(SynchronizationCallback synchronizationCallback, String authToken, String apiKey) {
-		return new SynchronizationTask(synchronizationCallback, authToken, apiKey);
+	public static SynchronizationTask newInstance(Context context, SynchronizationCallback synchronizationCallback, String authToken, String apiKey) {
+		return new SynchronizationTask(context, synchronizationCallback, authToken, apiKey);
 	}
 
-	private SynchronizationTask(SynchronizationCallback synchronizationCallback, String authToken, String apiKey) {
+	private SynchronizationTask(Context context, SynchronizationCallback synchronizationCallback, String authToken, String apiKey) {
+		this.context = context;
+
 		this.synchronizationCallback = synchronizationCallback;
 
 		this.authToken = authToken;
 		this.apiKey = apiKey;
+	}
 
-		spreadsheetKey = new String();
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	public void setSynchronizationCallback(SynchronizationCallback synchronizationCallback) {
 		this.synchronizationCallback = synchronizationCallback;
 	}
 
-	public void setSpreadsheetKey(String spreadsheetKey) {
-		this.spreadsheetKey = spreadsheetKey;
-	}
-
 	@Override
-	protected Void doInBackground(Void... parameters) {
+	protected String doInBackground(Void... parameters) {
 		try {
-			synchronize();
+			String spreadsheetKey = synchronize();
 
 			result = Result.SUCCESS;
+
+			return spreadsheetKey;
 		}
 		catch (NothingToSyncException e) {
 			result = Result.SUCCESS;
@@ -87,26 +92,36 @@ public class SynchronizationTask extends AsyncTask<Void, Void, Void>
 			result = Result.FAIL;
 		}
 
-		return null;
+		return new String();
 	}
 
-	private void synchronize() {
+	private String synchronize() {
 		Synchronizer synchronizer = new Synchronizer(authToken, apiKey);
 
-		if (spreadsheetKey.isEmpty()) {
-			synchronizer.sync();
+		if (haveSpreadsheetKey()) {
+			return synchronizer.sync(loadSpreadsheetKey());
 		}
 		else {
-			synchronizer.sync(spreadsheetKey);
+			return synchronizer.sync();
 		}
+	}
+
+	private boolean haveSpreadsheetKey() {
+		return !TextUtils.isEmpty(loadSpreadsheetKey());
+	}
+
+	private String loadSpreadsheetKey() {
+		return Preferences.getString(context, Preferences.Keys.SYNC_SPREADSHEET_KEY);
 	}
 
 	@Override
-	protected void onPostExecute(Void resultMessage) {
-		super.onPostExecute(resultMessage);
+	protected void onPostExecute(String spreadsheetKey) {
+		super.onPostExecute(spreadsheetKey);
 
 		switch (result) {
 			case SUCCESS:
+				saveSpreadsheetKey(spreadsheetKey);
+
 				synchronizationCallback.onSuccessSynchronization();
 				break;
 
@@ -122,5 +137,9 @@ public class SynchronizationTask extends AsyncTask<Void, Void, Void>
 				synchronizationCallback.onFailedSynchronization();
 				break;
 		}
+	}
+
+	private void saveSpreadsheetKey(String spreadsheetKey) {
+		Preferences.set(context, Preferences.Keys.SYNC_SPREADSHEET_KEY, spreadsheetKey);
 	}
 }
