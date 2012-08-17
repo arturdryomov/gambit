@@ -119,7 +119,7 @@ public class AuthenticationTask extends AsyncTask<Void, Void, String>
 	}
 
 	private String pickAuthToken(Account account) {
-		String authToken = new String();
+		String authToken;
 
 		switch (mode) {
 			case WITHOUT_INVALIDATION:
