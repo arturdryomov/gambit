@@ -131,6 +131,9 @@ public class AuthenticationTask extends AsyncTask<Void, Void, String>
 				GoogleDriveAuthorizer.invalidateToken(activity, authToken);
 				authToken = GoogleDriveAuthorizer.getToken(activity, account);
 				break;
+
+			default:
+				throw new AuthorizationFailedException();
 		}
 
 		return authToken;
