@@ -28,8 +28,12 @@ import android.text.TextUtils;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.format.CellFormat;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
+import jxl.write.WritableCell;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -173,8 +177,30 @@ public class RemoteDecksConverter
 
 	private void insertHeader(WritableSheet sheet) {
 		try {
-			sheet.addCell(new Label(FRONT_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX, HEADER_FRONT_SIDE));
-			sheet.addCell(new Label(BACK_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX, HEADER_BACK_SIDE));
+			WritableCell frontSideColumnHeader = new Label(FRONT_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX,
+				HEADER_FRONT_SIDE);
+			frontSideColumnHeader.setCellFormat(buildBoldCellFormat());
+			sheet.addCell(frontSideColumnHeader);
+
+			WritableCell backSideColumnHeader = new Label(BACK_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX,
+				HEADER_BACK_SIDE);
+			backSideColumnHeader.setCellFormat(buildBoldCellFormat());
+			sheet.addCell(backSideColumnHeader);
+		}
+		catch (WriteException e) {
+			throw new ConvertingException();
+		}
+	}
+
+	private CellFormat buildBoldCellFormat() {
+		try {
+			WritableCellFormat cellFormat = new WritableCellFormat();
+			WritableFont font = new WritableFont(cellFormat.getFont());
+
+			font.setBoldStyle(WritableFont.BOLD);
+			cellFormat.setFont(font);
+
+			return cellFormat;
 		}
 		catch (WriteException e) {
 			throw new ConvertingException();
