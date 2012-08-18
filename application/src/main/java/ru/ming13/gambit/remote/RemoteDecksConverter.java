@@ -55,10 +55,10 @@ public class RemoteDecksConverter
 	private static final int MINIMAL_ROWS_COUNT = 1;
 
 	public List<RemoteDeck> fromXlsData(InputStream xlsData) {
-		return constructRemoteDecks(getWorkbook(xlsData));
+		return buildRemoteDecks(buildWorkbook(xlsData));
 	}
 
-	private Workbook getWorkbook(InputStream xlsData) {
+	private Workbook buildWorkbook(InputStream xlsData) {
 		try {
 			return Workbook.getWorkbook(xlsData);
 		}
@@ -70,7 +70,7 @@ public class RemoteDecksConverter
 		}
 	}
 
-	private List<RemoteDeck> constructRemoteDecks(Workbook workbook) {
+	private List<RemoteDeck> buildRemoteDecks(Workbook workbook) {
 		List<RemoteDeck> remoteDecks = new ArrayList<RemoteDeck>();
 
 		if (workbook.getNumberOfSheets() == 0) {
@@ -78,44 +78,40 @@ public class RemoteDecksConverter
 		}
 
 		for (Sheet sheet : workbook.getSheets()) {
-			remoteDecks.add(constructRemoteDeck(sheet));
+			remoteDecks.add(buildRemoteDeck(sheet));
 		}
 
 		return remoteDecks;
 	}
 
-	private RemoteDeck constructRemoteDeck(Sheet sheet) {
+	private RemoteDeck buildRemoteDeck(Sheet sheet) {
 		RemoteDeck remoteDeck = new RemoteDeck();
 
 		remoteDeck.setTitle(sheet.getName());
-		remoteDeck.setCards(constructRemoteCards(sheet));
+		remoteDeck.setCards(buildRemoteCards(sheet));
 
 		return remoteDeck;
 	}
 
-	private List<RemoteCard> constructRemoteCards(Sheet sheet) {
+	private List<RemoteCard> buildRemoteCards(Sheet sheet) {
 		List<RemoteCard> remoteCards = new ArrayList<RemoteCard>();
 
-		if (sheet.getColumns() < MINIMAL_COLUMNS_COUNT) {
-			return remoteCards;
-		}
-
-		if (sheet.getRows() < MINIMAL_ROWS_COUNT) {
+		if( (sheet.getColumns() < MINIMAL_COLUMNS_COUNT) || (sheet.getRows() < MINIMAL_ROWS_COUNT)) {
 			return remoteCards;
 		}
 
 		for (int rowIndex = CARDS_FIRST_ROW_INDEX; rowIndex < sheet.getRows(); rowIndex++) {
 			Cell[] row = sheet.getRow(rowIndex);
 
-			if (!isCardDataEmpty(row)) {
-				remoteCards.add(constructRemoteCard(row));
+			if (!isRowEmpty(row)) {
+				remoteCards.add(buildRemoteCard(row));
 			}
 		}
 
 		return remoteCards;
 	}
 
-	private boolean isCardDataEmpty(Cell[] row) {
+	private boolean isRowEmpty(Cell[] row) {
 		if (row == null) {
 			return true;
 		}
@@ -130,7 +126,7 @@ public class RemoteDecksConverter
 		return TextUtils.isEmpty(frontSideText) && TextUtils.isEmpty(backSideText);
 	}
 
-	private RemoteCard constructRemoteCard(Cell[] row) {
+	private RemoteCard buildRemoteCard(Cell[] row) {
 		RemoteCard remoteCard = new RemoteCard();
 
 		remoteCard.setFrontSideText(row[FRONT_SIDE_COLUMN_INDEX].getContents());
