@@ -26,6 +26,7 @@ import java.util.List;
 
 import android.text.TextUtils;
 import jxl.Cell;
+import jxl.CellView;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.format.CellFormat;
@@ -167,7 +168,19 @@ public class RemoteDecksConverter
 
 			WritableSheet sheet = workbook.createSheet(remoteDeck.getTitle(), deckIndex);
 			fillSheet(sheet, remoteDeck);
+			expandCardColumns(sheet);
 		}
+	}
+
+	private void expandCardColumns(WritableSheet sheet) {
+		expandColumn(sheet, FRONT_SIDE_COLUMN_INDEX);
+		expandColumn(sheet, BACK_SIDE_COLUMN_INDEX);
+	}
+
+	private void expandColumn(WritableSheet sheet, int columnIndex) {
+		CellView columnView = sheet.getColumnView(columnIndex);
+		columnView.setAutosize(true);
+		sheet.setColumnView(columnIndex, columnView);
 	}
 
 	private void fillSheet(WritableSheet sheet, RemoteDeck remoteDeck) {
