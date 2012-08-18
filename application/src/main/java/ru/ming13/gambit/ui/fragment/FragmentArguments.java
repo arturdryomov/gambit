@@ -26,5 +26,6 @@ final class FragmentArguments
 	public static final String CARD = "card";
 
 	public static final String OPERATION = "operation";
+	public static final String MESSAGE = "message";
 	public static final String TEXT = "text";
 }
