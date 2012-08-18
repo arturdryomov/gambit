@@ -40,10 +40,16 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 
 		public static final String AUTHENTICATION_TASK = "authentication_task";
 		public static final String SYNCHRONIZATION_TASK = "syncrhonization_task";
+
+		public static final String SYNCHRONIZATION_DIALOG_HIDING_ON_RESUME_REQUIRED = "sync_dialog_hiding";
 	}
 
 	private AuthenticationTask authenticationTask;
 	private SynchronizationTask synchronizationTask;
+
+	private boolean isPaused;
+
+	private boolean isSynchronizationDialogHidingOnResumeRequested;
 
 	@Override
 	protected Fragment buildFragment() {
@@ -82,12 +88,28 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 	}
 
 	private void hideSynchronizationProgressDialog() {
+		if (isPaused()) {
+			setSynchronizationDialogHidingOnResumeRequested(true);
+
+			return;
+		}
+
 		IntermediateProgressDialog progressDialog = (IntermediateProgressDialog) getSupportFragmentManager().findFragmentByTag(
 			IntermediateProgressDialog.TAG);
 
 		if (progressDialog != null) {
 			progressDialog.dismiss();
+
+			setSynchronizationDialogHidingOnResumeRequested(false);
 		}
+	}
+
+	private boolean isPaused() {
+		return isPaused;
+	}
+
+	private void setSynchronizationDialogHidingOnResumeRequested(boolean isRequested) {
+		isSynchronizationDialogHidingOnResumeRequested = isRequested;
 	}
 
 	@Override
@@ -151,6 +173,9 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 		instance.put(LastInstanceKeys.AUTHENTICATION_TASK, authenticationTask);
 		instance.put(LastInstanceKeys.SYNCHRONIZATION_TASK, synchronizationTask);
 
+		instance.put(LastInstanceKeys.SYNCHRONIZATION_DIALOG_HIDING_ON_RESUME_REQUIRED,
+			isSynchronizationDialogHidingOnResumeRequested());
+
 		return instance;
 	}
 
@@ -158,14 +183,17 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		updateRunningTasks();
+		if (isLastInstanceValid()) {
+			updateRunningTasks();
+			updateSynchronizationDialogHidingOnResumeRequired();
+		}
+	}
+
+	private boolean isLastInstanceValid() {
+		return getLastCustomNonConfigurationInstance() != null;
 	}
 
 	private void updateRunningTasks() {
-		if (!isLastInstanceValid()) {
-			return;
-		}
-
 		if (isTaskValid(LastInstanceKeys.AUTHENTICATION_TASK)) {
 			updateRunningAuthenticationTask();
 		}
@@ -175,12 +203,8 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 		}
 	}
 
-	private boolean isLastInstanceValid() {
-		return getLastCustomNonConfigurationInstance() != null;
-	}
-
 	private boolean isTaskValid(String lastInstanceKey) {
-		Map<String, Object> lastInstance = (Map<String, Object>) getLastCustomNonConfigurationInstance();
+		Map<String, Object> lastInstance = getLastInstance();
 
 		if (!lastInstance.containsKey(lastInstanceKey)) {
 			return false;
@@ -189,8 +213,12 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 		return lastInstance.get(lastInstanceKey) != null;
 	}
 
+	private Map<String, Object> getLastInstance() {
+		return (Map<String, Object>) getLastCustomNonConfigurationInstance();
+	}
+
 	private void updateRunningAuthenticationTask() {
-		Map<String, Object> lastInstance = (Map<String, Object>) getLastCustomNonConfigurationInstance();
+		Map<String, Object> lastInstance = getLastInstance();
 		AuthenticationTask authenticationTask = (AuthenticationTask) lastInstance.get(
 			LastInstanceKeys.AUTHENTICATION_TASK);
 
@@ -199,11 +227,44 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 	}
 
 	private void updateRunningSynchronizationTask() {
-		Map<String, Object> lastInstance = (Map<String, Object>) getLastCustomNonConfigurationInstance();
+		Map<String, Object> lastInstance = getLastInstance();
 		SynchronizationTask synchronizationTask = (SynchronizationTask) lastInstance.get(
 			LastInstanceKeys.SYNCHRONIZATION_TASK);
 
 		synchronizationTask.setContext(this);
 		synchronizationTask.setSynchronizationCallback(this);
+	}
+
+	private void updateSynchronizationDialogHidingOnResumeRequired() {
+		Map<String, Object> lastInstance = getLastInstance();
+
+		setSynchronizationDialogHidingOnResumeRequested((Boolean) lastInstance.get(
+			LastInstanceKeys.SYNCHRONIZATION_DIALOG_HIDING_ON_RESUME_REQUIRED));
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		setPaused(true);
+	}
+
+	private void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		setPaused(false);
+
+		if (isSynchronizationDialogHidingOnResumeRequested()) {
+			hideSynchronizationProgressDialog();
+		}
+	}
+
+	private boolean isSynchronizationDialogHidingOnResumeRequested() {
+		return isSynchronizationDialogHidingOnResumeRequested;
 	}
 }
