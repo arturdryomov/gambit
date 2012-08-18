@@ -219,7 +219,7 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 
 	private void updateRunningAuthenticationTask() {
 		Map<String, Object> lastInstance = getLastInstance();
-		AuthenticationTask authenticationTask = (AuthenticationTask) lastInstance.get(
+		authenticationTask = (AuthenticationTask) lastInstance.get(
 			LastInstanceKeys.AUTHENTICATION_TASK);
 
 		authenticationTask.setActivity(this);
@@ -228,7 +228,7 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 
 	private void updateRunningSynchronizationTask() {
 		Map<String, Object> lastInstance = getLastInstance();
-		SynchronizationTask synchronizationTask = (SynchronizationTask) lastInstance.get(
+		synchronizationTask = (SynchronizationTask) lastInstance.get(
 			LastInstanceKeys.SYNCHRONIZATION_TASK);
 
 		synchronizationTask.setContext(this);
