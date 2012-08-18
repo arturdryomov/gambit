@@ -23,12 +23,15 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import com.actionbarsherlock.view.Menu;
@@ -140,20 +143,65 @@ public class CardsFragment extends AdaptedListFragment<Card>
 	}
 
 	private void setUpContextMenu() {
-		registerForContextMenu(getListView());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			getListView().setOnItemLongClickListener(actionModeListener);
+		}
+		else {
+			registerForContextMenu(getListView());
+		}
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
+	private final AdapterView.OnItemLongClickListener actionModeListener = new AdapterView.OnItemLongClickListener()
+	{
+		@Override
+		public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+			getListView().startActionMode(new ActionModeCallback(CardsFragment.this, position));
 
-		getActivity().getMenuInflater().inflate(R.menu.menu_context_cards, contextMenu);
+			return true;
+		}
+	};
+
+	private static class ActionModeCallback implements ActionMode.Callback
+	{
+		private final CardsFragment cardsFragment;
+
+		private final int cardListPosition;
+
+		public ActionModeCallback(CardsFragment cardsFragment, int cardListPosition) {
+			this.cardsFragment = cardsFragment;
+
+			this.cardListPosition = cardListPosition;
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode actionMode, android.view.Menu menu) {
+			actionMode.getMenuInflater().inflate(R.menu.menu_context_cards, menu);
+
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode actionMode, android.view.Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+			if (cardsFragment.handleContextMenu(menuItem, cardListPosition)) {
+				actionMode.finish();
+
+				return true;
+			}
+
+			return false;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode actionMode) {
+		}
 	}
 
-	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		int cardListPosition = getListPosition(menuItem);
-
+	private boolean handleContextMenu(MenuItem menuItem, int cardListPosition) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
 				callCardModification(cardListPosition);
@@ -225,6 +273,20 @@ public class CardsFragment extends AdaptedListFragment<Card>
 		@Override
 		public void onLoaderReset(Loader<LoaderResult<Card>> cardOperationLoader) {
 		}
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
+
+		getActivity().getMenuInflater().inflate(R.menu.menu_context_cards, contextMenu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem) {
+		int cardListPosition = getListPosition(menuItem);
+
+		return handleContextMenu(menuItem, cardListPosition);
 	}
 
 	@Override
