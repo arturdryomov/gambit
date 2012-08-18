@@ -17,6 +17,7 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -49,7 +50,16 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		CURRENT, SHUFFLE, ORIGINAL
 	}
 
+	private static final class SavedInstanceKeys
+	{
+		private SavedInstanceKeys() {
+		}
+
+		public static final String CARDS = "cards";
+	}
+
 	private Deck deck;
+	private List<Card> cards;
 
 	private CardsOrder cardsOrder = CardsOrder.CURRENT;
 
@@ -66,7 +76,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 		setUpShakeListener();
 
-		populatePager();
+		populatePager(savedInstanceState);
 	}
 
 	private Deck extractReceivedDeck() {
@@ -121,19 +131,23 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	@Override
 	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-		List<Card> cards = cardsLoaderResult.getData();
+		cards = cardsLoaderResult.getData();
 
-		setUpCardsPagerAdapter(cards);
+		setUpCardsPagerAdapter();
 		setUpCurrentCardIndex();
 	}
 
-	private void setUpCardsPagerAdapter(List<Card> cards) {
+	private void setUpCardsPagerAdapter() {
 		ViewPager cardsPager = getCardsPager();
 		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(), cards);
 
 		cardsPager.setAdapter(cardsPagerAdapter);
 
 		cardsPager.getAdapter().notifyDataSetChanged();
+	}
+
+	private ViewPager getCardsPager() {
+		return (ViewPager) findViewById(R.id.pager);
 	}
 
 	private void setUpCurrentCardIndex() {
@@ -144,12 +158,34 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		}
 	}
 
-	private ViewPager getCardsPager() {
-		return (ViewPager) findViewById(R.id.pager);
+	@Override
+	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
+	}
+
+	private void populatePager(Bundle savedInstanceState) {
+		if (!isSavedInstanceStateValid(savedInstanceState)) {
+			populatePager();
+		}
+		else {
+			cards = extractPreviousInstanceCards(savedInstanceState);
+
+			setUpCardsPagerAdapter();
+		}
+	}
+
+	private boolean isSavedInstanceStateValid(Bundle savedInstanceState) {
+		return savedInstanceState != null && savedInstanceState.containsKey(SavedInstanceKeys.CARDS);
+	}
+
+	private List<Card> extractPreviousInstanceCards(Bundle savedInstanceState) {
+		return savedInstanceState.getParcelableArrayList(SavedInstanceKeys.CARDS);
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putParcelableArrayList(SavedInstanceKeys.CARDS, (ArrayList<Card>) cards);
 	}
 
 	@Override
