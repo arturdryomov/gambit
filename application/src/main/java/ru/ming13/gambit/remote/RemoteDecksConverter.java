@@ -26,10 +26,15 @@ import java.util.List;
 
 import android.text.TextUtils;
 import jxl.Cell;
+import jxl.CellView;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.format.CellFormat;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
+import jxl.write.WritableCell;
+import jxl.write.WritableCellFormat;
+import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
@@ -50,10 +55,10 @@ public class RemoteDecksConverter
 	private static final int MINIMAL_ROWS_COUNT = 1;
 
 	public List<RemoteDeck> fromXlsData(InputStream xlsData) {
-		return constructRemoteDecks(getWorkbook(xlsData));
+		return buildRemoteDecks(buildWorkbook(xlsData));
 	}
 
-	private Workbook getWorkbook(InputStream xlsData) {
+	private Workbook buildWorkbook(InputStream xlsData) {
 		try {
 			return Workbook.getWorkbook(xlsData);
 		}
@@ -65,7 +70,7 @@ public class RemoteDecksConverter
 		}
 	}
 
-	private List<RemoteDeck> constructRemoteDecks(Workbook workbook) {
+	private List<RemoteDeck> buildRemoteDecks(Workbook workbook) {
 		List<RemoteDeck> remoteDecks = new ArrayList<RemoteDeck>();
 
 		if (workbook.getNumberOfSheets() == 0) {
@@ -73,44 +78,40 @@ public class RemoteDecksConverter
 		}
 
 		for (Sheet sheet : workbook.getSheets()) {
-			remoteDecks.add(constructRemoteDeck(sheet));
+			remoteDecks.add(buildRemoteDeck(sheet));
 		}
 
 		return remoteDecks;
 	}
 
-	private RemoteDeck constructRemoteDeck(Sheet sheet) {
+	private RemoteDeck buildRemoteDeck(Sheet sheet) {
 		RemoteDeck remoteDeck = new RemoteDeck();
 
 		remoteDeck.setTitle(sheet.getName());
-		remoteDeck.setCards(constructRemoteCards(sheet));
+		remoteDeck.setCards(buildRemoteCards(sheet));
 
 		return remoteDeck;
 	}
 
-	private List<RemoteCard> constructRemoteCards(Sheet sheet) {
+	private List<RemoteCard> buildRemoteCards(Sheet sheet) {
 		List<RemoteCard> remoteCards = new ArrayList<RemoteCard>();
 
-		if (sheet.getColumns() < MINIMAL_COLUMNS_COUNT) {
-			return remoteCards;
-		}
-
-		if (sheet.getRows() < MINIMAL_ROWS_COUNT) {
+		if( (sheet.getColumns() < MINIMAL_COLUMNS_COUNT) || (sheet.getRows() < MINIMAL_ROWS_COUNT)) {
 			return remoteCards;
 		}
 
 		for (int rowIndex = CARDS_FIRST_ROW_INDEX; rowIndex < sheet.getRows(); rowIndex++) {
 			Cell[] row = sheet.getRow(rowIndex);
 
-			if (!isCardDataEmpty(row)) {
-				remoteCards.add(constructRemoteCard(row));
+			if (!isRowEmpty(row)) {
+				remoteCards.add(buildRemoteCard(row));
 			}
 		}
 
 		return remoteCards;
 	}
 
-	private boolean isCardDataEmpty(Cell[] row) {
+	private boolean isRowEmpty(Cell[] row) {
 		if (row == null) {
 			return true;
 		}
@@ -125,7 +126,7 @@ public class RemoteDecksConverter
 		return TextUtils.isEmpty(frontSideText) && TextUtils.isEmpty(backSideText);
 	}
 
-	private RemoteCard constructRemoteCard(Cell[] row) {
+	private RemoteCard buildRemoteCard(Cell[] row) {
 		RemoteCard remoteCard = new RemoteCard();
 
 		remoteCard.setFrontSideText(row[FRONT_SIDE_COLUMN_INDEX].getContents());
@@ -144,9 +145,9 @@ public class RemoteDecksConverter
 		return xlsDataStream.toByteArray();
 	}
 
-	private WritableWorkbook createWorkbook(OutputStream dataStream) {
+	private WritableWorkbook createWorkbook(OutputStream xlsDataStream) {
 		try {
-			return Workbook.createWorkbook(dataStream);
+			return Workbook.createWorkbook(xlsDataStream);
 		}
 		catch (IOException e) {
 			throw new ConvertingException();
@@ -163,6 +164,7 @@ public class RemoteDecksConverter
 
 			WritableSheet sheet = workbook.createSheet(remoteDeck.getTitle(), deckIndex);
 			fillSheet(sheet, remoteDeck);
+			expandCardColumns(sheet);
 		}
 	}
 
@@ -173,8 +175,30 @@ public class RemoteDecksConverter
 
 	private void insertHeader(WritableSheet sheet) {
 		try {
-			sheet.addCell(new Label(FRONT_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX, HEADER_FRONT_SIDE));
-			sheet.addCell(new Label(BACK_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX, HEADER_BACK_SIDE));
+			WritableCell frontSideColumnHeader = new Label(FRONT_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX,
+				HEADER_FRONT_SIDE);
+			frontSideColumnHeader.setCellFormat(buildBoldCellFormat());
+			sheet.addCell(frontSideColumnHeader);
+
+			WritableCell backSideColumnHeader = new Label(BACK_SIDE_COLUMN_INDEX, HEADER_ROW_INDEX,
+				HEADER_BACK_SIDE);
+			backSideColumnHeader.setCellFormat(buildBoldCellFormat());
+			sheet.addCell(backSideColumnHeader);
+		}
+		catch (WriteException e) {
+			throw new ConvertingException();
+		}
+	}
+
+	private CellFormat buildBoldCellFormat() {
+		try {
+			WritableCellFormat cellFormat = new WritableCellFormat();
+			WritableFont font = new WritableFont(cellFormat.getFont());
+
+			font.setBoldStyle(WritableFont.BOLD);
+			cellFormat.setFont(font);
+
+			return cellFormat;
 		}
 		catch (WriteException e) {
 			throw new ConvertingException();
@@ -203,6 +227,17 @@ public class RemoteDecksConverter
 		catch (WriteException e) {
 			throw new ConvertingException();
 		}
+	}
+
+	private void expandCardColumns(WritableSheet sheet) {
+		expandColumn(sheet, FRONT_SIDE_COLUMN_INDEX);
+		expandColumn(sheet, BACK_SIDE_COLUMN_INDEX);
+	}
+
+	private void expandColumn(WritableSheet sheet, int columnIndex) {
+		CellView columnView = sheet.getColumnView(columnIndex);
+		columnView.setAutosize(true);
+		sheet.setColumnView(columnIndex, columnView);
 	}
 
 	private void saveWorkbook(WritableWorkbook workbook) {
