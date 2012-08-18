@@ -18,14 +18,12 @@ package ru.ming13.gambit.ui.loader;
 
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
 
-public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
+public class CardOperationLoader extends AsyncLoader<Card>
 {
 	private static enum Operation
 	{
@@ -75,13 +73,6 @@ public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
 	}
 
 	@Override
-	protected void onStartLoading() {
-		super.onStartLoading();
-
-		forceLoad();
-	}
-
-	@Override
 	public LoaderResult<Card> loadInBackground() {
 		switch (operation) {
 			case CREATE:
@@ -101,23 +92,19 @@ public class CardOperationLoader extends AsyncTaskLoader<LoaderResult<Card>>
 	private LoaderResult<Card> createCard() {
 		card = deck.createCard(frontSideText, backSideText);
 
-		return buildSuccessResult();
-	}
-
-	private LoaderResult<Card> buildSuccessResult() {
-		return new LoaderResult<Card>(LoaderStatus.SUCCESS, card, new String());
+		return buildSuccessResult(card);
 	}
 
 	private LoaderResult<Card> modifyCard() {
 		card.setFrontSideText(frontSideText);
 		card.setBackSideText(backSideText);
 
-		return buildSuccessResult();
+		return buildSuccessResult(card);
 	}
 
 	private LoaderResult<Card> deleteCard() {
 		deck.deleteCard(card);
 
-		return buildSuccessResult();
+		return buildSuccessResult(card);
 	}
 }

@@ -18,16 +18,14 @@ package ru.ming13.gambit.ui.loader;
 
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.AlreadyExistsException;
 import ru.ming13.gambit.local.DbProvider;
 import ru.ming13.gambit.local.Deck;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
 
-public class DeckOperationLoader extends AsyncTaskLoader<LoaderResult<Deck>>
+public class DeckOperationLoader extends AsyncLoader<Deck>
 {
 	private static enum Operation
 	{
@@ -82,13 +80,6 @@ public class DeckOperationLoader extends AsyncTaskLoader<LoaderResult<Deck>>
 	}
 
 	@Override
-	protected void onStartLoading() {
-		super.onStartLoading();
-
-		forceLoad();
-	}
-
-	@Override
 	public LoaderResult<Deck> loadInBackground() {
 		switch (operation) {
 			case CREATE:
@@ -112,45 +103,37 @@ public class DeckOperationLoader extends AsyncTaskLoader<LoaderResult<Deck>>
 		try {
 			deck = DbProvider.getInstance().getDecks().createDeck(deckTitle);
 
-			return buildSuccessResult();
+			return buildSuccessResult(deck);
 		}
 		catch (AlreadyExistsException e) {
 			String errorMessage = getContext().getString(R.string.error_deck_already_exists);
 
-			return buildErrorResult(errorMessage);
+			return buildErrorResult(deck, errorMessage);
 		}
-	}
-
-	private LoaderResult<Deck> buildSuccessResult() {
-		return new LoaderResult<Deck>(LoaderStatus.SUCCESS, deck, new String());
-	}
-
-	private LoaderResult<Deck> buildErrorResult(String errorMessage) {
-		return new LoaderResult<Deck>(LoaderStatus.ERROR, deck, errorMessage);
 	}
 
 	private LoaderResult<Deck> renameDeck() {
 		try {
 			deck.setTitle(deckTitle);
 
-			return buildSuccessResult();
+			return buildSuccessResult(deck);
 		}
 		catch (AlreadyExistsException e) {
 			String errorMessage = getContext().getString(R.string.error_deck_already_exists);
 
-			return buildErrorResult(errorMessage);
+			return buildErrorResult(deck, errorMessage);
 		}
 	}
 
 	private LoaderResult<Deck> deleteDeck() {
 		DbProvider.getInstance().getDecks().deleteDeck(deck);
 
-		return buildSuccessResult();
+		return buildSuccessResult(deck);
 	}
 
 	private LoaderResult<Deck> changeCurrentCardIndex() {
 		deck.setCurrentCardIndex(currentCardIndex);
 
-		return buildSuccessResult();
+		return buildSuccessResult(deck);
 	}
 }

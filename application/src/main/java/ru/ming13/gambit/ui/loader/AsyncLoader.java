@@ -17,28 +17,30 @@
 package ru.ming13.gambit.ui.loader;
 
 
-import java.util.List;
-
 import android.content.Context;
-import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.Deck;
+import android.support.v4.content.AsyncTaskLoader;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
+import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
 
-public class DecksLoader extends AsyncLoader<List<Deck>>
+abstract class AsyncLoader<Data> extends AsyncTaskLoader<LoaderResult<Data>>
 {
-	public static DecksLoader newInstance(Context context) {
-		return new DecksLoader(context);
-	}
-
-	private DecksLoader(Context context) {
+	protected AsyncLoader(Context context) {
 		super(context);
 	}
 
 	@Override
-	public LoaderResult<List<Deck>> loadInBackground() {
-		List<Deck> decks = DbProvider.getInstance().getDecks().getDecksList();
+	protected void onStartLoading() {
+		super.onStartLoading();
 
-		return buildSuccessResult(decks);
+		forceLoad();
+	}
+
+	protected LoaderResult<Data> buildSuccessResult(Data data) {
+		return new LoaderResult<Data>(LoaderStatus.SUCCESS, data, new String());
+	}
+
+	protected LoaderResult<Data> buildErrorResult(Data data, String errorMessage) {
+		return new LoaderResult<Data>(LoaderStatus.ERROR, data, errorMessage);
 	}
 }

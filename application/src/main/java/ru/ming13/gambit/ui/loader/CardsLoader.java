@@ -20,14 +20,12 @@ package ru.ming13.gambit.ui.loader;
 import java.util.List;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 import ru.ming13.gambit.local.Card;
 import ru.ming13.gambit.local.Deck;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
 
-public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
+public class CardsLoader extends AsyncLoader<List<Card>>
 {
 	private static enum Order
 	{
@@ -59,13 +57,6 @@ public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 	}
 
 	@Override
-	protected void onStartLoading() {
-		super.onStartLoading();
-
-		forceLoad();
-	}
-
-	@Override
 	public LoaderResult<List<Card>> loadInBackground() {
 		applyOrderToCards();
 
@@ -87,9 +78,5 @@ public class CardsLoader extends AsyncTaskLoader<LoaderResult<List<Card>>>
 				deck.resetCardsOrder();
 				break;
 		}
-	}
-
-	private LoaderResult<List<Card>> buildSuccessResult(List<Card> cards) {
-		return new LoaderResult<List<Card>>(LoaderStatus.SUCCESS, cards, new String());
 	}
 }
