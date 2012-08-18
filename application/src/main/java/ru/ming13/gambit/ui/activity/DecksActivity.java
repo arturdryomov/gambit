@@ -125,7 +125,23 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 
 	@Override
 	public void onSuccessSynchronization() {
+		repopulateDecks();
+
 		hideSynchronizationProgressDialog();
+	}
+
+	private void repopulateDecks() {
+		if (isDecksFragmentValid()) {
+			getDecksFragment().callListRepopulation();
+		}
+	}
+
+	private boolean isDecksFragmentValid() {
+		return getDecksFragment() != null;
+	}
+
+	private DecksFragment getDecksFragment() {
+		return (DecksFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
 	}
 
 	@Override

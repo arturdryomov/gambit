@@ -243,4 +243,10 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 
 		startActivity(intent);
 	}
+
+	public void callListRepopulation() {
+		DecksLoaderCallback decksLoaderCallback = new DecksLoaderCallback(this);
+
+		getLoaderManager().restartLoader(Loaders.DECKS, null, decksLoaderCallback);
+	}
 }
