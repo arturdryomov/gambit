@@ -145,9 +145,9 @@ public class RemoteDecksConverter
 		return xlsDataStream.toByteArray();
 	}
 
-	private WritableWorkbook createWorkbook(OutputStream dataStream) {
+	private WritableWorkbook createWorkbook(OutputStream xlsDataStream) {
 		try {
-			return Workbook.createWorkbook(dataStream);
+			return Workbook.createWorkbook(xlsDataStream);
 		}
 		catch (IOException e) {
 			throw new ConvertingException();
@@ -166,17 +166,6 @@ public class RemoteDecksConverter
 			fillSheet(sheet, remoteDeck);
 			expandCardColumns(sheet);
 		}
-	}
-
-	private void expandCardColumns(WritableSheet sheet) {
-		expandColumn(sheet, FRONT_SIDE_COLUMN_INDEX);
-		expandColumn(sheet, BACK_SIDE_COLUMN_INDEX);
-	}
-
-	private void expandColumn(WritableSheet sheet, int columnIndex) {
-		CellView columnView = sheet.getColumnView(columnIndex);
-		columnView.setAutosize(true);
-		sheet.setColumnView(columnIndex, columnView);
 	}
 
 	private void fillSheet(WritableSheet sheet, RemoteDeck remoteDeck) {
@@ -238,6 +227,17 @@ public class RemoteDecksConverter
 		catch (WriteException e) {
 			throw new ConvertingException();
 		}
+	}
+
+	private void expandCardColumns(WritableSheet sheet) {
+		expandColumn(sheet, FRONT_SIDE_COLUMN_INDEX);
+		expandColumn(sheet, BACK_SIDE_COLUMN_INDEX);
+	}
+
+	private void expandColumn(WritableSheet sheet, int columnIndex) {
+		CellView columnView = sheet.getColumnView(columnIndex);
+		columnView.setAutosize(true);
+		sheet.setColumnView(columnIndex, columnView);
 	}
 
 	private void saveWorkbook(WritableWorkbook workbook) {
