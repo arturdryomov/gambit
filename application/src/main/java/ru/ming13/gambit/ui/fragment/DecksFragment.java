@@ -179,7 +179,7 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 		DeckDeletionLoaderCallback deckDeletionLoaderCallback = new DeckDeletionLoaderCallback(
 			getActivity(), deck);
 
-		getLoaderManager().initLoader(Loaders.DECK_OPERATION, null, deckDeletionLoaderCallback);
+		getLoaderManager().restartLoader(Loaders.DECK_OPERATION, null, deckDeletionLoaderCallback);
 	}
 
 	private static class DeckDeletionLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Deck>>

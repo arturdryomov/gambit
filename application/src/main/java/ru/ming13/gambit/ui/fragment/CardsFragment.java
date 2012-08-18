@@ -196,7 +196,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 		CardDeletionLoaderCallback cardDeletionLoaderCallback = new CardDeletionLoaderCallback(
 			getActivity(), deck, card);
 
-		getLoaderManager().initLoader(Loaders.CARD_OPERATION, null, cardDeletionLoaderCallback);
+		getLoaderManager().restartLoader(Loaders.CARD_OPERATION, null, cardDeletionLoaderCallback);
 	}
 
 	private static class CardDeletionLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Card>>
