@@ -19,6 +19,7 @@ package ru.ming13.gambit.remote;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -224,7 +225,7 @@ public class DriveHelper
 		return String.format("%s(%s)", RESPONSE_LIST_ITEMS_PREFIX, responseFields);
 	}
 
-	private static class FileByModifiedDateComparator implements Comparator<File>
+	private static class FileByModifiedDateComparator implements Comparator<File>, Serializable
 	{
 		@Override
 		public int compare(File firstSpreadsheetFile, File secondSpreadsheetFile) {
