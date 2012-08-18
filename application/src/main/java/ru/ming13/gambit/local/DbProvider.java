@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class DbProvider
 {
-	private class AlreadyInstantiatedException extends RuntimeException
+	private static class AlreadyInstantiatedException extends RuntimeException
 	{
 	}
 
