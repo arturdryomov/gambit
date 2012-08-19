@@ -41,7 +41,14 @@ public class CardEmptyFragment extends SherlockFragment
 	public void onStart() {
 		super.onStart();
 
+		setCardTextSize();
 		setCardText();
+	}
+
+	private void setCardTextSize() {
+		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
+
+		cardTextView.setTextSize(getResources().getDimension(R.dimen.text_size_empty_card));
 	}
 
 	private void setCardText() {
