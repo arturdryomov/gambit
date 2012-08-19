@@ -53,7 +53,7 @@
 
 		<dependency>
 			<artifactId>google-api-services-drive</artifactId>
-			<version>v2-rev1-1.7.2-beta</version>
+			<version>v2-rev5-1.7.2-beta</version>
 			<groupId>com.google.apis</groupId>
 			<exclusions>
 				<exclusion>
