@@ -39,6 +39,10 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 
 	@Override
 	public int getCount() {
+		if (cards == null) {
+			return 0;
+		}
+
 		if (cards.isEmpty()) {
 			return 1;
 		}

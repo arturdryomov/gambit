@@ -17,7 +17,6 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -50,16 +49,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		CURRENT, SHUFFLE, ORIGINAL
 	}
 
-	private static final class SavedInstanceKeys
-	{
-		private SavedInstanceKeys() {
-		}
-
-		public static final String CARDS = "cards";
-	}
-
 	private Deck deck;
-	private List<Card> cards;
 
 	private CardsOrder cardsOrder = CardsOrder.CURRENT;
 
@@ -131,13 +121,13 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	@Override
 	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-		cards = cardsLoaderResult.getData();
+		List<Card> cards = cardsLoaderResult.getData();
 
-		setUpCardsPagerAdapter();
+		setUpCardsPagerAdapter(cards);
 		setUpCurrentCardIndex();
 	}
 
-	private void setUpCardsPagerAdapter() {
+	private void setUpCardsPagerAdapter(List<Card> cards) {
 		ViewPager cardsPager = getCardsPager();
 		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(), cards);
 
@@ -167,25 +157,14 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 			populatePager();
 		}
 		else {
-			cards = extractPreviousInstanceCards(savedInstanceState);
+			setUpCardsPagerAdapter(null);
 
-			setUpCardsPagerAdapter();
+			populatePager();
 		}
 	}
 
 	private boolean isSavedInstanceStateValid(Bundle savedInstanceState) {
-		return savedInstanceState != null && savedInstanceState.containsKey(SavedInstanceKeys.CARDS);
-	}
-
-	private List<Card> extractPreviousInstanceCards(Bundle savedInstanceState) {
-		return savedInstanceState.getParcelableArrayList(SavedInstanceKeys.CARDS);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		outState.putParcelableArrayList(SavedInstanceKeys.CARDS, (ArrayList<Card>) cards);
+		return savedInstanceState != null;
 	}
 
 	@Override
