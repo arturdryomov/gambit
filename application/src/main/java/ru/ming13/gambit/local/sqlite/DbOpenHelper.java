@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local;
+package ru.ming13.gambit.local.sqlite;
 
 
 import android.content.Context;
@@ -22,7 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-class DbOpenHelper extends SQLiteOpenHelper
+public class DbOpenHelper extends SQLiteOpenHelper
 {
 	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "gambit.db";

@@ -19,9 +19,9 @@ package ru.ming13.gambit.ui.loader;
 
 import android.content.Context;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.AlreadyExistsException;
+import ru.ming13.gambit.local.model.AlreadyExistsException;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 
 

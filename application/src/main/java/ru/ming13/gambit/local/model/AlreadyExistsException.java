@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local;
+package ru.ming13.gambit.local.model;
+
+
+import ru.ming13.gambit.local.DbException;
 
 
 public class AlreadyExistsException extends DbException

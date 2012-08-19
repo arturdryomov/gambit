@@ -17,7 +17,7 @@
 package ru.ming13.gambit.test;
 
 
-import ru.ming13.gambit.local.Card;
+import ru.ming13.gambit.local.model.Card;
 
 
 public class CardTests extends DatabaseTestCase

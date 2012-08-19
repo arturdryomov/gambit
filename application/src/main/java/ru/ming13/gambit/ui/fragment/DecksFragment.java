@@ -37,7 +37,7 @@ import android.widget.SimpleAdapter;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.DeckOperationLoader;
 import ru.ming13.gambit.ui.loader.DecksLoader;

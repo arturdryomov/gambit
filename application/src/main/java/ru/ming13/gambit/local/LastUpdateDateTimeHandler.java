@@ -20,10 +20,12 @@ package ru.ming13.gambit.local;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.sqlite.DbTableNames;
 import ru.ming13.gambit.remote.InternetDateTime;
 
 
-class LastUpdateDateTimeHandler
+public class LastUpdateDateTimeHandler
 {
 	private final SQLiteDatabase database;
 

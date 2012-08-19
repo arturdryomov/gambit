@@ -29,6 +29,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.local.model.Decks;
 import ru.ming13.gambit.ui.util.Preferences;
 
 

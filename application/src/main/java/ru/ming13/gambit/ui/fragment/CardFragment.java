@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.Card;
+import ru.ming13.gambit.local.model.Card;
 
 
 public class CardFragment extends SherlockFragment

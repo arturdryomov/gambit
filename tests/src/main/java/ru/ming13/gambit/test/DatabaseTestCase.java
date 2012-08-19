@@ -20,8 +20,8 @@ package ru.ming13.gambit.test;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.Suppress;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.Deck;
-import ru.ming13.gambit.local.Decks;
+import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.local.model.Decks;
 
 
 @Suppress

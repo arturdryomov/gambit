@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local;
+package ru.ming13.gambit.local.sqlite;
 
 
-final class DbFieldParams
+public final class DbFieldParams
 {
 	private DbFieldParams() {
 	}

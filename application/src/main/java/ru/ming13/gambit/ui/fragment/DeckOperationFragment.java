@@ -25,7 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.loader.DeckOperationLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;

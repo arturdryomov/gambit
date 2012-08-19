@@ -17,7 +17,7 @@
 package ru.ming13.gambit.local;
 
 
-class DbException extends RuntimeException
+public class DbException extends RuntimeException
 {
 	public DbException() {
 	}

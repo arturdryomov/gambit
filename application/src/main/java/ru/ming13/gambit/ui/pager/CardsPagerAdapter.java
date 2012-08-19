@@ -22,7 +22,7 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import ru.ming13.gambit.local.Card;
+import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.ui.fragment.CardEmptyFragment;
 import ru.ming13.gambit.ui.fragment.CardFragment;
 

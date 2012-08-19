@@ -20,8 +20,8 @@ package ru.ming13.gambit.test;
 import java.util.List;
 
 import android.test.suitebuilder.annotation.Suppress;
-import ru.ming13.gambit.local.Card;
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Card;
+import ru.ming13.gambit.local.model.Deck;
 
 
 public class DeckTests extends DatabaseTestCase

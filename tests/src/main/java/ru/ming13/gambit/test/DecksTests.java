@@ -19,7 +19,7 @@ package ru.ming13.gambit.test;
 
 import java.util.List;
 
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Deck;
 
 
 public class DecksTests extends DatabaseTestCase

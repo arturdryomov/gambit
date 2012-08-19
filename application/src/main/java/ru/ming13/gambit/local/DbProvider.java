@@ -19,6 +19,8 @@ package ru.ming13.gambit.local;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import ru.ming13.gambit.local.model.Decks;
+import ru.ming13.gambit.local.sqlite.DbOpenHelper;
 
 
 public class DbProvider
@@ -81,14 +83,14 @@ public class DbProvider
 		return decks;
 	}
 
-	LastUpdateDateTimeHandler getLastUpdateTimeHandler() {
+	public LastUpdateDateTimeHandler getLastUpdateTimeHandler() {
 		if (lastUpdateDateTimeHandler == null) {
 			lastUpdateDateTimeHandler = new LastUpdateDateTimeHandler();
 		}
 		return lastUpdateDateTimeHandler;
 	}
 
-	SQLiteDatabase getDatabase() {
+	public SQLiteDatabase getDatabase() {
 		return databaseOpenHelper.getWritableDatabase();
 	}
 }

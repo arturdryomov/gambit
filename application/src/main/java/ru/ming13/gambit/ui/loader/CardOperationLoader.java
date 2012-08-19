@@ -18,8 +18,8 @@ package ru.ming13.gambit.ui.loader;
 
 
 import android.content.Context;
-import ru.ming13.gambit.local.Card;
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Card;
+import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 
 

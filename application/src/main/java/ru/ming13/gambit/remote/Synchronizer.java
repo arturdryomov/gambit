@@ -21,10 +21,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.ming13.gambit.local.Card;
+import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.Deck;
-import ru.ming13.gambit.local.Decks;
+import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.local.model.Decks;
 
 
 public class Synchronizer

@@ -19,7 +19,7 @@ package ru.ming13.gambit.test;
 
 import static ru.ming13.gambit.R.string;
 
-import ru.ming13.gambit.local.Deck;
+import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.local.ExampleDeckWriter;
 
 
