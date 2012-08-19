@@ -19,6 +19,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<prerequisites>
+		<maven>3.0.0</maven>
+	</prerequisites>
+
 	<name>Gambit Parent</name>
 	<artifactId>gambit-parent</artifactId>
 	<version>0.0.1</version>
