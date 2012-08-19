@@ -28,16 +28,6 @@ import java.util.TimeZone;
 import android.accounts.Account;
 import android.app.Activity;
 import android.test.InstrumentationTestCase;
-import ru.ming13.gambit.remote.InternetDateTime;
-import ru.ming13.gambit.remote.ConvertingException;
-import ru.ming13.gambit.remote.DriveHelper;
-import ru.ming13.gambit.remote.SpreadsheetNotExistsException;
-import ru.ming13.gambit.remote.RemoteCard;
-import ru.ming13.gambit.remote.RemoteDeck;
-import ru.ming13.gambit.remote.RemoteDecksConverter;
-import ru.ming13.gambit.ui.AccountSelector;
-import ru.ming13.gambit.ui.GoogleDriveAuthorizer;
-import ru.ming13.gambit.ui.DeckCreationActivity;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.json.JsonHttpRequest;
@@ -47,6 +37,16 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveRequest;
 import com.google.api.services.drive.model.File;
+import ru.ming13.gambit.remote.ConvertingException;
+import ru.ming13.gambit.remote.DriveHelper;
+import ru.ming13.gambit.remote.InternetDateTime;
+import ru.ming13.gambit.remote.RemoteCard;
+import ru.ming13.gambit.remote.RemoteDeck;
+import ru.ming13.gambit.remote.RemoteDecksConverter;
+import ru.ming13.gambit.remote.SpreadsheetNotExistsException;
+import ru.ming13.gambit.ui.activity.DeckCreationActivity;
+import ru.ming13.gambit.ui.account.AccountSelector;
+import ru.ming13.gambit.ui.account.GoogleDriveAuthorizer;
 
 
 public class DriveHelperTests extends InstrumentationTestCase
@@ -78,10 +78,10 @@ public class DriveHelperTests extends InstrumentationTestCase
 
 		if (authToken == null) {
 			Account account = AccountSelector.select(hostActivity);
-			GoogleDriveAuthorizer googleDriveAuthorizer = new GoogleDriveAuthorizer(hostActivity);
-			authToken = googleDriveAuthorizer.getToken(account);
-			googleDriveAuthorizer.invalidateToken(authToken);
-			authToken = googleDriveAuthorizer.getToken(account);
+
+			authToken = GoogleDriveAuthorizer.getToken(hostActivity, account);
+			GoogleDriveAuthorizer.invalidateToken(hostActivity, authToken);
+			authToken = GoogleDriveAuthorizer.getToken(hostActivity, account);
 		}
 	}
 

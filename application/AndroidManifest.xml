@@ -37,7 +37,7 @@
 		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:name=".ui.DecksListActivity">
+			android:name=".ui.activity.DecksActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -46,34 +46,33 @@
 		</activity>
 
 		<activity
-			android:name=".ui.DeckCreationActivity"
+			android:name=".ui.activity.DeckCreationActivity"
 			android:label="@string/title_new_deck">
 		</activity>
 
 		<activity
-			android:name=".ui.DeckRenamingActivity"
+			android:name=".ui.activity.DeckRenamingActivity"
 			android:label="@string/title_rename_deck">
 		</activity>
 
 		<activity
-			android:name=".ui.CardCreationActivity"
+			android:name=".ui.activity.CardCreationActivity"
 			android:label="@string/title_new_card">
 		</activity>
 
 		<activity
-			android:name=".ui.CardEditingActivity"
+			android:name=".ui.activity.CardModificationActivity"
 			android:label="@string/title_edit_card">
 		</activity>
 
 		<activity
-			android:name=".ui.CardsListActivity"
+			android:name=".ui.activity.CardsActivity"
 			android:label="@string/title_edit_cards">
 		</activity>
 
 		<activity
-			android:name=".ui.CardsViewingActivity"
-			android:label="@string/title_cards"
-			android:configChanges="keyboardHidden|orientation">
+			android:name=".ui.activity.CardsPagerActivity"
+			android:label="@string/title_cards">
 		</activity>
 	</application>
 

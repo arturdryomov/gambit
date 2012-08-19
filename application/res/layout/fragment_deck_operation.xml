@@ -15,15 +15,20 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/FullParentLayout">
 
-	<dimen name="margin_top_form_item">10dp</dimen>
+	<LinearLayout
+		style="@style/FormLayout">
 
-	<dimen name="padding_horizontal_list_item">8dp</dimen>
-	<dimen name="padding_form_layout">20dp</dimen>
+		<EditText
+			android:id="@+id/edit_deck_title"
+			android:singleLine="true"
+			android:inputType="text"
+			android:hint="@string/hint_deck_name"
+			android:maxLength="@integer/maximum_deck_name_length"
+			style="@style/FormLayoutFirstItem" />
 
-	<dimen name="text_size_one_line_list_item">18sp</dimen>
-	<dimen name="text_size_card">30sp</dimen>
-	<dimen name="text_size_empty_card">20sp</dimen>
+	</LinearLayout>
 
-</resources>
+</ScrollView>

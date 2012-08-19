@@ -29,7 +29,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.ui.Preferences;
+import ru.ming13.gambit.ui.util.Preferences;
 
 
 public class ExampleDeckWriter
@@ -83,7 +83,7 @@ public class ExampleDeckWriter
 	}
 
 	public boolean shouldWriteDeck() {
-		if (Preferences.getBoolean(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED)) {
+		if (Preferences.getBoolean(context, Preferences.Keys.EXAMPLE_DECK_CREATED)) {
 			return false;
 		}
 
@@ -95,7 +95,7 @@ public class ExampleDeckWriter
 
 		try {
 			tryWriteDeck();
-			Preferences.set(context, Preferences.PREFERENCE_EXAMPLE_DECK_CREATED, true);
+			Preferences.set(context, Preferences.Keys.EXAMPLE_DECK_CREATED, true);
 
 			decks.setTransactionSuccessful();
 		}
