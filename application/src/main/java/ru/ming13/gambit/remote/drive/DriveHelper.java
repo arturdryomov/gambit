@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.remote;
+package ru.ming13.gambit.remote.drive;
 
 
 import java.io.IOException;
@@ -38,6 +38,9 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
+import ru.ming13.gambit.remote.InternetDateTime;
+import ru.ming13.gambit.remote.SpreadsheetNotExistsException;
+import ru.ming13.gambit.remote.SyncException;
 
 
 public class DriveHelper

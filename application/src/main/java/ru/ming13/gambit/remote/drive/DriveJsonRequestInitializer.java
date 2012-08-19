@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.remote;
+package ru.ming13.gambit.remote.drive;
 
 
 import java.io.IOException;

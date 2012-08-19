@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.remote;
+package ru.ming13.gambit.remote.drive;
 
 
 import java.io.IOException;
@@ -25,6 +25,8 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.HttpUnsuccessfulResponseHandler;
+import ru.ming13.gambit.remote.SpreadsheetNotExistsException;
+import ru.ming13.gambit.remote.SyncException;
 
 
 class DriveHttpRequestInitializer implements HttpRequestInitializer, HttpUnsuccessfulResponseHandler, HttpExecuteInterceptor

@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.remote;
+package ru.ming13.gambit.remote.convert;
 
 
-public class UnauthorizedException extends SyncException
+import ru.ming13.gambit.remote.SyncException;
+
+
+public class ConvertingException extends SyncException
 {
 }

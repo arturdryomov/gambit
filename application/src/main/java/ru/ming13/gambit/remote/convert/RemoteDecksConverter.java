@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.remote;
+package ru.ming13.gambit.remote.convert;
 
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +38,9 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import ru.ming13.gambit.remote.DecksNotFoundException;
+import ru.ming13.gambit.remote.model.RemoteCard;
+import ru.ming13.gambit.remote.model.RemoteDeck;
 
 
 public class RemoteDecksConverter

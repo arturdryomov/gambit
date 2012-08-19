@@ -23,7 +23,7 @@ import android.text.TextUtils;
 import ru.ming13.gambit.remote.NothingToSyncException;
 import ru.ming13.gambit.remote.SyncException;
 import ru.ming13.gambit.remote.Synchronizer;
-import ru.ming13.gambit.remote.UnauthorizedException;
+import ru.ming13.gambit.remote.drive.UnauthorizedException;
 import ru.ming13.gambit.ui.util.Preferences;
 
 

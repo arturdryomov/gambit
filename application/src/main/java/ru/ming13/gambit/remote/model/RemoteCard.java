@@ -14,37 +14,33 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.remote;
+package ru.ming13.gambit.remote.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class RemoteDeck
+public class RemoteCard
 {
-	private String title;
-	private List<RemoteCard> cards;
+	private String frontSideText;
+	private String backSideText;
 
-	public RemoteDeck() {
-		title = new String();
-		cards = new ArrayList<RemoteCard>();
+	public RemoteCard() {
+		frontSideText = new String();
+		backSideText = new String();
 	}
 
-	public String getTitle() {
-		return title;
+	public String getFrontSideText() {
+		return frontSideText;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setFrontSideText(String text) {
+		frontSideText = text;
 	}
 
-	public List<RemoteCard> getCards() {
-		return cards;
+	public String getBackSideText() {
+		return backSideText;
 	}
 
-	public void setCards(List<RemoteCard> cardsList) {
-		cards = cardsList;
+	public void setBackSideText(String text) {
+		backSideText = text;
 	}
 
 	@Override
@@ -58,25 +54,28 @@ public class RemoteDeck
 			return true;
 		}
 
-		if (!(otherObject instanceof RemoteDeck)) {
+		if (!(otherObject instanceof RemoteCard)) {
 			return false;
 		}
 
-		RemoteDeck otherDeck = (RemoteDeck) otherObject;
+		RemoteCard otherCard = (RemoteCard) otherObject;
 
-		if ((title == null) && (otherDeck.title != null)) {
+		if ((frontSideText == null) && (otherCard.frontSideText != null)) {
 			return false;
 		}
 
-		if ((title != null) && !title.equals(otherDeck.title)) {
+		if ((frontSideText != null) && !frontSideText.equals(otherCard.frontSideText)) {
 			return false;
 		}
 
-		if (!cards.equals(otherDeck.cards)) {
+		if ((backSideText == null) && (otherCard.backSideText != null)) {
+			return false;
+		}
+
+		if ((backSideText != null) && !backSideText.equals(otherCard.backSideText)) {
 			return false;
 		}
 
 		return true;
 	}
-
 }

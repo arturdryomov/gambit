@@ -25,6 +25,10 @@ import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.DbProvider;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.local.model.Decks;
+import ru.ming13.gambit.remote.convert.RemoteDecksConverter;
+import ru.ming13.gambit.remote.drive.DriveHelper;
+import ru.ming13.gambit.remote.model.RemoteCard;
+import ru.ming13.gambit.remote.model.RemoteDeck;
 
 
 public class Synchronizer
@@ -41,7 +45,7 @@ public class Synchronizer
 
 	/**
 	 * @throws NothingToSyncException if there are no local and remote data to sync.
-	 * @throws UnauthorizedException if something wrong with authorization.
+	 * @throws ru.ming13.gambit.remote.drive.UnauthorizedException if something wrong with authorization.
 	 * @throws SyncException if general error had happened.
 	 */
 	public String sync(String spreadsheetKey) {
@@ -158,7 +162,7 @@ public class Synchronizer
 
 	/**
 	 * @throws NothingToSyncException if there are no local and remote data to sync.
-	 * @throws UnauthorizedException if something wrong with authorization.
+	 * @throws ru.ming13.gambit.remote.drive.UnauthorizedException if something wrong with authorization.
 	 * @throws SyncException if general error had happened.
 	 */
 	public String sync() {

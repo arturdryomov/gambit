@@ -17,6 +17,6 @@
 package ru.ming13.gambit.remote;
 
 
-class DecksNotFoundException extends SyncException
+public class DecksNotFoundException extends SyncException
 {
 }
