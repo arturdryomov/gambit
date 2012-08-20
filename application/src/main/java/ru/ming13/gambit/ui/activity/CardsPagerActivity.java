@@ -19,7 +19,6 @@ package ru.ming13.gambit.ui.activity;
 
 import java.util.List;
 
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -36,10 +35,10 @@ import ru.ming13.gambit.ui.gesture.ShakeListener;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.CardsLoader;
-import ru.ming13.gambit.ui.loader.DeckOperationLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.pager.CardsPagerAdapter;
+import ru.ming13.gambit.ui.task.CurrentCardIndexChangingTask;
 
 
 public class CardsPagerActivity extends SherlockFragmentActivity implements ShakeListener.OnShakeListener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
@@ -217,39 +216,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	private void saveCurrentCardIndex() {
 		int currentCardIndex = getCardsPager().getCurrentItem();
-		CurrentCardIndexChangingLoaderCallback currentCardIndexChangingLoaderCallback = new CurrentCardIndexChangingLoaderCallback(
-			this, deck, currentCardIndex);
 
-		getSupportLoaderManager().restartLoader(Loaders.DECK_OPERATION, null,
-			currentCardIndexChangingLoaderCallback);
-	}
-
-	private static class CurrentCardIndexChangingLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Deck>>
-	{
-		private final Context context;
-
-		private final Deck deck;
-		private final int currentCardIndex;
-
-		public CurrentCardIndexChangingLoaderCallback(Context context, Deck deck, int currentCardIndex) {
-			this.context = context;
-
-			this.deck = deck;
-			this.currentCardIndex = currentCardIndex;
-		}
-
-		@Override
-		public Loader<LoaderResult<Deck>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-			return DeckOperationLoader.newCurrentCardIndexChangingLoader(context, deck, currentCardIndex);
-		}
-
-		@Override
-		public void onLoadFinished(Loader<LoaderResult<Deck>> deckOperationLoader, LoaderResult<Deck> deckOperationLoaderResult) {
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoaderResult<Deck>> deckOperationLoader) {
-		}
+		CurrentCardIndexChangingTask.newInstance(deck, currentCardIndex).execute();
 	}
 
 	@Override

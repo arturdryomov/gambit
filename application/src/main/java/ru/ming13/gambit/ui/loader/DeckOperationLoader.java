@@ -29,14 +29,13 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 {
 	private static enum Operation
 	{
-		CREATE, RENAME, DELETE, CHANGE_CURRENT_CARD_INDEX
+		CREATE, RENAME, DELETE
 	}
 
 	private final Operation operation;
 
 	private Deck deck;
 	private String deckTitle;
-	private int currentCardIndex;
 
 	public static DeckOperationLoader newCreationLoader(Context context, String deckTitle) {
 		DeckOperationLoader deckOperationLoader = new DeckOperationLoader(context, Operation.CREATE);
@@ -69,16 +68,6 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 		return deckOperationLoader;
 	}
 
-	public static DeckOperationLoader newCurrentCardIndexChangingLoader(Context context, Deck deck, int currentCardIndex) {
-		DeckOperationLoader deckOperationLoader = new DeckOperationLoader(context,
-			Operation.CHANGE_CURRENT_CARD_INDEX);
-
-		deckOperationLoader.deck = deck;
-		deckOperationLoader.currentCardIndex = currentCardIndex;
-
-		return deckOperationLoader;
-	}
-
 	@Override
 	public LoaderResult<Deck> loadInBackground() {
 		switch (operation) {
@@ -90,9 +79,6 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 
 			case DELETE:
 				return deleteDeck();
-
-			case CHANGE_CURRENT_CARD_INDEX:
-				return changeCurrentCardIndex();
 
 			default:
 				throw new LoaderException();
@@ -127,12 +113,6 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 
 	private LoaderResult<Deck> deleteDeck() {
 		DbProvider.getInstance().getDecks().deleteDeck(deck);
-
-		return buildSuccessResult(deck);
-	}
-
-	private LoaderResult<Deck> changeCurrentCardIndex() {
-		deck.setCurrentCardIndex(currentCardIndex);
 
 		return buildSuccessResult(deck);
 	}
