@@ -20,7 +20,7 @@
 	android:padding="@dimen/padding_horizontal_list_item">
 
 	<TextView
-		android:id="@+id/test_second_line"
+		android:id="@+id/text_second_line"
 		android:singleLine="true"
 		android:textColor="@android:color/secondary_text_light_nodisable"
 		android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
 		android:id="@+id/text_first_line"
 		android:singleLine="true"
 		android:textColor="@android:color/primary_text_light"
-		android:layout_above="@id/test_second_line"
+		android:layout_above="@id/text_second_line"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true" />

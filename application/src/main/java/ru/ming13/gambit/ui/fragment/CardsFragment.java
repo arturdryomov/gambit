@@ -79,7 +79,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 	@Override
 	protected SimpleAdapter buildListAdapter() {
 		String[] listColumnNames = {LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID};
-		int[] listColumnCorrespondingResources = {R.id.text_first_line, R.id.test_second_line};
+		int[] listColumnCorrespondingResources = {R.id.text_first_line, R.id.text_second_line};
 
 		return new SimpleAdapter(getActivity(), list, R.layout.list_item_two_line, listColumnNames,
 			listColumnCorrespondingResources);
