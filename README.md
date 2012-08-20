@@ -29,8 +29,8 @@ The building process is very simple:
 * Run `mvn -f application/pom.xml -P release clean package` to build APK.
 * Run `mvn clean install` to build application and run tests.
 
-For correct building you should set up Google API key.
-Look at `application/res/xml/keys.template.xml` for details.
+For correct building you should set up API keys.
+Look at `application/res/xml/apis.template.xml` for details.
 
 ## Acknowledgements
 
