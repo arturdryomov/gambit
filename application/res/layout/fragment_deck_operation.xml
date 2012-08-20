@@ -26,7 +26,6 @@
 			android:singleLine="true"
 			android:inputType="text"
 			android:hint="@string/hint_deck_name"
-			android:maxLength="@integer/maximum_deck_name_length"
 			style="@style/FormLayoutFirstItem" />
 
 	</LinearLayout>
