@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.text.TextUtils;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.ByteArrayContent;
@@ -38,6 +37,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.Permission;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.remote.InternetDateTime;
 import ru.ming13.gambit.remote.SpreadsheetNotExistsException;
 import ru.ming13.gambit.remote.SyncException;
@@ -114,7 +114,7 @@ public class DriveHelper
 	}
 
 	private String buildResponseFields(String... responseFields) {
-		return TextUtils.join(RESPONSE_FIELDS_DELIMITER, responseFields);
+		return StringUtils.join(responseFields, RESPONSE_FIELDS_DELIMITER);
 	}
 
 	public void updateSpreadsheet(String spreadsheetKey, byte[] xlsData) {
