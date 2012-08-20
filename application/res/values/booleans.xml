@@ -17,15 +17,6 @@
 
 <resources>
 
-	<!-- Copy this file as “keys.xml” to “values” directory. -->
-
-	<!-- Obtain your own API key and paste it to “keys.xml” to use Google Drive sync. -->
-
-	<string name="key_google_api">GOOGLE_API_KEY</string>
-
-	<!-- Create BugSense project and paste it to “keys.xml” to use it. -->
-	<!-- Also you need to enable it via “booleans.xml” -->
-
-	<string name="key_bugsense_project">BUGSENSE_PROJECT_KEY</string>
+	<bool name="flag_bugsense_enabled">false</bool>
 
 </resources>
