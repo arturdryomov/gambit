@@ -35,7 +35,7 @@ public class AsyncAccountSelector
 {
 	public static enum Result
 	{
-		SUCCESS, NO_ACCOUNTS_REGISTERED
+		SUCCESS, NO_ACCOUNTS_REGISTERED, CANCEL
 	}
 
 	public static interface AccountWaiter
@@ -146,12 +146,16 @@ public class AsyncAccountSelector
 			buildAccountsListDialog().show();
 		}
 		else {
-			notifyAccountWaiter(StringUtils.EMPTY);
+			notifyAccountWaiter(Result.NO_ACCOUNTS_REGISTERED);
 		}
 	}
 
 	private boolean haveSomeAccountRegistered() {
 		return !getRegisteredAccountsNames().isEmpty();
+	}
+
+	private void notifyAccountWaiter(Result result) {
+		accountWaiter.onAccountObtained(result, null);
 	}
 
 	private Dialog buildAccountsListDialog() {
@@ -170,6 +174,14 @@ public class AsyncAccountSelector
 
 				saveAccountNameToPreferences(selectedAccountName);
 				notifyAccountWaiter(selectedAccountName);
+			}
+		});
+
+		dialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener()
+		{
+			@Override
+			public void onCancel(DialogInterface dialogInterface) {
+				notifyAccountWaiter(Result.CANCEL);
 			}
 		});
 

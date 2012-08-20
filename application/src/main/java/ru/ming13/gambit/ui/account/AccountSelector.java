@@ -34,6 +34,7 @@ public class AccountSelector
 	/**
 	 * @throws NoAccountRegisteredException if there is no registered accounts
 	 * and user has nothing to select from.
+	 * @throws AuthorizationCanceledException if user cancelled account selection.
 	 */
 	public static Account select(Activity activity) {
 		return new AccountSelector(activity).select();
@@ -86,6 +87,10 @@ public class AccountSelector
 	private Account getSelectedAccount() {
 		if (accountSelectionResult == AsyncAccountSelector.Result.NO_ACCOUNTS_REGISTERED) {
 			throw new NoAccountRegisteredException();
+		}
+
+		if (accountSelectionResult == AsyncAccountSelector.Result.CANCEL) {
+			throw new AuthorizationCanceledException();
 		}
 
 		return selectedAccount;
