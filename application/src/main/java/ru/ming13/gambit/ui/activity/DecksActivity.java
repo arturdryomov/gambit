@@ -130,7 +130,7 @@ public class DecksActivity extends FragmentWrapperActivity implements Authentica
 	}
 
 	private String getApiKey() {
-		return getString(R.string.google_api_key);
+		return getString(R.string.key_google_api);
 	}
 
 	@Override
