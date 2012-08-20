@@ -17,7 +17,7 @@
 package ru.ming13.gambit.local.sqlite;
 
 
-public final class DbFieldParams
+final class DbFieldParams
 {
 	private DbFieldParams() {
 	}
