@@ -58,10 +58,6 @@ abstract class FormFragment extends SherlockFragment
 		formCallback = (FormCallback) activity;
 	}
 
-	protected FormCallback getFormCallback() {
-		return formCallback;
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return inflateFragment(layoutInflater, fragmentContainer);

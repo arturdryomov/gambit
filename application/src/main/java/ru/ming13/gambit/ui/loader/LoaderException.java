@@ -17,6 +17,6 @@
 package ru.ming13.gambit.ui.loader;
 
 
-public class LoaderException extends RuntimeException
+class LoaderException extends RuntimeException
 {
 }
