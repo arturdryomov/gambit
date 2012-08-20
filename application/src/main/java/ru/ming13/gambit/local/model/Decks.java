@@ -25,10 +25,10 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import ru.ming13.gambit.local.DbException;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.sqlite.DbTableNames;
 import ru.ming13.gambit.local.LastUpdateDateTimeHandler;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.sqlite.DbTableNames;
 import ru.ming13.gambit.remote.InternetDateTime;
 
 

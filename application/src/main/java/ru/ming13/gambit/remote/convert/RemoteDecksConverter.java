@@ -99,7 +99,7 @@ public class RemoteDecksConverter
 	private List<RemoteCard> buildRemoteCards(Sheet sheet) {
 		List<RemoteCard> remoteCards = new ArrayList<RemoteCard>();
 
-		if( (sheet.getColumns() < MINIMAL_COLUMNS_COUNT) || (sheet.getRows() < MINIMAL_ROWS_COUNT)) {
+		if ((sheet.getColumns() < MINIMAL_COLUMNS_COUNT) || (sheet.getRows() < MINIMAL_ROWS_COUNT)) {
 			return remoteCards;
 		}
 

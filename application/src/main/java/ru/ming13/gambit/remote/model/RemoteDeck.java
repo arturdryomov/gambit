@@ -80,5 +80,4 @@ public class RemoteDeck
 
 		return true;
 	}
-
 }

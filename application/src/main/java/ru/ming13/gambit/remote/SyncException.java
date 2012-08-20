@@ -16,6 +16,7 @@
 
 package ru.ming13.gambit.remote;
 
+
 public class SyncException extends RuntimeException
 {
 	public SyncException() {

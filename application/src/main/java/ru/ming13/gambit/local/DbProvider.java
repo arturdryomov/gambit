@@ -42,7 +42,7 @@ public class DbProvider
 
 	/**
 	 * @throws AlreadyInstantiatedException if this method is called more
-	 *  than once.
+	 * than once.
 	 */
 	public static DbProvider getInstance(Context context) {
 		if (instance == null) {

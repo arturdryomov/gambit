@@ -21,8 +21,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.DbProvider;
+import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.local.model.Decks;
 import ru.ming13.gambit.remote.convert.RemoteDecksConverter;
