@@ -40,3 +40,4 @@ Gambit uses many open source libraries and tools:
 * [ActionBarSherlock](https://github.com/JakeWharton/ActionBarSherlock)
 * [Google APIs Client Library for Java](http://code.google.com/p/google-api-java-client/)
 * [Java Excel API](http://jexcelapi.sourceforge.net/)
+* [Apache Commons Lang](http://commons.apache.org/lang/)
