@@ -19,6 +19,7 @@ package ru.ming13.gambit.ui.loader;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 
@@ -37,7 +38,7 @@ abstract class AsyncLoader<Data> extends AsyncTaskLoader<LoaderResult<Data>>
 	}
 
 	protected LoaderResult<Data> buildSuccessResult(Data data) {
-		return new LoaderResult<Data>(LoaderStatus.SUCCESS, data, new String());
+		return new LoaderResult<Data>(LoaderStatus.SUCCESS, data, StringUtils.EMPTY);
 	}
 
 	protected LoaderResult<Data> buildErrorResult(Data data, String errorMessage) {

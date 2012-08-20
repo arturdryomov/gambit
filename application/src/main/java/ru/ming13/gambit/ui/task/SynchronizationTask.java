@@ -20,6 +20,7 @@ package ru.ming13.gambit.ui.task;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.remote.NothingToSyncException;
 import ru.ming13.gambit.remote.SyncException;
 import ru.ming13.gambit.remote.Synchronizer;
@@ -92,7 +93,7 @@ public class SynchronizationTask extends AsyncTask<Void, Void, String>
 			result = Result.FAIL;
 		}
 
-		return new String();
+		return StringUtils.EMPTY;
 	}
 
 	private String synchronize() {

@@ -20,6 +20,7 @@ package ru.ming13.gambit.ui.task;
 import android.accounts.Account;
 import android.app.Activity;
 import android.os.AsyncTask;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.ui.account.AccountCreator;
 import ru.ming13.gambit.ui.account.AccountSelector;
 import ru.ming13.gambit.ui.account.AuthorizationCanceledException;
@@ -106,7 +107,7 @@ public class AuthenticationTask extends AsyncTask<Void, Void, String>
 			result = Result.FAIL;
 		}
 
-		return new String();
+		return StringUtils.EMPTY;
 	}
 
 	private Account pickAccount() {
