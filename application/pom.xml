@@ -34,6 +34,10 @@
 			<id>google-api-services</id>
 			<url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
 		</repository>
+		<repository>
+			<id>novoda-mvn-repo</id>
+			<url>https://github.com/novoda/public-mvn-repo/raw/master/releases</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -95,6 +99,12 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 			<groupId>commons-lang</groupId>
+		</dependency>
+
+		<dependency>
+			<artifactId>bugsense-trace</artifactId>
+			<version>1.9</version>
+			<groupId>com.bugsense</groupId>
 		</dependency>
 	</dependencies>
 
