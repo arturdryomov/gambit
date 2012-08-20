@@ -20,10 +20,10 @@ package ru.ming13.gambit.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
@@ -116,24 +116,24 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 
 	@Override
 	protected boolean isUserDataCorrect() {
-		return !isFrontSideTextEmpty() && !isBackSideTextEmpty();
+		return isFrontSideTextCorrect() && isBackSideTextCorrect();
 	}
 
-	private boolean isFrontSideTextEmpty() {
-		return TextUtils.isEmpty(frontSideText);
+	private boolean isFrontSideTextCorrect() {
+		return StringUtils.isNotBlank(frontSideText);
 	}
 
-	private boolean isBackSideTextEmpty() {
-		return TextUtils.isEmpty(backSideText);
+	private boolean isBackSideTextCorrect() {
+		return StringUtils.isNotBlank(backSideText);
 	}
 
 	@Override
 	protected void setUpErrorMessages() {
-		if (isFrontSideTextEmpty()) {
+		if (!isFrontSideTextCorrect()) {
 			setErrorToEdit(R.id.edit_front_side_text, R.string.error_empty_field);
 		}
 
-		if (isBackSideTextEmpty()) {
+		if (!isBackSideTextCorrect()) {
 			setErrorToEdit(R.id.edit_back_side_text, R.string.error_empty_field);
 		}
 	}
