@@ -26,7 +26,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.text.TextUtils;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.util.Preferences;
 
@@ -70,7 +70,8 @@ public class AsyncAccountSelector
 
 	private boolean haveAccountNameInPreferences() {
 		String accountName = loadAccountNameFromPreferences();
-		return !TextUtils.isEmpty(accountName);
+
+		return StringUtils.isNotBlank(accountName);
 	}
 
 	private String loadAccountNameFromPreferences() {
@@ -80,7 +81,7 @@ public class AsyncAccountSelector
 			return accountName;
 		}
 		else {
-			return new String();
+			return StringUtils.EMPTY;
 		}
 	}
 
@@ -145,7 +146,7 @@ public class AsyncAccountSelector
 			buildAccountsListDialog().show();
 		}
 		else {
-			notifyAccountWaiter(new String());
+			notifyAccountWaiter(StringUtils.EMPTY);
 		}
 	}
 

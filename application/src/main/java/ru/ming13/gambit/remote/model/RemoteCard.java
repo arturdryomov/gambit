@@ -17,14 +17,17 @@
 package ru.ming13.gambit.remote.model;
 
 
+import org.apache.commons.lang.StringUtils;
+
+
 public class RemoteCard
 {
 	private String frontSideText;
 	private String backSideText;
 
 	public RemoteCard() {
-		frontSideText = new String();
-		backSideText = new String();
+		frontSideText = StringUtils.EMPTY;
+		backSideText = StringUtils.EMPTY;
 	}
 
 	public String getFrontSideText() {

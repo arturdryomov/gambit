@@ -20,6 +20,8 @@ package ru.ming13.gambit.remote.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 
 public class RemoteDeck
 {
@@ -27,7 +29,7 @@ public class RemoteDeck
 	private List<RemoteCard> cards;
 
 	public RemoteDeck() {
-		title = new String();
+		title = StringUtils.EMPTY;
 		cards = new ArrayList<RemoteCard>();
 	}
 

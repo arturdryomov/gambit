@@ -24,7 +24,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.text.TextUtils;
 import jxl.Cell;
 import jxl.CellView;
 import jxl.Sheet;
@@ -38,6 +37,7 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.remote.DecksNotFoundException;
 import ru.ming13.gambit.remote.model.RemoteCard;
 import ru.ming13.gambit.remote.model.RemoteDeck;
@@ -106,7 +106,7 @@ public class RemoteDecksConverter
 		for (int rowIndex = CARDS_FIRST_ROW_INDEX; rowIndex < sheet.getRows(); rowIndex++) {
 			Cell[] row = sheet.getRow(rowIndex);
 
-			if (!isRowEmpty(row)) {
+			if (isRowCorrect(row)) {
 				remoteCards.add(buildRemoteCard(row));
 			}
 		}
@@ -114,19 +114,19 @@ public class RemoteDecksConverter
 		return remoteCards;
 	}
 
-	private boolean isRowEmpty(Cell[] row) {
+	private boolean isRowCorrect(Cell[] row) {
 		if (row == null) {
-			return true;
+			return false;
 		}
 
 		if (row.length == 0) {
-			return true;
+			return false;
 		}
 
 		String frontSideText = row[FRONT_SIDE_COLUMN_INDEX].getContents();
 		String backSideText = row[BACK_SIDE_COLUMN_INDEX].getContents();
 
-		return TextUtils.isEmpty(frontSideText) && TextUtils.isEmpty(backSideText);
+		return StringUtils.isNotBlank(frontSideText) && StringUtils.isNotBlank(backSideText);
 	}
 
 	private RemoteCard buildRemoteCard(Cell[] row) {

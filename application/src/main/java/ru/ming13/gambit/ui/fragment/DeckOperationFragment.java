@@ -20,10 +20,10 @@ package ru.ming13.gambit.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import org.apache.commons.lang.StringUtils;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.loader.DeckOperationLoader;
@@ -109,16 +109,16 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 
 	@Override
 	protected boolean isUserDataCorrect() {
-		return !isDeckNameEmpty();
+		return isDeckNameCorrect();
 	}
 
-	private boolean isDeckNameEmpty() {
-		return TextUtils.isEmpty(deckTitle);
+	private boolean isDeckNameCorrect() {
+		return StringUtils.isNotBlank(deckTitle);
 	}
 
 	@Override
 	protected void setUpErrorMessages() {
-		if (isDeckNameEmpty()) {
+		if (!isDeckNameCorrect()) {
 			setErrorToEdit(R.id.edit_deck_title, R.string.error_empty_field);
 		}
 	}
