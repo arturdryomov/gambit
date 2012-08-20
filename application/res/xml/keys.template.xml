@@ -24,8 +24,9 @@
 	<string name="key_google_api">GOOGLE_API_KEY</string>
 
 	<!-- Create BugSense project and paste it to “keys.xml” to use it. -->
-	<!-- Also you need to enable it via “booleans.xml” -->
+	<!-- Also you need to enable it, as you see. -->
 
+	<bool name="flag_bugsense_enabled">false</bool>
 	<string name="key_bugsense_project">BUGSENSE_PROJECT_KEY</string>
 
 </resources>
