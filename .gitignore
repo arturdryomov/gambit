@@ -9,8 +9,8 @@ project.properties
 
 target/
 
-# API keys
+# API information
 
-keys.xml
+apis.xml
 
 # Use global .gitignore for your IDE
