@@ -168,7 +168,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_viewing, menu);
+		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager, menu);
 
 		return true;
 	}
