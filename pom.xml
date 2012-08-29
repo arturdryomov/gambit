@@ -45,9 +45,9 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
 					<version>3.3.0</version>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<extensions>true</extensions>
 					<configuration>
 						<sdk>
@@ -55,6 +55,19 @@
 						</sdk>
 						<undeployBeforeDeploy>true</undeployBeforeDeploy>
 						<lazyLibraryUnpack>true</lazyLibraryUnpack>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-jarsigner-plugin</artifactId>
+					<version>1.2</version>
+					<groupId>org.apache.maven.plugins</groupId>
+					<configuration>
+						<removeExistingSignatures>true</removeExistingSignatures>
+						<arguments>
+							<argument>-sigalg</argument><argument>MD5withRSA</argument>
+							<argument>-digestalg</argument><argument>SHA1</argument>
+						</arguments>
 					</configuration>
 				</plugin>
 			</plugins>

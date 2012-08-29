@@ -124,12 +124,29 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<executions>
+							<execution>
+								<id>signing</id>
+								<phase>package</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
 						<artifactId>android-maven-plugin</artifactId>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 						<configuration>
 							<proguard>
 								<skip>false</skip>
 							</proguard>
+							<sign>
+								<debug>false</debug>
+							</sign>
 						</configuration>
 						<executions>
 							<execution>

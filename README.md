@@ -26,7 +26,7 @@ The build requires Maven and the Android SDK to be installed.
 
 The building process is very simple:
 
-* Run `mvn -f application/pom.xml -P release clean package` to build APK.
+* Run `mvn -f application/pom.xml clean package` to build APK.
 * Run `mvn clean install` to build application and run tests.
 
 For correct building you should set up API keys.
