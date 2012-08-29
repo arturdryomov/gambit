@@ -76,7 +76,7 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 	protected void callListPopulation() {
 		DecksLoaderCallback decksLoaderCallback = new DecksLoaderCallback(this);
 
-		getLoaderManager().initLoader(Loaders.DECKS, null, decksLoaderCallback);
+		getLoaderManager().restartLoader(Loaders.DECKS, null, decksLoaderCallback);
 	}
 
 	private static class DecksLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<List<Deck>>>

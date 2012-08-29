@@ -100,7 +100,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 	protected void callListPopulation() {
 		CardsLoaderCallback cardsLoaderCallback = new CardsLoaderCallback(this);
 
-		getLoaderManager().initLoader(Loaders.CARDS, null, cardsLoaderCallback);
+		getLoaderManager().restartLoader(Loaders.CARDS, null, cardsLoaderCallback);
 	}
 
 	private static class CardsLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
