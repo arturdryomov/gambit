@@ -29,7 +29,7 @@
 	<string name="title_choose_google_account">Choose Google account</string>
 
 	<string name="empty_decks">No decks.</string>
-	<string name="empty_cards">No flashcards in deck.</string>
+	<string name="empty_cards">No flashcards</string>
 
 	<string name="loading_decks">Loading decks…</string>
 	<string name="loading_cards">Loading flashcards…</string>
