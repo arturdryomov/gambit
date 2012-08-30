@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2012 Artur Dryomov
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+	<string name="application_name">Gambit</string>
+
+	<string name="title_decks">Стопки</string>
+	<string name="title_cards">Карточки</string>
+	<string name="title_new_deck">Новая стопка</string>
+	<string name="title_rename_deck">Переименование стопки</string>
+	<string name="title_edit_cards">Редактирование карточек</string>
+	<string name="title_new_card">Новая карточка</string>
+	<string name="title_edit_card">Редактирование карточки</string>
+	<string name="title_choose_google_account">Выберите аккаунт Google</string>
+
+	<string name="empty_decks">Стопок нет</string>
+	<string name="empty_cards">Карточек нет</string>
+
+	<string name="loading_decks">Загрузка стопок…</string>
+	<string name="loading_cards">Загрузка карточек…</string>
+	<string name="loading_sync">Синхронизация с Google Drive…</string>
+
+	<string name="error_unspecified">Ой, какая-то ошибка!</string>
+	<string name="error_empty_field">Не может быть пустым.</string>
+	<string name="error_deck_already_exists">Стопка с таким названием уже существует.</string>
+
+	<string name="hint_deck_name">Название стопки</string>
+	<string name="hint_card_front_text">Текст лицевой стороны</string>
+	<string name="hint_card_back_text">Текст обратной стороны</string>
+
+	<string name="menu_accept">Принять</string>
+	<string name="menu_cancel">Отменить</string>
+	<string name="menu_delete">Удалить</string>
+	<string name="menu_rename">Переименовать</string>
+	<string name="menu_edit">Редактировать</string>
+	<string name="menu_sync">Синхронизация</string>
+	<string name="menu_create_new_item">Создание нового элемента</string>
+	<string name="menu_edit_cards">Редактировать карточки</string>
+	<string name="menu_reset_order">Сбросить порядок</string>
+	<string name="menu_shuffle">Перемешать</string>
+	<string name="menu_to_first_card">В начало</string>
+
+</resources>
