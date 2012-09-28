@@ -18,12 +18,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:id="@+id/menu_sync"
-		android:icon="@drawable/ic_menu_refresh"
-		android:title="@string/menu_sync"
-		android:showAsAction="always" />
-
-	<item
 		android:id="@+id/menu_create_item"
 		android:icon="@drawable/ic_menu_content_new"
 		android:title="@string/menu_create_new_item"

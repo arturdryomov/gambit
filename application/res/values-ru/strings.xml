@@ -33,7 +33,6 @@
 
 	<string name="loading_decks">Загрузка стопок…</string>
 	<string name="loading_cards">Загрузка карточек…</string>
-	<string name="loading_sync">Синхронизация с Google Drive…</string>
 
 	<string name="error_unspecified">Ой, какая-то ошибка!</string>
 	<string name="error_empty_field">Не может быть пустым.</string>
@@ -48,7 +47,6 @@
 	<string name="menu_delete">Удалить</string>
 	<string name="menu_rename">Переименовать</string>
 	<string name="menu_edit">Редактировать</string>
-	<string name="menu_sync">Синхронизация</string>
 	<string name="menu_create_new_item">Создание нового элемента</string>
 	<string name="menu_edit_cards">Редактировать карточки</string>
 	<string name="menu_reset_order">Сбросить порядок</string>
