@@ -28,7 +28,6 @@ import ru.ming13.gambit.local.DbException;
 import ru.ming13.gambit.local.DbProvider;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
-import ru.ming13.gambit.remote.InternetDateTime;
 
 
 public class Decks
