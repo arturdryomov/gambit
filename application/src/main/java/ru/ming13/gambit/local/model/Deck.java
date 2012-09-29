@@ -29,7 +29,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import ru.ming13.gambit.local.DbException;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.LastUpdateDateTimeHandler;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
 
@@ -40,7 +39,6 @@ public class Deck implements Parcelable
 	private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
 
 	private final SQLiteDatabase database;
-	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	private long id;
 	private String title;
@@ -48,8 +46,6 @@ public class Deck implements Parcelable
 
 	Deck(ContentValues databaseValues) {
 		database = DbProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
-
 		setValues(databaseValues);
 	}
 
@@ -104,8 +100,6 @@ public class Deck implements Parcelable
 
 		updateTitle(title);
 		this.title = title;
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private void updateTitle(String title) {
@@ -164,8 +158,6 @@ public class Deck implements Parcelable
 
 		updateCurrentCardIndex(index);
 		currentCardIndex = index;
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private void updateCurrentCardIndex(int index) {
@@ -241,8 +233,6 @@ public class Deck implements Parcelable
 		Card card = getCardById(insertCard(frontSideText, backSideText));
 		setCurrentCardIndex(0);
 
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
-
 		return card;
 	}
 
@@ -311,8 +301,6 @@ public class Deck implements Parcelable
 		else {
 			setCurrentCardIndex(0);
 		}
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	public void shuffleCards() {
@@ -346,8 +334,6 @@ public class Deck implements Parcelable
 		}
 
 		setCardsOrder(newCardOrderIndexes);
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private List<Integer> getCurrentCardOrderIndexes() {
@@ -408,8 +394,6 @@ public class Deck implements Parcelable
 		}
 
 		databaseCursor.close();
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private void setCardOrderIndex(int cardId, int index) {
@@ -467,8 +451,6 @@ public class Deck implements Parcelable
 
 	private Deck(Parcel parcel) {
 		database = DbProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
-
 		readFromParcel(parcel);
 	}
 

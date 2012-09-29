@@ -26,7 +26,6 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import ru.ming13.gambit.local.DbException;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.LastUpdateDateTimeHandler;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
 import ru.ming13.gambit.remote.InternetDateTime;
@@ -35,11 +34,9 @@ import ru.ming13.gambit.remote.InternetDateTime;
 public class Decks
 {
 	private final SQLiteDatabase database;
-	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	public Decks() {
 		database = DbProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
 	}
 
 	public List<Deck> getDecksList() {
@@ -105,7 +102,6 @@ public class Decks
 		}
 
 		Deck deck = getDeckById(insertDeckWithTitle(title));
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 
 		return deck;
 	}
@@ -178,8 +174,6 @@ public class Decks
 			String.format("%s = %d", DbFieldNames.CARD_DECK_ID, deck.getId()), null);
 		database.delete(DbTableNames.DECKS, String.format("%s = %d", DbFieldNames.ID, deck.getId()),
 			null);
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	public void clear() {
@@ -196,10 +190,6 @@ public class Decks
 	private void tryClear() {
 		database.delete(DbTableNames.CARDS, null, null);
 		database.delete(DbTableNames.DECKS, null, null);
-	}
-
-	public InternetDateTime getLastUpdatedDateTime() {
-		return lastUpdateDateTimeHandler.getLastUpdatedDateTime();
 	}
 
 	public void beginTransaction() {
