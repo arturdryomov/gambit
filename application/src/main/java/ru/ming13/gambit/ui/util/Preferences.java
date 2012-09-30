@@ -20,7 +20,6 @@ package ru.ming13.gambit.ui.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import org.apache.commons.lang.StringUtils;
 
 
 public final class Preferences
@@ -30,28 +29,10 @@ public final class Preferences
 		private Keys() {
 		}
 
-		public static final String SYNC_GOOGLE_ACCOUNT_NAME = "sync_google_account_name";
-		public static final String SYNC_SPREADSHEET_KEY = "sync_spreadsheet_key";
 		public static final String EXAMPLE_DECK_CREATED = "example_deck_created";
 	}
 
 	private Preferences() {
-	}
-
-	public static void set(Context context, String key, String value) {
-		SharedPreferences.Editor preferencesEditor = getPreferencesEditor(context);
-
-		preferencesEditor.putString(key, value);
-
-		preferencesEditor.commit();
-	}
-
-	private static SharedPreferences.Editor getPreferencesEditor(Context context) {
-		return getSharedPreferences(context).edit();
-	}
-
-	private static SharedPreferences getSharedPreferences(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
 	public static void set(Context context, String key, boolean value) {
@@ -62,8 +43,12 @@ public final class Preferences
 		preferencesEditor.commit();
 	}
 
-	public static String getString(Context context, String key) {
-		return getSharedPreferences(context).getString(key, StringUtils.EMPTY);
+	private static SharedPreferences.Editor getPreferencesEditor(Context context) {
+		return getSharedPreferences(context).edit();
+	}
+
+	private static SharedPreferences getSharedPreferences(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
 	public static boolean getBoolean(Context context, String key) {
