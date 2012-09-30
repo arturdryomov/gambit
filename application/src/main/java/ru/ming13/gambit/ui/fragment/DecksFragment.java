@@ -22,15 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import com.actionbarsherlock.view.Menu;
@@ -42,9 +39,10 @@ import ru.ming13.gambit.ui.loader.DecksLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.task.DeckDeletionTask;
+import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Deck>>>
+public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Deck>>>, ActionModeProvider.ContextMenuHandler
 {
 	private static final String LIST_ITEM_TEXT_ID = "text";
 
@@ -107,65 +105,18 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 	}
 
 	private void setUpContextMenu() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getListView().setOnItemLongClickListener(actionModeListener);
+		if (ActionModeProvider.isActionModeAvailable()) {
+			ActionModeProvider actionModeProvider = new ActionModeProvider(getListView(), this,
+				R.menu.menu_context_decks);
+			actionModeProvider.setUpActionMode();
 		}
 		else {
 			registerForContextMenu(getListView());
 		}
 	}
 
-	private final AdapterView.OnItemLongClickListener actionModeListener = new AdapterView.OnItemLongClickListener()
-	{
-		@Override
-		public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-			getListView().startActionMode(new ActionModeCallback(DecksFragment.this, position));
-
-			return true;
-		}
-	};
-
-	private static class ActionModeCallback implements ActionMode.Callback
-	{
-		private final DecksFragment decksFragment;
-
-		private final int deckListPosition;
-
-		public ActionModeCallback(DecksFragment decksFragment, int deckListPosition) {
-			this.decksFragment = decksFragment;
-
-			this.deckListPosition = deckListPosition;
-		}
-
-		@Override
-		public boolean onCreateActionMode(ActionMode actionMode, android.view.Menu menu) {
-			actionMode.getMenuInflater().inflate(R.menu.menu_context_decks, menu);
-
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode actionMode, android.view.Menu menu) {
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-			if (decksFragment.handleContextMenu(menuItem, deckListPosition)) {
-				actionMode.finish();
-
-				return true;
-			}
-
-			return false;
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode actionMode) {
-		}
-	}
-
-	private boolean handleContextMenu(MenuItem menuItem, int deckListPosition) {
+	@Override
+	public boolean handleContextMenu(MenuItem menuItem, int deckListPosition) {
 		Deck deck = getListItemObject(deckListPosition);
 
 		switch (menuItem.getItemId()) {

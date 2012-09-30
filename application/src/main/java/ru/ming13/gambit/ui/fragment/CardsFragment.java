@@ -22,15 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import com.actionbarsherlock.view.Menu;
@@ -43,9 +40,10 @@ import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.task.CardDeletionTask;
+import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class CardsFragment extends AdaptedListFragment<Card> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
+public class CardsFragment extends AdaptedListFragment<Card> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>, ActionModeProvider.ContextMenuHandler
 {
 	private static final String LIST_ITEM_FRONT_TEXT_ID = "front_text";
 	private static final String LIST_ITEM_BACK_TEXT_ID = "back_text";
@@ -131,65 +129,18 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	}
 
 	private void setUpContextMenu() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getListView().setOnItemLongClickListener(actionModeListener);
+		if (ActionModeProvider.isActionModeAvailable()) {
+			ActionModeProvider actionModeProvider = new ActionModeProvider(getListView(), this,
+				R.menu.menu_context_cards);
+			actionModeProvider.setUpActionMode();
 		}
 		else {
 			registerForContextMenu(getListView());
 		}
 	}
 
-	private final AdapterView.OnItemLongClickListener actionModeListener = new AdapterView.OnItemLongClickListener()
-	{
-		@Override
-		public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-			getListView().startActionMode(new ActionModeCallback(CardsFragment.this, position));
-
-			return true;
-		}
-	};
-
-	private static class ActionModeCallback implements ActionMode.Callback
-	{
-		private final CardsFragment cardsFragment;
-
-		private final int cardListPosition;
-
-		public ActionModeCallback(CardsFragment cardsFragment, int cardListPosition) {
-			this.cardsFragment = cardsFragment;
-
-			this.cardListPosition = cardListPosition;
-		}
-
-		@Override
-		public boolean onCreateActionMode(ActionMode actionMode, android.view.Menu menu) {
-			actionMode.getMenuInflater().inflate(R.menu.menu_context_cards, menu);
-
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode actionMode, android.view.Menu menu) {
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-			if (cardsFragment.handleContextMenu(menuItem, cardListPosition)) {
-				actionMode.finish();
-
-				return true;
-			}
-
-			return false;
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode actionMode) {
-		}
-	}
-
-	private boolean handleContextMenu(MenuItem menuItem, int cardListPosition) {
+	@Override
+	public boolean handleContextMenu(MenuItem menuItem, int cardListPosition) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
 				callCardModification(cardListPosition);
