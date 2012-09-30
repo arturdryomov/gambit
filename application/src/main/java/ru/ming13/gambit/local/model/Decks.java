@@ -100,9 +100,7 @@ public class Decks
 			throw new AlreadyExistsException();
 		}
 
-		Deck deck = getDeckById(insertDeckWithTitle(title));
-
-		return deck;
+		return getDeckById(insertDeckWithTitle(title));
 	}
 
 	boolean containsDeckWithTitle(String title) {

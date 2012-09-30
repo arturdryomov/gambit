@@ -19,7 +19,6 @@
 
 	<string name="application_name">Gambit</string>
 
-	<string name="title_decks">Стопки</string>
 	<string name="title_cards">Карточки</string>
 	<string name="title_new_deck">Новая стопка</string>
 	<string name="title_rename_deck">Переименование стопки</string>
