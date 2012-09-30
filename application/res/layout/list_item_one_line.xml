@@ -14,17 +14,11 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/text"
+	android:singleLine="true"
+	android:textSize="@dimen/text_size_one_line_list_item"
+	android:gravity="center_vertical"
+	android:padding="@dimen/padding_horizontal_list_item"
 	android:layout_width="fill_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight"
-	android:padding="@dimen/padding_horizontal_list_item">
-
-	<TextView
-		android:id="@+id/text"
-		android:singleLine="true"
-		android:textSize="@dimen/text_size_one_line_list_item"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerVertical="true" />
-
-</RelativeLayout>
+	android:layout_height="?android:attr/listPreferredItemHeight" />
