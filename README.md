@@ -30,6 +30,7 @@ Gambit uses some open source libraries and tools:
 * [Android Maven plugin][Android Maven plugin link]
 * [ActionBarSherlock][ActionBarSherlock link]
 * [Apache Commons Lang][Apache Commons Lang link]
+* [Seismic][Seismic link]
 
 
   [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
@@ -40,3 +41,4 @@ Gambit uses some open source libraries and tools:
   [Android Maven plugin link]: https://code.google.com/p/maven-android-plugin
   [ActionBarSherlock link]: http://actionbarsherlock.com
   [Apache Commons Lang link]: http://commons.apache.org/lang
+  [Seismic link]: https://github.com/square/seismic
