@@ -20,7 +20,7 @@
 
 	<ListView
 		android:id="@android:id/list"
-		android:choiceMode="singleChoice"
+		android:choiceMode="none"
 		android:orientation="vertical"
 		style="@style/FullParentLayout" />
 
