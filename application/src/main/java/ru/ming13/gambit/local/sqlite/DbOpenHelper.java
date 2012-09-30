@@ -139,22 +139,4 @@ public class DbOpenHelper extends SQLiteOpenHelper
 			db.endTransaction();
 		}
 	}
-
-	@Override
-	public synchronized SQLiteDatabase getReadableDatabase() {
-		/*
-		 * We need to turn off database locking in order to avoid “HeapWorker is wedged:
-		 * 1XXXXms spent inside Landroid/database/sqlite/SQLiteCursor;.finalize()V” error.
-		 */
-		SQLiteDatabase database = super.getReadableDatabase();
-		database.setLockingEnabled(false);
-		return database;
-	}
-
-	@Override
-	public synchronized SQLiteDatabase getWritableDatabase() {
-		SQLiteDatabase database = super.getWritableDatabase();
-		database.setLockingEnabled(false);
-		return database;
-	}
 }
