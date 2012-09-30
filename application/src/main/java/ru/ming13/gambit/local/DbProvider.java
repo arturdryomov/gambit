@@ -34,7 +34,6 @@ public class DbProvider
 	private Context context;
 	private DbOpenHelper databaseOpenHelper;
 	private Decks decks;
-	private LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	public static DbProvider getInstance() {
 		return instance;
@@ -81,13 +80,6 @@ public class DbProvider
 		}
 
 		return decks;
-	}
-
-	public LastUpdateDateTimeHandler getLastUpdateTimeHandler() {
-		if (lastUpdateDateTimeHandler == null) {
-			lastUpdateDateTimeHandler = new LastUpdateDateTimeHandler();
-		}
-		return lastUpdateDateTimeHandler;
 	}
 
 	public SQLiteDatabase getDatabase() {
