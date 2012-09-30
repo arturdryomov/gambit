@@ -19,7 +19,6 @@ package ru.ming13.gambit.ui.activity;
 
 import java.util.List;
 
-import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -28,10 +27,10 @@ import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.squareup.seismic.ShakeDetector;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.gesture.ShakeListener;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.CardsLoader;
@@ -41,7 +40,7 @@ import ru.ming13.gambit.ui.pager.CardsPagerAdapter;
 import ru.ming13.gambit.ui.task.CurrentCardIndexChangingTask;
 
 
-public class CardsPagerActivity extends SherlockFragmentActivity implements ShakeListener.OnShakeListener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
+public class CardsPagerActivity extends SherlockFragmentActivity implements ShakeDetector.Listener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
 {
 	private static enum CardsOrder
 	{
@@ -53,8 +52,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 	private CardsOrder cardsOrder = CardsOrder.CURRENT;
 
 	private SensorManager sensorManager;
-	private Sensor accelerometer;
-	private ShakeListener shakeListener;
+	private ShakeDetector shakeDetector;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +78,11 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	private void setUpShakeListener() {
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		shakeListener = new ShakeListener();
-
-		shakeListener.setOnShakeListener(this);
+		shakeDetector = new ShakeDetector(this);
 	}
 
 	@Override
-	public void onShake() {
+	public void hearShake() {
 		shuffleCards();
 	}
 
@@ -211,7 +206,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 		saveCurrentCardIndex();
 
-		sensorManager.unregisterListener(shakeListener);
+		shakeDetector.stop();
 	}
 
 	private void saveCurrentCardIndex() {
@@ -224,6 +219,6 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 	protected void onResume() {
 		super.onResume();
 
-		sensorManager.registerListener(shakeListener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+		shakeDetector.start(sensorManager);
 	}
 }
