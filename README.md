@@ -25,12 +25,10 @@ Look at `application/res/xml/apis.template.xml` for details.
 
 ## Acknowledgements
 
-Gambit uses many open source libraries and tools:
+Gambit uses some open source libraries and tools:
 
 * [Android Maven plugin][Android Maven plugin link]
 * [ActionBarSherlock][ActionBarSherlock link]
-* [Google APIs Client Library for Java][Google APIs Client link]
-* [Java Excel API][Java Excel API link]
 * [Apache Commons Lang][Apache Commons Lang link]
 
 
@@ -41,6 +39,4 @@ Gambit uses many open source libraries and tools:
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
   [Android Maven plugin link]: https://code.google.com/p/maven-android-plugin
   [ActionBarSherlock link]: http://actionbarsherlock.com
-  [Google APIs Client link]: https://code.google.com/p/google-api-java-client
-  [Java Excel API link]: http://jexcelapi.sourceforge.net
   [Apache Commons Lang link]: http://commons.apache.org/lang
