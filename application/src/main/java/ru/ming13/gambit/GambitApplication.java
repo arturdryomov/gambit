@@ -42,7 +42,7 @@ public class GambitApplication extends Application
 		}
 	}
 
-	private boolean isBugsenseEnabled () {
+	private boolean isBugsenseEnabled() {
 		return getResources().getBoolean(R.bool.flag_bugsense_enabled);
 	}
 
