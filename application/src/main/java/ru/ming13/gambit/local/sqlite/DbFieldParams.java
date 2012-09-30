@@ -36,6 +36,4 @@ final class DbFieldParams
 	}
 
 	public static final String CARD_TEXT = "text not null";
-
-	public static final String DB_LAST_UPDATE_TIME = "text not null unique";
 }

@@ -23,7 +23,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import ru.ming13.gambit.local.DbException;
 import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.LastUpdateDateTimeHandler;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
 
@@ -33,7 +32,6 @@ public class Card implements Parcelable
 	private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
 
 	private final SQLiteDatabase database;
-	private final LastUpdateDateTimeHandler lastUpdateDateTimeHandler;
 
 	private long id;
 	private String frontSideText;
@@ -41,8 +39,6 @@ public class Card implements Parcelable
 
 	Card(ContentValues databaseValues) {
 		database = DbProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
-
 		setValues(databaseValues);
 	}
 
@@ -88,8 +84,6 @@ public class Card implements Parcelable
 
 		updateFrontSideText(text);
 		frontSideText = text;
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private void updateFrontSideText(String text) {
@@ -125,8 +119,6 @@ public class Card implements Parcelable
 
 		updateBackSideText(text);
 		backSideText = text;
-
-		lastUpdateDateTimeHandler.setCurrentDateTimeAsLastUpdated();
 	}
 
 	private void updateBackSideText(String text) {
@@ -195,8 +187,6 @@ public class Card implements Parcelable
 
 	private Card(Parcel parcel) {
 		database = DbProvider.getInstance().getDatabase();
-		lastUpdateDateTimeHandler = DbProvider.getInstance().getLastUpdateTimeHandler();
-
 		readFromParcel(parcel);
 	}
 

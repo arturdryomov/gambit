@@ -20,15 +20,15 @@ package ru.ming13.gambit.local.sqlite;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import ru.ming13.gambit.local.DbException;
 
 
 public class DbOpenHelper extends SQLiteOpenHelper
 {
-	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "gambit.db";
 
 	public DbOpenHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		super(context, DATABASE_NAME, null, DbVersions.CURRENT);
 	}
 
 	@Override
@@ -48,7 +48,6 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	private void createTables(SQLiteDatabase db) {
 		db.execSQL(buildDecksTableCreationQuery());
 		db.execSQL(buildCardsTableCreationQuery());
-		db.execSQL(buildLastUpdateTimeTableCreationQuery());
 	}
 
 	private String buildDecksTableCreationQuery() {
@@ -88,21 +87,23 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		return queryBuilder.toString();
 	}
 
-	private String buildLastUpdateTimeTableCreationQuery() {
-		StringBuilder queryBuilder = new StringBuilder();
-
-		queryBuilder.append(String.format("create table %s ", DbTableNames.DB_LAST_UPDATE_TIME));
-
-		queryBuilder.append("(");
-		queryBuilder.append(
-			String.format("%s %s", DbFieldNames.DB_LAST_UPDATE_TIME, DbFieldParams.DB_LAST_UPDATE_TIME));
-		queryBuilder.append(")");
-
-		return queryBuilder.toString();
-	}
-
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
+		switch (oldDatabaseVersion) {
+			case DbVersions.LATEST_WITH_CAMEL_NAMING_STYLE:
+				migrateFromCamelNamingStyle(db);
+				break;
+
+			case DbVersions.LATEST_WITH_UPDATE_TIME_SUPPORT:
+				migrateFromUpdateTimeSupport(db);
+				break;
+
+			default:
+				throw new DbException();
+		}
+	}
+
+	private void migrateFromCamelNamingStyle(SQLiteDatabase db) {
 		db.beginTransaction();
 
 		try {
@@ -124,6 +125,19 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 	private void dropTable(SQLiteDatabase db, String tableName) {
 		db.execSQL(String.format("drop table %s", tableName));
+	}
+
+	private void migrateFromUpdateTimeSupport(SQLiteDatabase db) {
+		db.beginTransaction();
+
+		try {
+			dropTable(db, DbTableNames.DB_LAST_UPDATE_TIME);
+
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
 	}
 
 	@Override
