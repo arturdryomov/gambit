@@ -21,6 +21,8 @@
 	<!-- Also you need to enable it, as you see. -->
 
 	<bool name="flag_bugsense_enabled">false</bool>
-	<string name="key_bugsense_project">BUGSENSE_PROJECT_KEY</string>
+	<string name="key_bugsense_project" translatable="false">
+		BUGSENSE_PROJECT_KEY
+	</string>
 
 </resources>

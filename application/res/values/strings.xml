@@ -17,7 +17,9 @@
 
 <resources>
 
-	<string name="application_name">Gambit</string>
+	<string name="application_name" translatable="false">
+		Gambit
+	</string>
 
 	<string name="title_cards">Flashcards</string>
 	<string name="title_new_deck">New deck</string>
