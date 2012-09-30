@@ -27,7 +27,7 @@ public class CardOperationLoader extends AsyncLoader<Card>
 {
 	private static enum Operation
 	{
-		CREATE, MODIFY, DELETE
+		CREATE, MODIFY
 	}
 
 	private final Operation operation;
@@ -63,15 +63,6 @@ public class CardOperationLoader extends AsyncLoader<Card>
 		return cardOperationLoader;
 	}
 
-	public static CardOperationLoader newDeletionInstance(Context context, Deck deck, Card card) {
-		CardOperationLoader cardOperationLoader = new CardOperationLoader(context, Operation.DELETE);
-
-		cardOperationLoader.deck = deck;
-		cardOperationLoader.card = card;
-
-		return cardOperationLoader;
-	}
-
 	@Override
 	public LoaderResult<Card> loadInBackground() {
 		switch (operation) {
@@ -80,9 +71,6 @@ public class CardOperationLoader extends AsyncLoader<Card>
 
 			case MODIFY:
 				return modifyCard();
-
-			case DELETE:
-				return deleteCard();
 
 			default:
 				throw new LoaderException();
@@ -98,12 +86,6 @@ public class CardOperationLoader extends AsyncLoader<Card>
 	private LoaderResult<Card> modifyCard() {
 		card.setFrontSideText(frontSideText);
 		card.setBackSideText(backSideText);
-
-		return buildSuccessResult(card);
-	}
-
-	private LoaderResult<Card> deleteCard() {
-		deck.deleteCard(card);
 
 		return buildSuccessResult(card);
 	}

@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,13 +38,13 @@ import com.actionbarsherlock.view.MenuInflater;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.intent.IntentFactory;
-import ru.ming13.gambit.ui.loader.DeckOperationLoader;
 import ru.ming13.gambit.ui.loader.DecksLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
+import ru.ming13.gambit.ui.task.DeckDeletionTask;
 
 
-public class DecksFragment extends AdaptedListFragment<Deck>
+public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Deck>>>
 {
 	private static final String LIST_ITEM_TEXT_ID = "text";
 
@@ -74,41 +73,30 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 
 	@Override
 	protected void callListPopulation() {
-		DecksLoaderCallback decksLoaderCallback = new DecksLoaderCallback(this);
+		setEmptyListText(R.string.loading_decks);
 
-		getLoaderManager().restartLoader(Loaders.DECKS, null, decksLoaderCallback);
+		getLoaderManager().restartLoader(Loaders.DECKS, null, this);
 	}
 
-	private static class DecksLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<List<Deck>>>
-	{
-		private final DecksFragment decksFragment;
+	@Override
+	public Loader<LoaderResult<List<Deck>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		return DecksLoader.newInstance(getActivity());
+	}
 
-		public DecksLoaderCallback(DecksFragment decksFragment) {
-			this.decksFragment = decksFragment;
+	@Override
+	public void onLoadFinished(Loader<LoaderResult<List<Deck>>> decksLoader, LoaderResult<List<Deck>> decksLoaderResult) {
+		List<Deck> decks = decksLoaderResult.getData();
+
+		if (decks.isEmpty()) {
+			setEmptyListText(R.string.empty_decks);
 		}
-
-		@Override
-		public Loader<LoaderResult<List<Deck>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-			decksFragment.setEmptyListText(R.string.loading_decks);
-
-			return DecksLoader.newInstance(decksFragment.getActivity());
+		else {
+			populateList(decks);
 		}
+	}
 
-		@Override
-		public void onLoadFinished(Loader<LoaderResult<List<Deck>>> decksLoader, LoaderResult<List<Deck>> decksLoaderResult) {
-			List<Deck> decks = decksLoaderResult.getData();
-
-			if (decks.isEmpty()) {
-				decksFragment.setEmptyListText(R.string.empty_decks);
-			}
-			else {
-				decksFragment.populateList(decks);
-			}
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoaderResult<List<Deck>>> decksLoader) {
-		}
+	@Override
+	public void onLoaderReset(Loader<LoaderResult<List<Deck>>> decksLoader) {
 	}
 
 	@Override
@@ -225,36 +213,7 @@ public class DecksFragment extends AdaptedListFragment<Deck>
 	}
 
 	private void deleteDeckEntirely(Deck deck) {
-		DeckDeletionLoaderCallback deckDeletionLoaderCallback = new DeckDeletionLoaderCallback(
-			getActivity(), deck);
-
-		getLoaderManager().restartLoader(Loaders.DECK_OPERATION, null, deckDeletionLoaderCallback);
-	}
-
-	private static class DeckDeletionLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Deck>>
-	{
-		private final Context context;
-
-		private final Deck deck;
-
-		public DeckDeletionLoaderCallback(Context context, Deck deck) {
-			this.context = context;
-
-			this.deck = deck;
-		}
-
-		@Override
-		public Loader<LoaderResult<Deck>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-			return DeckOperationLoader.newDeletionLoader(context, deck);
-		}
-
-		@Override
-		public void onLoadFinished(Loader<LoaderResult<Deck>> deckOperationLoader, LoaderResult<Deck> deckOperationLoaderResult) {
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoaderResult<Deck>> deckOperationLoader) {
-		}
+		DeckDeletionTask.newInstance(deck).execute();
 	}
 
 	@Override

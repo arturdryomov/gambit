@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,13 +39,13 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.intent.IntentFactory;
-import ru.ming13.gambit.ui.loader.CardOperationLoader;
 import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
+import ru.ming13.gambit.ui.task.CardDeletionTask;
 
 
-public class CardsFragment extends AdaptedListFragment<Card>
+public class CardsFragment extends AdaptedListFragment<Card> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
 {
 	private static final String LIST_ITEM_FRONT_TEXT_ID = "front_text";
 	private static final String LIST_ITEM_BACK_TEXT_ID = "back_text";
@@ -98,41 +97,30 @@ public class CardsFragment extends AdaptedListFragment<Card>
 
 	@Override
 	protected void callListPopulation() {
-		CardsLoaderCallback cardsLoaderCallback = new CardsLoaderCallback(this);
-
-		getLoaderManager().restartLoader(Loaders.CARDS, null, cardsLoaderCallback);
+		getLoaderManager().restartLoader(Loaders.CARDS, null, this);
 	}
 
-	private static class CardsLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
-	{
-		private final CardsFragment cardsFragment;
+	@Override
+	public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		setEmptyListText(R.string.loading_cards);
 
-		public CardsLoaderCallback(CardsFragment cardsFragment) {
-			this.cardsFragment = cardsFragment;
+		return CardsLoader.newCurrentOrderInstance(getActivity(), deck);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
+		List<Card> cards = cardsLoaderResult.getData();
+
+		if (cards.isEmpty()) {
+			setEmptyListText(R.string.empty_cards);
 		}
-
-		@Override
-		public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-			cardsFragment.setEmptyListText(R.string.loading_cards);
-
-			return CardsLoader.newCurrentOrderInstance(cardsFragment.getActivity(), cardsFragment.deck);
+		else {
+			populateList(cards);
 		}
+	}
 
-		@Override
-		public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-			List<Card> cards = cardsLoaderResult.getData();
-
-			if (cards.isEmpty()) {
-				cardsFragment.setEmptyListText(R.string.empty_cards);
-			}
-			else {
-				cardsFragment.populateList(cards);
-			}
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
-		}
+	@Override
+	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
 	}
 
 	@Override
@@ -241,38 +229,7 @@ public class CardsFragment extends AdaptedListFragment<Card>
 	}
 
 	private void deleteCardEntirely(Card card) {
-		CardDeletionLoaderCallback cardDeletionLoaderCallback = new CardDeletionLoaderCallback(
-			getActivity(), deck, card);
-
-		getLoaderManager().restartLoader(Loaders.CARD_OPERATION, null, cardDeletionLoaderCallback);
-	}
-
-	private static class CardDeletionLoaderCallback implements LoaderManager.LoaderCallbacks<LoaderResult<Card>>
-	{
-		private final Context context;
-
-		private final Deck deck;
-		private final Card card;
-
-		public CardDeletionLoaderCallback(Context context, Deck deck, Card card) {
-			this.context = context;
-
-			this.deck = deck;
-			this.card = card;
-		}
-
-		@Override
-		public Loader<LoaderResult<Card>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-			return CardOperationLoader.newDeletionInstance(context, deck, card);
-		}
-
-		@Override
-		public void onLoadFinished(Loader<LoaderResult<Card>> cardOperationLoader, LoaderResult<Card> cardOperationLoaderResult) {
-		}
-
-		@Override
-		public void onLoaderReset(Loader<LoaderResult<Card>> cardOperationLoader) {
-		}
+		CardDeletionTask.newInstance(deck, card).execute();
 	}
 
 	@Override
