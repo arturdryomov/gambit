@@ -19,7 +19,7 @@ package ru.ming13.gambit.ui.loader;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.loader.result.LoaderStatus;
 

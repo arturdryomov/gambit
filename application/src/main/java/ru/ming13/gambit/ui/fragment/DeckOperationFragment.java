@@ -23,7 +23,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.loader.DeckOperationLoader;
