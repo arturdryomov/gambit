@@ -38,7 +38,7 @@ public class GambitApplication extends Application
 
 	private void setUpBugsense() {
 		if (isBugsenseEnabled()) {
-			BugSenseHandler.setup(this, getBugsenseProjectKey());
+			BugSenseHandler.initAndStartSession(this, getBugsenseProjectKey());
 		}
 	}
 
