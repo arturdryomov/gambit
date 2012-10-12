@@ -174,7 +174,7 @@ public class Deck implements Parcelable
 			buildCardsSelectionQuery(DbFieldNames.CARD_ORDER_INDEX), null);
 
 		while (databaseCursor.moveToNext()) {
-			ContentValues databaseValues = extractCardDatabaseValuesFromCursor(databaseCursor);
+			ContentValues databaseValues = extractCardDatabaseValues(databaseCursor);
 			cardsList.add(new Card(databaseValues));
 		}
 
@@ -205,7 +205,7 @@ public class Deck implements Parcelable
 		return queryBuilder.toString();
 	}
 
-	private ContentValues extractCardDatabaseValuesFromCursor(Cursor databaseCursor) {
+	private ContentValues extractCardDatabaseValues(Cursor databaseCursor) {
 		ContentValues databaseValues = new ContentValues(databaseCursor.getCount());
 
 		DatabaseUtils.cursorLongToContentValues(databaseCursor, DbFieldNames.ID, databaseValues);
@@ -230,7 +230,7 @@ public class Deck implements Parcelable
 	}
 
 	private Card tryCreateCard(String frontSideText, String backSideText) {
-		Card card = getCardById(insertCard(frontSideText, backSideText));
+		Card card = getCard(insertCard(frontSideText, backSideText));
 		setCurrentCardIndex(0);
 
 		return card;
@@ -249,13 +249,13 @@ public class Deck implements Parcelable
 		return database.insert(DbTableNames.CARDS, null, databaseValues);
 	}
 
-	private Card getCardById(long id) {
+	private Card getCard(long id) {
 		Cursor databaseCursor = database.rawQuery(buildCardByIdSelectionQuery(id), null);
 		if (!databaseCursor.moveToFirst()) {
 			throw new DbException(String.format("There's no a card with id = %d in database", id));
 		}
 
-		Card card = new Card(extractCardDatabaseValuesFromCursor(databaseCursor));
+		Card card = new Card(extractCardDatabaseValues(databaseCursor));
 
 		databaseCursor.close();
 

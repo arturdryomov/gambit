@@ -29,7 +29,7 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 {
 	private static enum Operation
 	{
-		CREATE, RENAME, DELETE
+		CREATE, RENAME
 	}
 
 	private final Operation operation;
@@ -60,14 +60,6 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 		return deckOperationLoader;
 	}
 
-	public static DeckOperationLoader newDeletionLoader(Context context, Deck deck) {
-		DeckOperationLoader deckOperationLoader = new DeckOperationLoader(context, Operation.DELETE);
-
-		deckOperationLoader.deck = deck;
-
-		return deckOperationLoader;
-	}
-
 	@Override
 	public LoaderResult<Deck> loadInBackground() {
 		switch (operation) {
@@ -76,9 +68,6 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 
 			case RENAME:
 				return renameDeck();
-
-			case DELETE:
-				return deleteDeck();
 
 			default:
 				throw new LoaderException();
@@ -109,11 +98,5 @@ public class DeckOperationLoader extends AsyncLoader<Deck>
 
 			return buildErrorResult(deck, errorMessage);
 		}
-	}
-
-	private LoaderResult<Deck> deleteDeck() {
-		DbProvider.getInstance().getDecks().deleteDeck(deck);
-
-		return buildSuccessResult(deck);
 	}
 }

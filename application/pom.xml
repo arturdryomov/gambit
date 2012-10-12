@@ -25,7 +25,7 @@
 
 	<parent>
 		<artifactId>gambit-parent</artifactId>
-		<version>0.8.0</version>
+		<version>0.8.1</version>
 		<groupId>ru.ming13.gambit</groupId>
 	</parent>
 
@@ -45,21 +45,27 @@
 		</dependency>
 
 		<dependency>
-			<artifactId>library</artifactId>
-			<version>4.1.0</version>
+			<artifactId>actionbarsherlock</artifactId>
+			<version>4.2.0</version>
 			<groupId>com.actionbarsherlock</groupId>
 			<type>apklib</type>
 		</dependency>
 
 		<dependency>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-			<groupId>commons-lang</groupId>
+			<artifactId>seismic</artifactId>
+			<version>1.0.0</version>
+			<groupId>com.squareup</groupId>
+		</dependency>
+
+		<dependency>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+			<groupId>org.apache.commons</groupId>
 		</dependency>
 
 		<dependency>
 			<artifactId>bugsense-trace</artifactId>
-			<version>1.9</version>
+			<version>3.0.3</version>
 			<groupId>com.bugsense</groupId>
 		</dependency>
 	</dependencies>

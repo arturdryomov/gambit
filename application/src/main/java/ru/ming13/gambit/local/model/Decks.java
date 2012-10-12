@@ -100,9 +100,7 @@ public class Decks
 			throw new AlreadyExistsException();
 		}
 
-		Deck deck = getDeckById(insertDeckWithTitle(title));
-
-		return deck;
+		return getDeck(insertDeck(title));
 	}
 
 	boolean containsDeckWithTitle(String title) {
@@ -121,7 +119,7 @@ public class Decks
 		return queryBuilder.toString();
 	}
 
-	private long insertDeckWithTitle(String title) {
+	private long insertDeck(String title) {
 		ContentValues databaseValues = new ContentValues();
 		databaseValues.put(DbFieldNames.DECK_TITLE, title);
 		databaseValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, Deck.INVALID_CURRENT_CARD_INDEX);
@@ -129,8 +127,8 @@ public class Decks
 		return database.insert(DbTableNames.DECKS, null, databaseValues);
 	}
 
-	private Deck getDeckById(long id) {
-		Cursor databaseCursor = database.rawQuery(buildDeckByIdSelectionQuery(id), null);
+	private Deck getDeck(long id) {
+		Cursor databaseCursor = database.rawQuery(buildDeckSelectionQuery(id), null);
 		if (!databaseCursor.moveToFirst()) {
 			throw new DbException(String.format("There's no a deck with id = %d in database", id));
 		}
@@ -142,7 +140,7 @@ public class Decks
 		return deck;
 	}
 
-	private String buildDeckByIdSelectionQuery(long id) {
+	private String buildDeckSelectionQuery(long id) {
 		StringBuilder queryBuilder = new StringBuilder();
 
 		queryBuilder.append("select ");

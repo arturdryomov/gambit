@@ -17,7 +17,7 @@
 
 <resources>
 
-	<style name="Theme.Gambit" parent="Theme.Sherlock.Light.DarkActionBar.ForceOverflow">
+	<style name="Theme.Gambit" parent="Theme.Sherlock.Light.DarkActionBar">
 		<item name="actionBarStyle">@style/Theme.Gambit.ActionBar</item>
 		<item name="android:actionBarStyle">@style/Theme.Gambit.ActionBar</item>
 

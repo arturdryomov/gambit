@@ -14,39 +14,30 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit;
+package ru.ming13.gambit.ui.task;
 
 
-import android.app.Application;
-import com.bugsense.trace.BugSenseHandler;
+import android.os.AsyncTask;
 import ru.ming13.gambit.local.DbProvider;
+import ru.ming13.gambit.local.model.Deck;
 
 
-public class GambitApplication extends Application
+public class DeckDeletionTask extends AsyncTask<Void, Void, Void>
 {
+	private final Deck deck;
+
+	public static DeckDeletionTask newInstance(Deck deck) {
+		return new DeckDeletionTask(deck);
+	}
+
+	private DeckDeletionTask(Deck deck) {
+		this.deck = deck;
+	}
+
 	@Override
-	public void onCreate() {
-		super.onCreate();
+	protected Void doInBackground(Void... parameters) {
+		DbProvider.getInstance().getDecks().deleteDeck(deck);
 
-		setUpDatabase();
-		setUpBugsense();
-	}
-
-	private void setUpDatabase() {
-		DbProvider.getInstance(this);
-	}
-
-	private void setUpBugsense() {
-		if (isBugsenseEnabled()) {
-			BugSenseHandler.initAndStartSession(this, getBugsenseProjectKey());
-		}
-	}
-
-	private boolean isBugsenseEnabled() {
-		return getResources().getBoolean(R.bool.flag_bugsense_enabled);
-	}
-
-	private String getBugsenseProjectKey() {
-		return getString(R.string.key_bugsense_project);
+		return null;
 	}
 }
