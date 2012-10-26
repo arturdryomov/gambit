@@ -198,7 +198,6 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 
 	private void callCardCreation() {
 		Intent intent = IntentFactory.createCardCreationIntent(getActivity(), deck);
-
 		startActivity(intent);
 	}
 }

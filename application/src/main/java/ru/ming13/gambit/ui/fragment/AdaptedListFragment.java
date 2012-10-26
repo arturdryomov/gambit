@@ -38,7 +38,6 @@ abstract class AdaptedListFragment<T> extends SherlockListFragment
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
-		setRetainInstance(true);
 	}
 
 	@Override

@@ -120,13 +120,11 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 
 	private void callDeckRenaming(Deck deck) {
 		Intent intent = IntentFactory.createDeckRenamingIntent(getActivity(), deck);
-
 		startActivity(intent);
 	}
 
 	private void callCardsEditing(Deck deck) {
 		Intent intent = IntentFactory.createCardsIntent(getActivity(), deck);
-
 		startActivity(intent);
 	}
 
@@ -170,7 +168,6 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 
 	private void callCardsViewing(Deck deck) {
 		Intent intent = IntentFactory.createCardsPagerIntent(getActivity(), deck);
-
 		startActivity(intent);
 	}
 
@@ -193,7 +190,6 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 
 	private void callDeckCreation() {
 		Intent intent = IntentFactory.createDeckCreationIntent(getActivity());
-
 		startActivity(intent);
 	}
 }
