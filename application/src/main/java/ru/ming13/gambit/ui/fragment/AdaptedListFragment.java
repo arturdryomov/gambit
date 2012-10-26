@@ -17,9 +17,7 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,72 +25,45 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.SimpleAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import ru.ming13.gambit.R;
 
 
-abstract class AdaptedListFragment<ListItemType> extends SherlockListFragment
+abstract class AdaptedListFragment<T> extends SherlockListFragment
 {
-	protected static final String LIST_ITEM_OBJECT_ID = "object";
-
-	protected List<Map<String, Object>> list;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
-
-		if (!isListInitialized()) {
-			initializeList();
-		}
-	}
-
-	private boolean isListInitialized() {
-		return list != null;
-	}
-
-	private void initializeList() {
-		list = new ArrayList<Map<String, Object>>();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View fragmentView = inflateFragment(inflater, container);
+		View fragmentView = inflater.inflate(R.layout.fragment_list, container, false);
 
 		setUpListAdapter();
 
 		return fragmentView;
 	}
 
-	protected View inflateFragment(LayoutInflater layoutInflater, ViewGroup fragmentContainer) {
-		return layoutInflater.inflate(R.layout.fragment_list, fragmentContainer, false);
-	}
-
 	private void setUpListAdapter() {
 		setListAdapter(buildListAdapter());
 	}
 
-	protected abstract SimpleAdapter buildListAdapter();
+	protected abstract ArrayAdapter buildListAdapter();
 
-	protected void populateList(List<ListItemType> listContent) {
-		list.clear();
-
-		for (ListItemType listItemContent : listContent) {
-			list.add(buildListItem(listItemContent));
-		}
-
-		refreshListContent();
+	protected void populateList(List<T> listContent) {
+		getAdapter().clear();
+		getAdapter().addAll(listContent);
 	}
 
-	protected abstract Map<String, Object> buildListItem(ListItemType itemObject);
-
-	protected void refreshListContent() {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-		listAdapter.notifyDataSetChanged();
+	@SuppressWarnings("unchecked")
+	protected ArrayAdapter<T> getAdapter() {
+		return (ArrayAdapter<T>) getListAdapter();
 	}
 
 	protected void setEmptyListText(int textResourceId) {
@@ -101,18 +72,9 @@ abstract class AdaptedListFragment<ListItemType> extends SherlockListFragment
 		emptyListTextView.setText(getString(textResourceId));
 	}
 
-	protected ListItemType getListItemObject(int listPosition) {
-		SimpleAdapter listAdapter = (SimpleAdapter) getListAdapter();
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> listItem = (Map<String, Object>) listAdapter.getItem(listPosition);
-
-		return (ListItemType) listItem.get(LIST_ITEM_OBJECT_ID);
-	}
-
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 
 		callListPopulation();
 	}

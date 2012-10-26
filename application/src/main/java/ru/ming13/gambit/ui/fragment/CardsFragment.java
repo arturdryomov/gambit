@@ -17,9 +17,7 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,13 +26,14 @@ import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.ui.adapter.CardsAdapter;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
@@ -45,9 +44,6 @@ import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 public class CardsFragment extends AdaptedListFragment<Card> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>, ActionModeProvider.ContextMenuHandler
 {
-	private static final String LIST_ITEM_FRONT_TEXT_ID = "front_text";
-	private static final String LIST_ITEM_BACK_TEXT_ID = "back_text";
-
 	private Deck deck;
 
 	public static CardsFragment newInstance(Deck deck) {
@@ -74,23 +70,8 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	}
 
 	@Override
-	protected SimpleAdapter buildListAdapter() {
-		String[] listColumnNames = {LIST_ITEM_FRONT_TEXT_ID, LIST_ITEM_BACK_TEXT_ID};
-		int[] listColumnCorrespondingResources = {R.id.text_first_line, R.id.text_second_line};
-
-		return new SimpleAdapter(getActivity(), list, R.layout.list_item_two_line, listColumnNames,
-			listColumnCorrespondingResources);
-	}
-
-	@Override
-	protected Map<String, Object> buildListItem(Card card) {
-		HashMap<String, Object> listItem = new HashMap<String, Object>();
-
-		listItem.put(LIST_ITEM_OBJECT_ID, card);
-		listItem.put(LIST_ITEM_FRONT_TEXT_ID, card.getFrontSideText());
-		listItem.put(LIST_ITEM_BACK_TEXT_ID, card.getBackSideText());
-
-		return listItem;
+	protected ArrayAdapter buildListAdapter() {
+		return new CardsAdapter(getActivity());
 	}
 
 	@Override
@@ -139,13 +120,15 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 
 	@Override
 	public boolean handleContextMenu(MenuItem menuItem, int cardListPosition) {
+		Card card = getAdapter().getItem(cardListPosition);
+
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
-				callCardModification(cardListPosition);
+				callCardModification(card);
 				return true;
 
 			case R.id.menu_delete:
-				callCardDeletion(cardListPosition);
+				callCardDeletion(card);
 				return true;
 
 			default:
@@ -153,26 +136,20 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 		}
 	}
 
-	private void callCardModification(int cardListPosition) {
-		Card card = getListItemObject(cardListPosition);
-
+	private void callCardModification(Card card) {
 		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), card);
-
 		startActivity(intent);
 	}
 
-	private void callCardDeletion(int cardListPosition) {
-		Card card = getListItemObject(cardListPosition);
-
-		deleteCardFromList(cardListPosition);
+	private void callCardDeletion(Card card) {
+		deleteCardFromList(card);
 		deleteCardEntirely(card);
 	}
 
-	private void deleteCardFromList(int cardListPosition) {
-		list.remove(cardListPosition);
-		refreshListContent();
+	private void deleteCardFromList(Card card) {
+		getAdapter().remove(card);
 
-		if (list.isEmpty()) {
+		if (getAdapter().isEmpty()) {
 			setEmptyListText(R.string.empty_cards);
 		}
 	}
@@ -197,7 +174,9 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int listPosition, long rowId) {
-		callCardModification(listPosition);
+		Card card = getAdapter().getItem(listPosition);
+
+		callCardModification(card);
 	}
 
 	@Override
