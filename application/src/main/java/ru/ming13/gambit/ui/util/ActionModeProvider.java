@@ -36,18 +36,22 @@ public class ActionModeProvider
 	private final ListView listView;
 	private final ActionModeListener actionModeListener;
 
-	public ActionModeProvider(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
+	public static boolean isActionModeAvailable() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+	}
+
+	public static void setUpActionMode(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
+		new ActionModeProvider(listView, contextMenuHandler, contextMenuResourceId).setUpActionMode();
+	}
+
+	private ActionModeProvider(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
 		this.listView = listView;
 
 		this.actionModeListener = new ActionModeListener(listView, contextMenuHandler,
 			contextMenuResourceId);
 	}
 
-	public static boolean isActionModeAvailable() {
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-	}
-
-	public void setUpActionMode() {
+	private void setUpActionMode() {
 		listView.setOnItemLongClickListener(actionModeListener);
 	}
 

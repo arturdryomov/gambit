@@ -106,9 +106,7 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 
 	private void setUpContextMenu() {
 		if (ActionModeProvider.isActionModeAvailable()) {
-			ActionModeProvider actionModeProvider = new ActionModeProvider(getListView(), this,
-				R.menu.menu_context_decks);
-			actionModeProvider.setUpActionMode();
+			ActionModeProvider.setUpActionMode(getListView(), this, R.menu.menu_context_decks);
 		}
 		else {
 			registerForContextMenu(getListView());

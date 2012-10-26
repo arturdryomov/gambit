@@ -130,9 +130,7 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 
 	private void setUpContextMenu() {
 		if (ActionModeProvider.isActionModeAvailable()) {
-			ActionModeProvider actionModeProvider = new ActionModeProvider(getListView(), this,
-				R.menu.menu_context_cards);
-			actionModeProvider.setUpActionMode();
+			ActionModeProvider.setUpActionMode(getListView(), this, R.menu.menu_context_cards);
 		}
 		else {
 			registerForContextMenu(getListView());
