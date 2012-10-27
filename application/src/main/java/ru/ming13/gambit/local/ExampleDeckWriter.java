@@ -44,7 +44,7 @@ public class ExampleDeckWriter
 		R.string.android_version_jelly_bean
 	};
 
-	private static final String[] SUPPORTED_LANGUAGE_CODES = {"de", "es", "fr", "it"};
+	private static final String[] SUPPORTED_LANGUAGE_CODES = {"de", "es", "fr", "it", "ru"};
 
 	private final Context context;
 	private final Decks decks;
