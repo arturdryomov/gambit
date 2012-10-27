@@ -17,44 +17,49 @@
 package ru.ming13.gambit.test;
 
 
-import static ru.ming13.gambit.R.string;
-
-import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.ExampleDeckWriter;
+import ru.ming13.gambit.local.model.Deck;
 
 
 public class ExampleDeckWriterTests extends DatabaseTestCase
 {
-	private ExampleDeckWriter exampleDeckWriter;
-
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		exampleDeckWriter = new ExampleDeckWriter(getContext(), decks);
+		new ExampleDeckWriter(getContext(), decks).writeDeck();
 	}
 
-	public void testBuildDeck() {
-		exampleDeckWriter.writeDeck();
+	public void testWritingDeck() {
+		assertFalse(decks.getDecksList().isEmpty());
 
 		assertEquals(1, decks.getDecksList().size());
+	}
 
+	public void testDeckTitle() {
+		String expectedDeckTitlePrefix = getContext().getString(R.string.example_deck_title);
+		String actualDeckTitle = decks.getDecksList().get(0).getTitle();
+
+		assertTrue(actualDeckTitle.startsWith(expectedDeckTitlePrefix));
+	}
+
+	public void testDeckCards() {
 		Deck deck = decks.getDecksList().get(0);
-		assertTrue(deck.getTitle().startsWith(getContext().getString(string.example_deck_title)));
 
 		int cardsListSize = deck.getCardsList().size();
 		assertEquals(ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES.length, cardsListSize);
 
 		for (int cardIndex = 0; cardIndex < cardsListSize; cardIndex++) {
-			assertValidCard(deck, cardIndex);
+			assertTrue(isCardCorrect(deck, cardIndex));
 		}
 	}
 
-	private void assertValidCard(Deck deck, int cardIndex) {
-		String expectedFrontSideText = getContext().getString(
+	private boolean isCardCorrect(Deck deck, int cardIndex) {
+		String expectedBackSideText = getContext().getString(
 			ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES[cardIndex]);
-		String actualFrontSideText = deck.getCardsList().get(cardIndex).getFrontSideText();
+		String actualBackSideText = deck.getCardsList().get(cardIndex).getBackSideText();
 
-		assertEquals(expectedFrontSideText, actualFrontSideText);
+		return expectedBackSideText.equals(actualBackSideText);
 	}
 }
