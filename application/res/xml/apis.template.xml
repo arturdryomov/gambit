@@ -17,10 +17,8 @@
 
 <resources>
 
-	<!-- Create BugSense project and paste it to “apis.xml” to use it. -->
-	<!-- Also you need to enable it, as you see. -->
+	<!-- Copy this file as “apis.xml” to “values” directory. -->
 
-	<bool name="flag_bugsense_enabled">false</bool>
 	<string name="key_bugsense_project" translatable="false">
 		BUGSENSE_PROJECT_KEY
 	</string>
