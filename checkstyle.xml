@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+	"-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+	"http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+	<module name="FileLength" />
+
+	<module name="TreeWalker">
+		<property name="tabWidth" value="2" />
+
+		<module name="AnonInnerLength">
+			<property name="max" value="60" />
+		</module>
+
+		<module name="ArrayTypeStyle" />
+
+		<module name="AvoidInlineConditionals" />
+
+		<module name="AvoidNestedBlocks" />
+
+		<module name="AvoidStarImport" />
+
+		<module name="AvoidStaticImport" />
+
+		<module name="BooleanExpressionComplexity" />
+
+		<module name="CovariantEquals" />
+
+		<module name="DefaultComesLast" />
+
+		<module name="EmptyStatement" />
+
+		<module name="EqualsAvoidNull" />
+
+		<module name="EqualsHashCode" />
+
+		<module name="FallThrough" />
+
+		<module name="GenericWhitespace" />
+
+		<module name="HideUtilityClassConstructor" />
+
+		<module name="IllegalCatch" />
+
+		<module name="IllegalImport" />
+
+		<module name="IllegalInstantiation" />
+
+		<module name="IllegalThrows" />
+
+		<module name="InnerAssignment" />
+
+		<module name="InterfaceIsType" />
+
+		<module name="LeftCurly">
+			<property name="option" value="nl" />
+			<property name="tokens" value="CLASS_DEF,INTERFACE_DEF" />
+		</module>
+
+		<module name="MagicNumber" />
+
+		<module name="MissingOverride" />
+
+		<module name="MissingSwitchDefault" />
+
+		<module name="NestedForDepth" />
+
+		<module name="NestedIfDepth" />
+
+		<module name="NestedTryDepth" />
+
+		<module name="NoClone" />
+
+		<module name="NoFinalizer" />
+
+		<module name="NoWhitespaceAfter" />
+
+		<module name="NoWhitespaceBefore" />
+
+		<module name="OneStatementPerLine" />
+
+		<module name="OuterTypeFilename" />
+
+		<module name="ParameterAssignment" />
+
+		<module name="ParameterNumber" />
+
+		<module name="RedundantImport" />
+
+		<module name="RedundantModifier" />
+
+		<module name="RedundantThrows" />
+
+		<module name="RightCurly">
+			<property name="option" value="alone" />
+		</module>
+
+		<module name="SimplifyBooleanExpression" />
+
+		<module name="SimplifyBooleanReturn" />
+
+		<module name="StaticVariableName" />
+
+		<module name="StringLiteralEquality" />
+
+		<module name="UncommentedMain" />
+
+		<module name="UnnecessaryParentheses" />
+
+		<module name="UnusedImports" />
+
+		<module name="WhitespaceAfter" />
+
+		<module name="WhitespaceAround" />
+
+	</module>
+
+</module>
