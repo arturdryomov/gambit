@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import ru.ming13.gambit.R;
 
@@ -34,27 +33,6 @@ public class CardEmptyFragment extends SherlockFragment
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
-		return layoutInflater.inflate(R.layout.fragment_card, fragmentContainer, false);
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		setCardTextSize();
-		setCardText();
-	}
-
-	private void setCardTextSize() {
-		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
-
-		cardTextView.setTextSize(getResources().getDimension(R.dimen.text_size_empty_card));
-	}
-
-	private void setCardText() {
-		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
-		String text = getString(R.string.empty_cards);
-
-		cardTextView.setText(text);
+		return layoutInflater.inflate(R.layout.fragment_card_empty, fragmentContainer, false);
 	}
 }
