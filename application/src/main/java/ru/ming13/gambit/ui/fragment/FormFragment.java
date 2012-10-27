@@ -38,11 +38,11 @@ abstract class FormFragment extends SherlockFragment
 {
 	private static final boolean ENABLE_OPTIONS_MENU_FILLING = true;
 
-	public static interface FormCallback
+	public interface FormCallback
 	{
-		public <Data> void onAccept(Data data);
+		<Data> void onAccept(Data data);
 
-		public void onCancel();
+		void onCancel();
 	}
 
 	private FormCallback formCallback;

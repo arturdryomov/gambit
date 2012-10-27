@@ -30,7 +30,7 @@ public class ActionModeProvider
 {
 	public interface ContextMenuHandler
 	{
-		public boolean handleContextMenu(MenuItem menuItem, int listItemPosition);
+		boolean handleContextMenu(MenuItem menuItem, int listItemPosition);
 	}
 
 	private final ListView listView;
