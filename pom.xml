@@ -105,6 +105,7 @@
 					<targetJdk>1.6</targetJdk>
 					<excludes>
 						<exclude>com/actionbarsherlock/**</exclude>
+						<exclude>android/support/v4/**</exclude>
 						<exclude>**/R.java</exclude>
 					</excludes>
 				</configuration>
