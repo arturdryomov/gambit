@@ -57,10 +57,10 @@ public class ActionModeProvider
 
 	private static final class ActionModeListener implements AdapterView.OnItemLongClickListener
 	{
-		private ListView listView;
+		private final ListView listView;
 
-		private ContextMenuHandler contextMenuHandler;
-		private int contextMenuResourceId;
+		private final ContextMenuHandler contextMenuHandler;
+		private final int contextMenuResourceId;
 
 		public ActionModeListener(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
 			this.listView = listView;
