@@ -34,7 +34,7 @@ Gambit uses some open source libraries and tools:
 
 
   [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
-  [Screenshot image]: http://img4.imageshack.us/img4/856/shotua.png
+  [Screenshot image]: http://img607.imageshack.us/img607/5830/shotkf.png
 
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
