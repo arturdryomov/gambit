@@ -147,10 +147,14 @@ public class DeckOperationFragment extends FormFragment implements LoaderManager
 		switch (deckOperationLoaderResult.getStatus()) {
 			case ERROR:
 				setErrorToEdit(R.id.edit_deck_title, deckOperationLoaderResult.getErrorMessage());
-				return;
+				break;
 
 			case SUCCESS:
 				super.performAcceptAction(deckOperationLoaderResult.getData());
+				break;
+
+			default:
+				break;
 		}
 	}
 
