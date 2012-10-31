@@ -36,7 +36,7 @@ import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.pager.CardsPagerAdapter;
+import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.task.CurrentCardIndexChangingTask;
 
 

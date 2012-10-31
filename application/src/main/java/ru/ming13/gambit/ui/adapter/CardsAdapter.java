@@ -14,37 +14,26 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit;
+package ru.ming13.gambit.ui.adapter;
 
 
-import android.app.Application;
-import com.bugsense.trace.BugSenseHandler;
-import ru.ming13.gambit.local.DbProvider;
+import android.content.Context;
+import ru.ming13.gambit.local.model.Card;
 
 
-public class GambitApplication extends Application
+public class CardsAdapter extends TwoLineListAdapter<Card>
 {
+	public CardsAdapter(Context context) {
+		super(context);
+	}
+
 	@Override
-	public void onCreate() {
-		super.onCreate();
-
-		setUpDatabase();
-		setUpBugsense();
+	protected String buildListItemFirstLineText(int position) {
+		return getItem(position).getFrontSideText();
 	}
 
-	private void setUpDatabase() {
-		DbProvider.getInstance(this);
-	}
-
-	private void setUpBugsense() {
-		if (BuildConfig.DEBUG) {
-			return;
-		}
-
-		BugSenseHandler.initAndStartSession(this, getBugsenseProjectKey());
-	}
-
-	private String getBugsenseProjectKey() {
-		return getString(R.string.key_bugsense_project);
+	@Override
+	protected String buildListItemSecondLineText(int position) {
+		return getItem(position).getBackSideText();
 	}
 }

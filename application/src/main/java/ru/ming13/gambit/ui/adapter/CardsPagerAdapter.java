@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.pager;
+package ru.ming13.gambit.ui.adapter;
 
 
 import java.util.List;

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -15,16 +16,9 @@
   ~ limitations under the License.
   -->
 
-<resources>
-
-	<color name="background_action_bar">#0099cc</color>
-	<color name="background_action_bar_item_pressed_start">#ffb218</color>
-	<color name="background_action_bar_item_pressed_end">#ffb639</color>
-	<color name="background_action_bar_item_focused_start">#f78e18</color>
-	<color name="background_action_bar_item_focused_end">#ef8a18</color>
-
-	<color name="background_card">@android:color/white</color>
-	<color name="background_card_shadow">#d8d8d8</color>
-	<color name="background_card_fragment">#e5e5e5</color>
-
-</resources>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/text"
+	android:text="@string/empty_cards"
+	android:textSize="@dimen/text_size_empty_card"
+	android:gravity="center"
+	style="@style/FullParentLayout" />

@@ -16,8 +16,17 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:textSize="@dimen/text_size_card"
-	android:gravity="center"
-	style="@style/FullParentLayout" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background_card_fragment"
+	style="@style/FullParentLayout">
+
+	<TextView
+		android:id="@+id/text"
+		android:textSize="@dimen/text_size_card"
+		android:background="@drawable/background_card"
+		android:layout_centerInParent="true"
+		android:gravity="center"
+		android:layout_margin="@dimen/margin_card"
+		style="@style/FullParentLayout" />
+
+</RelativeLayout>

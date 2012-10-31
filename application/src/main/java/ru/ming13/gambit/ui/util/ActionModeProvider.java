@@ -30,33 +30,37 @@ public class ActionModeProvider
 {
 	public interface ContextMenuHandler
 	{
-		public boolean handleContextMenu(MenuItem menuItem, int listItemPosition);
+		boolean handleContextMenu(MenuItem menuItem, int listItemPosition);
 	}
 
 	private final ListView listView;
 	private final ActionModeListener actionModeListener;
 
-	public ActionModeProvider(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
+	public static boolean isActionModeAvailable() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+	}
+
+	public static void setUpActionMode(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
+		new ActionModeProvider(listView, contextMenuHandler, contextMenuResourceId).setUpActionMode();
+	}
+
+	private ActionModeProvider(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
 		this.listView = listView;
 
 		this.actionModeListener = new ActionModeListener(listView, contextMenuHandler,
 			contextMenuResourceId);
 	}
 
-	public static boolean isActionModeAvailable() {
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-	}
-
-	public void setUpActionMode() {
+	private void setUpActionMode() {
 		listView.setOnItemLongClickListener(actionModeListener);
 	}
 
 	private static final class ActionModeListener implements AdapterView.OnItemLongClickListener
 	{
-		private ListView listView;
+		private final ListView listView;
 
-		private ContextMenuHandler contextMenuHandler;
-		private int contextMenuResourceId;
+		private final ContextMenuHandler contextMenuHandler;
+		private final int contextMenuResourceId;
 
 		public ActionModeListener(ListView listView, ContextMenuHandler contextMenuHandler, int contextMenuResourceId) {
 			this.listView = listView;

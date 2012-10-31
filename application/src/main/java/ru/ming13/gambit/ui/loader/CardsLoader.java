@@ -77,6 +77,9 @@ public class CardsLoader extends AsyncLoader<List<Card>>
 			case ORIGINAL:
 				deck.resetCardsOrder();
 				break;
+
+			default:
+				break;
 		}
 	}
 }

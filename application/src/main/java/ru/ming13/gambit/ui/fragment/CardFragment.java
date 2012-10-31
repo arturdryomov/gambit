@@ -95,6 +95,10 @@ public class CardFragment extends SherlockFragment
 			case BACK:
 				currentCardSide = CardSide.FRONT;
 				break;
+
+			default:
+				currentCardSide = CardSide.FRONT;
+				break;
 		}
 
 		setCurrentCardText();
@@ -108,6 +112,10 @@ public class CardFragment extends SherlockFragment
 
 			case BACK:
 				setCardText(card.getBackSideText());
+				break;
+
+			default:
+				setCardText(card.getFrontSideText());
 				break;
 		}
 	}

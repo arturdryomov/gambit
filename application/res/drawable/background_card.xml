@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -15,16 +16,21 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<color name="background_action_bar">#0099cc</color>
-	<color name="background_action_bar_item_pressed_start">#ffb218</color>
-	<color name="background_action_bar_item_pressed_end">#ffb639</color>
-	<color name="background_action_bar_item_focused_start">#f78e18</color>
-	<color name="background_action_bar_item_focused_end">#ef8a18</color>
+	<item>
+		<shape android:shape="rectangle">
+			<solid android:color="@color/background_card_shadow" />
+			<corners android:radius="@dimen/border_radius_card" />
+		</shape>
+	</item>
 
-	<color name="background_card">@android:color/white</color>
-	<color name="background_card_shadow">#d8d8d8</color>
-	<color name="background_card_fragment">#e5e5e5</color>
+	<item android:bottom="@dimen/padding_card_shadow">
+		<shape android:shape="rectangle">
+			<solid android:color="@color/background_card" />
+			<corners android:radius="@dimen/border_radius_card" />
+		</shape>
+	</item>
 
-</resources>
+</layer-list>
+
