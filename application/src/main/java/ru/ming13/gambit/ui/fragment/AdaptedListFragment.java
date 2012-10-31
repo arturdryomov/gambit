@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.ui.util.AdapterFiller;
 
 
 abstract class AdaptedListFragment<T> extends SherlockListFragment
@@ -57,7 +58,7 @@ abstract class AdaptedListFragment<T> extends SherlockListFragment
 
 	protected void populateList(List<T> listContent) {
 		getAdapter().clear();
-		getAdapter().addAll(listContent);
+		AdapterFiller.fill(getAdapter(), listContent);
 	}
 
 	@SuppressWarnings("unchecked")
