@@ -56,15 +56,9 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	private void setUpDecksList() {
-		setUpDecksLoadingText();
 		setUpDecksAdapter();
 
 		loadDecks();
-	}
-
-	private void setUpDecksLoadingText() {
-		TextView emptyDecksListTextView = (TextView) getListView().getEmptyView();
-		emptyDecksListTextView.setText(R.string.loading_decks);
 	}
 
 	private void setUpDecksAdapter() {
