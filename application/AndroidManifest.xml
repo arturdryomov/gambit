@@ -71,6 +71,11 @@
 			android:name=".ui.activity.CardModificationActivity"
 			android:label="@string/title_edit_card">
 		</activity>
+
+		<provider
+			android:name=".local.provider.DecksProvider"
+			android:authorities="ru.ming13.gambit.provider">
+		</provider>
 	</application>
 
 </manifest>

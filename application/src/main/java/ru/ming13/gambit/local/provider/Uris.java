@@ -9,7 +9,7 @@ import android.net.Uri;
 public class Uris
 {
 	private static final String CONTENT = ContentResolver.SCHEME_CONTENT;
-	private static final String AUTHORITY = "ru.ming13.gambit";
+	private static final String AUTHORITY = "ru.ming13.gambit.provider";
 
 	private static final Uri BASE;
 
