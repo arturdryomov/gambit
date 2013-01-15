@@ -31,7 +31,7 @@ public class Uris
 		public static final int DECKS = 1;
 	}
 
-	private static final class Content
+	public static final class Content
 	{
 		private Content() {
 		}
