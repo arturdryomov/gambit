@@ -17,6 +17,8 @@
 
 <resources>
 
+	<color name="background_window">#f2f2f2</color>
+
 	<color name="background_action_bar">#0099cc</color>
 	<color name="background_action_bar_item_pressed_start">#ffb218</color>
 	<color name="background_action_bar_item_pressed_end">#ffb639</color>
