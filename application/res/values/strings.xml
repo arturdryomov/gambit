@@ -52,4 +52,6 @@
 	<string name="menu_shuffle">Shuffle</string>
 	<string name="menu_to_first_card">Back to beginning</string>
 
+	<string name="mask_card_list_item">%1$s ⇄ %2$s</string>
+
 </resources>
