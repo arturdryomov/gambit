@@ -31,4 +31,6 @@
 
 	<dimen name="border_radius_card">2dp</dimen>
 
+	<dimen name="height_card_indicator">2dp</dimen>
+
 </resources>
