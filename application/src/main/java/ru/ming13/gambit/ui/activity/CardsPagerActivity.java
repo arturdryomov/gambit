@@ -28,15 +28,16 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.squareup.seismic.ShakeDetector;
+import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.task.CurrentCardIndexChangingTask;
 
 
@@ -118,6 +119,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		List<Card> cards = cardsLoaderResult.getData();
 
 		setUpCardsPagerAdapter(cards);
+		setUpCardsPagerIndicator();
 		setUpCurrentCardIndex();
 	}
 
@@ -132,6 +134,11 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	private ViewPager getCardsPager() {
 		return (ViewPager) findViewById(R.id.pager);
+	}
+
+	private void setUpCardsPagerIndicator() {
+		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
+		indicator.setViewPager(getCardsPager());
 	}
 
 	private void setUpCurrentCardIndex() {

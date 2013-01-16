@@ -16,6 +16,20 @@
   ~ limitations under the License.
   -->
 
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/pager"
-	style="@style/FullParentLayout" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background_card_fragment"
+	style="@style/FullParentLayout">
+
+	<android.support.v4.view.ViewPager
+		android:id="@+id/pager"
+		android:layout_alignParentTop="true"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent" />
+
+	<com.viewpagerindicator.UnderlinePageIndicator
+		android:id="@+id/indicator"
+		android:layout_alignParentBottom="true"
+		android:layout_height="@dimen/height_card_indicator"
+		android:layout_width="fill_parent" />
+
+</RelativeLayout>

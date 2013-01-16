@@ -20,6 +20,7 @@
 	<dimen name="margin_top_form_item">10dp</dimen>
 	<dimen name="margin_card">7dp</dimen>
 
+	<dimen name="padding_horizontal_list">5dp</dimen>
 	<dimen name="padding_horizontal_list_item">8dp</dimen>
 	<dimen name="padding_form_layout">20dp</dimen>
 	<dimen name="padding_card_shadow">2dp</dimen>
@@ -29,5 +30,7 @@
 	<dimen name="text_size_empty_card">20sp</dimen>
 
 	<dimen name="border_radius_card">2dp</dimen>
+
+	<dimen name="height_card_indicator">2dp</dimen>
 
 </resources>

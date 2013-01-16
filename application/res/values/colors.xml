@@ -17,6 +17,10 @@
 
 <resources>
 
+	<color name="background_window">#f2f2f2</color>
+
+	<color name="background_divider">#dadada</color>
+
 	<color name="background_action_bar">#0099cc</color>
 	<color name="background_action_bar_item_pressed_start">#ffb218</color>
 	<color name="background_action_bar_item_pressed_end">#ffb639</color>
@@ -26,5 +30,8 @@
 	<color name="background_card">@android:color/white</color>
 	<color name="background_card_shadow">#d8d8d8</color>
 	<color name="background_card_fragment">#e5e5e5</color>
+
+	<color name="text_primary">#333333</color>
+	<color name="text_secondary">#777777</color>
 
 </resources>

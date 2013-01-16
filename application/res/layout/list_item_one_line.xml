@@ -18,6 +18,7 @@
 	android:id="@+id/text"
 	android:singleLine="true"
 	android:textSize="@dimen/text_size_one_line_list_item"
+	android:textColor="@color/text_primary"
 	android:gravity="center_vertical"
 	android:padding="@dimen/padding_horizontal_list_item"
 	android:layout_width="fill_parent"
