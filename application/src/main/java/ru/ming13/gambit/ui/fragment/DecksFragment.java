@@ -183,6 +183,10 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 				callDeckCreation();
 				return true;
 
+			case R.id.menu_licenses:
+				callLicenses();
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
@@ -190,6 +194,11 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 
 	private void callDeckCreation() {
 		Intent intent = IntentFactory.createDeckCreationIntent(getActivity());
+		startActivity(intent);
+	}
+
+	private void callLicenses() {
+		Intent intent = IntentFactory.createLicensesIntent(getActivity());
 		startActivity(intent);
 	}
 }

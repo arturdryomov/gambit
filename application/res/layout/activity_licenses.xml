@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -15,17 +16,6 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-	<item
-		android:id="@+id/menu_create_item"
-		android:icon="@drawable/ic_menu_content_new"
-		android:title="@string/menu_create_new_item"
-		android:showAsAction="always" />
-
-	<item
-		android:id="@+id/menu_licenses"
-		android:title="@string/title_licenses"
-		android:showAsAction="never" />
-
-</menu>
+<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/licenses_webview"
+	style="@style/FullParentLayout"/>
