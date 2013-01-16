@@ -27,6 +27,7 @@
 	<string name="title_edit_cards">Edit flashcards</string>
 	<string name="title_new_card">New flashcard</string>
 	<string name="title_edit_card">Edit flashcard</string>
+	<string name="title_licenses">Open source licenses</string>
 
 	<string name="empty_decks">No decks.</string>
 	<string name="empty_cards">No flashcards</string>
