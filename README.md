@@ -29,6 +29,7 @@ Gambit uses some open source libraries and tools:
 
 * [Android Maven plugin][Android Maven plugin link]
 * [ActionBarSherlock][ActionBarSherlock link]
+* [ViewPagerIndicator][ViewPagerIndicator link]
 * [Apache Commons Lang][Apache Commons Lang link]
 * [Seismic][Seismic link]
 
@@ -40,5 +41,6 @@ Gambit uses some open source libraries and tools:
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
   [Android Maven plugin link]: https://code.google.com/p/maven-android-plugin
   [ActionBarSherlock link]: http://actionbarsherlock.com
+  [ViewPagerIndicator link]: http://viewpagerindicator.com
   [Apache Commons Lang link]: http://commons.apache.org/lang
   [Seismic link]: https://github.com/square/seismic
