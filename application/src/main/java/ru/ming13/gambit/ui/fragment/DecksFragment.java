@@ -44,20 +44,26 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setRetainInstance(true);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_list, container, false);
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		setUpDecksList();
 	}
 
 	private void setUpDecksList() {
 		setUpDecksAdapter();
-
 		loadDecks();
 	}
 
