@@ -94,7 +94,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> decksLoader, Cursor decksCursor) {
-		decksAdapter.changeCursor(decksCursor);
+		decksAdapter.swapCursor(decksCursor);
 
 		if (getListAdapter().isEmpty()) {
 			setUpNoDecksText();
@@ -108,6 +108,6 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> decksLoader) {
-		decksAdapter.changeCursor(null);
+		decksAdapter.swapCursor(null);
 	}
 }
