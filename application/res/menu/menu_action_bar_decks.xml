@@ -23,4 +23,9 @@
 		android:title="@string/menu_create_new_item"
 		android:showAsAction="always" />
 
+	<item
+		android:id="@+id/menu_licenses"
+		android:title="@string/title_licenses"
+		android:showAsAction="never" />
+
 </menu>

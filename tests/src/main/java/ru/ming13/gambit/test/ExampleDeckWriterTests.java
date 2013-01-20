@@ -56,10 +56,10 @@ public class ExampleDeckWriterTests extends DatabaseTestCase
 	}
 
 	private boolean isCardCorrect(Deck deck, int cardIndex) {
-		String expectedBackSideText = getContext().getString(
+		String expectedFrontSideText = getContext().getString(
 			ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES[cardIndex]);
-		String actualBackSideText = deck.getCardsList().get(cardIndex).getBackSideText();
+		String actualFrontSideText = deck.getCardsList().get(cardIndex).getFrontSideText();
 
-		return expectedBackSideText.equals(actualBackSideText);
+		return expectedFrontSideText.equals(actualFrontSideText);
 	}
 }

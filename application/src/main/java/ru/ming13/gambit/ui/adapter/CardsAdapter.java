@@ -18,22 +18,21 @@ package ru.ming13.gambit.ui.adapter;
 
 
 import android.content.Context;
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Card;
 
 
-public class CardsAdapter extends TwoLineListAdapter<Card>
+public class CardsAdapter extends OneLineListAdapter<Card>
 {
 	public CardsAdapter(Context context) {
 		super(context);
 	}
 
 	@Override
-	protected String buildListItemFirstLineText(int position) {
-		return getItem(position).getFrontSideText();
-	}
+	protected String buildListItemText(int position) {
+		Card card = getItem(position);
+		String maskCardListItem = getContext().getString(R.string.mask_card_list_item);
 
-	@Override
-	protected String buildListItemSecondLineText(int position) {
-		return getItem(position).getBackSideText();
+		return String.format(maskCardListItem, card.getFrontSideText(), card.getBackSideText());
 	}
 }

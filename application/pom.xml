@@ -52,6 +52,13 @@
 		</dependency>
 
 		<dependency>
+			<artifactId>library</artifactId>
+			<version>2.4.1</version>
+			<groupId>com.viewpagerindicator</groupId>
+			<type>apklib</type>
+		</dependency>
+
+		<dependency>
 			<artifactId>seismic</artifactId>
 			<version>1.0.0</version>
 			<groupId>com.squareup</groupId>

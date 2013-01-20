@@ -28,6 +28,7 @@ import ru.ming13.gambit.ui.activity.CardsActivity;
 import ru.ming13.gambit.ui.activity.CardsPagerActivity;
 import ru.ming13.gambit.ui.activity.DeckCreationActivity;
 import ru.ming13.gambit.ui.activity.DeckRenamingActivity;
+import ru.ming13.gambit.ui.activity.LicensesActivity;
 
 
 public final class IntentFactory
@@ -72,5 +73,9 @@ public final class IntentFactory
 		intent.putExtra(IntentExtras.DECK, deck);
 
 		return intent;
+	}
+
+	public static Intent createLicensesIntent(Context context) {
+		return new Intent(context, LicensesActivity.class);
 	}
 }

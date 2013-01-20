@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -15,22 +16,6 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/FullParentLayout">
-
-	<ListView
-		android:id="@android:id/list"
-		android:choiceMode="none"
-		android:orientation="vertical"
-		android:fastScrollEnabled="true"
-		android:paddingLeft="@dimen/padding_horizontal_list"
-		android:paddingRight="@dimen/padding_horizontal_list"
-		style="@style/FullParentLayout" />
-
-	<TextView
-		android:id="@android:id/empty"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true" />
-
-</RelativeLayout>
+<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/licenses_webview"
+	style="@style/FullParentLayout"/>

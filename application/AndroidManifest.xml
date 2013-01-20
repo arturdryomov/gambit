@@ -72,10 +72,14 @@
 			android:label="@string/title_edit_card">
 		</activity>
 
+		<activity
+			android:name=".ui.activity.LicensesActivity"
+			android:label="@string/title_licenses">
+		</activity>
+
 		<provider
 			android:name=".local.provider.DecksProvider"
 			android:authorities="ru.ming13.gambit.provider">
 		</provider>
 	</application>
-
 </manifest>

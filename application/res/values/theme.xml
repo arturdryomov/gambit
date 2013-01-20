@@ -26,6 +26,11 @@
 
 		<!-- Fix pre-Honeycomb too light EditText error messages. -->
 		<item name="android:textColorSecondaryInverse">@android:color/secondary_text_light</item>
+
+		<!-- Change background color -->
+		<item name="android:colorBackground">@color/background_window</item>
+		<item name="android:colorBackgroundCacheHint">@color/background_window</item>
+		<item name="android:windowBackground">@color/background_window</item>
 	</style>
 
 	<style name="Theme.Gambit.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">

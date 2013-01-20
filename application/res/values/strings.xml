@@ -27,6 +27,7 @@
 	<string name="title_edit_cards">Edit flashcards</string>
 	<string name="title_new_card">New flashcard</string>
 	<string name="title_edit_card">Edit flashcard</string>
+	<string name="title_licenses">Open source licenses</string>
 
 	<string name="empty_decks">No decks.</string>
 	<string name="empty_cards">No flashcards</string>
@@ -51,5 +52,7 @@
 	<string name="menu_reset_order">Reset order</string>
 	<string name="menu_shuffle">Shuffle</string>
 	<string name="menu_to_first_card">Back to beginning</string>
+
+	<string name="mask_card_list_item">%1$s → %2$s</string>
 
 </resources>
