@@ -119,7 +119,7 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	}
 
 	@Override
-	public boolean handleContextMenu(MenuItem menuItem, int cardListPosition) {
+	public boolean handleContextMenu(MenuItem menuItem, int cardListPosition, long cardListId) {
 		Card card = getAdapter().getItem(cardListPosition);
 
 		switch (menuItem.getItemId()) {
@@ -168,8 +168,9 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
 		int cardListPosition = getListPosition(menuItem);
+		long cardListId = getListItemId(menuItem);
 
-		return handleContextMenu(menuItem, cardListPosition);
+		return handleContextMenu(menuItem, cardListPosition, cardListId);
 	}
 
 	@Override

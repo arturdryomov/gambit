@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.fragment;
+package ru.ming13.gambit.ui.bus;
 
 
-final class FragmentArguments
+import com.squareup.otto.Bus;
+
+
+public class BusProvider
 {
-	private FragmentArguments() {
+	private static Bus instance;
+
+	private BusProvider() {
 	}
 
-	public static final String DECK = "deck";
-	public static final String CARD = "card";
+	public static Bus getInstance() {
+		if (instance == null) {
+			instance = new Bus();
+		}
 
-	public static final String DECK_URI = "deck_uri";
-
-	public static final String OPERATION = "operation";
+		return instance;
+	}
 }

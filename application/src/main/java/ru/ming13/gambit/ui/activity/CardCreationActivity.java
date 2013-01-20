@@ -24,7 +24,7 @@ import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
-public class CardCreationActivity extends FragmentWrapperActivity implements CardOperationFragment.FormCallback
+public class CardCreationActivity extends FragmentWrapperActivity
 {
 	@Override
 	protected Fragment buildFragment() {
@@ -39,15 +39,5 @@ public class CardCreationActivity extends FragmentWrapperActivity implements Car
 		}
 
 		return deck;
-	}
-
-	@Override
-	public <Data> void onAccept(Data data) {
-		finish();
-	}
-
-	@Override
-	public void onCancel() {
-		finish();
 	}
 }

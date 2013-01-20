@@ -2,18 +2,22 @@ package ru.ming13.gambit.local.provider;
 
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.sqlite.DbOpenHelper;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
 
 
 public class DecksProvider extends ContentProvider
 {
+	private static final int DEFAULT_CURRENT_CARD_INDEX = 0;
+
 	private SQLiteOpenHelper databaseHelper;
 
 	@Override
@@ -29,18 +33,30 @@ public class DecksProvider extends ContentProvider
 
 		queryBuilder.setTables(DbTableNames.DECKS);
 
-		switch (Uris.MATCHER.match(uri)) {
-			case Uris.Codes.DECKS:
+		switch (ProviderUris.MATCHER.match(uri)) {
+			case ProviderUris.Codes.DECKS:
+				break;
+
+			case ProviderUris.Codes.DECK:
+				selection = buildDeckWhereClause(uri);
 				break;
 
 			default:
 				throw new IllegalArgumentException("Unsupported URI.");
 		}
 
-		SQLiteDatabase database = databaseHelper.getReadableDatabase();
+		Cursor decksCursor = queryBuilder.query(databaseHelper.getReadableDatabase(), projection,
+			selection, selectionArguments, null, null, sortOrder);
 
-		return queryBuilder.query(database, projection, selection, selectionArguments, null, null,
-			sortOrder);
+		decksCursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+		return decksCursor;
+	}
+
+	private String buildDeckWhereClause(Uri deckUri) {
+		long deckId = ContentUris.parseId(deckUri);
+
+		return String.format("%s = %d", DbFieldNames.ID, deckId);
 	}
 
 	@Override
@@ -50,16 +66,97 @@ public class DecksProvider extends ContentProvider
 
 	@Override
 	public Uri insert(Uri uri, ContentValues contentValues) {
-		throw new UnsupportedOperationException();
+		if (ProviderUris.MATCHER.match(uri) != ProviderUris.Codes.DECKS) {
+			throw new IllegalArgumentException("Unsupported URI.");
+		}
+
+		if (!areDeckValuesValid(contentValues)) {
+			throw new IllegalArgumentException("Content values are not valid.");
+		}
+
+		if (!isDeckTitleUnique(contentValues)) {
+			throw new DeckExistsException();
+		}
+
+		setDeckValuesDefaults(contentValues);
+
+		return createDeck(contentValues);
+	}
+
+	private boolean areDeckValuesValid(ContentValues deckValues) {
+		return deckValues.containsKey(DbFieldNames.DECK_TITLE);
+	}
+
+	private boolean isDeckTitleUnique(ContentValues deckValues) {
+		String deckTitle = deckValues.getAsString(DbFieldNames.DECK_TITLE);
+
+		return DatabaseUtils.longForQuery(databaseHelper.getReadableDatabase(),
+			buildDecksCountQuery(deckTitle), null) == 0;
+	}
+
+	private String buildDecksCountQuery(String deckTitle) {
+		StringBuilder queryBuilder = new StringBuilder();
+
+		queryBuilder.append(String.format("select count(%s) ", DbFieldNames.ID));
+		queryBuilder.append(String.format("from %s ", DbTableNames.DECKS));
+		queryBuilder.append(
+			String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, deckTitle));
+
+		return queryBuilder.toString();
+	}
+
+	private void setDeckValuesDefaults(ContentValues deckValues) {
+		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DEFAULT_CURRENT_CARD_INDEX);
+	}
+
+	private Uri createDeck(ContentValues deckValues) {
+		long deckId = databaseHelper.getWritableDatabase().insert(DbTableNames.DECKS, null, deckValues);
+
+		Uri deckUri = ContentUris.withAppendedId(ProviderUris.Content.DECKS, deckId);
+		getContext().getContentResolver().notifyChange(deckUri, null);
+
+		return deckUri;
 	}
 
 	@Override
-	public int delete(Uri uri, String s, String[] strings) {
-		throw new UnsupportedOperationException();
+	public int delete(Uri uri, String selection, String[] selectionArguments) {
+		if (ProviderUris.MATCHER.match(uri) != ProviderUris.Codes.DECK) {
+			throw new IllegalArgumentException("Unsupported URI.");
+		}
+
+		return deleteDeck(uri);
+	}
+
+	private int deleteDeck(Uri deckUri) {
+		int affectedRowsCount = databaseHelper.getWritableDatabase().delete(DbTableNames.DECKS,
+			buildDeckWhereClause(deckUri), null);
+		getContext().getContentResolver().notifyChange(deckUri, null);
+
+		return affectedRowsCount;
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-		throw new UnsupportedOperationException();
+	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArguments) {
+		if (ProviderUris.MATCHER.match(uri) != ProviderUris.Codes.DECK) {
+			throw new IllegalArgumentException("Invalid URI.");
+		}
+
+		if (!areDeckValuesValid(contentValues)) {
+			throw new IllegalArgumentException("Content values are not valid.");
+		}
+
+		if (!isDeckTitleUnique(contentValues)) {
+			throw new DeckExistsException();
+		}
+
+		return updateDeck(uri, contentValues);
+	}
+
+	private int updateDeck(Uri deckUri, ContentValues deckValues) {
+		int affectedRowsContent = databaseHelper.getWritableDatabase().update(DbTableNames.DECKS,
+			deckValues, buildDeckWhereClause(deckUri), null);
+		getContext().getContentResolver().notifyChange(deckUri, null);
+
+		return affectedRowsContent;
 	}
 }

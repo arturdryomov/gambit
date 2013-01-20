@@ -17,26 +17,28 @@
 package ru.ming13.gambit.ui.task;
 
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.local.DbProvider;
-import ru.ming13.gambit.local.model.Deck;
 
 
 public class DeckDeletionTask extends AsyncTask<Void, Void, Void>
 {
-	private final Deck deck;
+	private final ContentResolver contentResolver;
+	private final Uri deckUri;
 
-	public static DeckDeletionTask newInstance(Deck deck) {
-		return new DeckDeletionTask(deck);
+	public static void execute(ContentResolver contentResolver, Uri deckUri) {
+		new DeckDeletionTask(contentResolver, deckUri).execute();
 	}
 
-	private DeckDeletionTask(Deck deck) {
-		this.deck = deck;
+	private DeckDeletionTask(ContentResolver contentResolver, Uri deckUri) {
+		this.contentResolver = contentResolver;
+		this.deckUri = deckUri;
 	}
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
-		DbProvider.getInstance().getDecks().deleteDeck(deck);
+		contentResolver.delete(deckUri, null, null);
 
 		return null;
 	}

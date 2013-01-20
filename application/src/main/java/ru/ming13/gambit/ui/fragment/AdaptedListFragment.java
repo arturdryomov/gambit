@@ -86,4 +86,10 @@ abstract class AdaptedListFragment<T> extends SherlockListFragment
 
 		return menuItemInfo.position;
 	}
+
+	protected long getListItemId(MenuItem menuItem) {
+		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+
+		return menuItemInfo.id;
+	}
 }

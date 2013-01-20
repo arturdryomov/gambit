@@ -19,6 +19,7 @@ package ru.ming13.gambit.ui.intent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
@@ -38,9 +39,9 @@ public final class IntentFactory
 		return new Intent(context, DeckCreationActivity.class);
 	}
 
-	public static Intent createDeckRenamingIntent(Context context, Deck deck) {
+	public static Intent createDeckRenamingIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, DeckRenamingActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}

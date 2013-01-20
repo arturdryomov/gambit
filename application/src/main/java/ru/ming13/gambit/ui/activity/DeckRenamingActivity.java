@@ -17,37 +17,55 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.net.Uri;
 import android.support.v4.app.Fragment;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.fragment.DeckOperationFragment;
+import com.squareup.otto.Subscribe;
+import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.DeckRenamedEvent;
+import ru.ming13.gambit.ui.bus.DeckRenamingCancelledEvent;
+import ru.ming13.gambit.ui.fragment.DeckRenamingFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 
 
-public class DeckRenamingActivity extends FragmentWrapperActivity implements DeckOperationFragment.FormCallback
+public class DeckRenamingActivity extends FragmentWrapperActivity
 {
 	@Override
 	protected Fragment buildFragment() {
-		return DeckOperationFragment.newRenamingInstance(extractReceivedDeck());
+		return DeckRenamingFragment.newInstance(extractReceivedDeckUri());
 	}
 
-	private Deck extractReceivedDeck() {
-		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Uri extractReceivedDeckUri() {
+		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
 
-		if (deck == null) {
+		if (deckUri == null) {
 			throw new IntentException();
 		}
 
-		return deck;
+		return deckUri;
 	}
 
-	@Override
-	public <Data> void onAccept(Data data) {
+	@Subscribe
+	public void onDeckRenamed(DeckRenamedEvent deckRenamedEvent) {
+		finish();
+	}
+
+	@Subscribe
+	public void onDeckRenamingCancelled(DeckRenamingCancelledEvent deckRenamingCancelledEvent) {
 		finish();
 	}
 
 	@Override
-	public void onCancel() {
-		finish();
+	protected void onResume() {
+		super.onResume();
+
+		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		BusProvider.getInstance().unregister(this);
 	}
 }

@@ -6,7 +6,7 @@ import android.content.UriMatcher;
 import android.net.Uri;
 
 
-public class Uris
+public class ProviderUris
 {
 	private static final String CONTENT = ContentResolver.SCHEME_CONTENT;
 	private static final String AUTHORITY = "ru.ming13.gambit.provider";
@@ -20,7 +20,10 @@ public class Uris
 		private Paths() {
 		}
 
+		public static final String NUMBER = "#";
+
 		public static final String DECKS = "decks";
+		public static final String DECK = "decks/#";
 	}
 
 	public static final class Codes
@@ -29,6 +32,7 @@ public class Uris
 		}
 
 		public static final int DECKS = 1;
+		public static final int DECK = 2;
 	}
 
 	public static final class Content
@@ -37,11 +41,13 @@ public class Uris
 		}
 
 		public static final Uri DECKS = Uri.withAppendedPath(BASE, Paths.DECKS);
+		public static final Uri DECK = Uri.withAppendedPath(DECKS, Paths.NUMBER);
 	}
 
 	static {
 		BASE = new Uri.Builder().scheme(CONTENT).authority(AUTHORITY).build();
 
 		MATCHER.addURI(AUTHORITY, Paths.DECKS, Codes.DECKS);
+		MATCHER.addURI(AUTHORITY, Paths.DECK, Codes.DECK);
 	}
 }

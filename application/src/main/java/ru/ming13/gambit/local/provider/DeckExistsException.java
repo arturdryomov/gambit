@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.fragment;
+package ru.ming13.gambit.local.provider;
 
 
-final class FragmentArguments
+public class DeckExistsException extends ProviderException
 {
-	private FragmentArguments() {
-	}
-
-	public static final String DECK = "deck";
-	public static final String CARD = "card";
-
-	public static final String DECK_URI = "deck_uri";
-
-	public static final String OPERATION = "operation";
 }

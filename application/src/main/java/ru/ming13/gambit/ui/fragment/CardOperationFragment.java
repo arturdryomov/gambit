@@ -138,9 +138,18 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 		}
 	}
 
-	@Override
 	protected <Data> void performAcceptAction(Data data) {
 		getLoaderManager().initLoader(Loaders.CARD_OPERATION, null, this);
+	}
+
+	@Override
+	protected void performAcceptAction() {
+		//To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	protected void performCancelAction() {
+		//To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
@@ -161,7 +170,7 @@ public class CardOperationFragment extends FormFragment implements LoaderManager
 
 	@Override
 	public void onLoadFinished(Loader<LoaderResult<Card>> cardOperationLoader, LoaderResult<Card> cardOperationLoaderResult) {
-		super.performAcceptAction(cardOperationLoaderResult.getData());
+		//super.performAcceptAction(cardOperationLoaderResult.getData());
 	}
 
 	@Override

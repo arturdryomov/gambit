@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.fragment;
+package ru.ming13.gambit.ui.bus;
 
 
-final class FragmentArguments
+public class DeckQueriedEvent
 {
-	private FragmentArguments() {
+	private final String deckTitle;
+
+	public DeckQueriedEvent(String deckTitle) {
+		this.deckTitle = deckTitle;
 	}
 
-	public static final String DECK = "deck";
-	public static final String CARD = "card";
-
-	public static final String DECK_URI = "deck_uri";
-
-	public static final String OPERATION = "operation";
+	public String getDeckTitle() {
+		return deckTitle;
+	}
 }
