@@ -17,11 +17,12 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import java.util.List;
-
+import android.database.Cursor;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -30,25 +31,22 @@ import com.actionbarsherlock.view.MenuItem;
 import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.local.provider.ProviderUris;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
-import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
-import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.task.CurrentCardIndexChangingTask;
 
 
-public class CardsPagerActivity extends SherlockFragmentActivity implements ShakeDetector.Listener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
+public class CardsPagerActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
 {
 	private static enum CardsOrder
 	{
 		CURRENT, SHUFFLE, ORIGINAL
 	}
 
-	private Deck deck;
+	private Uri cardsUri;
 
 	private CardsOrder cardsOrder = CardsOrder.CURRENT;
 
@@ -60,21 +58,21 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pager);
 
-		deck = extractReceivedDeck();
+		cardsUri = ProviderUris.Content.buildCardsUri(extractReceivedDeckUri());
 
 		setUpShakeListener();
 
 		populatePager(savedInstanceState);
 	}
 
-	private Deck extractReceivedDeck() {
-		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Uri extractReceivedDeckUri() {
+		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
 
-		if (deck == null) {
+		if (deckUri == null) {
 			throw new IntentException();
 		}
 
-		return deck;
+		return deckUri;
 	}
 
 	private void setUpShakeListener() {
@@ -98,38 +96,26 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 	}
 
 	@Override
-	public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		switch (cardsOrder) {
-			case CURRENT:
-				return CardsLoader.newCurrentOrderInstance(this, deck);
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		String[] projection = {DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
+		String sort = DbFieldNames.CARD_FRONT_SIDE_TEXT;
 
-			case SHUFFLE:
-				return CardsLoader.newShuffleOrderInstance(this, deck);
-
-			case ORIGINAL:
-				return CardsLoader.newOriginalOrderInstance(this, deck);
-
-			default:
-				return CardsLoader.newCurrentOrderInstance(this, deck);
-		}
+		return new CursorLoader(this, cardsUri, projection, null, null, sort);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-		List<Card> cards = cardsLoaderResult.getData();
-
-		setUpCardsPagerAdapter(cards);
+	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
+		setUpCardsPagerAdapter(cardsCursor);
 		setUpCardsPagerIndicator();
 		setUpCurrentCardIndex();
 	}
 
-	private void setUpCardsPagerAdapter(List<Card> cards) {
-		ViewPager cardsPager = getCardsPager();
-		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(), cards);
+	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
+		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(),
+			cardsCursor);
 
-		cardsPager.setAdapter(cardsPagerAdapter);
-
-		cardsPager.getAdapter().notifyDataSetChanged();
+		getCardsPager().setAdapter(cardsPagerAdapter);
+		getCardsPager().getAdapter().notifyDataSetChanged();
 	}
 
 	private ViewPager getCardsPager() {
@@ -143,14 +129,20 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 
 	private void setUpCurrentCardIndex() {
 		if (cardsOrder == CardsOrder.CURRENT) {
-			int currentCardIndex = deck.getCurrentCardIndex();
+			// TODO: implement real behaviour
+			int currentCardIndex = 0;
 
 			getCardsPager().setCurrentItem(currentCardIndex);
 		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
+	public void onLoaderReset(Loader<Cursor> cardsLoader) {
+		getCardsPagerAdapter().swapCursor(null);
+	}
+
+	private CardsPagerAdapter getCardsPagerAdapter() {
+		return (CardsPagerAdapter) getCardsPager().getAdapter();
 	}
 
 	private void populatePager(Bundle savedInstanceState) {
@@ -219,7 +211,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 	private void saveCurrentCardIndex() {
 		int currentCardIndex = getCardsPager().getCurrentItem();
 
-		CurrentCardIndexChangingTask.newInstance(deck, currentCardIndex).execute();
+		// TODO: implement real behaviour
 	}
 
 	@Override

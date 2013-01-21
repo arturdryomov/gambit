@@ -159,11 +159,11 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	public void onListItemClick(ListView listView, View view, int position, long id) {
 		Uri deckUri = ProviderUris.Content.buildDeckUri(id);
 
-		callCardsList(deckUri);
+		callCardsPager(deckUri);
 	}
 
-	private void callCardsList(Uri deckUri) {
-		Intent intent = IntentFactory.createCardsIntent(getActivity(), deckUri);
+	private void callCardsPager(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsPagerIntent(getActivity(), deckUri);
 		startActivity(intent);
 	}
 
@@ -192,6 +192,10 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 				callDeckRenaming(deckUri);
 				return true;
 
+			case R.id.menu_edit_cards:
+				callCardsList(deckUri);
+				return true;
+
 			case R.id.menu_delete:
 				callDeckDeletion(deckUri);
 				return true;
@@ -203,6 +207,11 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	private void callDeckRenaming(Uri deckUri) {
 		Intent intent = IntentFactory.createDeckRenamingIntent(getActivity(), deckUri);
+		startActivity(intent);
+	}
+
+	private void callCardsList(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsIntent(getActivity(), deckUri);
 		startActivity(intent);
 	}
 

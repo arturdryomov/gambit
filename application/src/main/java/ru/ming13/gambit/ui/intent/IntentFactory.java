@@ -20,7 +20,6 @@ package ru.ming13.gambit.ui.intent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
 import ru.ming13.gambit.ui.activity.CardModificationActivity;
 import ru.ming13.gambit.ui.activity.CardsActivity;
@@ -67,9 +66,9 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardsPagerIntent(Context context, Deck deck) {
+	public static Intent createCardsPagerIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, CardsPagerActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}
