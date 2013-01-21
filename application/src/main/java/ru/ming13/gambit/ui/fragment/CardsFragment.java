@@ -17,6 +17,7 @@
 package ru.ming13.gambit.ui.fragment;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,9 +31,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
 
 
@@ -65,12 +70,13 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		setUpCardsUri();
 
 		setRetainInstance(true);
+		setHasOptionsMenu(true);
 	}
 
 	private void setUpCardsUri() {
 		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
 
-		cardsUri = ProviderUris.Content.buildCardsUriFromDeckUri(deckUri);
+		cardsUri = ProviderUris.Content.buildCardsUri(deckUri);
 	}
 
 	@Override
@@ -130,10 +136,10 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		}
 
 		private String buildCardsListItemText(Cursor cursor) {
-			String cardFrontSideText = cursor.getString(cursor.getColumnIndex(DbFieldNames
-				.CARD_FRONT_SIDE_TEXT));
-			String cardBackSideText = cursor.getString(cursor.getColumnIndex(DbFieldNames
-				.CARD_BACK_SIDE_TEXT));
+			String cardFrontSideText = cursor.getString(
+				cursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+			String cardBackSideText = cursor.getString(
+				cursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
 
 			return String.format(cardsListItemTextMask, cardFrontSideText, cardBackSideText);
 		}
@@ -168,5 +174,27 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	@Override
 	public void onLoaderReset(Loader<Cursor> cardsLoader) {
 		cardsAdapter.swapCursor(null);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		menuInflater.inflate(R.menu.menu_action_bar_cards, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case R.id.menu_create_item:
+				callCardCreation();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(menuItem);
+		}
+	}
+
+	private void callCardCreation() {
+		Intent intent = IntentFactory.createCardCreationIntent(getActivity(), cardsUri);
+		startActivity(intent);
 	}
 }

@@ -81,10 +81,19 @@ public class DecksProvider extends ContentProvider
 
 	@Override
 	public Uri insert(Uri uri, ContentValues contentValues) {
-		if (ProviderUris.MATCHER.match(uri) != ProviderUris.Codes.DECKS) {
-			throw new IllegalArgumentException("Unsupported URI.");
-		}
+		switch (ProviderUris.MATCHER.match(uri)) {
+			case ProviderUris.Codes.DECKS:
+				return insertDeck(contentValues);
 
+			case ProviderUris.Codes.CARDS:
+				return insertCard(uri, contentValues);
+
+			default:
+				throw new IllegalArgumentException("Unsupported URI.");
+		}
+	}
+
+	private Uri insertDeck(ContentValues contentValues) {
 		if (!areDeckValuesValid(contentValues)) {
 			throw new IllegalArgumentException("Content values are not valid.");
 		}
@@ -120,6 +129,7 @@ public class DecksProvider extends ContentProvider
 		return queryBuilder.toString();
 	}
 
+
 	private void setDeckValuesDefaults(ContentValues deckValues) {
 		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DEFAULT_CURRENT_CARD_INDEX);
 	}
@@ -131,6 +141,53 @@ public class DecksProvider extends ContentProvider
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return deckUri;
+	}
+
+	private Uri insertCard(Uri cardsUri, ContentValues cardValues) {
+		if (!areCardValuesValid(cardValues)) {
+			throw new IllegalArgumentException("Content values are not valid.");
+		}
+
+		setCardValuesDefaults(cardsUri, cardValues);
+
+		return createCard(cardsUri, cardValues);
+	}
+
+	private boolean areCardValuesValid(ContentValues cardValues) {
+		return cardValues.containsKey(DbFieldNames.CARD_FRONT_SIDE_TEXT) && cardValues.containsKey(
+			DbFieldNames.CARD_BACK_SIDE_TEXT);
+	}
+
+	private void setCardValuesDefaults(Uri cardsUri, ContentValues cardValues) {
+		long cardDeckId = parseDeckId(cardsUri);
+		long cardOrderIndex = queryDeckCardsCount(parseDeckId(cardsUri));
+
+		cardValues.put(DbFieldNames.CARD_DECK_ID, cardDeckId);
+		cardValues.put(DbFieldNames.CARD_ORDER_INDEX, cardOrderIndex);
+	}
+
+	private long queryDeckCardsCount(long deckId) {
+		return DatabaseUtils.longForQuery(databaseHelper.getReadableDatabase(),
+			buildCardsCountQuery(deckId), null);
+	}
+
+	private String buildCardsCountQuery(long deckId) {
+		StringBuilder queryBuilder = new StringBuilder();
+
+		queryBuilder.append(
+			String.format("select count(%s) from %s ", DbFieldNames.ID, DbTableNames.CARDS));
+		queryBuilder.append(String.format("where %s = %d", DbFieldNames.CARD_DECK_ID, deckId));
+
+		return queryBuilder.toString();
+	}
+
+	private Uri createCard(Uri cardsUri, ContentValues cardValues) {
+		long cardId = databaseHelper.getWritableDatabase().insert(DbTableNames.CARDS, null, cardValues);
+
+		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, cardId);
+		getContext().getContentResolver().notifyChange(cardUri, null);
+
+		return cardUri;
 	}
 
 	@Override

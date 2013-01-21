@@ -47,13 +47,6 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardsIntent(Context context, Deck deck) {
-		Intent intent = new Intent(context, CardsActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
-
-		return intent;
-	}
-
 	public static Intent createCardsIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, CardsActivity.class);
 		intent.putExtra(IntentExtras.DECK_URI, deckUri);
@@ -61,9 +54,9 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardCreationIntent(Context context, Deck deck) {
+	public static Intent createCardCreationIntent(Context context, Uri cardsUri) {
 		Intent intent = new Intent(context, CardCreationActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.CARDS_URI, cardsUri);
 
 		return intent;
 	}

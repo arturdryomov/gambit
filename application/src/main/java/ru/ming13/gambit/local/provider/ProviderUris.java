@@ -84,8 +84,12 @@ public class ProviderUris
 			return ContentUris.withAppendedId(buildDecksUri(), deckId);
 		}
 
-		public static Uri buildCardsUriFromDeckUri(Uri deckUri) {
+		public static Uri buildCardsUri(Uri deckUri) {
 			return Uri.withAppendedPath(deckUri, PathSegments.CARDS);
+		}
+
+		public static Uri buildCardUri(Uri cardsUri, long cardId) {
+			return ContentUris.withAppendedId(cardsUri, cardId);
 		}
 	}
 }
