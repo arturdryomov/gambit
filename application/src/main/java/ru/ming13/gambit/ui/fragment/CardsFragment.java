@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -203,6 +204,18 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id) {
+		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, id);
+
+		callCardModification(cardUri);
+	}
+
+	private void callCardModification(Uri cardUri) {
+		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), cardUri);
+		startActivity(intent);
+	}
+
+	@Override
 	public void onStart() {
 		super.onStart();
 
@@ -234,11 +247,6 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 			default:
 				return false;
 		}
-	}
-
-	private void callCardModification(Uri cardUri) {
-		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), cardUri);
-		startActivity(intent);
 	}
 
 	private void callCardDeletion(Uri cardUri) {
