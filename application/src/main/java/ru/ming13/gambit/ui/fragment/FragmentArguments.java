@@ -22,15 +22,10 @@ final class FragmentArguments
 	private FragmentArguments() {
 	}
 
-	public static final String DECK = "deck";
-	public static final String CARD = "card";
-
 	public static final String DECK_URI = "deck_uri";
 	public static final String CARDS_URI = "cards_uri";
 	public static final String CARD_URI = "card_uri";
 
 	public static final String CARD_FRONT_SIDE_TEXT = "card_front_side_text";
 	public static final String CARD_BACK_SIDE_TEXT = "card_back_side_text";
-
-	public static final String OPERATION = "operation";
 }

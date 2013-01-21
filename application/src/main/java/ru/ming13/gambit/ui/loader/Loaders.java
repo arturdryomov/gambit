@@ -24,7 +24,4 @@ public final class Loaders
 
 	public static final int DECKS = 0;
 	public static final int CARDS = 1;
-
-	public static final int DECK_OPERATION = 2;
-	public static final int CARD_OPERATION = 3;
 }

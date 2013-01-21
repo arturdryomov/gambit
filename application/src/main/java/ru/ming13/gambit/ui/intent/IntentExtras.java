@@ -24,22 +24,12 @@ public final class IntentExtras
 
 	private static final String EXTRA_PREFIX;
 
-	public static final String DECK;
-	public static final String CARD;
-
-	public static final String DECK_TITLE;
-
 	public static final String DECK_URI;
 	public static final String CARDS_URI;
 	public static final String CARD_URI;
 
 	static {
 		EXTRA_PREFIX = IntentFactory.class.getPackage().getName();
-
-		DECK = buildIntentExtraName(ExtraPostfixes.DECK);
-		CARD = buildIntentExtraName(ExtraPostfixes.CARD);
-
-		DECK_TITLE = buildIntentExtraName(ExtraPostfixes.DECK_TITLE);
 
 		DECK_URI = buildIntentExtraName(ExtraPostfixes.DECK_URI);
 		CARDS_URI = buildIntentExtraName(ExtraPostfixes.CARDS_URI);
@@ -54,11 +44,6 @@ public final class IntentExtras
 	{
 		private ExtraPostfixes() {
 		}
-
-		public static final String DECK = "deck";
-		public static final String CARD = "card";
-
-		public static final String DECK_TITLE = "deck_title";
 
 		public static final String DECK_URI = "deck_uri";
 		public static final String CARDS_URI = "cards_uri";

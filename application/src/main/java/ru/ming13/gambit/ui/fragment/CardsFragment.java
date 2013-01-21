@@ -219,7 +219,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	@Override
-	public boolean handleContextMenu(android.view.MenuItem menuItem, int listItemPosition, long listItemId) {
+	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
 		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, listItemId);
 
 		switch (menuItem.getItemId()) {
@@ -254,16 +254,9 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-		int cardListPosition = getListPosition(menuItem);
 		long cardListId = getListItemId(menuItem);
 
-		return handleContextMenu(menuItem, cardListPosition, cardListId);
-	}
-
-	protected int getListPosition(android.view.MenuItem menuItem) {
-		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-
-		return menuItemInfo.position;
+		return handleContextMenu(menuItem, cardListId);
 	}
 
 	protected long getListItemId(android.view.MenuItem menuItem) {
