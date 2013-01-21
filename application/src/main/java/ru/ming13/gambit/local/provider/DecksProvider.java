@@ -31,14 +31,19 @@ public class DecksProvider extends ContentProvider
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArguments, String sortOrder) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-		queryBuilder.setTables(DbTableNames.DECKS);
-
 		switch (ProviderUris.MATCHER.match(uri)) {
 			case ProviderUris.Codes.DECKS:
+				queryBuilder.setTables(DbTableNames.DECKS);
 				break;
 
 			case ProviderUris.Codes.DECK:
+				queryBuilder.setTables(DbTableNames.DECKS);
 				selection = buildDeckWhereClause(uri);
+				break;
+
+			case ProviderUris.Codes.CARDS:
+				queryBuilder.setTables(DbTableNames.CARDS);
+				selection = buildCardsWhereClause(uri);
 				break;
 
 			default:
@@ -57,6 +62,16 @@ public class DecksProvider extends ContentProvider
 		long deckId = ContentUris.parseId(deckUri);
 
 		return String.format("%s = %d", DbFieldNames.ID, deckId);
+	}
+
+	private String buildCardsWhereClause(Uri cardsUri) {
+		return String.format("%s = %d", DbFieldNames.CARD_DECK_ID, parseDeckId(cardsUri));
+	}
+
+	private long parseDeckId(Uri cardsUri) {
+		String deckId = cardsUri.getPathSegments().get(1);
+
+		return Long.parseLong(deckId);
 	}
 
 	@Override
@@ -112,7 +127,7 @@ public class DecksProvider extends ContentProvider
 	private Uri createDeck(ContentValues deckValues) {
 		long deckId = databaseHelper.getWritableDatabase().insert(DbTableNames.DECKS, null, deckValues);
 
-		Uri deckUri = ContentUris.withAppendedId(ProviderUris.Content.DECKS, deckId);
+		Uri deckUri = ProviderUris.Content.buildDeckUri(deckId);
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return deckUri;

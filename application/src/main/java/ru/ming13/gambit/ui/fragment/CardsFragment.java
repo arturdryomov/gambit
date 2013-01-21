@@ -17,47 +17,43 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import java.util.List;
-
-import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.view.ContextMenu;
-import android.view.MenuItem;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockListFragment;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.adapter.CardsAdapter;
-import ru.ming13.gambit.ui.intent.IntentFactory;
-import ru.ming13.gambit.ui.loader.CardsLoader;
+import ru.ming13.gambit.local.provider.ProviderUris;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.loader.Loaders;
-import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.task.CardDeletionTask;
-import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class CardsFragment extends AdaptedListFragment<Card> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>, ActionModeProvider.ContextMenuHandler
+public class CardsFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
-	private Deck deck;
+	private Uri cardsUri;
 
-	public static CardsFragment newInstance(Deck deck) {
+	private CursorAdapter cardsAdapter;
+
+	public static CardsFragment newInstance(Uri deckUri) {
 		CardsFragment cardsFragment = new CardsFragment();
 
-		cardsFragment.setArguments(buildArguments(deck));
+		cardsFragment.setArguments(buildArguments(deckUri));
 
 		return cardsFragment;
 	}
 
-	private static Bundle buildArguments(Deck deck) {
+	private static Bundle buildArguments(Uri deckUri) {
 		Bundle bundle = new Bundle();
 
-		bundle.putParcelable(FragmentArguments.DECK, deck);
+		bundle.putParcelable(FragmentArguments.DECK_URI, deckUri);
 
 		return bundle;
 	}
@@ -66,139 +62,111 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		deck = getArguments().getParcelable(FragmentArguments.DECK);
+		setUpCardsUri();
+
+		setRetainInstance(true);
+	}
+
+	private void setUpCardsUri() {
+		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
+
+		cardsUri = ProviderUris.Content.buildCardsUriFromDeckUri(deckUri);
 	}
 
 	@Override
-	protected ArrayAdapter buildListAdapter() {
-		return new CardsAdapter(getActivity());
+	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+		return layoutInflater.inflate(R.layout.fragment_list, container, false);
 	}
 
 	@Override
-	protected void callListPopulation() {
-		getLoaderManager().restartLoader(Loaders.CARDS, null, this);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpCardsList();
 	}
 
-	@Override
-	public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		setEmptyListText(R.string.loading_cards);
-
-		return CardsLoader.newCurrentOrderInstance(getActivity(), deck);
+	private void setUpCardsList() {
+		setUpCardsAdapter();
+		loadCards();
 	}
 
-	@Override
-	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-		List<Card> cards = cardsLoaderResult.getData();
+	private void setUpCardsAdapter() {
+		cardsAdapter = buildCardsAdapter();
+		setListAdapter(cardsAdapter);
+	}
 
-		if (cards.isEmpty()) {
-			setEmptyListText(R.string.empty_cards);
+	private CursorAdapter buildCardsAdapter() {
+		String[] departureColumns = {DbFieldNames.CARD_FRONT_SIDE_TEXT};
+		int[] destinationFields = {R.id.text};
+
+		SimpleCursorAdapter cardsAdapter = new SimpleCursorAdapter(getActivity(),
+			R.layout.list_item_one_line, null, departureColumns, destinationFields, 0);
+
+		cardsAdapter.setViewBinder(buildCardsListItemViewBinder());
+
+		return cardsAdapter;
+	}
+
+	private SimpleCursorAdapter.ViewBinder buildCardsListItemViewBinder() {
+		String cardsListItemTextMask = getString(R.string.mask_card_list_item);
+
+		return new CardsListItemViewBinder(cardsListItemTextMask);
+	}
+
+	private static class CardsListItemViewBinder implements SimpleCursorAdapter.ViewBinder
+	{
+		private final String cardsListItemTextMask;
+
+		public CardsListItemViewBinder(String cardsListItemTextMask) {
+			this.cardsListItemTextMask = cardsListItemTextMask;
 		}
-		else {
-			populateList(cards);
+
+		@Override
+		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			TextView cardsListItemTextView = (TextView) view;
+			cardsListItemTextView.setText(buildCardsListItemText(cursor));
+
+			return true;
 		}
-	}
 
-	@Override
-	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
-	}
+		private String buildCardsListItemText(Cursor cursor) {
+			String cardFrontSideText = cursor.getString(cursor.getColumnIndex(DbFieldNames
+				.CARD_FRONT_SIDE_TEXT));
+			String cardBackSideText = cursor.getString(cursor.getColumnIndex(DbFieldNames
+				.CARD_BACK_SIDE_TEXT));
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		setUpContextMenu();
-	}
-
-	private void setUpContextMenu() {
-		if (ActionModeProvider.isActionModeAvailable()) {
-			ActionModeProvider.setUpActionMode(getListView(), this, R.menu.menu_context_cards);
-		}
-		else {
-			registerForContextMenu(getListView());
-		}
-	}
-
-	@Override
-	public boolean handleContextMenu(MenuItem menuItem, int cardListPosition, long cardListId) {
-		Card card = getAdapter().getItem(cardListPosition);
-
-		switch (menuItem.getItemId()) {
-			case R.id.menu_edit:
-				callCardModification(card);
-				return true;
-
-			case R.id.menu_delete:
-				callCardDeletion(card);
-				return true;
-
-			default:
-				return false;
-		}
-	}
-
-	private void callCardModification(Card card) {
-		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), card);
-		startActivity(intent);
-	}
-
-	private void callCardDeletion(Card card) {
-		deleteCardFromList(card);
-		deleteCardEntirely(card);
-	}
-
-	private void deleteCardFromList(Card card) {
-		getAdapter().remove(card);
-
-		if (getAdapter().isEmpty()) {
-			setEmptyListText(R.string.empty_cards);
+			return String.format(cardsListItemTextMask, cardFrontSideText, cardBackSideText);
 		}
 	}
 
-	private void deleteCardEntirely(Card card) {
-		CardDeletionTask.newInstance(deck, card).execute();
+	private void loadCards() {
+		getLoaderManager().initLoader(Loaders.CARDS, null, this);
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		String[] projection = {DbFieldNames.ID, DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
+		String sort = DbFieldNames.CARD_FRONT_SIDE_TEXT;
 
-		getActivity().getMenuInflater().inflate(R.menu.menu_context_cards, contextMenu);
+		return new CursorLoader(getActivity(), cardsUri, projection, null, null, sort);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		int cardListPosition = getListPosition(menuItem);
-		long cardListId = getListItemId(menuItem);
+	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cursor) {
+		cardsAdapter.swapCursor(cursor);
 
-		return handleContextMenu(menuItem, cardListPosition, cardListId);
-	}
-
-	@Override
-	public void onListItemClick(ListView listView, View view, int listPosition, long rowId) {
-		Card card = getAdapter().getItem(listPosition);
-
-		callCardModification(card);
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.menu_action_bar_cards, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem menuItem) {
-		switch (menuItem.getItemId()) {
-			case R.id.menu_create_item:
-				callCardCreation();
-				return true;
-
-			default:
-				return super.onOptionsItemSelected(menuItem);
+		if (getListAdapter().isEmpty()) {
+			setUpNoCardsText();
 		}
 	}
 
-	private void callCardCreation() {
-		Intent intent = IntentFactory.createCardCreationIntent(getActivity(), deck);
-		startActivity(intent);
+	private void setUpNoCardsText() {
+		TextView emptyDecksListTextView = (TextView) getListView().getEmptyView();
+		emptyDecksListTextView.setText(R.string.empty_cards);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> cardsLoader) {
+		cardsAdapter.swapCursor(null);
 	}
 }

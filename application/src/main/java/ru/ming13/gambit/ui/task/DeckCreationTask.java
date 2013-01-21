@@ -50,7 +50,7 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 	private BusEvent createDeck() {
 		try {
-			contentResolver.insert(ProviderUris.Content.DECKS, buildDeckValues(deckTitle));
+			contentResolver.insert(ProviderUris.Content.buildDecksUri(), buildDeckValues(deckTitle));
 
 			return new DeckCreatedEvent();
 		}

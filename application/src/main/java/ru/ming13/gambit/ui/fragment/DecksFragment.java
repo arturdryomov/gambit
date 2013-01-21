@@ -17,7 +17,6 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -32,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -101,8 +101,8 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 		String[] projection = {DbFieldNames.ID, DbFieldNames.DECK_TITLE};
 		String sort = DbFieldNames.DECK_TITLE;
 
-		return new CursorLoader(getActivity(), ProviderUris.Content.DECKS, projection, null, null,
-			sort);
+		return new CursorLoader(getActivity(), ProviderUris.Content.buildDecksUri(), projection, null,
+			null, sort);
 	}
 
 	@Override
@@ -156,6 +156,18 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id) {
+		Uri deckUri = ProviderUris.Content.buildDeckUri(id);
+
+		callCardsList(deckUri);
+	}
+
+	private void callCardsList(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsIntent(getActivity(), deckUri);
+		startActivity(intent);
+	}
+
+	@Override
 	public void onStart() {
 		super.onStart();
 
@@ -173,7 +185,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public boolean handleContextMenu(android.view.MenuItem menuItem, int listItemPosition, long listItemId) {
-		Uri deckUri = ContentUris.withAppendedId(ProviderUris.Content.DECKS, listItemId);
+		Uri deckUri = ProviderUris.Content.buildDeckUri(listItemId);
 
 		switch (menuItem.getItemId()) {
 			case R.id.menu_rename:
