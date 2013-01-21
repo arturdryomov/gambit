@@ -14,7 +14,7 @@ import ru.ming13.gambit.local.sqlite.DbOpenHelper;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
 
 
-public class DecksProvider extends ContentProvider
+public class GambitProvider extends ContentProvider
 {
 	private static final int DEFAULT_CURRENT_CARD_INDEX = 0;
 
@@ -38,17 +38,17 @@ public class DecksProvider extends ContentProvider
 
 			case ProviderUris.Codes.DECK:
 				queryBuilder.setTables(DbTableNames.DECKS);
-				selection = buildDeckWhereClause(uri);
+				selection = buildDeckSelectionClause(uri);
 				break;
 
 			case ProviderUris.Codes.CARDS:
 				queryBuilder.setTables(DbTableNames.CARDS);
-				selection = buildDeckCardsWhereClause(uri);
+				selection = buildDeckCardsSelectionClause(uri);
 				break;
 
 			case ProviderUris.Codes.CARD:
 				queryBuilder.setTables(DbTableNames.CARDS);
-				selection = buildCardWhereClause(uri);
+				selection = buildCardSelectionClause(uri);
 				break;
 
 			default:
@@ -63,20 +63,16 @@ public class DecksProvider extends ContentProvider
 		return decksCursor;
 	}
 
-	private String buildDeckWhereClause(Uri deckUri) {
+	private String buildDeckSelectionClause(Uri deckUri) {
 		long deckId = ContentUris.parseId(deckUri);
 
 		return String.format("%s = %d", DbFieldNames.ID, deckId);
 	}
 
-	private String buildDeckCardsWhereClause(Uri cardsUri) {
-		return String.format("%s = %d", DbFieldNames.CARD_DECK_ID, parseDeckId(cardsUri));
-	}
+	private String buildDeckCardsSelectionClause(Uri cardsUri) {
+		long deckId = ProviderUris.Content.parseDeckId(cardsUri);
 
-	private long parseDeckId(Uri cardsUri) {
-		String deckId = cardsUri.getPathSegments().get(1);
-
-		return Long.parseLong(deckId);
+		return String.format("%s = %d", DbFieldNames.CARD_DECK_ID, deckId);
 	}
 
 	@Override
@@ -119,21 +115,24 @@ public class DecksProvider extends ContentProvider
 	private boolean isDeckTitleUnique(ContentValues deckValues) {
 		String deckTitle = deckValues.getAsString(DbFieldNames.DECK_TITLE);
 
+		return queryDecksCount(deckTitle) == 0;
+	}
+
+	private long queryDecksCount(String deckTitle) {
 		return DatabaseUtils.longForQuery(databaseHelper.getReadableDatabase(),
-			buildDecksCountQuery(deckTitle), null) == 0;
+			buildDecksCountQuery(deckTitle), null);
 	}
 
 	private String buildDecksCountQuery(String deckTitle) {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(String.format("select count(%s) ", DbFieldNames.ID));
-		queryBuilder.append(String.format("from %s ", DbTableNames.DECKS));
+		queryBuilder.append(
+			String.format("select count(%s) from %s ", DbFieldNames.ID, DbTableNames.DECKS));
 		queryBuilder.append(
 			String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, deckTitle));
 
 		return queryBuilder.toString();
 	}
-
 
 	private void setDeckValuesDefaults(ContentValues deckValues) {
 		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DEFAULT_CURRENT_CARD_INDEX);
@@ -164,8 +163,8 @@ public class DecksProvider extends ContentProvider
 	}
 
 	private void setCardValuesDefaults(Uri cardsUri, ContentValues cardValues) {
-		long cardDeckId = parseDeckId(cardsUri);
-		long cardOrderIndex = queryDeckCardsCount(parseDeckId(cardsUri));
+		long cardDeckId = ProviderUris.Content.parseDeckId(cardsUri);
+		long cardOrderIndex = queryDeckCardsCount(cardDeckId);
 
 		cardValues.put(DbFieldNames.CARD_DECK_ID, cardDeckId);
 		cardValues.put(DbFieldNames.CARD_ORDER_INDEX, cardOrderIndex);
@@ -211,7 +210,7 @@ public class DecksProvider extends ContentProvider
 
 	private int deleteDeck(Uri deckUri) {
 		int affectedRowsCount = databaseHelper.getWritableDatabase().delete(DbTableNames.DECKS,
-			buildDeckWhereClause(deckUri), null);
+			buildDeckSelectionClause(deckUri), null);
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return affectedRowsCount;
@@ -219,13 +218,13 @@ public class DecksProvider extends ContentProvider
 
 	private int deleteCard(Uri cardUri) {
 		int affectedRowsCount = databaseHelper.getWritableDatabase().delete(DbTableNames.CARDS,
-			buildCardWhereClause(cardUri), null);
+			buildCardSelectionClause(cardUri), null);
 		getContext().getContentResolver().notifyChange(cardUri, null);
 
 		return affectedRowsCount;
 	}
 
-	private String buildCardWhereClause(Uri cardUri) {
+	private String buildCardSelectionClause(Uri cardUri) {
 		long cardId = ContentUris.parseId(cardUri);
 
 		return String.format("%s = %d", DbFieldNames.ID, cardId);
@@ -259,7 +258,7 @@ public class DecksProvider extends ContentProvider
 
 	private int editDeck(Uri deckUri, ContentValues deckValues) {
 		int affectedRowsContent = databaseHelper.getWritableDatabase().update(DbTableNames.DECKS,
-			deckValues, buildDeckWhereClause(deckUri), null);
+			deckValues, buildDeckSelectionClause(deckUri), null);
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return affectedRowsContent;
@@ -275,7 +274,7 @@ public class DecksProvider extends ContentProvider
 
 	private int editCard(Uri cardUri, ContentValues cardValues) {
 		int affectedRowsCount = databaseHelper.getWritableDatabase().update(DbTableNames.CARDS,
-			cardValues, buildCardWhereClause(cardUri), null);
+			cardValues, buildCardSelectionClause(cardUri), null);
 		getContext().getContentResolver().notifyChange(cardUri, null);
 
 		return affectedRowsCount;

@@ -76,6 +76,8 @@ public class ProviderUris
 		private Content() {
 		}
 
+		private static final int CARDS_URI_DECK_ID_SEGMENT_INDEX = 1;
+
 		public static Uri buildDecksUri() {
 			return Uri.withAppendedPath(BASE, Paths.DECKS);
 		}
@@ -90,6 +92,12 @@ public class ProviderUris
 
 		public static Uri buildCardUri(Uri cardsUri, long cardId) {
 			return ContentUris.withAppendedId(cardsUri, cardId);
+		}
+
+		public static long parseDeckId(Uri cardsUri) {
+			String deckId = cardsUri.getPathSegments().get(CARDS_URI_DECK_ID_SEGMENT_INDEX);
+
+			return Long.parseLong(deckId);
 		}
 	}
 }

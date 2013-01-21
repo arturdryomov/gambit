@@ -78,7 +78,7 @@
 		</activity>
 
 		<provider
-			android:name=".local.provider.DecksProvider"
+			android:name=".local.provider.GambitProvider"
 			android:authorities="ru.ming13.gambit.provider">
 		</provider>
 	</application>
