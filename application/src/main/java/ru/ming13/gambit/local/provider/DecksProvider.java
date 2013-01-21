@@ -43,7 +43,7 @@ public class DecksProvider extends ContentProvider
 
 			case ProviderUris.Codes.CARDS:
 				queryBuilder.setTables(DbTableNames.CARDS);
-				selection = buildCardsWhereClause(uri);
+				selection = buildDeckCardsWhereClause(uri);
 				break;
 
 			default:
@@ -64,7 +64,7 @@ public class DecksProvider extends ContentProvider
 		return String.format("%s = %d", DbFieldNames.ID, deckId);
 	}
 
-	private String buildCardsWhereClause(Uri cardsUri) {
+	private String buildDeckCardsWhereClause(Uri cardsUri) {
 		return String.format("%s = %d", DbFieldNames.CARD_DECK_ID, parseDeckId(cardsUri));
 	}
 
@@ -192,11 +192,16 @@ public class DecksProvider extends ContentProvider
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArguments) {
-		if (ProviderUris.MATCHER.match(uri) != ProviderUris.Codes.DECK) {
-			throw new IllegalArgumentException("Unsupported URI.");
-		}
+		switch (ProviderUris.MATCHER.match(uri)) {
+			case ProviderUris.Codes.DECK:
+				return deleteDeck(uri);
 
-		return deleteDeck(uri);
+			case ProviderUris.Codes.CARD:
+				return deleteCard(uri);
+
+			default:
+				throw new IllegalArgumentException("Unsupported URI.");
+		}
 	}
 
 	private int deleteDeck(Uri deckUri) {
@@ -205,6 +210,20 @@ public class DecksProvider extends ContentProvider
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return affectedRowsCount;
+	}
+
+	private int deleteCard(Uri cardUri) {
+		int affectedRowsCount = databaseHelper.getWritableDatabase().delete(DbTableNames.CARDS,
+			buildCardWhereClause(cardUri), null);
+		getContext().getContentResolver().notifyChange(cardUri, null);
+
+		return affectedRowsCount;
+	}
+
+	private String buildCardWhereClause(Uri cardUri) {
+		long cardId = ContentUris.parseId(cardUri);
+
+		return String.format("%s = %d", DbFieldNames.ID, cardId);
 	}
 
 	@Override

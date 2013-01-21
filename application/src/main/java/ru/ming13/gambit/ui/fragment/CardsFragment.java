@@ -26,9 +26,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -39,9 +41,11 @@ import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
+import ru.ming13.gambit.ui.task.CardDeletionTask;
+import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class CardsFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>
+public class CardsFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
 {
 	private Uri cardsUri;
 
@@ -196,5 +200,66 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	private void callCardCreation() {
 		Intent intent = IntentFactory.createCardCreationIntent(getActivity(), cardsUri);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		setUpContextMenu();
+	}
+
+	private void setUpContextMenu() {
+		if (ActionModeProvider.isActionModeAvailable()) {
+			ActionModeProvider.setUpActionMode(getListView(), this, R.menu.menu_context_cards);
+		}
+		else {
+			registerForContextMenu(getListView());
+		}
+	}
+
+	@Override
+	public boolean handleContextMenu(android.view.MenuItem menuItem, int listItemPosition, long listItemId) {
+		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, listItemId);
+
+		switch (menuItem.getItemId()) {
+			case R.id.menu_delete:
+				callCardDeletion(cardUri);
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	private void callCardDeletion(Uri cardUri) {
+		CardDeletionTask.execute(getActivity().getContentResolver(), cardUri);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
+
+		getActivity().getMenuInflater().inflate(R.menu.menu_context_cards, contextMenu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+		int cardListPosition = getListPosition(menuItem);
+		long cardListId = getListItemId(menuItem);
+
+		return handleContextMenu(menuItem, cardListPosition, cardListId);
+	}
+
+	protected int getListPosition(android.view.MenuItem menuItem) {
+		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+
+		return menuItemInfo.position;
+	}
+
+	protected long getListItemId(android.view.MenuItem menuItem) {
+		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+
+		return menuItemInfo.id;
 	}
 }
