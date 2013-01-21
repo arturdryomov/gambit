@@ -26,16 +26,16 @@ import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckQueriedEvent;
 
 
-public class DeckQuerringTask extends AsyncTask<Void, Void, String>
+public class DeckQueryingTask extends AsyncTask<Void, Void, String>
 {
 	private final ContentResolver contentResolver;
 	private final Uri deckUri;
 
 	public static void execute(ContentResolver contentResolver, Uri deckUri) {
-		new DeckQuerringTask(contentResolver, deckUri).execute();
+		new DeckQueryingTask(contentResolver, deckUri).execute();
 	}
 
-	private DeckQuerringTask(ContentResolver contentResolver, Uri deckUri) {
+	private DeckQueryingTask(ContentResolver contentResolver, Uri deckUri) {
 		this.contentResolver = contentResolver;
 		this.deckUri = deckUri;
 	}

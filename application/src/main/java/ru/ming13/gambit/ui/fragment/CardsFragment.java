@@ -259,7 +259,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		return handleContextMenu(menuItem, cardListId);
 	}
 
-	protected long getListItemId(android.view.MenuItem menuItem) {
+	private long getListItemId(android.view.MenuItem menuItem) {
 		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 
 		return menuItemInfo.id;
