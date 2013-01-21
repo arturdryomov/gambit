@@ -20,7 +20,6 @@ package ru.ming13.gambit.ui.intent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import ru.ming13.gambit.local.model.Card;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
 import ru.ming13.gambit.ui.activity.CardModificationActivity;
@@ -61,9 +60,9 @@ public final class IntentFactory
 		return intent;
 	}
 
-	public static Intent createCardModificationIntent(Context context, Card card) {
+	public static Intent createCardModificationIntent(Context context, Uri cardUri) {
 		Intent intent = new Intent(context, CardModificationActivity.class);
-		intent.putExtra(IntentExtras.CARD, card);
+		intent.putExtra(IntentExtras.CARD_URI, cardUri);
 
 		return intent;
 	}

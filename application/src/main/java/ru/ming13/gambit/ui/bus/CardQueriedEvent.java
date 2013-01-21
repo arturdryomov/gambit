@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.ui.fragment;
+package ru.ming13.gambit.ui.bus;
 
 
-final class FragmentArguments
+public class CardQueriedEvent implements BusEvent
 {
-	private FragmentArguments() {
+	private final String cardFrontSideText;
+	private final String cardBackSideText;
+
+	public CardQueriedEvent(String cardFrontSideText, String cardBackSideText) {
+		this.cardFrontSideText = cardFrontSideText;
+		this.cardBackSideText = cardBackSideText;
 	}
 
-	public static final String DECK = "deck";
-	public static final String CARD = "card";
+	public String getCardFrontSideText() {
+		return cardFrontSideText;
+	}
 
-	public static final String DECK_URI = "deck_uri";
-	public static final String CARDS_URI = "cards_uri";
-	public static final String CARD_URI = "card_uri";
-
-	public static final String OPERATION = "operation";
+	public String getCardBackSideText() {
+		return cardBackSideText;
+	}
 }

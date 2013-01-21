@@ -46,6 +46,11 @@ public class DecksProvider extends ContentProvider
 				selection = buildDeckCardsWhereClause(uri);
 				break;
 
+			case ProviderUris.Codes.CARD:
+				queryBuilder.setTables(DbTableNames.CARDS);
+				selection = buildCardWhereClause(uri);
+				break;
+
 			default:
 				throw new IllegalArgumentException("Unsupported URI.");
 		}
@@ -228,26 +233,51 @@ public class DecksProvider extends ContentProvider
 
 	@Override
 	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArguments) {
-		if (ProviderUris.MATCHER.match(uri) != ProviderUris.Codes.DECK) {
-			throw new IllegalArgumentException("Invalid URI.");
-		}
+		switch (ProviderUris.MATCHER.match(uri)) {
+			case ProviderUris.Codes.DECK:
+				return updateDeck(uri, contentValues);
 
-		if (!areDeckValuesValid(contentValues)) {
-			throw new IllegalArgumentException("Content values are not valid.");
-		}
+			case ProviderUris.Codes.CARD:
+				return updateCard(uri, contentValues);
 
-		if (!isDeckTitleUnique(contentValues)) {
-			throw new DeckExistsException();
+			default:
+				throw new IllegalArgumentException("Invalid URI.");
 		}
-
-		return updateDeck(uri, contentValues);
 	}
 
 	private int updateDeck(Uri deckUri, ContentValues deckValues) {
+		if (!areDeckValuesValid(deckValues)) {
+			throw new IllegalArgumentException("Content values are not valid.");
+		}
+
+		if (!isDeckTitleUnique(deckValues)) {
+			throw new DeckExistsException();
+		}
+
+		return editDeck(deckUri, deckValues);
+	}
+
+	private int editDeck(Uri deckUri, ContentValues deckValues) {
 		int affectedRowsContent = databaseHelper.getWritableDatabase().update(DbTableNames.DECKS,
 			deckValues, buildDeckWhereClause(deckUri), null);
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return affectedRowsContent;
+	}
+
+	private int updateCard(Uri cardUri, ContentValues cardValues) {
+		if (!areCardValuesValid(cardValues)) {
+			throw new IllegalArgumentException("Content values are not valid.");
+		}
+
+		return editCard(cardUri, cardValues);
+	}
+
+	private int editCard(Uri cardUri, ContentValues cardValues) {
+		int affectedRowsCount = databaseHelper.getWritableDatabase().update(DbTableNames.CARDS,
+			cardValues, buildCardWhereClause(cardUri), null);
+		getContext().getContentResolver().notifyChange(cardUri, null);
+
+		return affectedRowsCount;
 	}
 }

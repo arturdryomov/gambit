@@ -31,6 +31,7 @@ public final class IntentExtras
 
 	public static final String DECK_URI;
 	public static final String CARDS_URI;
+	public static final String CARD_URI;
 
 	static {
 		EXTRA_PREFIX = IntentFactory.class.getPackage().getName();
@@ -42,6 +43,7 @@ public final class IntentExtras
 
 		DECK_URI = buildIntentExtraName(ExtraPostfixes.DECK_URI);
 		CARDS_URI = buildIntentExtraName(ExtraPostfixes.CARDS_URI);
+		CARD_URI = buildIntentExtraName(ExtraPostfixes.CARD_URI);
 	}
 
 	private static String buildIntentExtraName(String extraPostfix) {
@@ -60,5 +62,6 @@ public final class IntentExtras
 
 		public static final String DECK_URI = "deck_uri";
 		public static final String CARDS_URI = "cards_uri";
+		public static final String CARD_URI = "card_uri";
 	}
 }

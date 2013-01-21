@@ -223,6 +223,10 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, listItemId);
 
 		switch (menuItem.getItemId()) {
+			case R.id.menu_edit:
+				callCardModification(cardUri);
+				return true;
+
 			case R.id.menu_delete:
 				callCardDeletion(cardUri);
 				return true;
@@ -230,6 +234,11 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 			default:
 				return false;
 		}
+	}
+
+	private void callCardModification(Uri cardUri) {
+		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), cardUri);
+		startActivity(intent);
 	}
 
 	private void callCardDeletion(Uri cardUri) {

@@ -17,9 +17,13 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.net.Uri;
 import android.support.v4.app.Fragment;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.ui.fragment.CardOperationFragment;
+import com.squareup.otto.Subscribe;
+import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.CardEditedEvent;
+import ru.ming13.gambit.ui.bus.CardEditingCancelledEvent;
+import ru.ming13.gambit.ui.fragment.CardEditingFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 
@@ -28,16 +32,40 @@ public class CardModificationActivity extends FragmentWrapperActivity
 {
 	@Override
 	protected Fragment buildFragment() {
-		return CardOperationFragment.newModificationInstance(extractReceivedCard());
+		return CardEditingFragment.newInstance(extractReceivedCardUri());
 	}
 
-	private Card extractReceivedCard() {
-		Card card = getIntent().getParcelableExtra(IntentExtras.CARD);
+	private Uri extractReceivedCardUri() {
+		Uri cardUri = getIntent().getParcelableExtra(IntentExtras.CARD_URI);
 
-		if (card == null) {
+		if (cardUri == null) {
 			throw new IntentException();
 		}
 
-		return card;
+		return cardUri;
+	}
+
+	@Subscribe
+	public void onCardEdited(CardEditedEvent cardEditedEvent) {
+		finish();
+	}
+
+	@Subscribe
+	public void onCardEditingCancelled(CardEditingCancelledEvent cardEditingCancelledEvent) {
+		finish();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		BusProvider.getInstance().unregister(this);
 	}
 }
