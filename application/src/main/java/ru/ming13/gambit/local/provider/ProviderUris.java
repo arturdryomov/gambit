@@ -27,6 +27,9 @@ public class ProviderUris
 		MATCHER.addURI(AUTHORITY, Paths.CARD, Codes.CARD);
 	}
 
+	private ProviderUris() {
+	}
+
 	private static final class Paths
 	{
 		private Paths() {

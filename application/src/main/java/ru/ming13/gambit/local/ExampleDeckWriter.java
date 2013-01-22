@@ -38,7 +38,7 @@ import ru.ming13.gambit.local.sqlite.DbValues;
 
 public class ExampleDeckWriter
 {
-	public static final int[] ANDROID_VERSIONS_RESOURCES = {
+	private static final int[] ANDROID_VERSIONS_RESOURCES = {
 		R.string.android_version_froyo,
 		R.string.android_version_gingerbread,
 		R.string.android_version_honeycomb,
@@ -90,7 +90,7 @@ public class ExampleDeckWriter
 		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
 	}
 
-	public void writeDeck() {
+	private void writeDeck() {
 		database.beginTransaction();
 
 		try {
