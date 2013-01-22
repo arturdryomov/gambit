@@ -134,8 +134,8 @@ public class GambitProvider extends ContentProvider
 
 		queryBuilder.append(
 			String.format("select count(%s) from %s ", DbFieldNames.ID, DbTableNames.DECKS));
-		queryBuilder.append(
-			String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE, deckTitle));
+		queryBuilder.append(String.format("where upper(%s) = upper('%s')", DbFieldNames.DECK_TITLE,
+			DatabaseUtils.sqlEscapeString(deckTitle)));
 
 		return queryBuilder.toString();
 	}
