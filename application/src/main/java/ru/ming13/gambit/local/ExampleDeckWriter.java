@@ -31,7 +31,6 @@ import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.local.model.Decks;
-import ru.ming13.gambit.ui.util.Preferences;
 
 
 public class ExampleDeckWriter
@@ -84,20 +83,11 @@ public class ExampleDeckWriter
 		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
 	}
 
-	public boolean shouldWriteDeck() {
-		if (Preferences.getBoolean(context, Preferences.Keys.EXAMPLE_DECK_CREATED)) {
-			return false;
-		}
-
-		return decks.getDecksList().isEmpty();
-	}
-
 	public void writeDeck() {
 		decks.beginTransaction();
 
 		try {
 			tryWriteDeck();
-			Preferences.set(context, Preferences.Keys.EXAMPLE_DECK_CREATED, true);
 
 			decks.setTransactionSuccessful();
 		}
