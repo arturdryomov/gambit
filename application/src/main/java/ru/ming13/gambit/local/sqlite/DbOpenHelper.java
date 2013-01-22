@@ -21,14 +21,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import ru.ming13.gambit.local.DbException;
+import ru.ming13.gambit.local.ExampleDeckWriter;
 
 
 public class DbOpenHelper extends SQLiteOpenHelper
 {
 	private static final String DATABASE_NAME = "gambit.db";
 
+	private final Context context;
+
 	public DbOpenHelper(Context context) {
 		super(context, DATABASE_NAME, null, DbVersions.CURRENT);
+
+		this.context = context;
 	}
 
 	@Override
@@ -37,6 +42,8 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 		try {
 			createTables(db);
+
+			writeExampleDeck(db);
 
 			db.setTransactionSuccessful();
 		}
@@ -85,6 +92,10 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		queryBuilder.append(")");
 
 		return queryBuilder.toString();
+	}
+
+	private void writeExampleDeck(SQLiteDatabase db) {
+		ExampleDeckWriter.writeDeck(context, db);
 	}
 
 	@Override

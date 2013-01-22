@@ -23,15 +23,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.local.model.Decks;
-import ru.ming13.gambit.ui.util.Preferences;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.sqlite.DbTableNames;
+import ru.ming13.gambit.local.sqlite.DbValues;
 
 
 public class ExampleDeckWriter
@@ -47,14 +49,18 @@ public class ExampleDeckWriter
 	private static final String[] SUPPORTED_LANGUAGE_CODES = {"de", "es", "fr", "it", "ru"};
 
 	private final Context context;
-	private final Decks decks;
+	private final SQLiteDatabase database;
 
 	private final Locale localeForFrontText;
 	private final Locale localeForBackText;
 
-	public ExampleDeckWriter(Context context, Decks decks) {
+	public static void writeDeck(Context context, SQLiteDatabase database) {
+		new ExampleDeckWriter(context, database).writeDeck();
+	}
+
+	private ExampleDeckWriter(Context context, SQLiteDatabase database) {
 		this.context = context;
-		this.decks = decks;
+		this.database = database;
 
 		localeForFrontText = Locale.ENGLISH;
 		localeForBackText = selectLocaleForBackText();
@@ -84,44 +90,35 @@ public class ExampleDeckWriter
 		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
 	}
 
-	public boolean shouldWriteDeck() {
-		if (Preferences.getBoolean(context, Preferences.Keys.EXAMPLE_DECK_CREATED)) {
-			return false;
-		}
-
-		return decks.getDecksList().isEmpty();
-	}
-
 	public void writeDeck() {
-		decks.beginTransaction();
+		database.beginTransaction();
 
 		try {
 			tryWriteDeck();
-			Preferences.set(context, Preferences.Keys.EXAMPLE_DECK_CREATED, true);
 
-			decks.setTransactionSuccessful();
+			database.setTransactionSuccessful();
 		}
 		finally {
-			decks.endTransaction();
+			database.endTransaction();
 		}
 	}
 
 	private void tryWriteDeck() {
-		Deck deck = buildDeck();
-
-		List<String> frontSideTexts = buildTexts(localeForFrontText);
-		List<String> backSideTexts = buildTexts(localeForBackText);
-
-		for (int i = 0; i < frontSideTexts.size(); i++) {
-			deck.createCard(frontSideTexts.get(i), backSideTexts.get(i));
-		}
+		long deckId = createDeck();
+		createCards(deckId);
 	}
 
-	private Deck buildDeck() {
-		String deckTitle = String.format("%s (%s)", context.getString(R.string.example_deck_title),
-			getExampleDeckTitleLanguage(localeForBackText));
+	private long createDeck() {
+		ContentValues deckValues = new ContentValues();
+		deckValues.put(DbFieldNames.DECK_TITLE, buildDeckTitle());
+		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DbValues.DEFAULT_DECK_CURRENT_CARD_INDEX);
 
-		return decks.createDeck(deckTitle);
+		return database.insert(DbTableNames.DECKS, null, deckValues);
+	}
+
+	private String buildDeckTitle() {
+		return String.format("%s (%s)", context.getString(R.string.example_deck_title),
+			getExampleDeckTitleLanguage(localeForBackText));
 	}
 
 	private String getExampleDeckTitleLanguage(Locale locale) {
@@ -149,6 +146,25 @@ public class ExampleDeckWriter
 	private void restoreLocale(Locale locale) {
 		// Recreate Resources with original locale to avoid weird things
 		buildResources(locale);
+	}
+
+	private void createCards(long deckId) {
+		List<String> frontSideTexts = buildTexts(localeForFrontText);
+		List<String> backSideTexts = buildTexts(localeForBackText);
+
+		for (int cardIndex = 0; cardIndex < frontSideTexts.size(); cardIndex++) {
+			createCard(deckId, frontSideTexts.get(cardIndex), backSideTexts.get(cardIndex));
+		}
+	}
+
+	private void createCard(long deckId, String frontSideText, String backSideText) {
+		ContentValues cardValues = new ContentValues();
+		cardValues.put(DbFieldNames.CARD_DECK_ID, deckId);
+		cardValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, frontSideText);
+		cardValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, backSideText);
+		cardValues.put(DbFieldNames.CARD_ORDER_INDEX, DbValues.DEFAULT_CARD_ORDER_INDEX);
+
+		database.insert(DbTableNames.CARDS, null, cardValues);
 	}
 
 	private List<String> buildTexts(Locale locale) {

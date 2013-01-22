@@ -65,21 +65,7 @@ public class DbProvider
 	}
 
 	public Decks getDecks() {
-		if (decks == null) {
-			decks = createDecks();
-		}
-		return decks;
-	}
-
-	private Decks createDecks() {
-		Decks decks = new Decks();
-
-		ExampleDeckWriter exampleDeckWriter = new ExampleDeckWriter(context, decks);
-		if (exampleDeckWriter.shouldWriteDeck()) {
-			exampleDeckWriter.writeDeck();
-		}
-
-		return decks;
+		return new Decks();
 	}
 
 	public SQLiteDatabase getDatabase() {
