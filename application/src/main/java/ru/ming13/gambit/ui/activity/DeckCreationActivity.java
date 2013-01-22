@@ -17,12 +17,15 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import com.squareup.otto.Subscribe;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckCreatedEvent;
 import ru.ming13.gambit.ui.bus.DeckCreationCancelledEvent;
 import ru.ming13.gambit.ui.fragment.DeckCreationFragment;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
 public class DeckCreationActivity extends FragmentWrapperActivity
@@ -34,7 +37,13 @@ public class DeckCreationActivity extends FragmentWrapperActivity
 
 	@Subscribe
 	public void onDeckCreated(DeckCreatedEvent deckCreatedEvent) {
+		callCardsList(deckCreatedEvent.getDeckUri());
 		finish();
+	}
+
+	private void callCardsList(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
+		startActivity(intent);
 	}
 
 	@Subscribe

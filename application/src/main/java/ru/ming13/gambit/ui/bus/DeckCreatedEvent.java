@@ -17,6 +17,18 @@
 package ru.ming13.gambit.ui.bus;
 
 
+import android.net.Uri;
+
+
 public class DeckCreatedEvent implements BusEvent
 {
+	private final Uri deckUri;
+
+	public DeckCreatedEvent(Uri deckUri) {
+		this.deckUri = deckUri;
+	}
+
+	public Uri getDeckUri() {
+		return deckUri;
+	}
 }

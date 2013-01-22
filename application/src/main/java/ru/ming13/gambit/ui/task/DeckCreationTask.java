@@ -19,6 +19,7 @@ package ru.ming13.gambit.ui.task;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.net.Uri;
 import android.os.AsyncTask;
 import ru.ming13.gambit.local.provider.DeckExistsException;
 import ru.ming13.gambit.local.provider.ProviderUris;
@@ -50,9 +51,10 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 	private BusEvent createDeck() {
 		try {
-			contentResolver.insert(ProviderUris.Content.buildDecksUri(), buildDeckValues(deckTitle));
+			Uri deckUri = contentResolver.insert(ProviderUris.Content.buildDecksUri(),
+				buildDeckValues(deckTitle));
 
-			return new DeckCreatedEvent();
+			return new DeckCreatedEvent(deckUri);
 		}
 		catch (DeckExistsException e) {
 			return new DeckExistsEvent();
