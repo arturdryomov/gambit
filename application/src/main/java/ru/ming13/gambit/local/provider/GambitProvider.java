@@ -75,6 +75,12 @@ public class GambitProvider extends ContentProvider
 		return String.format("%s = %d", DbFieldNames.CARD_DECK_ID, deckId);
 	}
 
+	private String buildCardSelectionClause(Uri cardUri) {
+		long cardId = ContentUris.parseId(cardUri);
+
+		return String.format("%s = %d", DbFieldNames.ID, cardId);
+	}
+
 	@Override
 	public String getType(Uri uri) {
 		throw new UnsupportedOperationException();
@@ -222,12 +228,6 @@ public class GambitProvider extends ContentProvider
 		getContext().getContentResolver().notifyChange(cardUri, null);
 
 		return affectedRowsCount;
-	}
-
-	private String buildCardSelectionClause(Uri cardUri) {
-		long cardId = ContentUris.parseId(cardUri);
-
-		return String.format("%s = %d", DbFieldNames.ID, cardId);
 	}
 
 	@Override
