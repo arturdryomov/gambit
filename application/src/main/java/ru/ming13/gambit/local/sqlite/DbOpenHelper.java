@@ -139,4 +139,17 @@ public class DbOpenHelper extends SQLiteOpenHelper
 			db.endTransaction();
 		}
 	}
+
+	@Override
+	public SQLiteDatabase getWritableDatabase() {
+		SQLiteDatabase db = super.getWritableDatabase();
+
+		db.execSQL(buildForeignKeysEnablingQuery());
+
+		return db;
+	}
+
+	private String buildForeignKeysEnablingQuery() {
+		return "pragma foreign_keys = on";
+	}
 }
