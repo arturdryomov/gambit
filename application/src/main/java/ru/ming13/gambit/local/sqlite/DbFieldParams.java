@@ -30,9 +30,9 @@ final class DbFieldParams
 	public static final String DECK_FOREIGN_ID;
 
 	static {
-		final String foreignKeyMask = "integer not null references %s(%s)";
+		final String deckForeignKeyMask = "integer not null references %s(%s) on delete cascade";
 
-		DECK_FOREIGN_ID = String.format(foreignKeyMask, DbTableNames.DECKS, DbFieldNames.ID);
+		DECK_FOREIGN_ID = String.format(deckForeignKeyMask, DbTableNames.DECKS, DbFieldNames.ID);
 	}
 
 	public static final String CARD_TEXT = "text not null";

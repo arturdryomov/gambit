@@ -53,32 +53,28 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void createTables(SQLiteDatabase db) {
-		db.execSQL(buildDecksTableCreationQuery());
-		db.execSQL(buildCardsTableCreationQuery());
+		createTable(db, DbTableNames.DECKS, buildDecksTableDescription());
+		createTable(db, DbTableNames.CARDS, buildCardsTableDescription());
 	}
 
-	private String buildDecksTableCreationQuery() {
+	private void createTable(SQLiteDatabase db, String tableName, String tableDescription) {
+		db.execSQL(String.format("create table %s (%s)", tableName, tableDescription));
+	}
+
+	private String buildDecksTableDescription() {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(String.format("create table %s ", DbTableNames.DECKS));
-
-		queryBuilder.append("(");
 		queryBuilder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
 		queryBuilder.append(
 			String.format("%s %s, ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
 		queryBuilder.append(
 			String.format("%s %s", DbFieldNames.DECK_CURRENT_CARD_INDEX, DbFieldParams.INDEX));
-		queryBuilder.append(")");
 
 		return queryBuilder.toString();
 	}
 
-	private String buildCardsTableCreationQuery() {
+	private String buildCardsTableDescription() {
 		StringBuilder queryBuilder = new StringBuilder();
-
-		queryBuilder.append(String.format("create table %s ", DbTableNames.CARDS));
-
-		queryBuilder.append("(");
 
 		queryBuilder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
 		queryBuilder.append(
@@ -88,8 +84,6 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		queryBuilder.append(
 			String.format("%s %s, ", DbFieldNames.CARD_BACK_SIDE_TEXT, DbFieldParams.CARD_TEXT));
 		queryBuilder.append(String.format("%s %s", DbFieldNames.CARD_ORDER_INDEX, DbFieldParams.INDEX));
-
-		queryBuilder.append(")");
 
 		return queryBuilder.toString();
 	}
@@ -101,6 +95,10 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
 		switch (oldDatabaseVersion) {
+			case DbVersions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
+				migrateFromCardsNotCascadeDeletion(db);
+				break;
+
 			case DbVersions.LATEST_WITH_CAMEL_NAMING_STYLE:
 				migrateFromCamelNamingStyle(db);
 				break;
@@ -112,6 +110,40 @@ public class DbOpenHelper extends SQLiteOpenHelper
 			default:
 				throw new DbException();
 		}
+	}
+
+	private void migrateFromCardsNotCascadeDeletion(SQLiteDatabase db) {
+		db.beginTransaction();
+
+		try {
+			createTemporaryTable(db, buildTemporaryTableName(DbTableNames.CARDS),
+				buildCardsTableDescription());
+			copyTableContents(db, DbTableNames.CARDS, buildTemporaryTableName(DbTableNames.CARDS));
+
+			dropTable(db, DbTableNames.CARDS);
+			createTable(db, DbTableNames.CARDS, buildCardsTableDescription());
+
+			copyTableContents(db, buildTemporaryTableName(DbTableNames.CARDS), DbTableNames.CARDS);
+			dropTable(db, buildTemporaryTableName(DbTableNames.CARDS));
+
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+	private void createTemporaryTable(SQLiteDatabase db, String tableName, String tableDescription) {
+		db.execSQL(String.format("create temporary table %s (%s)", tableName, tableDescription));
+	}
+
+	private String buildTemporaryTableName(String originalTableName) {
+		return String.format("%sTemporary", originalTableName);
+	}
+
+	private void copyTableContents(SQLiteDatabase db, String departureTableName, String destinationTableName) {
+		db.execSQL(
+			String.format("insert into %s select * from %s", departureTableName, destinationTableName));
 	}
 
 	private void migrateFromCamelNamingStyle(SQLiteDatabase db) {
@@ -149,5 +181,18 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		finally {
 			db.endTransaction();
 		}
+	}
+
+	@Override
+	public SQLiteDatabase getWritableDatabase() {
+		SQLiteDatabase db = super.getWritableDatabase();
+
+		db.execSQL(buildForeignKeysEnablingQuery());
+
+		return db;
+	}
+
+	private String buildForeignKeysEnablingQuery() {
+		return "pragma foreign_keys = on";
 	}
 }
