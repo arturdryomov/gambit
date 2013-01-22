@@ -107,15 +107,7 @@ public class CardEditingFragment extends FormFragment
 
 	@Override
 	protected boolean isUserDataCorrect() {
-		return isCardFrontSideTextNotEmpty() && isCardBackSideTextNotEmpty();
-	}
-
-	private boolean isCardFrontSideTextNotEmpty() {
-		return StringUtils.isNotBlank(cardFrontSideText);
-	}
-
-	private boolean isCardBackSideTextNotEmpty() {
-		return StringUtils.isNotBlank(cardBackSideText);
+		return StringUtils.isNotBlank(cardFrontSideText) && StringUtils.isNotBlank(cardBackSideText);
 	}
 
 	@Override
@@ -136,11 +128,11 @@ public class CardEditingFragment extends FormFragment
 
 	@Override
 	protected void setUpErrorMessages() {
-		if (!isCardFrontSideTextNotEmpty()) {
+		if (StringUtils.isBlank(cardFrontSideText)) {
 			setErrorToEdit(R.id.edit_front_side_text, R.string.error_empty_field);
 		}
 
-		if (!isCardBackSideTextNotEmpty()) {
+		if (StringUtils.isBlank(cardBackSideText)) {
 			setErrorToEdit(R.id.edit_back_side_text, R.string.error_empty_field);
 		}
 	}

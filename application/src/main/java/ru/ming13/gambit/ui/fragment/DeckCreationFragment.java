@@ -49,10 +49,6 @@ public class DeckCreationFragment extends FormFragment
 
 	@Override
 	protected boolean isUserDataCorrect() {
-		return isDeckTitleNotEmpty();
-	}
-
-	private boolean isDeckTitleNotEmpty() {
 		return StringUtils.isNotBlank(deckTitle);
 	}
 
@@ -63,7 +59,7 @@ public class DeckCreationFragment extends FormFragment
 
 	@Override
 	protected void setUpErrorMessages() {
-		if (!isDeckTitleNotEmpty()) {
+		if (StringUtils.isBlank(deckTitle)) {
 			setErrorToEdit(R.id.edit_deck_title, R.string.error_empty_field);
 		}
 	}
