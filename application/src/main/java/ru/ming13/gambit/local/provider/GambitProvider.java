@@ -83,7 +83,7 @@ public class GambitProvider extends ContentProvider
 
 	@Override
 	public String getType(Uri uri) {
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	@Override
