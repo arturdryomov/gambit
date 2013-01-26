@@ -30,7 +30,7 @@ import ru.ming13.gambit.local.sqlite.DbFieldNames;
 public class ExampleDeckWriterTests extends GambitProviderTestCase
 {
 	public void testExampleDeckWriting() {
-		// Example deck is the only deck in an empty database7
+		// Example deck is the only deck in an empty database
 		int expectedDecksCount = 1;
 		int actualDecksCount = queryDecks().getCount();
 
