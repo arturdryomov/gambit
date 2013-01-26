@@ -91,8 +91,8 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 
 		deleteCard(insertCard(deckUri, Content.CARD_FRONT_SIDE_TEXT, Content.CARD_BACK_SIDE_TEXT));
 
-		int finalCardsCount = queryCards(deckUri).getCount();
+		Cursor cardsCursor = queryCards(deckUri);
 
-		assertThat(finalCardsCount).isEqualTo(initialCardsCount);
+		assertThat(cardsCursor).hasCount(initialCardsCount);
 	}
 }

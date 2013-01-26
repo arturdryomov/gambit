@@ -19,6 +19,7 @@ package ru.ming13.gambit.test.provider;
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -62,7 +63,7 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 			insertDeck(Content.DECK_TITLE);
 			insertDeck(Content.DECK_TITLE);
 
-			fail();
+			failBecauseExceptionWasNotThrown(DeckExistsException.class);
 		}
 		catch (DeckExistsException e) {
 		}
@@ -86,7 +87,7 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 
 			updateDeck(deckUri, Content.DECK_TITLE);
 
-			fail();
+			failBecauseExceptionWasNotThrown(DeckExistsException.class);
 		}
 		catch (DeckExistsException e) {
 		}
@@ -97,8 +98,8 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 
 		deleteDeck(insertDeck(Content.DECK_TITLE));
 
-		int finalDecksCount = queryDecks().getCount();
+		Cursor decksCursor = queryDecks();
 
-		assertThat(finalDecksCount).isEqualTo(initialDecksCount);
+		assertThat(decksCursor).hasCount(initialDecksCount);
 	}
 }

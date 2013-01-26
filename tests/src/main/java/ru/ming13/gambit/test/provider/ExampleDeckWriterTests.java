@@ -17,6 +17,7 @@
 package ru.ming13.gambit.test.provider;
 
 
+import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 import android.database.Cursor;
@@ -32,9 +33,9 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 	public void testExampleDeckWriting() {
 		// Example deck is the only deck in an empty database
 		int expectedDecksCount = 1;
-		int actualDecksCount = queryDecks().getCount();
+		Cursor decksCursor = queryDecks();
 
-		assertThat(actualDecksCount).isEqualTo(expectedDecksCount);
+		assertThat(decksCursor).hasCount(expectedDecksCount);
 	}
 
 	public void testExampleDeckTitle() {
@@ -54,12 +55,10 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 	}
 
 	public void testExampleDeckCardsCount() {
+		int expectedCardsCount = ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES.length;
 		Cursor cardsCursor = queryCards(getExampleDeckUri());
 
-		int expectedCardsCount = ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES.length;
-		int actualCardsCount = cardsCursor.getCount();
-
-		assertThat(actualCardsCount).isEqualTo(expectedCardsCount);
+		assertThat(cardsCursor).hasCount(expectedCardsCount);
 	}
 
 	public void testExampleDeckCardsTexts() {
