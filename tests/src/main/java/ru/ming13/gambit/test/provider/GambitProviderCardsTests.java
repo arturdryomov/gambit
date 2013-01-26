@@ -82,8 +82,8 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 		String actualCardFrontSideText = queryCardSidesTexts(cardUri).first;
 		String actualCardBackSideText = queryCardSidesTexts(cardUri).second;
 
-		assertThat(modifiedCardFrontSideText).isEqualTo(actualCardFrontSideText);
-		assertThat(modifiedCardBackSideText).isEqualTo(actualCardBackSideText);
+		assertThat(actualCardFrontSideText).isEqualTo(modifiedCardFrontSideText);
+		assertThat(actualCardBackSideText).isEqualTo(modifiedCardBackSideText);
 	}
 
 	public void testCardDeletion() {
@@ -93,6 +93,6 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 
 		int finalCardsCount = queryCards(deckUri).getCount();
 
-		assertThat(initialCardsCount).isEqualTo(finalCardsCount);
+		assertThat(finalCardsCount).isEqualTo(initialCardsCount);
 	}
 }

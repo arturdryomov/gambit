@@ -17,6 +17,9 @@
 package ru.ming13.gambit.test.provider;
 
 
+import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
+
 import android.database.Cursor;
 import android.net.Uri;
 import ru.ming13.gambit.local.provider.DeckExistsException;
@@ -28,12 +31,14 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 	public void testDecksQuerying() {
 		Cursor decksCursor = queryDecks();
 
-		assertNotNull(decksCursor);
+		assertThat(decksCursor).isNotNull();
 	}
 
 	public void testDecksQueryHasValidContents() {
 		Cursor decksCursor = queryDecks();
 		decksCursor.moveToFirst();
+
+		assertThat(decksCursor).hasColumnCount(Projection.DECKS.length);
 
 		try {
 			decksCursor.getLong(decksCursor.getColumnIndexOrThrow(DbFieldNames.ID));
@@ -46,9 +51,10 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 
 	public void testDeckInsertion() {
 		Uri deckUri = insertDeck(Content.DECK_TITLE);
+		assertThat(deckUri).isNotNull();
 
-		assertNotNull(deckUri);
-		assertEquals(Content.DECK_TITLE, queryDeckTitle(deckUri));
+		String actualDeckTitle = queryDeckTitle(deckUri);
+		assertThat(actualDeckTitle).isEqualTo(Content.DECK_TITLE);
 	}
 
 	public void testDuplicateDeckInsertion() {
@@ -68,7 +74,9 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 		String modifiedDeckTitle = reverseText(Content.DECK_TITLE);
 		updateDeck(deckUri, modifiedDeckTitle);
 
-		assertEquals(modifiedDeckTitle, queryDeckTitle(deckUri));
+		String actualDeckTitle = queryDeckTitle(deckUri);
+
+		assertThat(actualDeckTitle).isEqualTo(modifiedDeckTitle);
 	}
 
 	public void testDuplicateDeckUpdating() {
@@ -91,6 +99,6 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 
 		int finalDecksCount = queryDecks().getCount();
 
-		assertEquals(initialDecksCount, finalDecksCount);
+		assertThat(finalDecksCount).isEqualTo(initialDecksCount);
 	}
 }
