@@ -245,12 +245,10 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private int updateDeck(Uri deckUri, ContentValues deckValues) {
-		if (!areDeckValuesValid(deckValues)) {
-			throw new IllegalArgumentException("Content values are not valid.");
-		}
-
-		if (!isDeckTitleUnique(deckValues)) {
-			throw new DeckExistsException();
+		if (deckValues.containsKey(DbFieldNames.DECK_TITLE)) {
+			if (!isDeckTitleUnique(deckValues)) {
+				throw new DeckExistsException();
+			}
 		}
 
 		return editDeck(deckUri, deckValues);

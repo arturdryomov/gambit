@@ -28,15 +28,20 @@ import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.squareup.otto.Subscribe;
 import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
+import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.DeckCurrentCardQueriedEvent;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.Loaders;
+import ru.ming13.gambit.ui.task.DeckCurrentCardQueryingTask;
+import ru.ming13.gambit.ui.task.DeckCurrentCardSavingTask;
 
 
 public class CardsPagerActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
@@ -128,11 +133,21 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void setUpCurrentCardIndex() {
-		if (cardsOrder == CardsOrder.CURRENT) {
-			// TODO: implement real behaviour
-			int currentCardIndex = 0;
+		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
 
-			getCardsPager().setCurrentItem(currentCardIndex);
+		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
+	}
+
+	@Subscribe
+	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent deckCurrentCardQueriedEvent) {
+		setUpCurrentCardIndex(deckCurrentCardQueriedEvent.getCurrentCardIndex());
+	}
+
+	private void setUpCurrentCardIndex(int currentCardIndex) {
+		if (cardsOrder == CardsOrder.CURRENT) {
+			if (getCardsPager().getCurrentItem() == 0) {
+				getCardsPager().setCurrentItem(currentCardIndex);
+			}
 		}
 	}
 
@@ -206,12 +221,15 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		saveCurrentCardIndex();
 
 		shakeDetector.stop();
+
+		BusProvider.getInstance().unregister(this);
 	}
 
 	private void saveCurrentCardIndex() {
+		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
 		int currentCardIndex = getCardsPager().getCurrentItem();
 
-		// TODO: implement real behaviour
+		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);
 	}
 
 	@Override
@@ -219,5 +237,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		super.onResume();
 
 		shakeDetector.start(sensorManager);
+
+		BusProvider.getInstance().register(this);
 	}
 }
