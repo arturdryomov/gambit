@@ -36,7 +36,7 @@ public class GambitProviderDecksTests extends ProviderTestCase2<GambitProvider>
 		super(GambitProvider.class, "ru.ming13.gambit.provider");
 	}
 
-	public void testDecksQuery() {
+	public void testDecksQuerying() {
 		Cursor decksCursor = queryDecks();
 
 		assertNotNull(decksCursor);
