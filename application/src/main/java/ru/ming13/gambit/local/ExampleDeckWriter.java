@@ -38,7 +38,7 @@ import ru.ming13.gambit.local.sqlite.DbValues;
 
 public class ExampleDeckWriter
 {
-	private static final int[] ANDROID_VERSIONS_RESOURCES = {
+	public static final int[] ANDROID_VERSIONS_RESOURCES = {
 		R.string.android_version_froyo,
 		R.string.android_version_gingerbread,
 		R.string.android_version_honeycomb,
