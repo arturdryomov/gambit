@@ -45,6 +45,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>fest-android</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
 			<groupId>ru.ming13.gambit</groupId>
