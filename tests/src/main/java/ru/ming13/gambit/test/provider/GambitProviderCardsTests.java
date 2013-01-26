@@ -17,6 +17,9 @@
 package ru.ming13.gambit.test.provider;
 
 
+import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
+
 import android.database.Cursor;
 import android.net.Uri;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
@@ -36,14 +39,17 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 	public void testCardsQuerying() {
 		Cursor cardsCursor = queryCards(deckUri);
 
-		assertNotNull(cardsCursor);
-		assertEquals(0, cardsCursor.getCount());
+		assertThat(cardsCursor).isNotNull();
+		assertThat(cardsCursor).hasCount(0);
 	}
 
 	public void testCardsQueryHasValidContents() {
 		insertCard(deckUri, Content.CARD_FRONT_SIDE_TEXT, Content.CARD_BACK_SIDE_TEXT);
+
 		Cursor cardsCursor = queryCards(deckUri);
 		cardsCursor.moveToFirst();
+
+		assertThat(cardsCursor).hasColumnCount(Projection.CARDS.length);
 
 		try {
 			cardsCursor.getLong(cardsCursor.getColumnIndexOrThrow(DbFieldNames.ID));
@@ -57,10 +63,13 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 
 	public void testCardInsertion() {
 		Uri cardUri = insertCard(deckUri, Content.CARD_FRONT_SIDE_TEXT, Content.CARD_BACK_SIDE_TEXT);
+		assertThat(cardUri).isNotNull();
 
-		assertNotNull(cardUri);
-		assertEquals(Content.CARD_FRONT_SIDE_TEXT, queryCardSidesTexts(cardUri).first);
-		assertEquals(Content.CARD_BACK_SIDE_TEXT, queryCardSidesTexts(cardUri).second);
+		String actualCardFrontSideText = queryCardSidesTexts(cardUri).first;
+		String actualCardBackSideText = queryCardSidesTexts(cardUri).second;
+
+		assertThat(actualCardFrontSideText).isEqualTo(Content.CARD_FRONT_SIDE_TEXT);
+		assertThat(actualCardBackSideText).isEqualTo(Content.CARD_BACK_SIDE_TEXT);
 	}
 
 	public void testCardUpdating() {
@@ -70,8 +79,11 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 		String modifiedCardBackSideText = reverseText(Content.CARD_BACK_SIDE_TEXT);
 		updateCard(cardUri, modifiedCardFrontSideText, modifiedCardBackSideText);
 
-		assertEquals(modifiedCardFrontSideText, queryCardSidesTexts(cardUri).first);
-		assertEquals(modifiedCardBackSideText, queryCardSidesTexts(cardUri).second);
+		String actualCardFrontSideText = queryCardSidesTexts(cardUri).first;
+		String actualCardBackSideText = queryCardSidesTexts(cardUri).second;
+
+		assertThat(actualCardFrontSideText).isEqualTo(modifiedCardFrontSideText);
+		assertThat(actualCardBackSideText).isEqualTo(modifiedCardBackSideText);
 	}
 
 	public void testCardDeletion() {
@@ -81,6 +93,6 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 
 		int finalCardsCount = queryCards(deckUri).getCount();
 
-		assertEquals(initialCardsCount, finalCardsCount);
+		assertThat(finalCardsCount).isEqualTo(initialCardsCount);
 	}
 }

@@ -17,6 +17,8 @@
 package ru.ming13.gambit.test.provider;
 
 
+import static org.fest.assertions.api.Assertions.assertThat;
+
 import android.database.Cursor;
 import android.net.Uri;
 import ru.ming13.gambit.R;
@@ -28,18 +30,18 @@ import ru.ming13.gambit.local.sqlite.DbFieldNames;
 public class ExampleDeckWriterTests extends GambitProviderTestCase
 {
 	public void testExampleDeckWriting() {
-		// Example deck is the only deck in an empty database7
+		// Example deck is the only deck in an empty database
 		int expectedDecksCount = 1;
 		int actualDecksCount = queryDecks().getCount();
 
-		assertEquals(expectedDecksCount, actualDecksCount);
+		assertThat(actualDecksCount).isEqualTo(expectedDecksCount);
 	}
 
 	public void testExampleDeckTitle() {
 		String expectedExampleDeckTitlePrefix = getMockContext().getString(R.string.example_deck_title);
 		String actualExampleDeckTitle = queryDeckTitle(getExampleDeckUri());
 
-		assertTrue(actualExampleDeckTitle.startsWith(expectedExampleDeckTitlePrefix));
+		assertThat(actualExampleDeckTitle).startsWith(expectedExampleDeckTitlePrefix);
 	}
 
 	private Uri getExampleDeckUri() {
@@ -57,7 +59,7 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 		int expectedCardsCount = ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES.length;
 		int actualCardsCount = cardsCursor.getCount();
 
-		assertEquals(expectedCardsCount, actualCardsCount);
+		assertThat(actualCardsCount).isEqualTo(expectedCardsCount);
 	}
 
 	public void testExampleDeckCardsTexts() {
@@ -69,7 +71,7 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 			String actualFrontSideText = cardsCursor.getString(
 				cardsCursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
 
-			assertEquals(expectedFrontSideText, actualFrontSideText);
+			assertThat(actualFrontSideText).isEqualTo(expectedFrontSideText);
 
 			cardsCursor.moveToNext();
 		}
