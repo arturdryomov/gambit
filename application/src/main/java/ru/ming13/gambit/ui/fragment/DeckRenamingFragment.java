@@ -27,11 +27,11 @@ import org.apache.commons.lang3.StringUtils;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckExistsEvent;
-import ru.ming13.gambit.ui.bus.DeckTitleQueriedEvent;
 import ru.ming13.gambit.ui.bus.DeckRenamedEvent;
 import ru.ming13.gambit.ui.bus.DeckRenamingCancelledEvent;
-import ru.ming13.gambit.ui.task.DeckTitleQueryingTask;
+import ru.ming13.gambit.ui.bus.DeckTitleQueriedEvent;
 import ru.ming13.gambit.ui.task.DeckRenamingTask;
+import ru.ming13.gambit.ui.task.DeckTitleQueryingTask;
 
 
 public class DeckRenamingFragment extends FormFragment
