@@ -1,11 +1,17 @@
 package ru.ming13.gambit.local.provider;
 
 
+import java.util.ArrayList;
+
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -263,10 +269,6 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private int updateCard(Uri cardUri, ContentValues cardValues) {
-		if (!areCardValuesValid(cardValues)) {
-			throw new IllegalArgumentException("Content values are not valid.");
-		}
-
 		return editCard(cardUri, cardValues);
 	}
 
@@ -276,5 +278,26 @@ public class GambitProvider extends ContentProvider
 		getContext().getContentResolver().notifyChange(cardUri, null);
 
 		return affectedRowsCount;
+	}
+
+	@Override
+	public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+		database.beginTransaction();
+		try {
+			ContentProviderResult[] results = new ContentProviderResult[operations.size()];
+
+			for (int operationIndex = 0; operationIndex < operations.size(); operationIndex++) {
+				results[operationIndex] = operations.get(operationIndex).apply(this, results,
+					operationIndex);
+			}
+
+			database.setTransactionSuccessful();
+			return results;
+		}
+		finally {
+			database.endTransaction();
+		}
 	}
 }
