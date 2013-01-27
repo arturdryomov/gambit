@@ -74,7 +74,6 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 		setUpCardsUri();
 
-		setRetainInstance(true);
 		setHasOptionsMenu(true);
 	}
 
