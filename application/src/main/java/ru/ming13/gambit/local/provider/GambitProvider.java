@@ -18,6 +18,7 @@ import android.net.Uri;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.local.sqlite.DbOpenHelper;
 import ru.ming13.gambit.local.sqlite.DbTableNames;
+import ru.ming13.gambit.local.sqlite.DbValues;
 
 
 public class GambitProvider extends ContentProvider
@@ -176,10 +177,33 @@ public class GambitProvider extends ContentProvider
 
 	private void setCardValuesDefaults(Uri cardsUri, ContentValues cardValues) {
 		long cardDeckId = ProviderUris.Content.parseDeckId(cardsUri);
-		long cardOrderIndex = queryDeckCardsCount(cardDeckId);
+		long cardOrderIndex = calculateCardOrderIndex(cardDeckId);
 
 		cardValues.put(DbFieldNames.CARD_DECK_ID, cardDeckId);
 		cardValues.put(DbFieldNames.CARD_ORDER_INDEX, cardOrderIndex);
+	}
+
+	private long calculateCardOrderIndex(long cardDeckId) {
+		if (isCardOrderIndexUsed(cardDeckId)) {
+			return queryDeckCardsCount(cardDeckId);
+		}
+
+		return DbValues.DEFAULT_CARD_ORDER_INDEX;
+	}
+
+	private boolean isCardOrderIndexUsed(long deckId) {
+		return DatabaseUtils.longForQuery(databaseHelper.getReadableDatabase(),
+			buildCardsOrderIndexMaximumQuery(deckId), null) != DbValues.DEFAULT_CARD_ORDER_INDEX;
+	}
+
+	private String buildCardsOrderIndexMaximumQuery(long deckId) {
+		StringBuilder queryBuilder = new StringBuilder();
+
+		queryBuilder.append(
+			String.format("select max(%s) from %s ", DbFieldNames.CARD_ORDER_INDEX, DbTableNames.CARDS));
+		queryBuilder.append(String.format("where %s = %d", DbFieldNames.CARD_DECK_ID, deckId));
+
+		return queryBuilder.toString();
 	}
 
 	private long queryDeckCardsCount(long deckId) {
