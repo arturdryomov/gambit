@@ -79,7 +79,8 @@
 
 		<provider
 			android:name=".local.provider.GambitProvider"
-			android:authorities="ru.ming13.gambit.provider">
+			android:authorities="ru.ming13.gambit.provider"
+			android:exported="false">
 		</provider>
 	</application>
 </manifest>
