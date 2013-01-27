@@ -34,8 +34,8 @@ import ru.ming13.gambit.local.sqlite.DbValues;
 
 public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 {
-	private ContentResolver contentResolver;
-	private Uri cardsUri;
+	private final ContentResolver contentResolver;
+	private final Uri cardsUri;
 
 	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
 		new DeckCardsOrderResettingTask(contentResolver, cardsUri).execute();
