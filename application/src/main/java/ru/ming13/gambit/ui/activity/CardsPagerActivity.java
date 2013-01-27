@@ -40,20 +40,22 @@ import ru.ming13.gambit.ui.bus.DeckCurrentCardQueriedEvent;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.Loaders;
+import ru.ming13.gambit.ui.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.ui.task.DeckCurrentCardQueryingTask;
 import ru.ming13.gambit.ui.task.DeckCurrentCardSavingTask;
+import ru.ming13.gambit.ui.task.DeckShufflingTask;
 
 
 public class CardsPagerActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
 {
 	private static enum CardsOrder
 	{
-		CURRENT, SHUFFLE, ORIGINAL
+		DEFAULT, SHUFFLE, ORIGINAL
 	}
 
 	private Uri cardsUri;
 
-	private CardsOrder cardsOrder = CardsOrder.CURRENT;
+	private CardsOrder cardsOrder = CardsOrder.DEFAULT;
 
 	private SensorManager sensorManager;
 	private ShakeDetector shakeDetector;
@@ -63,11 +65,17 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pager);
 
-		cardsUri = ProviderUris.Content.buildCardsUri(extractReceivedDeckUri());
+		setUpCardsUri();
+
+		loadCards();
 
 		setUpShakeListener();
+	}
 
-		populatePager(savedInstanceState);
+	private void setUpCardsUri() {
+		Uri deckUri = extractReceivedDeckUri();
+
+		cardsUri = ProviderUris.Content.buildCardsUri(deckUri);
 	}
 
 	private Uri extractReceivedDeckUri() {
@@ -78,6 +86,93 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		}
 
 		return deckUri;
+	}
+
+	private void loadCards() {
+		getSupportLoaderManager().initLoader(Loaders.CARDS, null, this);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		String[] projection = {DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
+		String sortOrder = String.format("%s, %s", DbFieldNames.CARD_ORDER_INDEX,
+			DbFieldNames.CARD_FRONT_SIDE_TEXT);
+
+		return new CursorLoader(this, cardsUri, projection, null, null, sortOrder);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
+		setUpCardsPagerAdapter(cardsCursor);
+		setUpCardsPagerIndicator();
+		setUpCurrentCardIndex();
+	}
+
+	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
+		if (!isSettingCardsPagerAdapterRequired()) {
+			getCardsPagerAdapter().swapCursor(cardsCursor);
+			return;
+		}
+
+		CardsPagerAdapter adapter = new CardsPagerAdapter(getSupportFragmentManager(), cardsCursor);
+
+		getCardsPager().setAdapter(adapter);
+	}
+
+	private boolean isSettingCardsPagerAdapterRequired() {
+		// Aware setting adapter after orientation change: ViewPager saves adapter itself
+
+		return (cardsOrder != CardsOrder.DEFAULT) || (getCardsPager().getCurrentItem() == 0);
+	}
+
+	private ViewPager getCardsPager() {
+		return (ViewPager) findViewById(R.id.pager);
+	}
+
+	private CardsPagerAdapter getCardsPagerAdapter() {
+		return (CardsPagerAdapter) getCardsPager().getAdapter();
+	}
+
+	private void setUpCardsPagerIndicator() {
+		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
+
+		indicator.setViewPager(getCardsPager());
+	}
+
+	private void setUpCurrentCardIndex() {
+		if (!isSettingCurrentCardIndexRequired()) {
+			return;
+		}
+
+		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+
+		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
+	}
+
+	private boolean isSettingCurrentCardIndexRequired() {
+		// Aware case when user changed order or current card already
+
+		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
+	}
+
+	@Subscribe
+	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent deckCurrentCardQueriedEvent) {
+		int currentCardIndex = deckCurrentCardQueriedEvent.getCurrentCardIndex();
+
+		setUpCurrentCardIndex(currentCardIndex);
+	}
+
+	private void setUpCurrentCardIndex(int currentCardIndex) {
+		if (!isSettingCurrentCardIndexRequired()) {
+			return;
+		}
+
+		getCardsPager().setCurrentItem(currentCardIndex);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> cardsLoader) {
+		getCardsPagerAdapter().swapCursor(null);
 	}
 
 	private void setUpShakeListener() {
@@ -93,86 +188,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	private void shuffleCards() {
 		cardsOrder = CardsOrder.SHUFFLE;
 
-		populatePager();
-	}
-
-	private void populatePager() {
-		getSupportLoaderManager().restartLoader(Loaders.CARDS, null, this);
-	}
-
-	@Override
-	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		String[] projection = {DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
-		String sort = DbFieldNames.CARD_FRONT_SIDE_TEXT;
-
-		return new CursorLoader(this, cardsUri, projection, null, null, sort);
-	}
-
-	@Override
-	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
-		setUpCardsPagerAdapter(cardsCursor);
-		setUpCardsPagerIndicator();
-		setUpCurrentCardIndex();
-	}
-
-	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
-		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(),
-			cardsCursor);
-
-		getCardsPager().setAdapter(cardsPagerAdapter);
-		getCardsPager().getAdapter().notifyDataSetChanged();
-	}
-
-	private ViewPager getCardsPager() {
-		return (ViewPager) findViewById(R.id.pager);
-	}
-
-	private void setUpCardsPagerIndicator() {
-		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
-		indicator.setViewPager(getCardsPager());
-	}
-
-	private void setUpCurrentCardIndex() {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
-
-		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
-	}
-
-	@Subscribe
-	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent deckCurrentCardQueriedEvent) {
-		setUpCurrentCardIndex(deckCurrentCardQueriedEvent.getCurrentCardIndex());
-	}
-
-	private void setUpCurrentCardIndex(int currentCardIndex) {
-		if (cardsOrder == CardsOrder.CURRENT) {
-			if (getCardsPager().getCurrentItem() == 0) {
-				getCardsPager().setCurrentItem(currentCardIndex);
-			}
-		}
-	}
-
-	@Override
-	public void onLoaderReset(Loader<Cursor> cardsLoader) {
-		getCardsPagerAdapter().swapCursor(null);
-	}
-
-	private CardsPagerAdapter getCardsPagerAdapter() {
-		return (CardsPagerAdapter) getCardsPager().getAdapter();
-	}
-
-	private void populatePager(Bundle savedInstanceState) {
-		if (!isSavedInstanceStateValid(savedInstanceState)) {
-			populatePager();
-		}
-		else {
-			setUpCardsPagerAdapter(null);
-
-			populatePager();
-		}
-	}
-
-	private boolean isSavedInstanceStateValid(Bundle savedInstanceState) {
-		return savedInstanceState != null;
+		DeckShufflingTask.execute(getContentResolver(), cardsUri);
 	}
 
 	@Override
@@ -203,33 +219,13 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void setCurrentCardToFirst() {
-		ViewPager cardsPager = getCardsPager();
-
-		cardsPager.setCurrentItem(0);
+		getCardsPager().setCurrentItem(0);
 	}
 
 	private void resetCardsOrder() {
 		cardsOrder = CardsOrder.ORIGINAL;
 
-		populatePager();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		saveCurrentCardIndex();
-
-		shakeDetector.stop();
-
-		BusProvider.getInstance().unregister(this);
-	}
-
-	private void saveCurrentCardIndex() {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
-		int currentCardIndex = getCardsPager().getCurrentItem();
-
-		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);
+		DeckCardsOrderResettingTask.execute(getContentResolver(), cardsUri);
 	}
 
 	@Override
@@ -239,5 +235,28 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		shakeDetector.start(sensorManager);
 
 		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		shakeDetector.stop();
+
+		BusProvider.getInstance().unregister(this);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		saveCurrentCardIndex();
+	}
+
+	private void saveCurrentCardIndex() {
+		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		int currentCardIndex = getCardsPager().getCurrentItem();
+
+		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);
 	}
 }
