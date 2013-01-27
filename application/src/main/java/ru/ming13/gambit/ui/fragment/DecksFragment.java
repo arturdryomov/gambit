@@ -222,7 +222,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
 		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
 
-		getActivity().getMenuInflater().inflate(R.menu.menu_context_cards, contextMenu);
+		getActivity().getMenuInflater().inflate(R.menu.menu_context_decks, contextMenu);
 	}
 
 	@Override
