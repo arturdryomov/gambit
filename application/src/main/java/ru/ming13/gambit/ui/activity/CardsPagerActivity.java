@@ -41,9 +41,9 @@ import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.task.DeckCardsOrderResettingTask;
+import ru.ming13.gambit.ui.task.DeckCardsOrderShufflingTask;
 import ru.ming13.gambit.ui.task.DeckCurrentCardQueryingTask;
 import ru.ming13.gambit.ui.task.DeckCurrentCardSavingTask;
-import ru.ming13.gambit.ui.task.DeckShufflingTask;
 
 
 public class CardsPagerActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
@@ -188,7 +188,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	private void shuffleCards() {
 		cardsOrder = CardsOrder.SHUFFLE;
 
-		DeckShufflingTask.execute(getContentResolver(), cardsUri);
+		DeckCardsOrderShufflingTask.execute(getContentResolver(), cardsUri);
 	}
 
 	@Override

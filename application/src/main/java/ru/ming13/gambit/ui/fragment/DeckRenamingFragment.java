@@ -27,10 +27,10 @@ import org.apache.commons.lang3.StringUtils;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckExistsEvent;
-import ru.ming13.gambit.ui.bus.DeckQueriedEvent;
+import ru.ming13.gambit.ui.bus.DeckTitleQueriedEvent;
 import ru.ming13.gambit.ui.bus.DeckRenamedEvent;
 import ru.ming13.gambit.ui.bus.DeckRenamingCancelledEvent;
-import ru.ming13.gambit.ui.task.DeckQueryingTask;
+import ru.ming13.gambit.ui.task.DeckTitleQueryingTask;
 import ru.ming13.gambit.ui.task.DeckRenamingTask;
 
 
@@ -72,12 +72,12 @@ public class DeckRenamingFragment extends FormFragment
 	}
 
 	private void queryDeckOriginalTitle() {
-		DeckQueryingTask.execute(getActivity().getContentResolver(), deckUri);
+		DeckTitleQueryingTask.execute(getActivity().getContentResolver(), deckUri);
 	}
 
 	@Subscribe
-	public void onDeckQueried(DeckQueriedEvent deckQueriedEvent) {
-		deckOriginalTitle = deckQueriedEvent.getDeckTitle();
+	public void onDeckTitleQueried(DeckTitleQueriedEvent deckTitleQueriedEvent) {
+		deckOriginalTitle = deckTitleQueriedEvent.getDeckTitle();
 
 		setUpDeckOriginalTitle();
 	}

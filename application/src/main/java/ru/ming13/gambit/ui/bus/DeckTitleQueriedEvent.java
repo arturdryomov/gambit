@@ -17,21 +17,15 @@
 package ru.ming13.gambit.ui.bus;
 
 
-public class CardQueriedEvent implements BusEvent
+public class DeckTitleQueriedEvent
 {
-	private final String cardFrontSideText;
-	private final String cardBackSideText;
+	private final String deckTitle;
 
-	public CardQueriedEvent(String cardFrontSideText, String cardBackSideText) {
-		this.cardFrontSideText = cardFrontSideText;
-		this.cardBackSideText = cardBackSideText;
+	public DeckTitleQueriedEvent(String deckTitle) {
+		this.deckTitle = deckTitle;
 	}
 
-	public String getCardFrontSideText() {
-		return cardFrontSideText;
-	}
-
-	public String getCardBackSideText() {
-		return cardBackSideText;
+	public String getDeckTitle() {
+		return deckTitle;
 	}
 }

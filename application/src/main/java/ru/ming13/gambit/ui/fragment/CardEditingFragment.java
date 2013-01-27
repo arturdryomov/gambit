@@ -28,9 +28,9 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardEditedEvent;
 import ru.ming13.gambit.ui.bus.CardEditingCancelledEvent;
-import ru.ming13.gambit.ui.bus.CardQueriedEvent;
+import ru.ming13.gambit.ui.bus.CardSidesQueriedEvent;
 import ru.ming13.gambit.ui.task.CardEditingTask;
-import ru.ming13.gambit.ui.task.CardQueryingTask;
+import ru.ming13.gambit.ui.task.CardSidesQueryingTask;
 
 
 public class CardEditingFragment extends FormFragment
@@ -73,13 +73,13 @@ public class CardEditingFragment extends FormFragment
 	}
 
 	private void queryCardOriginalSidesText() {
-		CardQueryingTask.execute(getActivity().getContentResolver(), cardUri);
+		CardSidesQueryingTask.execute(getActivity().getContentResolver(), cardUri);
 	}
 
 	@Subscribe
-	public void onCardQueried(CardQueriedEvent cardQueriedEvent) {
-		cardOriginalFrontSideText = cardQueriedEvent.getCardFrontSideText();
-		cardOriginalBackSideText = cardQueriedEvent.getCardBackSideText();
+	public void onCardSidesQueried(CardSidesQueriedEvent cardSidesQueriedEvent) {
+		cardOriginalFrontSideText = cardSidesQueriedEvent.getCardFrontSideText();
+		cardOriginalBackSideText = cardSidesQueriedEvent.getCardBackSideText();
 
 		setUpCardOriginalSidesText();
 	}

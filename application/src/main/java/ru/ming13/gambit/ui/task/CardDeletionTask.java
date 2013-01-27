@@ -38,8 +38,12 @@ public class CardDeletionTask extends AsyncTask<Void, Void, Void>
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
-		contentResolver.delete(cardUri, null, null);
+		deleteCard();
 
 		return null;
+	}
+
+	private void deleteCard() {
+		contentResolver.delete(cardUri, null, null);
 	}
 }

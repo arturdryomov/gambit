@@ -29,10 +29,6 @@ import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 
 
-/**
- * Parent activity should implement FormCallback to handle cancel and accept.
- * You could call finish() in callback methods for example.
- */
 abstract class FormFragment extends SherlockFragment
 {
 	private static final boolean ENABLE_OPTIONS_MENU_FILLING = true;

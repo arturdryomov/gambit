@@ -38,8 +38,12 @@ public class DeckDeletionTask extends AsyncTask<Void, Void, Void>
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
-		contentResolver.delete(deckUri, null, null);
+		deleteDeck();
 
 		return null;
+	}
+
+	private void deleteDeck() {
+		contentResolver.delete(deckUri, null, null);
 	}
 }

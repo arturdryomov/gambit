@@ -32,26 +32,26 @@ import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 
 
-public class DeckShufflingTask extends AsyncTask<Void, Void, Void>
+public class DeckCardsOrderShufflingTask extends AsyncTask<Void, Void, Void>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardsUri;
 
 	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
-		new DeckShufflingTask(contentResolver, cardsUri).execute();
+		new DeckCardsOrderShufflingTask(contentResolver, cardsUri).execute();
 	}
 
-	private DeckShufflingTask(ContentResolver contentResolver, Uri cardsUri) {
+	private DeckCardsOrderShufflingTask(ContentResolver contentResolver, Uri cardsUri) {
 		this.contentResolver = contentResolver;
 		this.cardsUri = cardsUri;
 	}
 
 	@Override
-	protected Void doInBackground(Void... voids) {
+	protected Void doInBackground(Void... parameters) {
 		List<Uri> cardsUris = getCardsUris();
 		List<Integer> shuffledNaturalNumbers = generateShuffledNaturalNumbers(cardsUris.size());
 
-		applyOperations(buildOperations(cardsUris, shuffledNaturalNumbers));
+		applyOperations(buildChangingOrderOperations(cardsUris, shuffledNaturalNumbers));
 
 		return null;
 	}
@@ -72,9 +72,8 @@ public class DeckShufflingTask extends AsyncTask<Void, Void, Void>
 
 	private Cursor queryCards() {
 		String[] projection = {DbFieldNames.ID};
-		String sortOrder = DbFieldNames.CARD_FRONT_SIDE_TEXT;
 
-		return contentResolver.query(cardsUri, projection, null, null, sortOrder);
+		return contentResolver.query(cardsUri, projection, null, null, null);
 	}
 
 	private Uri buildCardUri(Cursor cardsCursor) {
@@ -103,7 +102,7 @@ public class DeckShufflingTask extends AsyncTask<Void, Void, Void>
 		return naturalNumbersList;
 	}
 
-	private ArrayList<ContentProviderOperation> buildOperations(List<Uri> cardsUris, List<Integer> shuffledNaturalNumbers) {
+	private ArrayList<ContentProviderOperation> buildChangingOrderOperations(List<Uri> cardsUris, List<Integer> shuffledNaturalNumbers) {
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
 		for (int cardIndex = 0; cardIndex < cardsUris.size(); cardIndex++) {

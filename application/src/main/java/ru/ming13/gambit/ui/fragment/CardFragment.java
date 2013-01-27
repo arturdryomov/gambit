@@ -26,7 +26,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import ru.ming13.gambit.R;
 
 
-public class CardFragment extends SherlockFragment
+public class CardFragment extends SherlockFragment implements View.OnClickListener
 {
 	private static enum CardSide
 	{
@@ -79,13 +79,12 @@ public class CardFragment extends SherlockFragment
 	private void setUpCardClickListener() {
 		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
 
-		cardTextView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view) {
-				flipCard();
-			}
-		});
+		cardTextView.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View view) {
+		flipCard();
 	}
 
 	private void flipCard() {

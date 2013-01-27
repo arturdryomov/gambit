@@ -23,25 +23,25 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.bus.BusProvider;
-import ru.ming13.gambit.ui.bus.DeckQueriedEvent;
+import ru.ming13.gambit.ui.bus.DeckTitleQueriedEvent;
 
 
-public class DeckQueryingTask extends AsyncTask<Void, Void, String>
+public class DeckTitleQueryingTask extends AsyncTask<Void, Void, String>
 {
 	private final ContentResolver contentResolver;
 	private final Uri deckUri;
 
 	public static void execute(ContentResolver contentResolver, Uri deckUri) {
-		new DeckQueryingTask(contentResolver, deckUri).execute();
+		new DeckTitleQueryingTask(contentResolver, deckUri).execute();
 	}
 
-	private DeckQueryingTask(ContentResolver contentResolver, Uri deckUri) {
+	private DeckTitleQueryingTask(ContentResolver contentResolver, Uri deckUri) {
 		this.contentResolver = contentResolver;
 		this.deckUri = deckUri;
 	}
 
 	@Override
-	protected String doInBackground(Void... voids) {
+	protected String doInBackground(Void... parameters) {
 		return queryDeckTitle();
 	}
 
@@ -50,10 +50,10 @@ public class DeckQueryingTask extends AsyncTask<Void, Void, String>
 
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
-		return extractDeckTitleFromCursor(deckCursor);
+		return extractDeckTitle(deckCursor);
 	}
 
-	private String extractDeckTitleFromCursor(Cursor deckCursor) {
+	private String extractDeckTitle(Cursor deckCursor) {
 		deckCursor.moveToFirst();
 
 		return deckCursor.getString(deckCursor.getColumnIndex(DbFieldNames.DECK_TITLE));
@@ -63,6 +63,6 @@ public class DeckQueryingTask extends AsyncTask<Void, Void, String>
 	protected void onPostExecute(String deckTitle) {
 		super.onPostExecute(deckTitle);
 
-		BusProvider.getInstance().post(new DeckQueriedEvent(deckTitle));
+		BusProvider.getInstance().post(new DeckTitleQueriedEvent(deckTitle));
 	}
 }

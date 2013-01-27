@@ -24,19 +24,19 @@ import android.os.AsyncTask;
 import android.util.Pair;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.bus.BusProvider;
-import ru.ming13.gambit.ui.bus.CardQueriedEvent;
+import ru.ming13.gambit.ui.bus.CardSidesQueriedEvent;
 
 
-public class CardQueryingTask extends AsyncTask<Void, Void, Pair<String, String>>
+public class CardSidesQueryingTask extends AsyncTask<Void, Void, Pair<String, String>>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardUri;
 
 	public static void execute(ContentResolver contentResolver, Uri cardUri) {
-		new CardQueryingTask(contentResolver, cardUri).execute();
+		new CardSidesQueryingTask(contentResolver, cardUri).execute();
 	}
 
-	private CardQueryingTask(ContentResolver contentResolver, Uri cardUri) {
+	private CardSidesQueryingTask(ContentResolver contentResolver, Uri cardUri) {
 		this.contentResolver = contentResolver;
 		this.cardUri = cardUri;
 	}
@@ -69,6 +69,7 @@ public class CardQueryingTask extends AsyncTask<Void, Void, Pair<String, String>
 	protected void onPostExecute(Pair<String, String> cardSidesText) {
 		super.onPostExecute(cardSidesText);
 
-		BusProvider.getInstance().post(new CardQueriedEvent(cardSidesText.first, cardSidesText.second));
+		BusProvider.getInstance().post(
+			new CardSidesQueriedEvent(cardSidesText.first, cardSidesText.second));
 	}
 }

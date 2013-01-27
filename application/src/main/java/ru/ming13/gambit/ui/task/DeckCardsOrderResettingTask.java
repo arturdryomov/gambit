@@ -47,10 +47,10 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	@Override
-	protected Void doInBackground(Void... voids) {
+	protected Void doInBackground(Void... parameters) {
 		List<Uri> cardsUris = getCardsUris();
 
-		applyOperations(buildOperations(cardsUris, DbValues.DEFAULT_CARD_ORDER_INDEX));
+		applyOperations(buildChangingOrderOperations(cardsUris));
 
 		return null;
 	}
@@ -71,9 +71,8 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 
 	private Cursor queryCards() {
 		String[] projection = {DbFieldNames.ID};
-		String sortOrder = DbFieldNames.CARD_FRONT_SIDE_TEXT;
 
-		return contentResolver.query(cardsUri, projection, null, null, sortOrder);
+		return contentResolver.query(cardsUri, projection, null, null, null);
 	}
 
 	private Uri buildCardUri(Cursor cardsCursor) {
@@ -84,11 +83,11 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 		return cardsCursor.getLong(cardsCursor.getColumnIndex(DbFieldNames.ID));
 	}
 
-	private ArrayList<ContentProviderOperation> buildOperations(List<Uri> cardsUris, Integer cardsDefaultOrderIndex) {
+	private ArrayList<ContentProviderOperation> buildChangingOrderOperations(List<Uri> cardsUris) {
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
 		for (Uri cardUri : cardsUris) {
-			operations.add(buildChangingOrderOperation(cardUri, cardsDefaultOrderIndex));
+			operations.add(buildChangingOrderOperation(cardUri, DbValues.DEFAULT_CARD_ORDER_INDEX));
 		}
 
 		return operations;
