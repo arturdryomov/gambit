@@ -30,6 +30,7 @@
 
 	<TextView
 		android:id="@android:id/empty"
+		android:textSize="@dimen/text_size_empty_list"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true" />

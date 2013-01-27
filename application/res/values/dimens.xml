@@ -28,6 +28,7 @@
 	<dimen name="text_size_one_line_list_item">18sp</dimen>
 	<dimen name="text_size_card">30sp</dimen>
 	<dimen name="text_size_empty_card">20sp</dimen>
+	<dimen name="text_size_empty_list">20sp</dimen>
 
 	<dimen name="border_radius_card">2dp</dimen>
 
