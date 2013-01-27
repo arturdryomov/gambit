@@ -23,8 +23,6 @@ import ru.ming13.gambit.local.sqlite.DbValues;
 
 public class GambitProvider extends ContentProvider
 {
-	private static final int DEFAULT_CURRENT_CARD_INDEX = 0;
-
 	private SQLiteOpenHelper databaseHelper;
 
 	@Override
@@ -50,7 +48,7 @@ public class GambitProvider extends ContentProvider
 
 			case ProviderUris.Codes.CARDS:
 				queryBuilder.setTables(DbTableNames.CARDS);
-				selection = buildDeckCardsSelectionClause(uri);
+				selection = buildCardsSelectionClause(uri);
 				break;
 
 			case ProviderUris.Codes.CARD:
@@ -59,7 +57,7 @@ public class GambitProvider extends ContentProvider
 				break;
 
 			default:
-				throw new IllegalArgumentException("Unsupported URI.");
+				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 
 		Cursor decksCursor = queryBuilder.query(databaseHelper.getReadableDatabase(), projection,
@@ -73,19 +71,27 @@ public class GambitProvider extends ContentProvider
 	private String buildDeckSelectionClause(Uri deckUri) {
 		long deckId = ContentUris.parseId(deckUri);
 
-		return String.format("%s = %d", DbFieldNames.ID, deckId);
+		return buildSelectionClause(DbFieldNames.ID, deckId);
 	}
 
-	private String buildDeckCardsSelectionClause(Uri cardsUri) {
+	private String buildSelectionClause(String fieldName, long id) {
+		return String.format("%s = %d", fieldName, id);
+	}
+
+	private String buildCardsSelectionClause(Uri cardsUri) {
 		long deckId = ProviderUris.Content.parseDeckId(cardsUri);
 
-		return String.format("%s = %d", DbFieldNames.CARD_DECK_ID, deckId);
+		return buildSelectionClause(DbFieldNames.CARD_DECK_ID, deckId);
 	}
 
 	private String buildCardSelectionClause(Uri cardUri) {
 		long cardId = ContentUris.parseId(cardUri);
 
-		return String.format("%s = %d", DbFieldNames.ID, cardId);
+		return buildSelectionClause(DbFieldNames.ID, cardId);
+	}
+
+	private String buildUnsupportedUriDetailMessage(Uri unsupportedUri) {
+		return String.format("Unsupported URI: %s", unsupportedUri.toString());
 	}
 
 	@Override
@@ -103,25 +109,25 @@ public class GambitProvider extends ContentProvider
 				return insertCard(uri, contentValues);
 
 			default:
-				throw new IllegalArgumentException("Unsupported URI.");
+				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 	}
 
-	private Uri insertDeck(ContentValues contentValues) {
-		if (!areDeckValuesValid(contentValues)) {
+	private Uri insertDeck(ContentValues deckValues) {
+		if (!areDeckValuesValidForInsertion(deckValues)) {
 			throw new IllegalArgumentException("Content values are not valid.");
 		}
 
-		if (!isDeckTitleUnique(contentValues)) {
+		if (!isDeckTitleUnique(deckValues)) {
 			throw new DeckExistsException();
 		}
 
-		setDeckValuesDefaults(contentValues);
+		setDeckInsertionDefaults(deckValues);
 
-		return createDeck(contentValues);
+		return createDeck(deckValues);
 	}
 
-	private boolean areDeckValuesValid(ContentValues deckValues) {
+	private boolean areDeckValuesValidForInsertion(ContentValues deckValues) {
 		return deckValues.containsKey(DbFieldNames.DECK_TITLE);
 	}
 
@@ -139,16 +145,16 @@ public class GambitProvider extends ContentProvider
 	private String buildDecksCountQuery(String deckTitle) {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(
-			String.format("select count(%s) from %s ", DbFieldNames.ID, DbTableNames.DECKS));
+		queryBuilder.append(String.format("select count(%s) ", DbFieldNames.ID));
+		queryBuilder.append(String.format("from %s ", DbTableNames.DECKS));
 		queryBuilder.append(String.format("where upper(%s) = upper(%s)", DbFieldNames.DECK_TITLE,
 			DatabaseUtils.sqlEscapeString(deckTitle)));
 
 		return queryBuilder.toString();
 	}
 
-	private void setDeckValuesDefaults(ContentValues deckValues) {
-		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DEFAULT_CURRENT_CARD_INDEX);
+	private void setDeckInsertionDefaults(ContentValues deckValues) {
+		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DbValues.DEFAULT_DECK_CURRENT_CARD_INDEX);
 	}
 
 	private Uri createDeck(ContentValues deckValues) {
@@ -161,31 +167,31 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private Uri insertCard(Uri cardsUri, ContentValues cardValues) {
-		if (!areCardValuesValid(cardValues)) {
+		if (!areCardValuesValidForInsertion(cardValues)) {
 			throw new IllegalArgumentException("Content values are not valid.");
 		}
 
-		setCardValuesDefaults(cardsUri, cardValues);
+		setCardInsertionDefaults(cardsUri, cardValues);
 
 		return createCard(cardsUri, cardValues);
 	}
 
-	private boolean areCardValuesValid(ContentValues cardValues) {
+	private boolean areCardValuesValidForInsertion(ContentValues cardValues) {
 		return cardValues.containsKey(DbFieldNames.CARD_FRONT_SIDE_TEXT) && cardValues.containsKey(
 			DbFieldNames.CARD_BACK_SIDE_TEXT);
 	}
 
-	private void setCardValuesDefaults(Uri cardsUri, ContentValues cardValues) {
-		long cardDeckId = ProviderUris.Content.parseDeckId(cardsUri);
-		long cardOrderIndex = calculateCardOrderIndex(cardDeckId);
+	private void setCardInsertionDefaults(Uri cardsUri, ContentValues cardValues) {
+		long deckId = ProviderUris.Content.parseDeckId(cardsUri);
+		long cardOrderIndex = calculateCardOrderIndex(deckId);
 
-		cardValues.put(DbFieldNames.CARD_DECK_ID, cardDeckId);
+		cardValues.put(DbFieldNames.CARD_DECK_ID, deckId);
 		cardValues.put(DbFieldNames.CARD_ORDER_INDEX, cardOrderIndex);
 	}
 
-	private long calculateCardOrderIndex(long cardDeckId) {
-		if (isCardOrderIndexUsed(cardDeckId)) {
-			return queryDeckCardsCount(cardDeckId);
+	private long calculateCardOrderIndex(long deckId) {
+		if (isCardOrderIndexUsed(deckId)) {
+			return queryCardsCount(deckId);
 		}
 
 		return DbValues.DEFAULT_CARD_ORDER_INDEX;
@@ -193,20 +199,20 @@ public class GambitProvider extends ContentProvider
 
 	private boolean isCardOrderIndexUsed(long deckId) {
 		return DatabaseUtils.longForQuery(databaseHelper.getReadableDatabase(),
-			buildCardsOrderIndexMaximumQuery(deckId), null) != DbValues.DEFAULT_CARD_ORDER_INDEX;
+			buildMaximumCardsOrderIndexQuery(deckId), null) != DbValues.DEFAULT_CARD_ORDER_INDEX;
 	}
 
-	private String buildCardsOrderIndexMaximumQuery(long deckId) {
+	private String buildMaximumCardsOrderIndexQuery(long deckId) {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(
-			String.format("select max(%s) from %s ", DbFieldNames.CARD_ORDER_INDEX, DbTableNames.CARDS));
+		queryBuilder.append(String.format("select max(%s) ", DbFieldNames.CARD_ORDER_INDEX));
+		queryBuilder.append(String.format("from %s ", DbTableNames.CARDS));
 		queryBuilder.append(String.format("where %s = %d", DbFieldNames.CARD_DECK_ID, deckId));
 
 		return queryBuilder.toString();
 	}
 
-	private long queryDeckCardsCount(long deckId) {
+	private long queryCardsCount(long deckId) {
 		return DatabaseUtils.longForQuery(databaseHelper.getReadableDatabase(),
 			buildCardsCountQuery(deckId), null);
 	}
@@ -214,8 +220,8 @@ public class GambitProvider extends ContentProvider
 	private String buildCardsCountQuery(long deckId) {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(
-			String.format("select count(%s) from %s ", DbFieldNames.ID, DbTableNames.CARDS));
+		queryBuilder.append(String.format("select count(%s) ", DbFieldNames.ID));
+		queryBuilder.append(String.format("from %s ", DbTableNames.CARDS));
 		queryBuilder.append(String.format("where %s = %d", DbFieldNames.CARD_DECK_ID, deckId));
 
 		return queryBuilder.toString();
@@ -240,7 +246,7 @@ public class GambitProvider extends ContentProvider
 				return deleteCard(uri);
 
 			default:
-				throw new IllegalArgumentException("Unsupported URI.");
+				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 	}
 
@@ -270,18 +276,24 @@ public class GambitProvider extends ContentProvider
 				return updateCard(uri, contentValues);
 
 			default:
-				throw new IllegalArgumentException("Invalid URI.");
+				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 	}
 
 	private int updateDeck(Uri deckUri, ContentValues deckValues) {
-		if (deckValues.containsKey(DbFieldNames.DECK_TITLE)) {
-			if (!isDeckTitleUnique(deckValues)) {
-				throw new DeckExistsException();
-			}
+		if (!areDeckValuesValidForUpdating(deckValues)) {
+			throw new DeckExistsException();
 		}
 
 		return editDeck(deckUri, deckValues);
+	}
+
+	private boolean areDeckValuesValidForUpdating(ContentValues deckValues) {
+		if (!deckValues.containsKey(DbFieldNames.DECK_TITLE)) {
+			return true;
+		}
+
+		return isDeckTitleUnique(deckValues);
 	}
 
 	private int editDeck(Uri deckUri, ContentValues deckValues) {
@@ -293,10 +305,6 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private int updateCard(Uri cardUri, ContentValues cardValues) {
-		return editCard(cardUri, cardValues);
-	}
-
-	private int editCard(Uri cardUri, ContentValues cardValues) {
 		int affectedRowsCount = databaseHelper.getWritableDatabase().update(DbTableNames.CARDS,
 			cardValues, buildCardSelectionClause(cardUri), null);
 		getContext().getContentResolver().notifyChange(cardUri, null);
