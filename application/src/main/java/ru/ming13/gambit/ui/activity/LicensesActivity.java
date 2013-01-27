@@ -39,11 +39,28 @@ public class LicensesActivity extends SherlockActivity
 	}
 
 	private void setUpLicenses() {
-		WebView licensesWebView = (WebView) findViewById(R.id.licenses_webview);
-		licensesWebView.loadUrl(buildLicensesUri());
+		getWebView().loadUrl(buildLicensesUri());
+	}
+
+	private WebView getWebView() {
+		return (WebView) findViewById(R.id.licenses_webview);
 	}
 
 	private String buildLicensesUri() {
 		return String.format("%s:///%s/%s", SCHEME, AUTHORITY, PATH);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		getWebView().saveState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		getWebView().restoreState(savedInstanceState);
 	}
 }
