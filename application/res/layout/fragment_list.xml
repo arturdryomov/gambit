@@ -23,6 +23,7 @@
 		android:choiceMode="none"
 		android:orientation="vertical"
 		android:fastScrollEnabled="true"
+		android:scrollbarStyle="outsideOverlay"
 		android:paddingLeft="@dimen/padding_horizontal_list"
 		android:paddingRight="@dimen/padding_horizontal_list"
 		style="@style/FullParentLayout" />
