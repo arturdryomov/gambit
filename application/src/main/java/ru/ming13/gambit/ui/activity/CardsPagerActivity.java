@@ -120,7 +120,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private boolean isSettingCardsPagerAdapterRequired() {
-		// Aware setting adapter after orientation change: ViewPager saves adapter itself
+		// Avoid setting adapter after orientation change: ViewPager saves adapter itself
 
 		return (cardsOrder != CardsOrder.DEFAULT) || (getCardsPager().getCurrentItem() == 0);
 	}
@@ -150,7 +150,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private boolean isSettingCurrentCardIndexRequired() {
-		// Aware case when user changed order or current card already
+		// Avoid case when user changed order or current card already
 
 		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
 	}
