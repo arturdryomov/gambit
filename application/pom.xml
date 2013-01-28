@@ -24,9 +24,9 @@
 	<packaging>apk</packaging>
 
 	<parent>
+		<groupId>ru.ming13.gambit</groupId>
 		<artifactId>gambit-parent</artifactId>
 		<version>0.8.2</version>
-		<groupId>ru.ming13.gambit</groupId>
 	</parent>
 
 	<repositories>
@@ -38,30 +38,30 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<version>${android.version}</version>
-			<groupId>com.google.android</groupId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
+			<groupId>com.actionbarsherlock</groupId>
 			<artifactId>actionbarsherlock</artifactId>
 			<version>4.2.0</version>
-			<groupId>com.actionbarsherlock</groupId>
 			<type>apklib</type>
 		</dependency>
 
 		<dependency>
+			<groupId>com.viewpagerindicator</groupId>
 			<artifactId>library</artifactId>
 			<version>2.4.1</version>
-			<groupId>com.viewpagerindicator</groupId>
 			<type>apklib</type>
 		</dependency>
 
 		<dependency>
+			<groupId>com.squareup</groupId>
 			<artifactId>seismic</artifactId>
 			<version>1.0.0</version>
-			<groupId>com.squareup</groupId>
 		</dependency>
 
 		<dependency>
@@ -71,15 +71,15 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.1</version>
-			<groupId>org.apache.commons</groupId>
 		</dependency>
 
 		<dependency>
+			<groupId>com.bugsense</groupId>
 			<artifactId>bugsense-trace</artifactId>
 			<version>3.0.3</version>
-			<groupId>com.bugsense</groupId>
 		</dependency>
 	</dependencies>
 
@@ -98,8 +98,8 @@
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-jarsigner-plugin</artifactId>
 						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
 						<executions>
 							<execution>
 								<id>signing</id>
@@ -112,8 +112,8 @@
 					</plugin>
 
 					<plugin>
-						<artifactId>android-maven-plugin</artifactId>
 						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>android-maven-plugin</artifactId>
 						<configuration>
 							<release>true</release>
 							<zipalign>

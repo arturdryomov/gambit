@@ -24,23 +24,23 @@
 	<packaging>apk</packaging>
 
 	<parent>
+		<groupId>ru.ming13.gambit</groupId>
 		<artifactId>gambit-parent</artifactId>
 		<version>0.8.2</version>
-		<groupId>ru.ming13.gambit</groupId>
 	</parent>
 
 	<dependencies>
 		<dependency>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<version>${android.version}</version>
-			<groupId>com.google.android</groupId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
+			<groupId>com.google.android</groupId>
 			<artifactId>android-test</artifactId>
 			<version>${android.version}</version>
-			<groupId>com.google.android</groupId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -51,17 +51,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>ru.ming13.gambit</groupId>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
-			<groupId>ru.ming13.gambit</groupId>
 			<scope>provided</scope>
 			<type>apk</type>
 		</dependency>
 
 		<dependency>
+			<groupId>ru.ming13.gambit</groupId>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
-			<groupId>ru.ming13.gambit</groupId>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
