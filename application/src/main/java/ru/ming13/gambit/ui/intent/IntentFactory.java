@@ -19,8 +19,7 @@ package ru.ming13.gambit.ui.intent;
 
 import android.content.Context;
 import android.content.Intent;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
+import android.net.Uri;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
 import ru.ming13.gambit.ui.activity.CardModificationActivity;
 import ru.ming13.gambit.ui.activity.CardsActivity;
@@ -39,37 +38,37 @@ public final class IntentFactory
 		return new Intent(context, DeckCreationActivity.class);
 	}
 
-	public static Intent createDeckRenamingIntent(Context context, Deck deck) {
+	public static Intent createDeckRenamingIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, DeckRenamingActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}
 
-	public static Intent createCardsIntent(Context context, Deck deck) {
+	public static Intent createCardsIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, CardsActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}
 
-	public static Intent createCardCreationIntent(Context context, Deck deck) {
+	public static Intent createCardCreationIntent(Context context, Uri cardsUri) {
 		Intent intent = new Intent(context, CardCreationActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.CARDS_URI, cardsUri);
 
 		return intent;
 	}
 
-	public static Intent createCardModificationIntent(Context context, Card card) {
+	public static Intent createCardModificationIntent(Context context, Uri cardUri) {
 		Intent intent = new Intent(context, CardModificationActivity.class);
-		intent.putExtra(IntentExtras.CARD, card);
+		intent.putExtra(IntentExtras.CARD_URI, cardUri);
 
 		return intent;
 	}
 
-	public static Intent createCardsPagerIntent(Context context, Deck deck) {
+	public static Intent createCardsPagerIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, CardsPagerActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}

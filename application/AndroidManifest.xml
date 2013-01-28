@@ -76,6 +76,11 @@
 			android:name=".ui.activity.LicensesActivity"
 			android:label="@string/title_licenses">
 		</activity>
-	</application>
 
+		<provider
+			android:name=".local.provider.GambitProvider"
+			android:authorities="ru.ming13.gambit.provider"
+			android:exported="false">
+		</provider>
+	</application>
 </manifest>

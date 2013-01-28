@@ -18,36 +18,50 @@ package ru.ming13.gambit.ui.activity;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.fragment.DeckOperationFragment;
+import com.squareup.otto.Subscribe;
+import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.DeckCreatedEvent;
+import ru.ming13.gambit.ui.bus.DeckCreationCancelledEvent;
+import ru.ming13.gambit.ui.fragment.DeckCreationFragment;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
-public class DeckCreationActivity extends FragmentWrapperActivity implements DeckOperationFragment.FormCallback
+public class DeckCreationActivity extends FragmentWrapperActivity
 {
 	@Override
 	protected Fragment buildFragment() {
-		return DeckOperationFragment.newCreationInstance();
+		return DeckCreationFragment.newInstance();
 	}
 
-	@Override
-	public <Data> void onAccept(Data data) {
-		Deck deck = (Deck) data;
-
-		callCardsActivity(deck);
-
+	@Subscribe
+	public void onDeckCreated(DeckCreatedEvent deckCreatedEvent) {
+		callCardsList(deckCreatedEvent.getDeckUri());
 		finish();
 	}
 
-	private void callCardsActivity(Deck deck) {
-		Intent intent = IntentFactory.createCardsIntent(this, deck);
-
+	private void callCardsList(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
 		startActivity(intent);
 	}
 
-	@Override
-	public void onCancel() {
+	@Subscribe
+	public void onDeckCreationCancelled(DeckCreationCancelledEvent deckCreationCancelledEvent) {
 		finish();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		BusProvider.getInstance().unregister(this);
 	}
 }

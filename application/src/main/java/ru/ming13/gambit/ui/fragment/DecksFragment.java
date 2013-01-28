@@ -17,158 +17,110 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import java.util.List;
-
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.ContextMenu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.adapter.DecksAdapter;
+import ru.ming13.gambit.local.provider.ProviderUris;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.intent.IntentFactory;
-import ru.ming13.gambit.ui.loader.DecksLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
-import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.task.DeckDeletionTask;
 import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Deck>>>, ActionModeProvider.ContextMenuHandler
+public class DecksFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
 {
+	private CursorAdapter decksAdapter;
+
 	public static DecksFragment newInstance() {
 		return new DecksFragment();
 	}
 
 	@Override
-	protected ArrayAdapter buildListAdapter() {
-		return new DecksAdapter(getActivity());
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setHasOptionsMenu(true);
 	}
 
 	@Override
-	protected void callListPopulation() {
-		setEmptyListText(R.string.loading_decks);
-
-		getLoaderManager().restartLoader(Loaders.DECKS, null, this);
+	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+		return layoutInflater.inflate(R.layout.fragment_list, container, false);
 	}
 
 	@Override
-	public Loader<LoaderResult<List<Deck>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		return DecksLoader.newInstance(getActivity());
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpDecksList();
+	}
+
+	private void setUpDecksList() {
+		setUpDecksAdapter();
+		loadDecks();
+	}
+
+	private void setUpDecksAdapter() {
+		decksAdapter = buildDecksAdapter();
+		setListAdapter(decksAdapter);
+	}
+
+	private CursorAdapter buildDecksAdapter() {
+		String[] departureColumns = {DbFieldNames.DECK_TITLE};
+		int[] destinationFields = {R.id.text};
+
+		return new SimpleCursorAdapter(getActivity(), R.layout.list_item_one_line, null,
+			departureColumns, destinationFields, 0);
+	}
+
+	private void loadDecks() {
+		getLoaderManager().initLoader(Loaders.DECKS, null, this);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoaderResult<List<Deck>>> decksLoader, LoaderResult<List<Deck>> decksLoaderResult) {
-		List<Deck> decks = decksLoaderResult.getData();
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		String[] projection = {DbFieldNames.ID, DbFieldNames.DECK_TITLE};
+		String sort = DbFieldNames.DECK_TITLE;
 
-		if (decks.isEmpty()) {
-			setEmptyListText(R.string.empty_decks);
-		}
-		else {
-			populateList(decks);
-		}
+		return new CursorLoader(getActivity(), ProviderUris.Content.buildDecksUri(), projection, null,
+			null, sort);
 	}
 
 	@Override
-	public void onLoaderReset(Loader<LoaderResult<List<Deck>>> decksLoader) {
-	}
+	public void onLoadFinished(Loader<Cursor> decksLoader, Cursor decksCursor) {
+		decksAdapter.swapCursor(decksCursor);
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		setUpContextMenu();
-	}
-
-	private void setUpContextMenu() {
-		if (ActionModeProvider.isActionModeAvailable()) {
-			ActionModeProvider.setUpActionMode(getListView(), this, R.menu.menu_context_decks);
-		}
-		else {
-			registerForContextMenu(getListView());
-		}
-	}
-
-	@Override
-	public boolean handleContextMenu(MenuItem menuItem, int deckListPosition) {
-		Deck deck = getAdapter().getItem(deckListPosition);
-
-		switch (menuItem.getItemId()) {
-			case R.id.menu_rename:
-				callDeckRenaming(deck);
-				return true;
-
-			case R.id.menu_edit_cards:
-				callCardsEditing(deck);
-				return true;
-
-			case R.id.menu_delete:
-				callDeckDeletion(deck);
-				return true;
-
-			default:
-				return false;
+		if (getListAdapter().isEmpty()) {
+			setUpNoDecksText();
 		}
 	}
 
-	private void callDeckRenaming(Deck deck) {
-		Intent intent = IntentFactory.createDeckRenamingIntent(getActivity(), deck);
-		startActivity(intent);
-	}
-
-	private void callCardsEditing(Deck deck) {
-		Intent intent = IntentFactory.createCardsIntent(getActivity(), deck);
-		startActivity(intent);
-	}
-
-	private void callDeckDeletion(Deck deck) {
-		deleteDeckFromList(deck);
-		deleteDeckEntirely(deck);
-	}
-
-	private void deleteDeckFromList(Deck deck) {
-		getAdapter().remove(deck);
-
-		if (getAdapter().isEmpty()) {
-			setEmptyListText(R.string.empty_decks);
-		}
-	}
-
-	private void deleteDeckEntirely(Deck deck) {
-		DeckDeletionTask.newInstance(deck).execute();
+	private void setUpNoDecksText() {
+		TextView emptyDecksListTextView = (TextView) getListView().getEmptyView();
+		emptyDecksListTextView.setText(R.string.empty_decks);
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
-
-		getActivity().getMenuInflater().inflate(R.menu.menu_context_decks, contextMenu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		int deckListPosition = getListPosition(menuItem);
-
-		return handleContextMenu(menuItem, deckListPosition);
-	}
-
-	@Override
-	public void onListItemClick(ListView listView, View view, int listPosition, long rowId) {
-		Deck deck = getAdapter().getItem(listPosition);
-
-		callCardsViewing(deck);
-	}
-
-	private void callCardsViewing(Deck deck) {
-		Intent intent = IntentFactory.createCardsPagerIntent(getActivity(), deck);
-		startActivity(intent);
+	public void onLoaderReset(Loader<Cursor> decksLoader) {
+		decksAdapter.swapCursor(null);
 	}
 
 	@Override
@@ -177,7 +129,7 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem menuItem) {
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_create_item:
 				callDeckCreation();
@@ -200,5 +152,89 @@ public class DecksFragment extends AdaptedListFragment<Deck> implements LoaderMa
 	private void callLicenses() {
 		Intent intent = IntentFactory.createLicensesIntent(getActivity());
 		startActivity(intent);
+	}
+
+	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id) {
+		Uri deckUri = ProviderUris.Content.buildDeckUri(id);
+
+		callCardsPager(deckUri);
+	}
+
+	private void callCardsPager(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsPagerIntent(getActivity(), deckUri);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		setUpContextMenu();
+	}
+
+	private void setUpContextMenu() {
+		if (ActionModeProvider.isActionModeAvailable()) {
+			ActionModeProvider.setUpActionMode(getListView(), this, R.menu.menu_context_decks);
+		}
+		else {
+			registerForContextMenu(getListView());
+		}
+	}
+
+	@Override
+	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
+		Uri deckUri = ProviderUris.Content.buildDeckUri(listItemId);
+
+		switch (menuItem.getItemId()) {
+			case R.id.menu_rename:
+				callDeckRenaming(deckUri);
+				return true;
+
+			case R.id.menu_edit_cards:
+				callCardsList(deckUri);
+				return true;
+
+			case R.id.menu_delete:
+				callDeckDeletion(deckUri);
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	private void callDeckRenaming(Uri deckUri) {
+		Intent intent = IntentFactory.createDeckRenamingIntent(getActivity(), deckUri);
+		startActivity(intent);
+	}
+
+	private void callCardsList(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsIntent(getActivity(), deckUri);
+		startActivity(intent);
+	}
+
+	private void callDeckDeletion(Uri deckUri) {
+		DeckDeletionTask.execute(getActivity().getContentResolver(), deckUri);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+		super.onCreateContextMenu(contextMenu, view, contextMenuInfo);
+
+		getActivity().getMenuInflater().inflate(R.menu.menu_context_decks, contextMenu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+		long cardListId = getListItemId(menuItem);
+
+		return handleContextMenu(menuItem, cardListId);
+	}
+
+	private long getListItemId(android.view.MenuItem menuItem) {
+		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+
+		return menuItemInfo.id;
 	}
 }

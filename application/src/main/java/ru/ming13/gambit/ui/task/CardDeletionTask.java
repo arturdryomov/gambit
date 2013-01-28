@@ -17,29 +17,33 @@
 package ru.ming13.gambit.ui.task;
 
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
 
 
 public class CardDeletionTask extends AsyncTask<Void, Void, Void>
 {
-	private final Deck deck;
-	private final Card card;
+	private final ContentResolver contentResolver;
+	private final Uri cardUri;
 
-	public static CardDeletionTask newInstance(Deck deck, Card card) {
-		return new CardDeletionTask(deck, card);
+	public static void execute(ContentResolver contentResolver, Uri cardUri) {
+		new CardDeletionTask(contentResolver, cardUri).execute();
 	}
 
-	private CardDeletionTask(Deck deck, Card card) {
-		this.deck = deck;
-		this.card = card;
+	private CardDeletionTask(ContentResolver contentResolver, Uri cardUri) {
+		this.contentResolver = contentResolver;
+		this.cardUri = cardUri;
 	}
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
-		deck.deleteCard(card);
+		deleteCard();
 
 		return null;
+	}
+
+	private void deleteCard() {
+		contentResolver.delete(cardUri, null, null);
 	}
 }

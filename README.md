@@ -32,6 +32,7 @@ Gambit uses some open source libraries and tools:
 * [ViewPagerIndicator][ViewPagerIndicator link]
 * [Apache Commons Lang][Apache Commons Lang link]
 * [Seismic][Seismic link]
+* [Otto][Otto link]
 
 
   [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
@@ -44,3 +45,4 @@ Gambit uses some open source libraries and tools:
   [ViewPagerIndicator link]: http://viewpagerindicator.com
   [Apache Commons Lang link]: http://commons.apache.org/lang
   [Seismic link]: https://github.com/square/seismic
+  [Otto link]: https://github.com/square/otto

@@ -17,47 +17,59 @@
 package ru.ming13.gambit.ui.adapter;
 
 
-import java.util.List;
-
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import ru.ming13.gambit.local.model.Card;
+import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.fragment.CardEmptyFragment;
 import ru.ming13.gambit.ui.fragment.CardFragment;
 
 
 public class CardsPagerAdapter extends FragmentStatePagerAdapter
 {
-	private final List<Card> cards;
+	private Cursor cardsCursor;
 
-	public CardsPagerAdapter(FragmentManager fragmentManager, List<Card> cards) {
+	public CardsPagerAdapter(FragmentManager fragmentManager, Cursor cardsCursor) {
 		super(fragmentManager);
 
-		this.cards = cards;
+		this.cardsCursor = cardsCursor;
+	}
+
+	public void swapCursor(Cursor cardsCursor) {
+		this.cardsCursor = cardsCursor;
 	}
 
 	@Override
 	public int getCount() {
-		if (cards == null) {
+		if (cardsCursor == null) {
 			return 0;
 		}
 
-		if (cards.isEmpty()) {
+		if (cardsCursor.getCount() == 0) {
 			return 1;
 		}
 
-		return cards.size();
+		return cardsCursor.getCount();
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		if (cards.isEmpty()) {
+		if (cardsCursor.getCount() == 0) {
 			return CardEmptyFragment.newInstance();
 		}
 
-		Card card = cards.get(position);
+		cardsCursor.moveToPosition(position);
 
-		return CardFragment.newInstance(card);
+		return CardFragment.newInstance(extractCardFrontSideText(cardsCursor),
+			extractCardBackSideText(cardsCursor));
+	}
+
+	private String extractCardFrontSideText(Cursor cardsCursor) {
+		return cardsCursor.getString(cardsCursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+	}
+
+	private String extractCardBackSideText(Cursor cardsCursor) {
+		return cardsCursor.getString(cardsCursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
 	}
 }
