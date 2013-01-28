@@ -143,7 +143,7 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 	private void copyTableContents(SQLiteDatabase db, String departureTableName, String destinationTableName) {
 		db.execSQL(
-			String.format("insert into %s select * from %s", departureTableName, destinationTableName));
+			String.format("insert into %s select * from %s", destinationTableName, departureTableName));
 	}
 
 	private void migrateFromCamelNamingStyle(SQLiteDatabase db) {
