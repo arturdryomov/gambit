@@ -36,10 +36,6 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 		this.cardsCursor = cardsCursor;
 	}
 
-	public void swapCursor(Cursor cardsCursor) {
-		this.cardsCursor = cardsCursor;
-	}
-
 	@Override
 	public int getCount() {
 		if (cardsCursor == null) {
@@ -71,5 +67,13 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 
 	private String extractCardBackSideText(Cursor cardsCursor) {
 		return cardsCursor.getString(cardsCursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
+	}
+
+	public void swapCursor(Cursor cardsCursor) {
+		this.cardsCursor = cardsCursor;
+	}
+
+	public boolean isEmpty() {
+		return (cardsCursor == null) || (cardsCursor.getCount() == 0);
 	}
 }

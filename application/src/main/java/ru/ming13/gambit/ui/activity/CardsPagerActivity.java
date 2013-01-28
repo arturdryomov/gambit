@@ -104,6 +104,12 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	@Override
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsPagerAdapter(cardsCursor);
+
+		if (getCardsPagerAdapter().isEmpty()) {
+			callHidingActionBarItems();
+			return;
+		}
+
 		setUpCardsPagerIndicator();
 		setUpCurrentCardIndex();
 	}
@@ -131,6 +137,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 	private CardsPagerAdapter getCardsPagerAdapter() {
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
+	}
+
+	private void callHidingActionBarItems() {
+		supportInvalidateOptionsMenu();
 	}
 
 	private void setUpCardsPagerIndicator() {
@@ -193,6 +203,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		if ((getCardsPagerAdapter() != null) && (getCardsPagerAdapter().isEmpty())) {
+			return false;
+		}
+
 		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager, menu);
 
 		return true;
