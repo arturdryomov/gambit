@@ -17,7 +17,6 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:background="@color/background_card_fragment"
 	style="@style/FullParentLayout">
 
 	<android.support.v4.view.ViewPager

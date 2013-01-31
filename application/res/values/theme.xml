@@ -41,4 +41,11 @@
 		<item name="displayOptions">showTitle</item>
 	</style>
 
+	<style name="Theme.Gambit.Cards" parent="Theme.Gambit">
+		<!-- Change background color -->
+		<item name="android:colorBackground">@color/background_card_container</item>
+		<item name="android:colorBackgroundCacheHint">@color/background_card_container</item>
+		<item name="android:windowBackground">@color/background_card_container</item>
+	</style>
+
 </resources>

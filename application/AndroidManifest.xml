@@ -59,7 +59,8 @@
 
 		<activity
 			android:name=".ui.activity.CardsPagerActivity"
-			android:label="@string/title_cards">
+			android:label="@string/title_cards"
+			android:theme="@style/Theme.Gambit.Cards">
 		</activity>
 
 		<activity
