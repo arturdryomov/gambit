@@ -21,7 +21,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.provider.GambitContract;
 
 
 public class DeckCurrentCardSavingTask extends AsyncTask<Void, Void, Void>
@@ -54,7 +54,7 @@ public class DeckCurrentCardSavingTask extends AsyncTask<Void, Void, Void>
 	private ContentValues buildDeckValues() {
 		ContentValues deckValues = new ContentValues();
 
-		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, currentCardIndex);
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, currentCardIndex);
 
 		return deckValues;
 	}

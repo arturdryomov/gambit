@@ -22,7 +22,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
 import ru.ming13.gambit.local.provider.DeckExistsException;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.ui.bus.BusEvent;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckExistsEvent;
@@ -64,7 +64,7 @@ public class DeckRenamingTask extends AsyncTask<Void, Void, BusEvent>
 	private ContentValues buildDeckValues(String deckTitle) {
 		ContentValues deckValues = new ContentValues();
 
-		deckValues.put(DbFieldNames.DECK_TITLE, deckTitle);
+		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
 
 		return deckValues;
 	}

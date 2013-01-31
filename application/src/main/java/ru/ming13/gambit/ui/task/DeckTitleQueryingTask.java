@@ -21,7 +21,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckTitleQueriedEvent;
 
@@ -46,7 +46,7 @@ public class DeckTitleQueryingTask extends AsyncTask<Void, Void, String>
 	}
 
 	private String queryDeckTitle() {
-		String[] projection = {DbFieldNames.DECK_TITLE};
+		String[] projection = {GambitContract.Decks.TITLE};
 
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
@@ -56,7 +56,7 @@ public class DeckTitleQueryingTask extends AsyncTask<Void, Void, String>
 	private String extractDeckTitle(Cursor deckCursor) {
 		deckCursor.moveToFirst();
 
-		return deckCursor.getString(deckCursor.getColumnIndex(DbFieldNames.DECK_TITLE));
+		return deckCursor.getString(deckCursor.getColumnIndex(GambitContract.Decks.TITLE));
 	}
 
 	@Override

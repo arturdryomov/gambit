@@ -21,7 +21,7 @@ import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.ui.fragment.CardEmptyFragment;
 import ru.ming13.gambit.ui.fragment.CardFragment;
 
@@ -62,11 +62,11 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 	}
 
 	private String extractCardFrontSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 	}
 
 	private String extractCardBackSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
+		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 	}
 
 	public void swapCursor(Cursor cardsCursor) {

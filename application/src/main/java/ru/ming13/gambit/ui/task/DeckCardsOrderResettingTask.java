@@ -28,7 +28,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
 import ru.ming13.gambit.local.provider.GambitContract;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
 
 
 public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
@@ -69,7 +68,7 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private Cursor queryCards() {
-		String[] projection = {DbFieldNames.ID};
+		String[] projection = {GambitContract.Cards._ID};
 
 		return contentResolver.query(cardsUri, projection, null, null, null);
 	}
@@ -79,7 +78,7 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private long extractCardId(Cursor cardsCursor) {
-		return cardsCursor.getLong(cardsCursor.getColumnIndex(DbFieldNames.ID));
+		return cardsCursor.getLong(cardsCursor.getColumnIndex(GambitContract.Cards._ID));
 	}
 
 	private ArrayList<ContentProviderOperation> buildChangingOrderOperations(List<Uri> cardsUris) {
@@ -94,7 +93,7 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private ContentProviderOperation buildChangingOrderOperation(Uri cardUri, Integer cardOrderIndex) {
-		return ContentProviderOperation.newUpdate(cardUri).withValue(DbFieldNames.CARD_ORDER_INDEX,
+		return ContentProviderOperation.newUpdate(cardUri).withValue(GambitContract.Cards.ORDER_INDEX,
 			cardOrderIndex).build();
 	}
 

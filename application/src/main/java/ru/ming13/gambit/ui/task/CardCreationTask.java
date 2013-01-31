@@ -21,7 +21,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardCreatedEvent;
 
@@ -58,8 +58,8 @@ public class CardCreationTask extends AsyncTask<Void, Void, Void>
 	private ContentValues buildCardValues() {
 		ContentValues cardValues = new ContentValues();
 
-		cardValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, cardFrontSideText);
-		cardValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, cardBackSideText);
+		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, cardFrontSideText);
+		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, cardBackSideText);
 
 		return cardValues;
 	}

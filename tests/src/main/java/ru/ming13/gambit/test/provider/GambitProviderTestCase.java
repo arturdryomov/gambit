@@ -25,7 +25,6 @@ import android.text.TextUtils;
 import android.util.Pair;
 import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.local.provider.GambitProvider;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
 
 
 public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitProvider>
@@ -39,8 +38,9 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 		public static final String[] CARDS;
 
 		static {
-			DECKS = new String[] {DbFieldNames.ID, DbFieldNames.DECK_TITLE};
-			CARDS = new String[] {DbFieldNames.ID, DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
+			DECKS = new String[] {GambitContract.Decks._ID, GambitContract.Decks.TITLE};
+			CARDS = new String[] {GambitContract.Cards._ID, GambitContract.Cards.FRONT_SIDE_TEXT,
+				GambitContract.Cards.BACK_SIDE_TEXT};
 		}
 	}
 
@@ -73,7 +73,7 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 		Cursor deckCursor = getMockContentResolver().query(deckUri, Projection.DECKS, null, null, null);
 
 		deckCursor.moveToFirst();
-		return deckCursor.getString(deckCursor.getColumnIndex(DbFieldNames.DECK_TITLE));
+		return deckCursor.getString(deckCursor.getColumnIndex(GambitContract.Decks.TITLE));
 	}
 
 	protected Uri insertDeck(String deckTitle) {
@@ -86,7 +86,7 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 	private ContentValues buildDeckValues(String deckTitle) {
 		ContentValues deckValues = new ContentValues();
 
-		deckValues.put(DbFieldNames.DECK_TITLE, deckTitle);
+		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
 
 		return deckValues;
 	}
@@ -112,9 +112,9 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 
 		cardCursor.moveToFirst();
 		String cardFrontSideText = cardCursor.getString(
-			cardCursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+			cardCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 		String cardBackSideText = cardCursor.getString(
-			cardCursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
+			cardCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 		return Pair.create(cardFrontSideText, cardBackSideText);
 	}
 
@@ -128,8 +128,8 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 	private ContentValues buildCardValues(String cardFrontSideText, String cardBackSideText) {
 		ContentValues cardValues = new ContentValues();
 
-		cardValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, cardFrontSideText);
-		cardValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, cardBackSideText);
+		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, cardFrontSideText);
+		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, cardBackSideText);
 
 		return cardValues;
 	}

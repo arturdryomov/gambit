@@ -25,7 +25,6 @@ import android.net.Uri;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.ExampleDeckWriter;
 import ru.ming13.gambit.local.provider.GambitContract;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
 
 
 public class ExampleDeckWriterTests extends GambitProviderTestCase
@@ -49,7 +48,7 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 		Cursor decksCursor = queryDecks();
 
 		decksCursor.moveToFirst();
-		long deckId = decksCursor.getLong(decksCursor.getColumnIndex(DbFieldNames.ID));
+		long deckId = decksCursor.getLong(decksCursor.getColumnIndex(GambitContract.Decks._ID));
 
 		return GambitContract.Decks.buildDeckUri(deckId);
 	}
@@ -68,7 +67,7 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 		for (int exampleDeckCardResourceId : ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES) {
 			String expectedFrontSideText = getMockContext().getString(exampleDeckCardResourceId);
 			String actualFrontSideText = cardsCursor.getString(
-				cardsCursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+				cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 
 			assertThat(actualFrontSideText).isEqualTo(expectedFrontSideText);
 
