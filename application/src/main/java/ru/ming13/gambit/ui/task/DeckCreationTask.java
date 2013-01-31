@@ -64,6 +64,8 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 		ContentValues deckValues = new ContentValues();
 
 		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX,
+			GambitContract.Decks.DEFAULT_CURRENT_CARD_INDEX);
 
 		return deckValues;
 	}

@@ -141,8 +141,6 @@ public class GambitProvider extends ContentProvider
 			throw new DeckExistsException();
 		}
 
-		setDeckInsertionDefaults(deckValues);
-
 		return createDeck(deckValues);
 	}
 
@@ -171,12 +169,6 @@ public class GambitProvider extends ContentProvider
 			DatabaseUtils.sqlEscapeString(deckTitle)));
 
 		return queryBuilder.toString();
-	}
-
-	private void setDeckInsertionDefaults(ContentValues deckValues) {
-		// TODO: move this to insertion call
-		deckValues.put(DbSchema.DecksColumns.CURRENT_CARD_INDEX,
-			DbSchema.DecksColumnsDefaultValues.CURRENT_CARD_INDEX);
 	}
 
 	private Uri createDeck(ContentValues deckValues) {
@@ -208,7 +200,6 @@ public class GambitProvider extends ContentProvider
 		long deckId = GambitContract.Cards.getDeckId(cardsUri);
 		long cardOrderIndex = calculateCardOrderIndex(deckId);
 
-		// TODO: move this to insertion call
 		cardValues.put(DbSchema.CardsColumns.DECK_ID, deckId);
 		cardValues.put(DbSchema.CardsColumns.ORDER_INDEX, cardOrderIndex);
 	}
