@@ -166,13 +166,33 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		cardsAdapter.swapCursor(cursor);
 
 		if (getListAdapter().isEmpty()) {
-			setUpNoCardsText();
+			showNoCardsText();
+		}
+		else {
+			hideNoCardsText();
 		}
 	}
 
-	private void setUpNoCardsText() {
-		TextView emptyDecksListTextView = (TextView) getListView().getEmptyView();
-		emptyDecksListTextView.setText(R.string.empty_cards);
+	private void showNoCardsText() {
+		TextView emptyCardsTitleTextView = (TextView) getView().findViewById(R.id.empty_title);
+		TextView emptyCardsSubtitleTextView = (TextView) getView().findViewById(R.id.empty_subtitle);
+
+		setNoCardsTextVisibility(View.VISIBLE);
+
+		emptyCardsTitleTextView.setText(R.string.empty_cards_title);
+		emptyCardsSubtitleTextView.setText(R.string.empty_cards_subtitle);
+	}
+
+	private void setNoCardsTextVisibility(int visibility) {
+		TextView emptyCardsTitleTextView = (TextView) getView().findViewById(R.id.empty_title);
+		TextView emptyCardsSubtitleTextView = (TextView) getView().findViewById(R.id.empty_subtitle);
+
+		emptyCardsTitleTextView.setVisibility(visibility);
+		emptyCardsSubtitleTextView.setVisibility(visibility);
+	}
+
+	private void hideNoCardsText() {
+		setNoCardsTextVisibility(View.GONE);
 	}
 
 	@Override

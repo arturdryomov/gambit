@@ -30,7 +30,11 @@
 	<string name="title_licenses">Open source licenses</string>
 
 	<string name="empty_decks">No decks.</string>
+	<string name="empty_decks_title">No decks</string>
+	<string name="empty_decks_subtitle">Press plus to create one</string>
 	<string name="empty_cards">No flashcards</string>
+	<string name="empty_cards_title">No flashcards</string>
+	<string name="empty_cards_subtitle">Press plus to create one</string>
 
 	<string name="loading_decks">Loading decks…</string>
 	<string name="loading_cards">Loading flashcards…</string>

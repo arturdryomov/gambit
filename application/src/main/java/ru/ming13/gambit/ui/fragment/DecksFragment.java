@@ -109,13 +109,33 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 		decksAdapter.swapCursor(decksCursor);
 
 		if (getListAdapter().isEmpty()) {
-			setUpNoDecksText();
+			showNoDecksText();
+		}
+		else {
+			hideNoDecksText();
 		}
 	}
 
-	private void setUpNoDecksText() {
-		TextView emptyDecksListTextView = (TextView) getListView().getEmptyView();
-		emptyDecksListTextView.setText(R.string.empty_decks);
+	private void showNoDecksText() {
+		TextView emptyDecksTitleTextView = (TextView) getView().findViewById(R.id.empty_title);
+		TextView emptyDecksSubtitleTextView = (TextView) getView().findViewById(R.id.empty_subtitle);
+
+		setNoDecksTextVisibility(View.VISIBLE);
+
+		emptyDecksTitleTextView.setText(R.string.empty_decks_title);
+		emptyDecksSubtitleTextView.setText(R.string.empty_decks_subtitle);
+	}
+
+	private void setNoDecksTextVisibility(int visibility) {
+		TextView emptyDecksTitleTextView = (TextView) getView().findViewById(R.id.empty_title);
+		TextView emptyDecksSubtitleTextView = (TextView) getView().findViewById(R.id.empty_subtitle);
+
+		emptyDecksTitleTextView.setVisibility(visibility);
+		emptyDecksSubtitleTextView.setVisibility(visibility);
+	}
+
+	private void hideNoDecksText() {
+		setNoDecksTextVisibility(View.GONE);
 	}
 
 	@Override
