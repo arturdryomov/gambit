@@ -20,7 +20,6 @@ package ru.ming13.gambit.local.sqlite;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import ru.ming13.gambit.local.DbException;
 import ru.ming13.gambit.local.ExampleDeckWriter;
 
 
@@ -111,7 +110,8 @@ public class DbOpenHelper extends SQLiteOpenHelper
 				break;
 
 			default:
-				throw new DbException();
+				migrateFromUnknownDatabaseVersion(db);
+				break;
 		}
 	}
 
@@ -178,6 +178,20 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 		try {
 			dropTable(db, DbSchema.Tables.DB_LAST_UPDATE_TIME);
+
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+	private void migrateFromUnknownDatabaseVersion(SQLiteDatabase db) {
+		db.beginTransaction();
+
+		try {
+			dropTables(db);
+			createTables(db);
 
 			db.setTransactionSuccessful();
 		}
