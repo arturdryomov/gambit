@@ -55,6 +55,24 @@ public class DbSchema
 		public static final String CURRENT_CARD_INDEX = "current_card_index";
 	}
 
+	static final class DecksColumnsParameters
+	{
+		private DecksColumnsParameters() {
+		}
+
+		public static final String _ID = "integer primary key autoincrement not null unique";
+		public static final String TITLE = "text not null unique";
+		public static final String CURRENT_CARD_INDEX = "int not null";
+	}
+
+	public static final class DecksColumnsDefaultValues
+	{
+		private DecksColumnsDefaultValues() {
+		}
+
+		public static final int CURRENT_CARD_INDEX = 0;
+	}
+
 	public static final class CardsColumns implements BaseColumns
 	{
 		private CardsColumns() {
@@ -66,22 +84,12 @@ public class DbSchema
 		public static final String ORDER_INDEX = "order_index";
 	}
 
-	static final class DecksColumnsParameters
-	{
-		private DecksColumnsParameters() {
-		}
-
-		public static final String ID = "integer primary key autoincrement not null unique";
-		public static final String TITLE = "text not null unique";
-		public static final String CURRENT_CARD_INDEX = "int not null";
-	}
-
 	static final class CardsColumnsParameters
 	{
 		private CardsColumnsParameters() {
 		}
 
-		public static final String ID = "integer primary key autoincrement not null unique";
+		public static final String _ID = "integer primary key autoincrement not null unique";
 		public static final String DECK_ID;
 		public static final String FRONT_SIDE_TEXT = "text not null";
 		public static final String BACK_SIDE_TEXT = "text not null";
@@ -92,5 +100,13 @@ public class DbSchema
 
 			DECK_ID = String.format(deckForeignKeyMask, Tables.DECKS, DecksColumns._ID);
 		}
+	}
+
+	public static final class CardsColumnsDefaultValues
+	{
+		private CardsColumnsDefaultValues() {
+		}
+
+		public static final int ORDER_INDEX = 0;
 	}
 }
