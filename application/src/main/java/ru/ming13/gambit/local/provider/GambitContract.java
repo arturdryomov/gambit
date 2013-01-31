@@ -22,39 +22,6 @@ public class GambitContract
 	private GambitContract() {
 	}
 
-	static final class Paths
-	{
-		private Paths() {
-		}
-
-		public static final class Segments
-		{
-			private Segments() {
-			}
-
-			public static final String NUMBER = "#";
-
-			public static final String DECKS = "decks";
-			public static final String CARDS = "cards";
-		}
-
-		public static final String DECKS;
-		public static final String DECK;
-		public static final String CARDS;
-		public static final String CARD;
-
-		static {
-			DECKS = Segments.DECKS;
-			DECK = appendUriPath(DECKS, Segments.NUMBER);
-			CARDS = appendUriPath(DECK, Segments.CARDS);
-			CARD = appendUriPath(CARDS, Segments.NUMBER);
-		}
-
-		private static String appendUriPath(String uri, String uriPath) {
-			return String.format("%s/%s", uri, uriPath);
-		}
-	}
-
 	private interface DecksColumns
 	{
 		public static final String TITLE = DbSchema.DecksColumns.TITLE;
@@ -70,7 +37,8 @@ public class GambitContract
 		public static final int DEFAULT_CURRENT_CARD_INDEX = 0;
 
 		static {
-			CONTENT_URI = GambitContract.CONTENT_URI.buildUpon().appendPath(Paths.DECKS).build();
+			CONTENT_URI = GambitContract.CONTENT_URI.buildUpon().appendPath(
+				GambitProviderPaths.DECKS).build();
 		}
 
 		public static Uri buildDeckUri(long deckId) {
@@ -95,11 +63,12 @@ public class GambitContract
 		public static final int DEFAULT_ORDER_INDEX = 0;
 
 		static {
-			CONTENT_URI = GambitContract.CONTENT_URI.buildUpon().appendPath(Paths.CARDS).build();
+			CONTENT_URI = GambitContract.CONTENT_URI.buildUpon().appendPath(
+				GambitProviderPaths.CARDS).build();
 		}
 
 		public static Uri buildCardsUri(Uri deckUri) {
-			return Uri.withAppendedPath(deckUri, Paths.Segments.CARDS);
+			return Uri.withAppendedPath(deckUri, GambitProviderPaths.Segments.CARDS);
 		}
 
 		public static Uri buildCardUri(Uri cardsUri, long cardId) {

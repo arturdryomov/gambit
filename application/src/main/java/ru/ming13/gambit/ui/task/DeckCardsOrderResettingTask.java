@@ -28,7 +28,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
 import ru.ming13.gambit.local.provider.GambitContract;
-import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 
 
@@ -76,7 +75,7 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private Uri buildCardUri(Cursor cardsCursor) {
-		return ProviderUris.Content.buildCardUri(cardsUri, extractCardId(cardsCursor));
+		return GambitContract.Cards.buildCardUri(cardsUri, extractCardId(cardsCursor));
 	}
 
 	private long extractCardId(Cursor cardsCursor) {
@@ -101,7 +100,7 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 
 	private void applyOperations(ArrayList<ContentProviderOperation> operations) {
 		try {
-			contentResolver.applyBatch(ProviderUris.AUTHORITY, operations);
+			contentResolver.applyBatch(GambitContract.AUTHORITY, operations);
 		}
 		catch (RemoteException e) {
 			// Oops, ignore it

@@ -38,7 +38,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.ProviderUris;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
@@ -80,7 +80,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	private void setUpCardsUri() {
 		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
 
-		cardsUri = ProviderUris.Content.buildCardsUri(deckUri);
+		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
 	}
 
 	@Override
@@ -224,7 +224,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, id);
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, id);
 
 		callCardModification(cardUri);
 	}
@@ -252,7 +252,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
-		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, listItemId);
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, listItemId);
 
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:

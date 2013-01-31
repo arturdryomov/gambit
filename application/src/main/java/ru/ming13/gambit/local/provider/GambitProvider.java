@@ -25,6 +25,7 @@ import android.content.ContentProviderResult;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -39,9 +40,13 @@ public class GambitProvider extends ContentProvider
 {
 	private SQLiteOpenHelper databaseHelper;
 
+	private UriMatcher uriMatcher;
+
 	@Override
 	public boolean onCreate() {
 		databaseHelper = new DbOpenHelper(getContext());
+
+		uriMatcher = GambitProviderPaths.buildUriMatcher();
 
 		return true;
 	}
@@ -50,22 +55,22 @@ public class GambitProvider extends ContentProvider
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArguments, String sortOrder) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-		switch (ProviderUris.MATCHER.match(uri)) {
-			case ProviderUris.Codes.DECKS:
+		switch (uriMatcher.match(uri)) {
+			case GambitProviderPaths.Codes.DECKS:
 				queryBuilder.setTables(DbSchema.Tables.DECKS);
 				break;
 
-			case ProviderUris.Codes.DECK:
+			case GambitProviderPaths.Codes.DECK:
 				queryBuilder.setTables(DbSchema.Tables.DECKS);
 				selection = buildDeckSelectionClause(uri);
 				break;
 
-			case ProviderUris.Codes.CARDS:
+			case GambitProviderPaths.Codes.CARDS:
 				queryBuilder.setTables(DbSchema.Tables.CARDS);
 				selection = buildCardsSelectionClause(uri);
 				break;
 
-			case ProviderUris.Codes.CARD:
+			case GambitProviderPaths.Codes.CARD:
 				queryBuilder.setTables(DbSchema.Tables.CARDS);
 				selection = buildCardSelectionClause(uri);
 				break;
@@ -93,7 +98,7 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private String buildCardsSelectionClause(Uri cardsUri) {
-		long deckId = ProviderUris.Content.parseDeckId(cardsUri);
+		long deckId = GambitContract.Cards.getDeckId(cardsUri);
 
 		return buildSelectionClause(DbSchema.CardsColumns.DECK_ID, deckId);
 	}
@@ -115,11 +120,11 @@ public class GambitProvider extends ContentProvider
 
 	@Override
 	public Uri insert(Uri uri, ContentValues contentValues) {
-		switch (ProviderUris.MATCHER.match(uri)) {
-			case ProviderUris.Codes.DECKS:
+		switch (uriMatcher.match(uri)) {
+			case GambitProviderPaths.Codes.DECKS:
 				return insertDeck(contentValues);
 
-			case ProviderUris.Codes.CARDS:
+			case GambitProviderPaths.Codes.CARDS:
 				return insertCard(uri, contentValues);
 
 			default:
@@ -178,7 +183,7 @@ public class GambitProvider extends ContentProvider
 		SQLiteDatabase database = databaseHelper.getWritableDatabase();
 		long deckId = database.insert(DbSchema.Tables.DECKS, null, deckValues);
 
-		Uri deckUri = ProviderUris.Content.buildDeckUri(deckId);
+		Uri deckUri = GambitContract.Decks.buildDeckUri(deckId);
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return deckUri;
@@ -200,7 +205,7 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private void setCardInsertionDefaults(Uri cardsUri, ContentValues cardValues) {
-		long deckId = ProviderUris.Content.parseDeckId(cardsUri);
+		long deckId = GambitContract.Cards.getDeckId(cardsUri);
 		long cardOrderIndex = calculateCardOrderIndex(deckId);
 
 		// TODO: move this to insertion call
@@ -253,7 +258,7 @@ public class GambitProvider extends ContentProvider
 		SQLiteDatabase database = databaseHelper.getWritableDatabase();
 		long cardId = database.insert(DbSchema.Tables.CARDS, null, cardValues);
 
-		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, cardId);
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, cardId);
 		getContext().getContentResolver().notifyChange(cardUri, null);
 
 		return cardUri;
@@ -261,11 +266,11 @@ public class GambitProvider extends ContentProvider
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArguments) {
-		switch (ProviderUris.MATCHER.match(uri)) {
-			case ProviderUris.Codes.DECK:
+		switch (uriMatcher.match(uri)) {
+			case GambitProviderPaths.Codes.DECK:
 				return deleteDeck(uri);
 
-			case ProviderUris.Codes.CARD:
+			case GambitProviderPaths.Codes.CARD:
 				return deleteCard(uri);
 
 			default:
@@ -295,11 +300,11 @@ public class GambitProvider extends ContentProvider
 
 	@Override
 	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArguments) {
-		switch (ProviderUris.MATCHER.match(uri)) {
-			case ProviderUris.Codes.DECK:
+		switch (uriMatcher.match(uri)) {
+			case GambitProviderPaths.Codes.DECK:
 				return updateDeck(uri, contentValues);
 
-			case ProviderUris.Codes.CARD:
+			case GambitProviderPaths.Codes.CARD:
 				return updateCard(uri, contentValues);
 
 			default:

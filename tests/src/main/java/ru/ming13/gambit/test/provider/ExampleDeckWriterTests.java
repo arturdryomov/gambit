@@ -24,7 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.local.ExampleDeckWriter;
-import ru.ming13.gambit.local.provider.ProviderUris;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 
 
@@ -51,7 +51,7 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 		decksCursor.moveToFirst();
 		long deckId = decksCursor.getLong(decksCursor.getColumnIndex(DbFieldNames.ID));
 
-		return ProviderUris.Content.buildDeckUri(deckId);
+		return GambitContract.Decks.buildDeckUri(deckId);
 	}
 
 	public void testExampleDeckCardsCount() {

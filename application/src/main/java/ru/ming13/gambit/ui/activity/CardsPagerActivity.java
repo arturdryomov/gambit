@@ -33,7 +33,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.ProviderUris;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.bus.BusProvider;
@@ -78,7 +78,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	private void setUpCardsUri() {
 		Uri deckUri = extractReceivedDeckUri();
 
-		cardsUri = ProviderUris.Content.buildCardsUri(deckUri);
+		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
 	}
 
 	private Uri extractReceivedDeckUri() {
@@ -158,7 +158,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 			return;
 		}
 
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 
 		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
 	}
@@ -252,7 +252,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void callCardsList() {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 
 		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
 		startActivity(intent);
@@ -284,7 +284,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void saveCurrentCardIndex() {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 		int currentCardIndex = getCardsPager().getCurrentItem();
 
 		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);
