@@ -27,9 +27,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
+import ru.ming13.gambit.local.provider.GambitContract;
 import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
-import ru.ming13.gambit.local.sqlite.DbValues;
 
 
 public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
@@ -87,7 +87,8 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
 		for (Uri cardUri : cardsUris) {
-			operations.add(buildChangingOrderOperation(cardUri, DbValues.DEFAULT_CARD_ORDER_INDEX));
+			operations.add(
+				buildChangingOrderOperation(cardUri, GambitContract.Cards.DEFAULT_ORDER_INDEX));
 		}
 
 		return operations;
