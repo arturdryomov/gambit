@@ -39,8 +39,7 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 
 		static {
 			DECKS = new String[] {GambitContract.Decks._ID, GambitContract.Decks.TITLE};
-			CARDS = new String[] {GambitContract.Cards._ID, GambitContract.Cards.FRONT_SIDE_TEXT,
-				GambitContract.Cards.BACK_SIDE_TEXT};
+			CARDS = new String[] {GambitContract.Cards._ID, GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
 		}
 	}
 
@@ -87,6 +86,8 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 		ContentValues deckValues = new ContentValues();
 
 		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX,
+			GambitContract.Decks.DEFAULT_CURRENT_CARD_INDEX);
 
 		return deckValues;
 	}
@@ -130,6 +131,7 @@ public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitPro
 
 		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, cardFrontSideText);
 		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, cardBackSideText);
+		cardValues.put(GambitContract.Cards.ORDER_INDEX, GambitContract.Cards.DEFAULT_ORDER_INDEX);
 
 		return cardValues;
 	}
