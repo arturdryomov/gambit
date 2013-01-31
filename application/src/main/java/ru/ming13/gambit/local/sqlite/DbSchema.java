@@ -25,7 +25,7 @@ public class DbSchema
 	private DbSchema() {
 	}
 
-	public static final class Versions
+	static final class Versions
 	{
 		private Versions() {
 		}
