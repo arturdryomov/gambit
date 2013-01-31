@@ -17,6 +17,7 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -36,9 +37,11 @@ import ru.ming13.gambit.local.provider.ProviderUris;
 import ru.ming13.gambit.local.sqlite.DbFieldNames;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.CardsListCalledFromCardsEmptyPagerEvent;
 import ru.ming13.gambit.ui.bus.DeckCurrentCardQueriedEvent;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.ui.task.DeckCardsOrderShufflingTask;
@@ -105,8 +108,9 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsPagerAdapter(cardsCursor);
 
+		updateActionBarItems();
+
 		if (getCardsPagerAdapter().isEmpty()) {
-			callHidingActionBarItems();
 			return;
 		}
 
@@ -139,7 +143,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
 	}
 
-	private void callHidingActionBarItems() {
+	private void updateActionBarItems() {
 		supportInvalidateOptionsMenu();
 	}
 
@@ -240,6 +244,18 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		cardsOrder = CardsOrder.ORIGINAL;
 
 		DeckCardsOrderResettingTask.execute(getContentResolver(), cardsUri);
+	}
+
+	@Subscribe
+	public void onCardsListCalledFromCardsEmptyPager(CardsListCalledFromCardsEmptyPagerEvent cardsListCalledFromCardsEmptyPagerEvent) {
+		callCardsList();
+	}
+
+	private void callCardsList() {
+		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+
+		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
+		startActivity(intent);
 	}
 
 	@Override
