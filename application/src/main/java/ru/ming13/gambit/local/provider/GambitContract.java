@@ -32,8 +32,6 @@ public class GambitContract
 	{
 		public static final Uri CONTENT_URI;
 
-		public static final String DEFAULT_SORT_ORDER = DecksColumns.TITLE;
-
 		public static final int DEFAULT_CURRENT_CARD_INDEX = DbSchema.DecksColumnsDefaultValues.CURRENT_CARD_INDEX;
 
 		static {
@@ -57,8 +55,6 @@ public class GambitContract
 	public static final class Cards implements BaseColumns, CardsColumns
 	{
 		public static final Uri CONTENT_URI;
-
-		public static final String DEFAULT_SORT_ORDER = CardsColumns.FRONT_SIDE_TEXT;
 
 		public static final int DEFAULT_ORDER_INDEX = DbSchema.CardsColumnsDefaultValues.ORDER_INDEX;
 
