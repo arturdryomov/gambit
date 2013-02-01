@@ -24,7 +24,9 @@
 	<dimen name="padding_horizontal_list">5dp</dimen>
 	<dimen name="padding_horizontal_list_item">8dp</dimen>
 	<dimen name="padding_form_layout">20dp</dimen>
-	<dimen name="padding_card_shadow">2dp</dimen>
+	<dimen name="padding_bottom_card">2dp</dimen>
+	<dimen name="padding_horizontal_card">1dp</dimen>
+	<dimen name="padding_top_card_shadow">1dp</dimen>
 
 	<dimen name="text_size_one_line_list_item">18sp</dimen>
 	<dimen name="text_size_card">30sp</dimen>

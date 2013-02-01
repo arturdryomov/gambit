@@ -18,18 +18,24 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<item>
+	<item
+		android:top="@dimen/padding_top_card_shadow">
+
 		<shape android:shape="rectangle">
 			<solid android:color="@color/background_card_shadow" />
-			<corners android:radius="@dimen/border_radius_card" />
 		</shape>
+
 	</item>
 
-	<item android:bottom="@dimen/padding_card_shadow">
+	<item
+		android:bottom="@dimen/padding_bottom_card"
+		android:left="@dimen/padding_horizontal_card"
+		android:right="@dimen/padding_horizontal_card">
+
 		<shape android:shape="rectangle">
 			<solid android:color="@color/background_card" />
-			<corners android:radius="@dimen/border_radius_card" />
 		</shape>
+
 	</item>
 
 </layer-list>
