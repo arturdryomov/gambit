@@ -24,7 +24,7 @@
 		<EditText
 			android:id="@+id/edit_deck_title"
 			android:singleLine="true"
-			android:inputType="text"
+			android:inputType="text|textCapSentences"
 			android:hint="@string/hint_deck_name"
 			style="@style/FormLayoutFirstItem" />
 
