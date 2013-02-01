@@ -17,6 +17,7 @@
 package ru.ming13.gambit.ui.fragment;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -162,6 +163,10 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 				callFeedbackSending();
 				return true;
 
+			case R.id.menu_rate_application:
+				callGooglePlay();
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
@@ -180,6 +185,17 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	private void callFeedbackSending() {
 		Intent intent = IntentFactory.createFeedbackEmailIntent(getActivity());
 		startActivity(Intent.createChooser(intent, null));
+	}
+
+	private void callGooglePlay() {
+		try {
+			Intent intent = IntentFactory.createGooglePlayAppIntent(getActivity());
+			startActivity(intent);
+		}
+		catch (ActivityNotFoundException e) {
+			Intent intent = IntentFactory.createGooglePlayWebIntent(getActivity());
+			startActivity(intent);
+		}
 	}
 
 	@Override

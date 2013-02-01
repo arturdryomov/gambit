@@ -87,4 +87,16 @@ public final class IntentFactory
 
 		return new Intent(Intent.ACTION_SENDTO, emailUri);
 	}
+
+	public static Intent createGooglePlayAppIntent(Context context) {
+		Uri googlePlayUri = Uri.parse(context.getString(R.string.url_app_google_play));
+
+		return new Intent(Intent.ACTION_VIEW, googlePlayUri);
+	}
+
+	public static Intent createGooglePlayWebIntent(Context context) {
+		Uri googlePlayUri = Uri.parse(context.getString(R.string.url_web_google_play));
+
+		return new Intent(Intent.ACTION_VIEW, googlePlayUri);
+	}
 }
