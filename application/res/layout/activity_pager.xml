@@ -23,12 +23,12 @@
 		android:id="@+id/pager"
 		android:layout_alignParentTop="true"
 		android:layout_height="wrap_content"
-		android:layout_width="fill_parent" />
+		android:layout_width="match_parent" />
 
 	<com.viewpagerindicator.UnderlinePageIndicator
 		android:id="@+id/indicator"
 		android:layout_alignParentBottom="true"
 		android:layout_height="@dimen/height_card_indicator"
-		android:layout_width="fill_parent" />
+		android:layout_width="match_parent" />
 
 </RelativeLayout>

@@ -39,7 +39,7 @@
 			android:textStyle="bold"
 			android:visibility="gone"
 			android:gravity="center_horizontal"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
 
 		<TextView
@@ -48,7 +48,7 @@
 			android:visibility="gone"
 			android:gravity="center_horizontal"
 			android:layout_marginTop="@dimen/margin_top_empty_list_subtitle"
-			android:layout_width="fill_parent"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
 
 	</LinearLayout>
