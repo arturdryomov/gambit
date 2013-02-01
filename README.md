@@ -15,10 +15,11 @@ Gambit is a really simple flashcards viewer and manager for Android.
 
 The build requires Maven and the Android SDK to be installed.
 
-The building process is very simple:
+The building process is very simple.
 
-* Run `mvn -f application/pom.xml clean package` to build application.
-* Run `mvn clean integration-test` to build application and run tests.
+* Run `mvn -f application/pom.xml clean package` to build the application.
+* Run `mvn clean integration-test` to build the application and run tests.
+* Run `mvn -f application/pom.xml clean package site` to build the application and generate reports site.
 
 For correct building you should set up API keys.
 Look at `application/res/xml/apis.template.xml` for details.
@@ -45,4 +46,4 @@ Gambit uses some open source libraries and tools:
   [ViewPagerIndicator link]: http://viewpagerindicator.com
   [Apache Commons Lang link]: http://commons.apache.org/lang
   [Seismic link]: https://github.com/square/seismic
-  [Otto link]: https://github.com/square/otto
+  [Otto link]: http://square.github.com/otto
