@@ -145,7 +145,8 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private boolean areDeckValuesValidForInsertion(ContentValues deckValues) {
-		return deckValues.containsKey(DbSchema.DecksColumns.TITLE);
+		return deckValues.containsKey(DbSchema.DecksColumns.TITLE) && deckValues.containsKey(
+			DbSchema.DecksColumns.CURRENT_CARD_INDEX);
 	}
 
 	private boolean isDeckTitleUnique(ContentValues deckValues) {
