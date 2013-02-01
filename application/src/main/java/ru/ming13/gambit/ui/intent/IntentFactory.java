@@ -20,6 +20,7 @@ package ru.ming13.gambit.ui.intent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
 import ru.ming13.gambit.ui.activity.CardModificationActivity;
 import ru.ming13.gambit.ui.activity.CardsActivity;
@@ -75,5 +76,15 @@ public final class IntentFactory
 
 	public static Intent createLicensesIntent(Context context) {
 		return new Intent(context, LicensesActivity.class);
+	}
+
+	public static Intent createFeedbackEmailIntent(Context context) {
+		String feedbackAddress = context.getString(R.string.email_address_feedback);
+		String feedbackSubject = context.getString(R.string.email_subject_feedback);
+
+		Uri emailUri = Uri.parse(
+			context.getString(R.string.email_uri_format, feedbackAddress, feedbackSubject));
+
+		return new Intent(Intent.ACTION_SENDTO, emailUri);
 	}
 }

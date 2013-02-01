@@ -158,6 +158,10 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 				callLicenses();
 				return true;
 
+			case R.id.menu_send_feedback:
+				callFeedbackSending();
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
@@ -171,6 +175,11 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	private void callLicenses() {
 		Intent intent = IntentFactory.createLicensesIntent(getActivity());
 		startActivity(intent);
+	}
+
+	private void callFeedbackSending() {
+		Intent intent = IntentFactory.createFeedbackEmailIntent(getActivity());
+		startActivity(Intent.createChooser(intent, null));
 	}
 
 	@Override
