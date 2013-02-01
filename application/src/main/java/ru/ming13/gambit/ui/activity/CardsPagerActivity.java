@@ -33,7 +33,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardsListCalledFromCardsEmptyPagerEvent;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.provider;
+package ru.ming13.gambit.provider;
 
 
 import android.content.UriMatcher;

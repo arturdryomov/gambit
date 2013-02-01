@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.provider;
+package ru.ming13.gambit.provider;
 
 
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import ru.ming13.gambit.local.sqlite.DbOpenHelper;
-import ru.ming13.gambit.local.sqlite.DbSchema;
+import ru.ming13.gambit.db.DbOpenHelper;
+import ru.ming13.gambit.db.DbSchema;
 
 
 public class GambitProvider extends ContentProvider

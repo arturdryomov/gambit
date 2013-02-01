@@ -22,7 +22,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import android.database.Cursor;
 import android.net.Uri;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class GambitProviderCardsTests extends GambitProviderTestCase

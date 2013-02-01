@@ -23,8 +23,8 @@ import android.net.Uri;
 import android.test.ProviderTestCase2;
 import android.text.TextUtils;
 import android.util.Pair;
-import ru.ming13.gambit.local.provider.GambitContract;
-import ru.ming13.gambit.local.provider.GambitProvider;
+import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.provider.GambitProvider;
 
 
 public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitProvider>

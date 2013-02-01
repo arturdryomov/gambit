@@ -38,7 +38,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.task.CardDeletionTask;

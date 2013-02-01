@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.sqlite;
+package ru.ming13.gambit.db;
 
 
 import android.provider.BaseColumns;

@@ -23,8 +23,8 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import android.database.Cursor;
 import android.net.Uri;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.ExampleDeckWriter;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.db.ExampleDeckWriter;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class ExampleDeckWriterTests extends GambitProviderTestCase

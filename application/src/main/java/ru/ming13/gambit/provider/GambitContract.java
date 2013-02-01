@@ -1,11 +1,11 @@
-package ru.ming13.gambit.local.provider;
+package ru.ming13.gambit.provider;
 
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import ru.ming13.gambit.local.sqlite.DbSchema;
+import ru.ming13.gambit.db.DbSchema;
 
 
 public class GambitContract

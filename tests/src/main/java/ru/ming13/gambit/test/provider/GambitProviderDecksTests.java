@@ -23,8 +23,8 @@ import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrow
 
 import android.database.Cursor;
 import android.net.Uri;
-import ru.ming13.gambit.local.provider.DeckExistsException;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.provider.DeckExistsException;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class GambitProviderDecksTests extends GambitProviderTestCase

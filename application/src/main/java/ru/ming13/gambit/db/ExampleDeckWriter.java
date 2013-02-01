@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local;
+package ru.ming13.gambit.db;
 
 
 import java.util.ArrayList;
@@ -31,7 +31,6 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.sqlite.DbSchema;
 
 
 public class ExampleDeckWriter

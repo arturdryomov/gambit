@@ -21,7 +21,7 @@ import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.fragment.CardEmptyFragment;
 import ru.ming13.gambit.ui.fragment.CardFragment;
 

@@ -28,7 +28,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
-import ru.ming13.gambit.local.provider.GambitContract;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class DeckCardsOrderShufflingTask extends AsyncTask<Void, Void, Void>

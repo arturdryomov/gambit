@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.sqlite;
+package ru.ming13.gambit.db;
 
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import ru.ming13.gambit.local.ExampleDeckWriter;
 
 
 public class DbOpenHelper extends SQLiteOpenHelper
