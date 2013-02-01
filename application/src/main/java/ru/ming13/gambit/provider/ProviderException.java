@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.sqlite;
+package ru.ming13.gambit.provider;
 
 
-public final class DbTableNames
+class ProviderException extends RuntimeException
 {
-	private DbTableNames() {
-	}
-
-	public static final String DECKS = "Decks";
-	public static final String CARDS = "Cards";
-	public static final String DB_LAST_UPDATE_TIME = "DbLastUpdateTime";
 }

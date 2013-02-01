@@ -22,7 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Pair;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardSidesQueriedEvent;
 
@@ -47,7 +47,7 @@ public class CardSidesQueryingTask extends AsyncTask<Void, Void, Pair<String, St
 	}
 
 	private Pair<String, String> queryCardSidesText() {
-		String[] projection = {DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
+		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
 
 		Cursor cardCursor = contentResolver.query(cardUri, projection, null, null, null);
 
@@ -58,9 +58,9 @@ public class CardSidesQueryingTask extends AsyncTask<Void, Void, Pair<String, St
 		cardCursor.moveToFirst();
 
 		String cardFrontSideText = cardCursor.getString(
-			cardCursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+			cardCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 		String cardBackSideText = cardCursor.getString(
-			cardCursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
+			cardCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 
 		return new Pair<String, String>(cardFrontSideText, cardBackSideText);
 	}

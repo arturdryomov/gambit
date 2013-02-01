@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.provider;
+package ru.ming13.gambit.provider;
 
 
-class ProviderException extends RuntimeException
+public class DeckExistsException extends ProviderException
 {
 }

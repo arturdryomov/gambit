@@ -38,8 +38,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.ProviderUris;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.task.DeckDeletionTask;
@@ -84,7 +83,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	private CursorAdapter buildDecksAdapter() {
-		String[] departureColumns = {DbFieldNames.DECK_TITLE};
+		String[] departureColumns = {GambitContract.Decks.TITLE};
 		int[] destinationFields = {R.id.text};
 
 		return new SimpleCursorAdapter(getActivity(), R.layout.list_item_one_line, null,
@@ -97,11 +96,11 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		String[] projection = {DbFieldNames.ID, DbFieldNames.DECK_TITLE};
-		String sort = DbFieldNames.DECK_TITLE;
+		String[] projection = {GambitContract.Decks._ID, GambitContract.Decks.TITLE};
+		String sort = GambitContract.Decks.TITLE;
 
-		return new CursorLoader(getActivity(), ProviderUris.Content.buildDecksUri(), projection, null,
-			null, sort);
+		return new CursorLoader(getActivity(), GambitContract.Decks.CONTENT_URI, projection, null, null,
+			sort);
 	}
 
 	@Override
@@ -176,7 +175,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(id);
+		Uri deckUri = GambitContract.Decks.buildDeckUri(id);
 
 		callCardsPager(deckUri);
 	}
@@ -204,7 +203,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(listItemId);
+		Uri deckUri = GambitContract.Decks.buildDeckUri(listItemId);
 
 		switch (menuItem.getItemId()) {
 			case R.id.menu_rename:

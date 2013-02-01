@@ -22,7 +22,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import android.database.Cursor;
 import android.net.Uri;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class GambitProviderCardsTests extends GambitProviderTestCase
@@ -52,9 +52,9 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 		assertThat(cardsCursor).hasColumnCount(Projection.CARDS.length);
 
 		try {
-			cardsCursor.getLong(cardsCursor.getColumnIndexOrThrow(DbFieldNames.ID));
-			cardsCursor.getString(cardsCursor.getColumnIndexOrThrow(DbFieldNames.CARD_FRONT_SIDE_TEXT));
-			cardsCursor.getString(cardsCursor.getColumnIndexOrThrow(DbFieldNames.CARD_BACK_SIDE_TEXT));
+			cardsCursor.getLong(cardsCursor.getColumnIndexOrThrow(GambitContract.Cards._ID));
+			cardsCursor.getString(cardsCursor.getColumnIndexOrThrow(GambitContract.Cards.FRONT_SIDE_TEXT));
+			cardsCursor.getString(cardsCursor.getColumnIndexOrThrow(GambitContract.Cards.BACK_SIDE_TEXT));
 		}
 		catch (IllegalArgumentException e) {
 			fail();

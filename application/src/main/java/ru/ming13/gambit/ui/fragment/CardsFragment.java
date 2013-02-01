@@ -38,8 +38,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.ProviderUris;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
 import ru.ming13.gambit.ui.task.CardDeletionTask;
@@ -80,7 +79,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	private void setUpCardsUri() {
 		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
 
-		cardsUri = ProviderUris.Content.buildCardsUri(deckUri);
+		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
 	}
 
 	@Override
@@ -106,7 +105,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	}
 
 	private CursorAdapter buildCardsAdapter() {
-		String[] departureColumns = {DbFieldNames.CARD_FRONT_SIDE_TEXT};
+		String[] departureColumns = {GambitContract.Cards.FRONT_SIDE_TEXT};
 		int[] destinationFields = {R.id.text};
 
 		SimpleCursorAdapter cardsAdapter = new SimpleCursorAdapter(getActivity(),
@@ -141,9 +140,9 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 		private String buildCardsListItemText(Cursor cursor) {
 			String cardFrontSideText = cursor.getString(
-				cursor.getColumnIndex(DbFieldNames.CARD_FRONT_SIDE_TEXT));
+				cursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 			String cardBackSideText = cursor.getString(
-				cursor.getColumnIndex(DbFieldNames.CARD_BACK_SIDE_TEXT));
+				cursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 
 			return String.format(cardsListItemTextMask, cardFrontSideText, cardBackSideText);
 		}
@@ -155,8 +154,9 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		String[] projection = {DbFieldNames.ID, DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
-		String sort = DbFieldNames.CARD_FRONT_SIDE_TEXT;
+		String[] projection = {GambitContract.Cards._ID, GambitContract.Cards.FRONT_SIDE_TEXT,
+			GambitContract.Cards.BACK_SIDE_TEXT};
+		String sort = GambitContract.Cards.FRONT_SIDE_TEXT;
 
 		return new CursorLoader(getActivity(), cardsUri, projection, null, null, sort);
 	}
@@ -224,7 +224,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, id);
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, id);
 
 		callCardModification(cardUri);
 	}
@@ -252,7 +252,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 	@Override
 	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
-		Uri cardUri = ProviderUris.Content.buildCardUri(cardsUri, listItemId);
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, listItemId);
 
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:

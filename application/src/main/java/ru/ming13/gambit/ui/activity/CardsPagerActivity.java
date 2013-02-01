@@ -33,8 +33,7 @@ import com.squareup.otto.Subscribe;
 import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.provider.ProviderUris;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardsListCalledFromCardsEmptyPagerEvent;
@@ -78,7 +77,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	private void setUpCardsUri() {
 		Uri deckUri = extractReceivedDeckUri();
 
-		cardsUri = ProviderUris.Content.buildCardsUri(deckUri);
+		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
 	}
 
 	private Uri extractReceivedDeckUri() {
@@ -97,9 +96,9 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		String[] projection = {DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldNames.CARD_BACK_SIDE_TEXT};
-		String sortOrder = String.format("%s, %s", DbFieldNames.CARD_ORDER_INDEX,
-			DbFieldNames.CARD_FRONT_SIDE_TEXT);
+		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
+		String sortOrder = String.format("%s, %s", GambitContract.Cards.ORDER_INDEX,
+			GambitContract.Cards.FRONT_SIDE_TEXT);
 
 		return new CursorLoader(this, cardsUri, projection, null, null, sortOrder);
 	}
@@ -158,7 +157,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 			return;
 		}
 
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 
 		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
 	}
@@ -252,7 +251,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void callCardsList() {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 
 		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
 		startActivity(intent);
@@ -284,7 +283,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void saveCurrentCardIndex() {
-		Uri deckUri = ProviderUris.Content.buildDeckUri(ProviderUris.Content.parseDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 		int currentCardIndex = getCardsPager().getCurrentItem();
 
 		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local.sqlite;
+package ru.ming13.gambit.db;
 
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import ru.ming13.gambit.local.DbException;
-import ru.ming13.gambit.local.ExampleDeckWriter;
 
 
 public class DbOpenHelper extends SQLiteOpenHelper
@@ -31,7 +29,7 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	private final Context context;
 
 	public DbOpenHelper(Context context) {
-		super(context, DATABASE_NAME, null, DbVersions.CURRENT);
+		super(context, DATABASE_NAME, null, DbSchema.Versions.CURRENT);
 
 		this.context = context;
 	}
@@ -53,8 +51,8 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void createTables(SQLiteDatabase db) {
-		createTable(db, DbTableNames.DECKS, buildDecksTableDescription());
-		createTable(db, DbTableNames.CARDS, buildCardsTableDescription());
+		createTable(db, DbSchema.Tables.DECKS, buildDecksTableDescription());
+		createTable(db, DbSchema.Tables.CARDS, buildCardsTableDescription());
 	}
 
 	private void createTable(SQLiteDatabase db, String tableName, String tableDescription) {
@@ -64,11 +62,12 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	private String buildDecksTableDescription() {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
 		queryBuilder.append(
-			String.format("%s %s, ", DbFieldNames.DECK_TITLE, DbFieldParams.DECK_TITLE));
+			String.format("%s %s, ", DbSchema.DecksColumns._ID, DbSchema.DecksColumnsParameters._ID));
 		queryBuilder.append(
-			String.format("%s %s", DbFieldNames.DECK_CURRENT_CARD_INDEX, DbFieldParams.INDEX));
+			String.format("%s %s, ", DbSchema.DecksColumns.TITLE, DbSchema.DecksColumnsParameters.TITLE));
+		queryBuilder.append(String.format("%s %s", DbSchema.DecksColumns.CURRENT_CARD_INDEX,
+			DbSchema.DecksColumnsParameters.CURRENT_CARD_INDEX));
 
 		return queryBuilder.toString();
 	}
@@ -76,14 +75,16 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	private String buildCardsTableDescription() {
 		StringBuilder queryBuilder = new StringBuilder();
 
-		queryBuilder.append(String.format("%s %s, ", DbFieldNames.ID, DbFieldParams.ID));
 		queryBuilder.append(
-			String.format("%s %s, ", DbFieldNames.CARD_DECK_ID, DbFieldParams.DECK_FOREIGN_ID));
-		queryBuilder.append(
-			String.format("%s %s, ", DbFieldNames.CARD_FRONT_SIDE_TEXT, DbFieldParams.CARD_TEXT));
-		queryBuilder.append(
-			String.format("%s %s, ", DbFieldNames.CARD_BACK_SIDE_TEXT, DbFieldParams.CARD_TEXT));
-		queryBuilder.append(String.format("%s %s", DbFieldNames.CARD_ORDER_INDEX, DbFieldParams.INDEX));
+			String.format("%s %s, ", DbSchema.CardsColumns._ID, DbSchema.CardsColumnsParameters._ID));
+		queryBuilder.append(String.format("%s %s, ", DbSchema.CardsColumns.DECK_ID,
+			DbSchema.CardsColumnsParameters.DECK_ID));
+		queryBuilder.append(String.format("%s %s, ", DbSchema.CardsColumns.FRONT_SIDE_TEXT,
+			DbSchema.CardsColumnsParameters.FRONT_SIDE_TEXT));
+		queryBuilder.append(String.format("%s %s, ", DbSchema.CardsColumns.BACK_SIDE_TEXT,
+			DbSchema.CardsColumnsParameters.BACK_SIDE_TEXT));
+		queryBuilder.append(String.format("%s %s", DbSchema.CardsColumns.ORDER_INDEX,
+			DbSchema.CardsColumnsParameters.ORDER_INDEX));
 
 		return queryBuilder.toString();
 	}
@@ -95,20 +96,21 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
 		switch (oldDatabaseVersion) {
-			case DbVersions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
+			case DbSchema.Versions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
 				migrateFromCardsNotCascadeDeletion(db);
 				break;
 
-			case DbVersions.LATEST_WITH_CAMEL_NAMING_STYLE:
+			case DbSchema.Versions.LATEST_WITH_CAMEL_NAMING_STYLE:
 				migrateFromCamelNamingStyle(db);
 				break;
 
-			case DbVersions.LATEST_WITH_UPDATE_TIME_SUPPORT:
+			case DbSchema.Versions.LATEST_WITH_UPDATE_TIME_SUPPORT:
 				migrateFromUpdateTimeSupport(db);
 				break;
 
 			default:
-				throw new DbException();
+				migrateFromUnknownDatabaseVersion(db);
+				break;
 		}
 	}
 
@@ -116,15 +118,15 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		db.beginTransaction();
 
 		try {
-			createTemporaryTable(db, buildTemporaryTableName(DbTableNames.CARDS),
+			createTemporaryTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS),
 				buildCardsTableDescription());
-			copyTableContents(db, DbTableNames.CARDS, buildTemporaryTableName(DbTableNames.CARDS));
+			copyTableContents(db, DbSchema.Tables.CARDS, buildTemporaryTableName(DbSchema.Tables.CARDS));
 
-			dropTable(db, DbTableNames.CARDS);
-			createTable(db, DbTableNames.CARDS, buildCardsTableDescription());
+			dropTable(db, DbSchema.Tables.CARDS);
+			createTable(db, DbSchema.Tables.CARDS, buildCardsTableDescription());
 
-			copyTableContents(db, buildTemporaryTableName(DbTableNames.CARDS), DbTableNames.CARDS);
-			dropTable(db, buildTemporaryTableName(DbTableNames.CARDS));
+			copyTableContents(db, buildTemporaryTableName(DbSchema.Tables.CARDS), DbSchema.Tables.CARDS);
+			dropTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS));
 
 			db.setTransactionSuccessful();
 		}
@@ -161,9 +163,9 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void dropTables(SQLiteDatabase db) {
-		dropTable(db, DbTableNames.DECKS);
-		dropTable(db, DbTableNames.CARDS);
-		dropTable(db, DbTableNames.DB_LAST_UPDATE_TIME);
+		dropTable(db, DbSchema.Tables.DECKS);
+		dropTable(db, DbSchema.Tables.CARDS);
+		dropTable(db, DbSchema.Tables.DB_LAST_UPDATE_TIME);
 	}
 
 	private void dropTable(SQLiteDatabase db, String tableName) {
@@ -174,7 +176,21 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		db.beginTransaction();
 
 		try {
-			dropTable(db, DbTableNames.DB_LAST_UPDATE_TIME);
+			dropTable(db, DbSchema.Tables.DB_LAST_UPDATE_TIME);
+
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+	private void migrateFromUnknownDatabaseVersion(SQLiteDatabase db) {
+		db.beginTransaction();
+
+		try {
+			dropTables(db);
+			createTables(db);
 
 			db.setTransactionSuccessful();
 		}

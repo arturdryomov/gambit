@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.local;
+package ru.ming13.gambit.db;
 
 
 import java.util.ArrayList;
@@ -31,9 +31,6 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.DisplayMetrics;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
-import ru.ming13.gambit.local.sqlite.DbTableNames;
-import ru.ming13.gambit.local.sqlite.DbValues;
 
 
 public class ExampleDeckWriter
@@ -110,10 +107,11 @@ public class ExampleDeckWriter
 
 	private long createDeck() {
 		ContentValues deckValues = new ContentValues();
-		deckValues.put(DbFieldNames.DECK_TITLE, buildDeckTitle());
-		deckValues.put(DbFieldNames.DECK_CURRENT_CARD_INDEX, DbValues.DEFAULT_DECK_CURRENT_CARD_INDEX);
+		deckValues.put(DbSchema.DecksColumns.TITLE, buildDeckTitle());
+		deckValues.put(DbSchema.DecksColumns.CURRENT_CARD_INDEX,
+			DbSchema.DecksColumnsDefaultValues.CURRENT_CARD_INDEX);
 
-		return database.insert(DbTableNames.DECKS, null, deckValues);
+		return database.insert(DbSchema.Tables.DECKS, null, deckValues);
 	}
 
 	private String buildDeckTitle() {
@@ -159,12 +157,13 @@ public class ExampleDeckWriter
 
 	private void createCard(long deckId, String frontSideText, String backSideText) {
 		ContentValues cardValues = new ContentValues();
-		cardValues.put(DbFieldNames.CARD_DECK_ID, deckId);
-		cardValues.put(DbFieldNames.CARD_FRONT_SIDE_TEXT, frontSideText);
-		cardValues.put(DbFieldNames.CARD_BACK_SIDE_TEXT, backSideText);
-		cardValues.put(DbFieldNames.CARD_ORDER_INDEX, DbValues.DEFAULT_CARD_ORDER_INDEX);
+		cardValues.put(DbSchema.CardsColumns.DECK_ID, deckId);
+		cardValues.put(DbSchema.CardsColumns.FRONT_SIDE_TEXT, frontSideText);
+		cardValues.put(DbSchema.CardsColumns.BACK_SIDE_TEXT, backSideText);
+		cardValues.put(DbSchema.CardsColumns.ORDER_INDEX,
+			DbSchema.CardsColumnsDefaultValues.ORDER_INDEX);
 
-		database.insert(DbTableNames.CARDS, null, cardValues);
+		database.insert(DbSchema.Tables.CARDS, null, cardValues);
 	}
 
 	private List<String> buildTexts(Locale locale) {

@@ -21,7 +21,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.local.sqlite.DbFieldNames;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckCurrentCardQueriedEvent;
 
@@ -46,7 +46,7 @@ public class DeckCurrentCardQueryingTask extends AsyncTask<Void, Void, Integer>
 	}
 
 	private int queryCurrentCardIndex() {
-		String[] projection = {DbFieldNames.DECK_CURRENT_CARD_INDEX};
+		String[] projection = {GambitContract.Decks.CURRENT_CARD_INDEX};
 
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
@@ -56,7 +56,7 @@ public class DeckCurrentCardQueryingTask extends AsyncTask<Void, Void, Integer>
 	private int extractCurrentCardIndex(Cursor deckCursor) {
 		deckCursor.moveToFirst();
 
-		return deckCursor.getInt(deckCursor.getColumnIndex(DbFieldNames.DECK_CURRENT_CARD_INDEX));
+		return deckCursor.getInt(deckCursor.getColumnIndex(GambitContract.Decks.CURRENT_CARD_INDEX));
 	}
 
 	@Override
