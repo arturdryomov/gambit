@@ -36,6 +36,8 @@ public class LicensesActivity extends SherlockActivity
 		setContentView(R.layout.activity_licenses);
 
 		setUpLicenses();
+
+		restoreWebViewState(savedInstanceState);
 	}
 
 	private void setUpLicenses() {
@@ -50,17 +52,16 @@ public class LicensesActivity extends SherlockActivity
 		return String.format("%s:///%s/%s", SCHEME, AUTHORITY, PATH);
 	}
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		getWebView().saveState(outState);
+	private void restoreWebViewState(Bundle savedState) {
+		if (savedState != null) {
+			getWebView().restoreState(savedState);
+		}
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
+	protected void onSaveInstanceState(Bundle outState) {
+		getWebView().saveState(outState);
 
-		getWebView().restoreState(savedInstanceState);
+		super.onSaveInstanceState(outState);
 	}
 }
