@@ -26,6 +26,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -202,6 +204,14 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		cardsOrder = CardsOrder.SHUFFLE;
 
 		DeckCardsOrderShufflingTask.execute(getContentResolver(), cardsUri);
+
+		showCardsOrderChangingAnimation();
+	}
+
+	private void showCardsOrderChangingAnimation() {
+		Animation shakingAnimation = AnimationUtils.loadAnimation(this, R.anim.shaking);
+
+		getCardsPager().startAnimation(shakingAnimation);
 	}
 
 	@Override
@@ -243,6 +253,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		cardsOrder = CardsOrder.ORIGINAL;
 
 		DeckCardsOrderResettingTask.execute(getContentResolver(), cardsUri);
+
+		showCardsOrderChangingAnimation();
 	}
 
 	@Subscribe
