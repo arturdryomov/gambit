@@ -22,16 +22,15 @@ import com.squareup.otto.Bus;
 
 public class BusProvider
 {
-	private static Bus instance;
-
 	private BusProvider() {
 	}
 
-	public static Bus getInstance() {
-		if (instance == null) {
-			instance = new Bus();
-		}
+	private static final class BusHolder
+	{
+		public static final Bus BUS = new Bus();
+	}
 
-		return instance;
+	public static Bus getInstance() {
+		return BusHolder.BUS;
 	}
 }
