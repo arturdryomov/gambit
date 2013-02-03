@@ -31,10 +31,10 @@
 
 	<string name="empty_decks">No decks.</string>
 	<string name="empty_decks_title">No decks</string>
-	<string name="empty_decks_subtitle">Press plus to create one</string>
+	<string name="empty_decks_subtitle">Try to create some</string>
 	<string name="empty_cards">No flashcards</string>
 	<string name="empty_cards_title">No flashcards</string>
-	<string name="empty_cards_subtitle">Press plus to create one</string>
+	<string name="empty_cards_subtitle">Try to create some</string>
 
 	<string name="button_create_cards">Create some</string>
 
