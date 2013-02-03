@@ -48,10 +48,13 @@ public class CardSidesQueryingTask extends AsyncTask<Void, Void, Pair<String, St
 
 	private Pair<String, String> queryCardSidesText() {
 		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
-
 		Cursor cardCursor = contentResolver.query(cardUri, projection, null, null, null);
 
-		return extractCardSidesText(cardCursor);
+		Pair<String, String> cardSidesText = extractCardSidesText(cardCursor);
+
+		cardCursor.close();
+
+		return cardSidesText;
 	}
 
 	private Pair<String, String> extractCardSidesText(Cursor cardCursor) {

@@ -47,10 +47,13 @@ public class DeckCurrentCardQueryingTask extends AsyncTask<Void, Void, Integer>
 
 	private int queryCurrentCardIndex() {
 		String[] projection = {GambitContract.Decks.CURRENT_CARD_INDEX};
-
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
-		return extractCurrentCardIndex(deckCursor);
+		int currentCardIndex = extractCurrentCardIndex(deckCursor);
+
+		deckCursor.close();
+
+		return currentCardIndex;
 	}
 
 	private int extractCurrentCardIndex(Cursor deckCursor) {

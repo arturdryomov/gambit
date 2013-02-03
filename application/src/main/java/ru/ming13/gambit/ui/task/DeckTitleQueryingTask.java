@@ -47,10 +47,13 @@ public class DeckTitleQueryingTask extends AsyncTask<Void, Void, String>
 
 	private String queryDeckTitle() {
 		String[] projection = {GambitContract.Decks.TITLE};
-
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
-		return extractDeckTitle(deckCursor);
+		String deckTitle = extractDeckTitle(deckCursor);
+
+		deckCursor.close();
+
+		return deckTitle;
 	}
 
 	private String extractDeckTitle(Cursor deckCursor) {
