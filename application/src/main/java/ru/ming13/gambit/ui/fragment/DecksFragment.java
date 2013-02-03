@@ -155,16 +155,16 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 				callDeckCreation();
 				return true;
 
-			case R.id.menu_licenses:
-				callLicenses();
-				return true;
-
 			case R.id.menu_send_feedback:
 				callFeedbackSending();
 				return true;
 
 			case R.id.menu_rate_application:
 				callGooglePlay();
+				return true;
+
+			case R.id.menu_licenses:
+				callLicenses();
 				return true;
 
 			default:
@@ -174,11 +174,6 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 
 	private void callDeckCreation() {
 		Intent intent = IntentFactory.createDeckCreationIntent(getActivity());
-		startActivity(intent);
-	}
-
-	private void callLicenses() {
-		Intent intent = IntentFactory.createLicensesIntent(getActivity());
 		startActivity(intent);
 	}
 
@@ -196,6 +191,11 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 			Intent intent = IntentFactory.createGooglePlayWebIntent(getActivity());
 			startActivity(intent);
 		}
+	}
+
+	private void callLicenses() {
+		Intent intent = IntentFactory.createLicensesIntent(getActivity());
+		startActivity(intent);
 	}
 
 	@Override

@@ -24,11 +24,6 @@
 		android:showAsAction="always" />
 
 	<item
-		android:id="@+id/menu_licenses"
-		android:title="@string/title_licenses"
-		android:showAsAction="never" />
-
-	<item
 		android:id="@+id/menu_send_feedback"
 		android:title="@string/menu_send_feedback"
 		android:showAsAction="never" />
@@ -36,6 +31,11 @@
 	<item
 		android:id="@+id/menu_rate_application"
 		android:title="@string/menu_rate_application"
+		android:showAsAction="never" />
+
+	<item
+		android:id="@+id/menu_licenses"
+		android:title="@string/title_licenses"
 		android:showAsAction="never" />
 
 </menu>
