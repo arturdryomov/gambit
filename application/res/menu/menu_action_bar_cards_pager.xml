@@ -19,7 +19,7 @@
 
 	<item
 		android:id="@+id/menu_back"
-		android:icon="@drawable/ic_menu_rewind"
+		android:icon="@drawable/ic_menu_replay"
 		android:title="@string/menu_to_first_card"
 		android:showAsAction="always" />
 
