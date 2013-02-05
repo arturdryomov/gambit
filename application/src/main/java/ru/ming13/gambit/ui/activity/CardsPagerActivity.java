@@ -111,9 +111,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsPagerAdapter(cardsCursor);
 
-		// Hide action bar controls if there are no cards or show them when cards arrived
-		// See CardsPagerActivity#onCreateOptionsMenu
-		updateActionBarItems();
+		callActionBarItemsInvalidation();
 
 		if (getCardsPagerAdapter().isEmpty()) {
 			return;
@@ -125,7 +123,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
-		if (!isSettingCardsPagerAdapterRequired()) {
+		if (isOnlyCardsPagerAdapterCursorUpdatingRequired()) {
 			getCardsPagerAdapter().swapCursor(cardsCursor);
 			return;
 		}
@@ -134,10 +132,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		getCardsPager().setAdapter(adapter);
 	}
 
-	private boolean isSettingCardsPagerAdapterRequired() {
+	private boolean isOnlyCardsPagerAdapterCursorUpdatingRequired() {
 		// Avoid setting adapter after orientation change: ViewPager saves adapter itself
 
-		return (cardsOrder != CardsOrder.DEFAULT) || (getCardsPager().getCurrentItem() == 0);
+		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() != 0);
 	}
 
 	private ViewPager getCardsPager() {
@@ -148,7 +146,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
 	}
 
-	private void updateActionBarItems() {
+	private void callActionBarItemsInvalidation() {
 		supportInvalidateOptionsMenu();
 	}
 
@@ -168,17 +166,13 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	@Subscribe
-	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent deckCurrentCardQueriedEvent) {
-		int currentCardIndex = deckCurrentCardQueriedEvent.getCurrentCardIndex();
+	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent currentCardQueriedEvent) {
+		int currentCardIndex = currentCardQueriedEvent.getCurrentCardIndex();
 
 		setUpCurrentCardIndex(currentCardIndex);
 	}
 
 	private void setUpCurrentCardIndex(int currentCardIndex) {
-		if (!isSettingCurrentCardIndexRequired()) {
-			return;
-		}
-
 		getCardsPager().setCurrentItem(currentCardIndex);
 	}
 
@@ -201,8 +195,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 				break;
 		}
 
-		// Show shuffle on-off button
-		updateActionBarItems();
+		callActionBarItemsInvalidation();
 	}
 
 	private void setUpCardsPagerIndicator() {
@@ -272,7 +265,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 			case R.id.menu_shuffle:
 				changeCardsOrder();
-				updateActionBarItems();
+				callActionBarItemsInvalidation();
 				return true;
 
 			default:
@@ -338,8 +331,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onStop() {
+		super.onStop();
 
 		saveCurrentCardIndex();
 	}
