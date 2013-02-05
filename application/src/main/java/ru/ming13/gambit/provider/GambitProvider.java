@@ -313,6 +313,11 @@ public class GambitProvider extends ContentProvider
 
 		int affectedRowsContent = database.update(DbSchema.Tables.DECKS, deckValues,
 			buildDeckSelectionClause(deckUri), null);
+
+		if (isOnlyCurrentCardUpdated(deckValues)) {
+			return affectedRowsContent;
+		}
+
 		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return affectedRowsContent;
@@ -324,6 +329,14 @@ public class GambitProvider extends ContentProvider
 		}
 
 		return isDeckTitleUnique(deckValues);
+	}
+
+	private boolean isOnlyCurrentCardUpdated(ContentValues deckValues) {
+		if (deckValues.containsKey(DbSchema.DecksColumns.TITLE)) {
+			return false;
+		}
+
+		return deckValues.containsKey(DbSchema.DecksColumns.CURRENT_CARD_INDEX);
 	}
 
 	private int updateCard(Uri cardUri, ContentValues cardValues) {
