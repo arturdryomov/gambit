@@ -177,6 +177,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void setUpCardsOrder() {
+		if (cardsOrder != CardsOrder.DEFAULT) {
+			return;
+		}
+
 		DeckCardsOrderQueryingTask.execute(getContentResolver(), cardsUri);
 	}
 
@@ -244,6 +248,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 				return true;
 
 			case ORIGINAL:
+				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
+				return true;
+
+			case DEFAULT:
 				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
 				return true;
 
