@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
+import ru.ming13.gambit.provider.BatchApplyingException;
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -102,10 +103,10 @@ public class DeckCardsOrderResettingTask extends AsyncTask<Void, Void, Void>
 			contentResolver.applyBatch(GambitContract.AUTHORITY, operations);
 		}
 		catch (RemoteException e) {
-			// Oops, ignore it
+			throw new BatchApplyingException();
 		}
 		catch (OperationApplicationException e) {
-			// Oops, ignore it
+			throw new BatchApplyingException();
 		}
 	}
 }
