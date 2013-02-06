@@ -261,7 +261,21 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private boolean isShowingActionBarButtonsRequired() {
-		return (getCardsPagerAdapter() != null) && (!getCardsPagerAdapter().isEmpty());
+		CardsPagerAdapter cardsPagerAdapter = getCardsPagerAdapter();
+
+		if (cardsPagerAdapter == null) {
+			return false;
+		}
+
+		if (cardsPagerAdapter.isEmpty()) {
+			return false;
+		}
+
+		if (cardsPagerAdapter.getCount() == 1) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
