@@ -12,7 +12,7 @@ public class GambitContract
 {
 	public static final String AUTHORITY = "ru.ming13.gambit.provider";
 
-	public static final Uri CONTENT_URI;
+	private static final Uri CONTENT_URI;
 
 	static {
 		CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(
