@@ -39,11 +39,13 @@ import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardsListCalledFromCardsEmptyPagerEvent;
+import ru.ming13.gambit.ui.bus.DeckCardsOrderQueriedEvent;
 import ru.ming13.gambit.ui.bus.DeckCurrentCardQueriedEvent;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
+import ru.ming13.gambit.ui.task.DeckCardsOrderQueryingTask;
 import ru.ming13.gambit.ui.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.ui.task.DeckCardsOrderShufflingTask;
 import ru.ming13.gambit.ui.task.DeckCurrentCardQueryingTask;
@@ -109,31 +111,31 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsPagerAdapter(cardsCursor);
 
-		updateActionBarItems();
+		callActionBarItemsInvalidation();
 
 		if (getCardsPagerAdapter().isEmpty()) {
 			return;
 		}
 
-		setUpCardsPagerIndicator();
 		setUpCurrentCardIndex();
+		setUpCardsOrder();
+		setUpCardsPagerIndicator();
 	}
 
 	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
-		if (!isSettingCardsPagerAdapterRequired()) {
+		if (isOnlyCardsPagerAdapterCursorUpdatingRequired()) {
 			getCardsPagerAdapter().swapCursor(cardsCursor);
 			return;
 		}
 
 		CardsPagerAdapter adapter = new CardsPagerAdapter(getSupportFragmentManager(), cardsCursor);
-
 		getCardsPager().setAdapter(adapter);
 	}
 
-	private boolean isSettingCardsPagerAdapterRequired() {
+	private boolean isOnlyCardsPagerAdapterCursorUpdatingRequired() {
 		// Avoid setting adapter after orientation change: ViewPager saves adapter itself
 
-		return (cardsOrder != CardsOrder.DEFAULT) || (getCardsPager().getCurrentItem() == 0);
+		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() != 0);
 	}
 
 	private ViewPager getCardsPager() {
@@ -144,14 +146,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
 	}
 
-	private void updateActionBarItems() {
+	private void callActionBarItemsInvalidation() {
 		supportInvalidateOptionsMenu();
-	}
-
-	private void setUpCardsPagerIndicator() {
-		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
-
-		indicator.setViewPager(getCardsPager());
 	}
 
 	private void setUpCurrentCardIndex() {
@@ -160,7 +156,6 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		}
 
 		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
-
 		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
 	}
 
@@ -171,18 +166,41 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	@Subscribe
-	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent deckCurrentCardQueriedEvent) {
-		int currentCardIndex = deckCurrentCardQueriedEvent.getCurrentCardIndex();
+	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent currentCardQueriedEvent) {
+		int currentCardIndex = currentCardQueriedEvent.getCurrentCardIndex();
 
 		setUpCurrentCardIndex(currentCardIndex);
 	}
 
 	private void setUpCurrentCardIndex(int currentCardIndex) {
-		if (!isSettingCurrentCardIndexRequired()) {
-			return;
+		getCardsPager().setCurrentItem(currentCardIndex);
+	}
+
+	private void setUpCardsOrder() {
+		DeckCardsOrderQueryingTask.execute(getContentResolver(), cardsUri);
+	}
+
+	@Subscribe
+	public void onCardsOrderQueriedEvent(DeckCardsOrderQueriedEvent cardsOrderQueriedEvent) {
+		switch (cardsOrderQueriedEvent.getCardsOrder()) {
+			case SHUFFLE:
+				cardsOrder = CardsOrder.SHUFFLE;
+				break;
+
+			case ORIGINAL:
+				cardsOrder = CardsOrder.ORIGINAL;
+				break;
+
+			default:
+				break;
 		}
 
-		getCardsPager().setCurrentItem(currentCardIndex);
+		callActionBarItemsInvalidation();
+	}
+
+	private void setUpCardsPagerIndicator() {
+		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
+		indicator.setViewPager(getCardsPager());
 	}
 
 	@Override
@@ -216,13 +234,26 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if ((getCardsPagerAdapter() != null) && (getCardsPagerAdapter().isEmpty())) {
+		if (!isShowingActionBarButtonsRequired()) {
 			return false;
 		}
 
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager, menu);
+		switch (cardsOrder) {
+			case SHUFFLE:
+				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_enabled, menu);
+				return true;
 
-		return true;
+			case ORIGINAL:
+				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	private boolean isShowingActionBarButtonsRequired() {
+		return (getCardsPagerAdapter() != null) && (!getCardsPagerAdapter().isEmpty());
 	}
 
 	@Override
@@ -233,11 +264,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 				return true;
 
 			case R.id.menu_shuffle:
-				shuffleCards();
-				return true;
-
-			case R.id.menu_reset:
-				resetCardsOrder();
+				changeCardsOrder();
+				callActionBarItemsInvalidation();
 				return true;
 
 			default:
@@ -247,6 +275,21 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 	private void setCurrentCardToFirst() {
 		getCardsPager().setCurrentItem(0);
+	}
+
+	private void changeCardsOrder() {
+		switch (cardsOrder) {
+			case SHUFFLE:
+				resetCardsOrder();
+				break;
+
+			case ORIGINAL:
+				shuffleCards();
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	private void resetCardsOrder() {
@@ -288,8 +331,8 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onStop() {
+		super.onStop();
 
 		saveCurrentCardIndex();
 	}
