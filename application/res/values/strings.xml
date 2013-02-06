@@ -29,17 +29,12 @@
 	<string name="title_edit_card">Edit flashcard</string>
 	<string name="title_licenses">Open source licenses</string>
 
-	<string name="empty_decks">No decks.</string>
 	<string name="empty_decks_title">No decks</string>
 	<string name="empty_decks_subtitle">Try to create some</string>
-	<string name="empty_cards">No flashcards</string>
 	<string name="empty_cards_title">No flashcards</string>
 	<string name="empty_cards_subtitle">Try to create some</string>
 
 	<string name="button_create_cards">Create some</string>
-
-	<string name="loading_decks">Loading decks…</string>
-	<string name="loading_cards">Loading flashcards…</string>
 
 	<string name="error_empty_field">Should not be empty.</string>
 	<string name="error_deck_already_exists">Deck with such name already exists.</string>
@@ -55,7 +50,6 @@
 	<string name="menu_edit">Edit</string>
 	<string name="menu_create_new_item">Create new item</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
-	<string name="menu_reset_order">Reset order</string>
 	<string name="menu_shuffle">Shuffle</string>
 	<string name="menu_to_first_card">Back to beginning</string>
 	<string name="menu_send_feedback">Send feedback</string>
