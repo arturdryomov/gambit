@@ -22,7 +22,6 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import android.database.Cursor;
 import android.net.Uri;
-import ru.ming13.gambit.provider.GambitContract;
 
 
 public class GambitProviderCardsTests extends GambitProviderTestCase
@@ -50,15 +49,7 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 		cardsCursor.moveToFirst();
 
 		assertThat(cardsCursor).hasColumnCount(Projection.CARDS.length);
-
-		try {
-			cardsCursor.getLong(cardsCursor.getColumnIndexOrThrow(GambitContract.Cards._ID));
-			cardsCursor.getString(cardsCursor.getColumnIndexOrThrow(GambitContract.Cards.FRONT_SIDE_TEXT));
-			cardsCursor.getString(cardsCursor.getColumnIndexOrThrow(GambitContract.Cards.BACK_SIDE_TEXT));
-		}
-		catch (IllegalArgumentException e) {
-			fail();
-		}
+		assertThat(cardsCursor).hasColumns(Projection.CARDS);
 	}
 
 	public void testCardInsertion() {

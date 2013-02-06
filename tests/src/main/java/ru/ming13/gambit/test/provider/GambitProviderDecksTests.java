@@ -24,7 +24,6 @@ import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrow
 import android.database.Cursor;
 import android.net.Uri;
 import ru.ming13.gambit.provider.DeckExistsException;
-import ru.ming13.gambit.provider.GambitContract;
 
 
 public class GambitProviderDecksTests extends GambitProviderTestCase
@@ -40,14 +39,7 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 		decksCursor.moveToFirst();
 
 		assertThat(decksCursor).hasColumnCount(Projection.DECKS.length);
-
-		try {
-			decksCursor.getLong(decksCursor.getColumnIndexOrThrow(GambitContract.Decks._ID));
-			decksCursor.getString(decksCursor.getColumnIndexOrThrow(GambitContract.Decks.TITLE));
-		}
-		catch (IllegalArgumentException e) {
-			fail();
-		}
+		assertThat(decksCursor).hasColumns(Projection.DECKS);
 	}
 
 	public void testDeckInsertion() {
