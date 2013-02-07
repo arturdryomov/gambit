@@ -62,29 +62,29 @@ public class GambitProvider extends ContentProvider
 
 			case GambitProviderPaths.Codes.DECK:
 				queryBuilder.setTables(DbSchema.Tables.DECKS);
-				selection = buildDeckSelectionClause(uri);
+				queryBuilder.appendWhere(buildDeckSelectionClause(uri));
 				break;
 
 			case GambitProviderPaths.Codes.CARDS:
 				queryBuilder.setTables(DbSchema.Tables.CARDS);
-				selection = buildCardsSelectionClause(uri);
+				queryBuilder.appendWhere(buildCardsSelectionClause(uri));
 				break;
 
 			case GambitProviderPaths.Codes.CARD:
 				queryBuilder.setTables(DbSchema.Tables.CARDS);
-				selection = buildCardSelectionClause(uri);
+				queryBuilder.appendWhere(buildCardSelectionClause(uri));
 				break;
 
 			default:
 				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 
-		Cursor decksCursor = queryBuilder.query(databaseHelper.getReadableDatabase(), projection,
-			selection, selectionArguments, null, null, sortOrder);
+		Cursor cursor = queryBuilder.query(databaseHelper.getReadableDatabase(), projection, selection,
+			selectionArguments, null, null, sortOrder);
 
-		decksCursor.setNotificationUri(getContext().getContentResolver(), uri);
+		cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
-		return decksCursor;
+		return cursor;
 	}
 
 	private String buildDeckSelectionClause(Uri deckUri) {
