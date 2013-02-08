@@ -36,7 +36,6 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 
 	public void testDecksQueryHasValidContents() {
 		Cursor decksCursor = queryDecks();
-		decksCursor.moveToFirst();
 
 		assertThat(decksCursor).hasColumnCount(Projection.DECKS.length);
 		assertThat(decksCursor).hasColumns(Projection.DECKS);

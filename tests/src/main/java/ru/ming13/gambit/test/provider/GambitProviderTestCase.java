@@ -27,7 +27,7 @@ import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.provider.GambitProvider;
 
 
-public abstract class GambitProviderTestCase extends ProviderTestCase2<GambitProvider>
+abstract class GambitProviderTestCase extends ProviderTestCase2<GambitProvider>
 {
 	protected static final class Projection
 	{

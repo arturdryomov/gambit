@@ -46,7 +46,6 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 		insertCard(deckUri, Content.CARD_FRONT_SIDE_TEXT, Content.CARD_BACK_SIDE_TEXT);
 
 		Cursor cardsCursor = queryCards(deckUri);
-		cardsCursor.moveToFirst();
 
 		assertThat(cardsCursor).hasColumnCount(Projection.CARDS.length);
 		assertThat(cardsCursor).hasColumns(Projection.CARDS);

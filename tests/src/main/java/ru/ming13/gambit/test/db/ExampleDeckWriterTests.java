@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.test.provider;
+package ru.ming13.gambit.test.db;
 
 
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 import android.database.Cursor;
-import android.net.Uri;
+import org.fest.assertions.api.Assertions;
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.db.DbSchema;
 import ru.ming13.gambit.db.ExampleDeckWriter;
 import ru.ming13.gambit.provider.GambitContract;
 
 
-public class ExampleDeckWriterTests extends GambitProviderTestCase
+public class ExampleDeckWriterTests extends DbTestCase
 {
 	public void testExampleDeckWriting() {
 		// Example deck is the only deck in an empty database
@@ -38,34 +39,49 @@ public class ExampleDeckWriterTests extends GambitProviderTestCase
 	}
 
 	public void testExampleDeckTitle() {
-		String expectedExampleDeckTitlePrefix = getMockContext().getString(R.string.example_deck_title);
-		String actualExampleDeckTitle = queryDeckTitle(getExampleDeckUri());
+		String expectedExampleDeckTitlePrefix = getContext().getString(R.string.example_deck_title);
+		String actualExampleDeckTitle = queryExampleDeckTitle();
 
-		assertThat(actualExampleDeckTitle).startsWith(expectedExampleDeckTitlePrefix);
+		Assertions.assertThat(actualExampleDeckTitle).startsWith(expectedExampleDeckTitlePrefix);
 	}
 
-	private Uri getExampleDeckUri() {
+	private String queryExampleDeckTitle() {
 		Cursor decksCursor = queryDecks();
 
 		decksCursor.moveToFirst();
-		long deckId = decksCursor.getLong(decksCursor.getColumnIndex(GambitContract.Decks._ID));
-
-		return GambitContract.Decks.buildDeckUri(deckId);
+		return decksCursor.getString(decksCursor.getColumnIndex(DbSchema.DecksColumns.TITLE));
 	}
 
 	public void testExampleDeckCardsCount() {
 		int expectedCardsCount = ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES.length;
-		Cursor cardsCursor = queryCards(getExampleDeckUri());
+		Cursor cardsCursor = queryExampleDeckCards();
 
 		assertThat(cardsCursor).hasCount(expectedCardsCount);
 	}
 
+	private Cursor queryExampleDeckCards() {
+		long exampleDeckId = queryExampleDeckId();
+
+		String cardsSelectionClause = String.format("%s = %d", DbSchema.CardsColumns.DECK_ID,
+			exampleDeckId);
+
+		return database.query(DbSchema.Tables.CARDS, null, cardsSelectionClause, null, null, null,
+			null);
+	}
+
+	private long queryExampleDeckId() {
+		Cursor decksCursor = queryDecks();
+
+		decksCursor.moveToFirst();
+		return decksCursor.getLong(decksCursor.getColumnIndex(DbSchema.DecksColumns._ID));
+	}
+
 	public void testExampleDeckCardsTexts() {
-		Cursor cardsCursor = queryCards(getExampleDeckUri());
+		Cursor cardsCursor = queryExampleDeckCards();
 
 		cardsCursor.moveToFirst();
 		for (int exampleDeckCardResourceId : ExampleDeckWriter.ANDROID_VERSIONS_RESOURCES) {
-			String expectedFrontSideText = getMockContext().getString(exampleDeckCardResourceId);
+			String expectedFrontSideText = getContext().getString(exampleDeckCardResourceId);
 			String actualFrontSideText = cardsCursor.getString(
 				cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 
