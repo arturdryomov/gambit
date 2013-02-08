@@ -88,7 +88,7 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
 		switch (oldDatabaseVersion) {
 			case DbSchema.Versions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
-				migrateFromCardsNotCascadeDeletion(db);
+				migrateFromDeckCardsWithoutCascadeDeletion(db);
 				break;
 
 			case DbSchema.Versions.LATEST_WITH_CAMEL_NAMING_STYLE:
@@ -105,7 +105,7 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		}
 	}
 
-	private void migrateFromCardsNotCascadeDeletion(SQLiteDatabase db) {
+	private void migrateFromDeckCardsWithoutCascadeDeletion(SQLiteDatabase db) {
 		createTemporaryTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS),
 			buildCardsTableDescription());
 		copyTableContents(db, DbSchema.Tables.CARDS, buildTemporaryTableName(DbSchema.Tables.CARDS));
