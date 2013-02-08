@@ -19,11 +19,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Gambit Parent</name>
 	<groupId>ru.ming13.gambit</groupId>
 	<artifactId>gambit-parent</artifactId>
 	<version>0.8.2</version>
 	<packaging>pom</packaging>
+
+	<name>Gambit Parent</name>
 
 	<modules>
 		<module>application</module>
