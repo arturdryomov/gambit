@@ -24,12 +24,6 @@
 	<string name="title_new_card">Neue Kartei</string>
 	<string name="title_edit_card">Kartei bearbeiten</string>
 
-	<string name="empty_decks">Keine Stöße</string>
-	<string name="empty_cards">Keine Karteien</string>
-
-	<string name="loading_decks">Stöße-Downloads…</string>
-	<string name="loading_cards">Karteien-Downloads…</string>
-
 	<string name="error_empty_field">Es kann nicht leer sein.</string>
 	<string name="error_deck_already_exists">Es gibt schon einen Stoß mit solchem Namen.</string>
 
@@ -44,7 +38,6 @@
 	<string name="menu_edit">Bearbeiten</string>
 	<string name="menu_create_new_item">Neues Element erschaffen</string>
 	<string name="menu_edit_cards">Karteien bearbeiten</string>
-	<string name="menu_reset_order">Reihenfolge zurücksetzen</string>
 	<string name="menu_shuffle">Durchmischen</string>
 	<string name="menu_to_first_card">Zurück</string>
 

@@ -24,12 +24,6 @@
 	<string name="title_new_card">Une nouvelle carte</string>
 	<string name="title_edit_card">La révision de la carte</string>
 
-	<string name="empty_decks">Les piles sont absentes</string>
-	<string name="empty_cards">Les cartes sont absentes</string>
-
-	<string name="loading_decks">Le chargement des piles…</string>
-	<string name="loading_cards">Le chargement des cartes…</string>
-
 	<string name="error_empty_field">Cela ne peut pas être vide.</string>
 	<string name="error_deck_already_exists">La pile nommée ainsi existe déjà.</string>
 
@@ -44,7 +38,6 @@
 	<string name="menu_edit">Réviser</string>
 	<string name="menu_create_new_item">La création d’un nouvel élément</string>
 	<string name="menu_edit_cards">Réviser les cartes</string>
-	<string name="menu_reset_order">Se défausser</string>
 	<string name="menu_shuffle">Battre</string>
 	<string name="menu_to_first_card">Au début</string>
 

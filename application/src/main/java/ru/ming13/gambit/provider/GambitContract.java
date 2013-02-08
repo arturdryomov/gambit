@@ -1,3 +1,19 @@
+/*
+ * Copyright 2012 Artur Dryomov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package ru.ming13.gambit.provider;
 
 
@@ -12,7 +28,7 @@ public class GambitContract
 {
 	public static final String AUTHORITY = "ru.ming13.gambit.provider";
 
-	public static final Uri CONTENT_URI;
+	private static final Uri CONTENT_URI;
 
 	static {
 		CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(
@@ -24,8 +40,8 @@ public class GambitContract
 
 	private interface DecksColumns
 	{
-		public static final String TITLE = DbSchema.DecksColumns.TITLE;
-		public static final String CURRENT_CARD_INDEX = DbSchema.DecksColumns.CURRENT_CARD_INDEX;
+		String TITLE = DbSchema.DecksColumns.TITLE;
+		String CURRENT_CARD_INDEX = DbSchema.DecksColumns.CURRENT_CARD_INDEX;
 	}
 
 	public static final class Decks implements BaseColumns, DecksColumns
@@ -42,14 +58,18 @@ public class GambitContract
 		public static Uri buildDeckUri(long deckId) {
 			return ContentUris.withAppendedId(CONTENT_URI, deckId);
 		}
+
+		public static long getDeckId(Uri deckUri) {
+			return ContentUris.parseId(deckUri);
+		}
 	}
 
 	private interface CardsColumns
 	{
-		public static final String DECK_ID = DbSchema.CardsColumns.DECK_ID;
-		public static final String FRONT_SIDE_TEXT = DbSchema.CardsColumns.FRONT_SIDE_TEXT;
-		public static final String BACK_SIDE_TEXT = DbSchema.CardsColumns.BACK_SIDE_TEXT;
-		public static final String ORDER_INDEX = DbSchema.CardsColumns.ORDER_INDEX;
+		String DECK_ID = DbSchema.CardsColumns.DECK_ID;
+		String FRONT_SIDE_TEXT = DbSchema.CardsColumns.FRONT_SIDE_TEXT;
+		String BACK_SIDE_TEXT = DbSchema.CardsColumns.BACK_SIDE_TEXT;
+		String ORDER_INDEX = DbSchema.CardsColumns.ORDER_INDEX;
 	}
 
 	public static final class Cards implements BaseColumns, CardsColumns
@@ -76,6 +96,10 @@ public class GambitContract
 
 			String deckId = cardsUri.getPathSegments().get(cardsUriDeckIdSegmentIndex);
 			return Long.parseLong(deckId);
+		}
+
+		public static long getCardId(Uri cardUri) {
+			return ContentUris.parseId(cardUri);
 		}
 	}
 }
