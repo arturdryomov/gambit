@@ -87,16 +87,14 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
 		switch (oldDatabaseVersion) {
-			case DbSchema.Versions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
-				migrateFromDeckCardsWithoutCascadeDeletion(db);
-				break;
-
 			case DbSchema.Versions.LATEST_WITH_CAMEL_NAMING_STYLE:
 				migrateFromCamelNamingStyle(db);
-				break;
 
 			case DbSchema.Versions.LATEST_WITH_UPDATE_TIME_SUPPORT:
 				migrateFromUpdateTimeSupport(db);
+
+			case DbSchema.Versions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
+				migrateFromDeckCardsWithoutCascadeDeletion(db);
 				break;
 
 			default:
