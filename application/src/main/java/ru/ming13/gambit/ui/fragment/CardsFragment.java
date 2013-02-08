@@ -208,7 +208,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_create_item:
+			case R.id.menu_new_card:
 				callCardCreation();
 				return true;
 

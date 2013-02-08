@@ -18,9 +18,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:id="@+id/menu_create_item"
+		android:id="@+id/menu_new_deck"
 		android:icon="@drawable/ic_menu_new"
-		android:title="@string/menu_create_new_item"
+		android:title="@string/menu_new_deck"
 		android:showAsAction="always" />
 
 	<item

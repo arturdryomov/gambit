@@ -55,7 +55,7 @@ abstract class FormFragment extends SherlockFragment
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_accept:
+			case R.id.menu_done:
 				checkAndAcceptUserData();
 				return true;
 

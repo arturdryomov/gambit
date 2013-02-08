@@ -18,15 +18,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:id="@+id/menu_back"
+		android:id="@+id/menu_replay"
 		android:icon="@drawable/ic_menu_replay"
-		android:title="@string/menu_to_first_card"
+		android:title="@string/menu_replay"
 		android:showAsAction="always" />
 
 	<item
 		android:id="@+id/menu_shuffle"
 		android:icon="@drawable/ic_menu_shuffle_disabled"
-		android:title="@string/menu_shuffle"
+		android:title="@string/menu_shuffle_enable"
 		android:showAsAction="always" />
 
 </menu>

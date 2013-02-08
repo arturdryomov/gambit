@@ -31,7 +31,7 @@
 	<string name="hint_card_front_text">Текст лицевой стороны</string>
 	<string name="hint_card_back_text">Текст обратной стороны</string>
 
-	<string name="menu_accept">Принять</string>
+	<string name="menu_done">Принять</string>
 	<string name="menu_cancel">Отменить</string>
 	<string name="menu_delete">Удалить</string>
 	<string name="menu_rename">Переименовать</string>

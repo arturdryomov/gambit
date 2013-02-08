@@ -281,7 +281,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_back:
+			case R.id.menu_replay:
 				setCurrentCardToFirst();
 				return true;
 

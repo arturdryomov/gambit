@@ -31,7 +31,7 @@
 	<string name="hint_card_front_text">Vorderflächetext</string>
 	<string name="hint_card_back_text">Rückseitetext</string>
 
-	<string name="menu_accept">Annehmen</string>
+	<string name="menu_done">Annehmen</string>
 	<string name="menu_cancel">Abbrechen</string>
 	<string name="menu_delete">Löschen</string>
 	<string name="menu_rename">Umbenennen</string>

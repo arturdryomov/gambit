@@ -43,15 +43,17 @@
 	<string name="hint_card_front_text">Front side text</string>
 	<string name="hint_card_back_text">Back side text</string>
 
-	<string name="menu_accept">Accept</string>
+	<string name="menu_done">Done</string>
 	<string name="menu_cancel">Cancel</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_rename">Rename</string>
 	<string name="menu_edit">Edit</string>
-	<string name="menu_create_new_item">Create new item</string>
+	<string name="menu_new_deck">New deck</string>
+	<string name="menu_new_card">New flashcard</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
-	<string name="menu_shuffle">Shuffle</string>
-	<string name="menu_to_first_card">Back to beginning</string>
+	<string name="menu_shuffle_enable">Enable shuffle</string>
+	<string name="menu_shuffle_disable">Disable shuffle</string>
+	<string name="menu_replay">Replay</string>
 	<string name="menu_send_feedback">Send feedback</string>
 	<string name="menu_rate_application">Rate the application</string>
 

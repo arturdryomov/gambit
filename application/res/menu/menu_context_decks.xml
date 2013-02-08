@@ -27,7 +27,7 @@
 		android:id="@+id/menu_edit_cards"
 		android:icon="@drawable/ic_menu_queue"
 		android:title="@string/menu_edit_cards"
-		android:showAsAction="always" />
+		android:showAsAction="always|withText" />
 
 	<item
 		android:id="@+id/menu_delete"

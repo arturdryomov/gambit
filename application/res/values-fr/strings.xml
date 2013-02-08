@@ -31,7 +31,7 @@
 	<string name="hint_card_front_text">Le texte du recto</string>
 	<string name="hint_card_back_text">Le texte du verso</string>
 
-	<string name="menu_accept">Accepter</string>
+	<string name="menu_done">Accepter</string>
 	<string name="menu_cancel">Annuler</string>
 	<string name="menu_delete">Supprimer</string>
 	<string name="menu_rename">Changer du nom</string>

@@ -151,7 +151,7 @@ public class DecksFragment extends SherlockListFragment implements LoaderManager
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_create_item:
+			case R.id.menu_new_deck:
 				callDeckCreation();
 				return true;
 
