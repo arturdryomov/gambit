@@ -18,12 +18,11 @@ package ru.ming13.gambit.test.db;
 
 
 import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import org.fest.assertions.api.Assertions;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.db.DbOpenHelper;
 import ru.ming13.gambit.db.DbSchema;
 import ru.ming13.gambit.db.ExampleDeckWriter;
 import ru.ming13.gambit.provider.GambitContract;
@@ -31,25 +30,12 @@ import ru.ming13.gambit.provider.GambitContract;
 
 public class ExampleDeckWriterTests extends DbTestCase
 {
-	protected SQLiteDatabase database;
-
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-
-		database = new DbOpenHelper(getContext()).getReadableDatabase();
-	}
-
 	public void testExampleDeckWriting() {
 		// Example deck is the only deck in an empty database
 		int expectedDecksCount = 1;
 		Cursor decksCursor = queryDecks();
 
 		assertThat(decksCursor).hasCount(expectedDecksCount);
-	}
-
-	private Cursor queryDecks() {
-		return database.query(DbSchema.Tables.DECKS, null, null, null, null, null, null);
 	}
 
 	public void testExampleDeckTitle() {
@@ -99,7 +85,7 @@ public class ExampleDeckWriterTests extends DbTestCase
 			String actualFrontSideText = cardsCursor.getString(
 				cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 
-			Assertions.assertThat(actualFrontSideText).isEqualTo(expectedFrontSideText);
+			assertThat(actualFrontSideText).isEqualTo(expectedFrontSideText);
 
 			cardsCursor.moveToNext();
 		}

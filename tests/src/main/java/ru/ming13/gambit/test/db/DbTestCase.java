@@ -17,18 +17,34 @@
 package ru.ming13.gambit.test.db;
 
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
+import ru.ming13.gambit.db.DbOpenHelper;
+import ru.ming13.gambit.db.DbSchema;
 
 
 abstract class DbTestCase extends AndroidTestCase
 {
 	private static final String DATABASE_FILENAME_PREFIX = "test.";
 
+	protected SQLiteDatabase database;
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 
 		setContext(new RenamingDelegatingContext(getContext(), DATABASE_FILENAME_PREFIX));
+
+		database = new DbOpenHelper(getContext()).getReadableDatabase();
+	}
+
+	protected Cursor queryDecks() {
+		return database.query(DbSchema.Tables.DECKS, null, null, null, null, null, null);
+	}
+
+	protected Cursor queryCards() {
+		return database.query(DbSchema.Tables.CARDS, null, null, null, null, null, null);
 	}
 }
