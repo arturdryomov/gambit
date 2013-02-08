@@ -74,6 +74,7 @@ public class ExampleDeckWriter
 
 	private boolean isCurrentLocaleSupported() {
 		String currentLanguageCode = getCurrentLocale().getLanguage();
+
 		return Arrays.asList(SUPPORTED_LANGUAGE_CODES).contains(currentLanguageCode);
 	}
 
@@ -84,6 +85,7 @@ public class ExampleDeckWriter
 	private Locale getRandomSupportedLocale() {
 		Random random = new Random();
 		int languageIndex = random.nextInt(SUPPORTED_LANGUAGE_CODES.length);
+
 		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
 	}
 
@@ -101,8 +103,7 @@ public class ExampleDeckWriter
 	}
 
 	private void tryWriteDeck() {
-		long deckId = createDeck();
-		createCards(deckId);
+		createCards(createDeck());
 	}
 
 	private long createDeck() {
@@ -115,8 +116,10 @@ public class ExampleDeckWriter
 	}
 
 	private String buildDeckTitle() {
-		return String.format("%s (%s)", context.getString(R.string.example_deck_title),
-			getExampleDeckTitleLanguage(localeForBackText));
+		String exampleDeckTitle = context.getString(R.string.example_deck_title);
+		String exampleDeckTitleLanguage = getExampleDeckTitleLanguage(localeForBackText);
+
+		return String.format("%s (%s)", exampleDeckTitle, exampleDeckTitleLanguage);
 	}
 
 	private String getExampleDeckTitleLanguage(Locale locale) {
