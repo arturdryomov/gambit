@@ -58,6 +58,10 @@ public class GambitContract
 		public static Uri buildDeckUri(long deckId) {
 			return ContentUris.withAppendedId(CONTENT_URI, deckId);
 		}
+
+		public static long getDeckId(Uri deckUri) {
+			return ContentUris.parseId(deckUri);
+		}
 	}
 
 	private interface CardsColumns
@@ -92,6 +96,10 @@ public class GambitContract
 
 			String deckId = cardsUri.getPathSegments().get(cardsUriDeckIdSegmentIndex);
 			return Long.parseLong(deckId);
+		}
+
+		public static long getCardId(Uri cardUri) {
+			return ContentUris.parseId(cardUri);
 		}
 	}
 }

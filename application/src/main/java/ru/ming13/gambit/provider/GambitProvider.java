@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.content.UriMatcher;
@@ -88,7 +87,7 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private String buildDeckSelectionClause(Uri deckUri) {
-		long deckId = ContentUris.parseId(deckUri);
+		long deckId = GambitContract.Decks.getDeckId(deckUri);
 
 		return buildSelectionClause(DbSchema.DecksColumns._ID, deckId);
 	}
@@ -104,7 +103,7 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private String buildCardSelectionClause(Uri cardUri) {
-		long cardId = ContentUris.parseId(cardUri);
+		long cardId = GambitContract.Cards.getCardId(cardUri);
 
 		return buildSelectionClause(DbSchema.CardsColumns._ID, cardId);
 	}
@@ -314,11 +313,9 @@ public class GambitProvider extends ContentProvider
 		int affectedRowsContent = database.update(DbSchema.Tables.DECKS, deckValues,
 			buildDeckSelectionClause(deckUri), null);
 
-		if (isOnlyCurrentCardUpdated(deckValues)) {
-			return affectedRowsContent;
+		if (!isOnlyCurrentCardIndexUpdated(deckValues)) {
+			getContext().getContentResolver().notifyChange(deckUri, null);
 		}
-
-		getContext().getContentResolver().notifyChange(deckUri, null);
 
 		return affectedRowsContent;
 	}
@@ -331,7 +328,7 @@ public class GambitProvider extends ContentProvider
 		return isDeckTitleUnique(deckValues);
 	}
 
-	private boolean isOnlyCurrentCardUpdated(ContentValues deckValues) {
+	private boolean isOnlyCurrentCardIndexUpdated(ContentValues deckValues) {
 		if (deckValues.containsKey(DbSchema.DecksColumns.TITLE)) {
 			return false;
 		}
