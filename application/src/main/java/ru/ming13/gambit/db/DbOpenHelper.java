@@ -36,18 +36,9 @@ public class DbOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.beginTransaction();
+		createTables(db);
 
-		try {
-			createTables(db);
-
-			writeExampleDeck(db);
-
-			db.setTransactionSuccessful();
-		}
-		finally {
-			db.endTransaction();
-		}
+		writeExampleDeck(db);
 	}
 
 	private void createTables(SQLiteDatabase db) {
@@ -115,24 +106,17 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void migrateFromCardsNotCascadeDeletion(SQLiteDatabase db) {
-		db.beginTransaction();
+		createTemporaryTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS),
+			buildCardsTableDescription());
+		copyTableContents(db, DbSchema.Tables.CARDS, buildTemporaryTableName(DbSchema.Tables.CARDS));
 
-		try {
-			createTemporaryTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS),
-				buildCardsTableDescription());
-			copyTableContents(db, DbSchema.Tables.CARDS, buildTemporaryTableName(DbSchema.Tables.CARDS));
+		dropTable(db, DbSchema.Tables.CARDS);
+		createTable(db, DbSchema.Tables.CARDS, buildCardsTableDescription());
 
-			dropTable(db, DbSchema.Tables.CARDS);
-			createTable(db, DbSchema.Tables.CARDS, buildCardsTableDescription());
+		copyTableContents(db, buildTemporaryTableName(DbSchema.Tables.CARDS), DbSchema.Tables.CARDS);
+		dropTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS));
 
-			copyTableContents(db, buildTemporaryTableName(DbSchema.Tables.CARDS), DbSchema.Tables.CARDS);
-			dropTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS));
-
-			db.setTransactionSuccessful();
-		}
-		finally {
-			db.endTransaction();
-		}
+		db.setTransactionSuccessful();
 	}
 
 	private void createTemporaryTable(SQLiteDatabase db, String tableName, String tableDescription) {
@@ -149,17 +133,8 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void migrateFromCamelNamingStyle(SQLiteDatabase db) {
-		db.beginTransaction();
-
-		try {
-			dropTables(db);
-			createTables(db);
-
-			db.setTransactionSuccessful();
-		}
-		finally {
-			db.endTransaction();
-		}
+		dropTables(db);
+		createTables(db);
 	}
 
 	private void dropTables(SQLiteDatabase db) {
@@ -173,30 +148,12 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void migrateFromUpdateTimeSupport(SQLiteDatabase db) {
-		db.beginTransaction();
-
-		try {
-			dropTable(db, DbSchema.Tables.DB_LAST_UPDATE_TIME);
-
-			db.setTransactionSuccessful();
-		}
-		finally {
-			db.endTransaction();
-		}
+		dropTable(db, DbSchema.Tables.DB_LAST_UPDATE_TIME);
 	}
 
 	private void migrateFromUnknownDatabaseVersion(SQLiteDatabase db) {
-		db.beginTransaction();
-
-		try {
-			dropTables(db);
-			createTables(db);
-
-			db.setTransactionSuccessful();
-		}
-		finally {
-			db.endTransaction();
-		}
+		dropTables(db);
+		createTables(db);
 	}
 
 	@Override
