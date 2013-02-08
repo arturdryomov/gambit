@@ -43,7 +43,7 @@ public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		if (areCardsShuffled(queryCards())) {
+		if (areCardsShuffled()) {
 			return new DeckCardsOrderQueriedEvent(DeckCardsOrderQueriedEvent.CardsOrder.SHUFFLE);
 		}
 		else {
@@ -51,23 +51,29 @@ public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
 		}
 	}
 
-	private Cursor queryCards() {
-		String[] projection = {GambitContract.Cards.ORDER_INDEX};
+	private boolean areCardsShuffled() {
+		boolean cardsShuffled = false;
 
-		return contentResolver.query(cardsUri, projection, null, null, null);
-	}
+		Cursor cardsCursor = queryCards();
 
-	private boolean areCardsShuffled(Cursor cardsCursor) {
 		while (cardsCursor.moveToNext()) {
 			int cardOrderIndex = cardsCursor.getInt(
 				cardsCursor.getColumnIndex(GambitContract.Cards.ORDER_INDEX));
 
 			if (cardOrderIndex != GambitContract.Cards.DEFAULT_ORDER_INDEX) {
-				return true;
+				cardsShuffled = true;
 			}
 		}
 
-		return false;
+		cardsCursor.close();
+
+		return cardsShuffled;
+	}
+
+	private Cursor queryCards() {
+		String[] projection = {GambitContract.Cards.ORDER_INDEX};
+
+		return contentResolver.query(cardsUri, projection, null, null, null);
 	}
 
 	@Override
