@@ -19,15 +19,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<prerequisites>
-		<maven>3.0.0</maven>
-	</prerequisites>
-
-	<name>Gambit Parent</name>
 	<groupId>ru.ming13.gambit</groupId>
 	<artifactId>gambit-parent</artifactId>
 	<version>0.8.2</version>
 	<packaging>pom</packaging>
+
+	<name>Gambit Parent</name>
 
 	<modules>
 		<module>application</module>
@@ -44,6 +41,16 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
@@ -79,7 +86,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.6</version>
 				<reportSets>
 					<reportSet>
 						<reports>
