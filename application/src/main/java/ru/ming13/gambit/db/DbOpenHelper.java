@@ -88,49 +88,25 @@ public class DbOpenHelper extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldDatabaseVersion, int newDatabaseVersion) {
 		switch (oldDatabaseVersion) {
 			case DbSchema.Versions.LATEST_WITH_CAMEL_NAMING_STYLE:
-				migrateFromCamelNamingStyle(db);
+				recreateDatabaseSchema(db);
+				break;
 
 			case DbSchema.Versions.LATEST_WITH_UPDATE_TIME_SUPPORT:
 				migrateFromUpdateTimeSupport(db);
+				migrateFromDeckCardsWithoutCascadeDeletion(db);
+				break;
 
 			case DbSchema.Versions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
 				migrateFromDeckCardsWithoutCascadeDeletion(db);
 				break;
 
 			default:
-				migrateFromUnknownDatabaseVersion(db);
+				recreateDatabaseSchema(db);
 				break;
 		}
 	}
 
-	private void migrateFromDeckCardsWithoutCascadeDeletion(SQLiteDatabase db) {
-		createTemporaryTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS),
-			buildCardsTableDescription());
-		copyTableContents(db, DbSchema.Tables.CARDS, buildTemporaryTableName(DbSchema.Tables.CARDS));
-
-		dropTable(db, DbSchema.Tables.CARDS);
-		createTable(db, DbSchema.Tables.CARDS, buildCardsTableDescription());
-
-		copyTableContents(db, buildTemporaryTableName(DbSchema.Tables.CARDS), DbSchema.Tables.CARDS);
-		dropTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS));
-
-		db.setTransactionSuccessful();
-	}
-
-	private void createTemporaryTable(SQLiteDatabase db, String tableName, String tableDescription) {
-		db.execSQL(String.format("create temporary table %s (%s)", tableName, tableDescription));
-	}
-
-	private String buildTemporaryTableName(String originalTableName) {
-		return String.format("%sTemporary", originalTableName);
-	}
-
-	private void copyTableContents(SQLiteDatabase db, String departureTableName, String destinationTableName) {
-		db.execSQL(
-			String.format("insert into %s select * from %s", destinationTableName, departureTableName));
-	}
-
-	private void migrateFromCamelNamingStyle(SQLiteDatabase db) {
+	private void recreateDatabaseSchema(SQLiteDatabase db) {
 		dropTables(db);
 		createTables(db);
 	}
@@ -149,9 +125,29 @@ public class DbOpenHelper extends SQLiteOpenHelper
 		dropTable(db, DbSchema.Tables.DB_LAST_UPDATE_TIME);
 	}
 
-	private void migrateFromUnknownDatabaseVersion(SQLiteDatabase db) {
-		dropTables(db);
-		createTables(db);
+	private void migrateFromDeckCardsWithoutCascadeDeletion(SQLiteDatabase db) {
+		createTemporaryTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS),
+			buildCardsTableDescription());
+		copyTableContents(db, DbSchema.Tables.CARDS, buildTemporaryTableName(DbSchema.Tables.CARDS));
+
+		dropTable(db, DbSchema.Tables.CARDS);
+		createTable(db, DbSchema.Tables.CARDS, buildCardsTableDescription());
+
+		copyTableContents(db, buildTemporaryTableName(DbSchema.Tables.CARDS), DbSchema.Tables.CARDS);
+		dropTable(db, buildTemporaryTableName(DbSchema.Tables.CARDS));
+	}
+
+	private void createTemporaryTable(SQLiteDatabase db, String tableName, String tableDescription) {
+		db.execSQL(String.format("create temporary table %s (%s)", tableName, tableDescription));
+	}
+
+	private String buildTemporaryTableName(String originalTableName) {
+		return String.format("%sTemporary", originalTableName);
+	}
+
+	private void copyTableContents(SQLiteDatabase db, String departureTableName, String destinationTableName) {
+		db.execSQL(
+			String.format("insert into %s select * from %s", destinationTableName, departureTableName));
 	}
 
 	@Override
