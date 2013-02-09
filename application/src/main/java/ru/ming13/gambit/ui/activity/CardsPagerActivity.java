@@ -111,7 +111,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsPagerAdapter(cardsCursor);
 
-		callActionBarItemsInvalidation();
+		invalidateActionBarItems();
 
 		if (getCardsPagerAdapter().isEmpty()) {
 			return;
@@ -146,7 +146,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
 	}
 
-	private void callActionBarItemsInvalidation() {
+	private void invalidateActionBarItems() {
 		supportInvalidateOptionsMenu();
 	}
 
@@ -199,7 +199,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 				break;
 		}
 
-		callActionBarItemsInvalidation();
+		invalidateActionBarItems();
 	}
 
 	private void setUpCardsPagerIndicator() {
@@ -287,7 +287,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 			case R.id.menu_shuffle:
 				changeCardsOrder();
-				callActionBarItemsInvalidation();
+				invalidateActionBarItems();
 				return true;
 
 			default:
