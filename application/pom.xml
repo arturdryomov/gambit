@@ -79,8 +79,8 @@
 
 		<dependency>
 			<groupId>com.bugsense</groupId>
-			<artifactId>bugsense-trace</artifactId>
-			<version>3.0.7</version>
+			<artifactId>bugsense</artifactId>
+			<version>3.2</version>
 		</dependency>
 	</dependencies>
 
