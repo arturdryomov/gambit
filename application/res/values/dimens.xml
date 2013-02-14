@@ -17,13 +17,13 @@
 
 <resources>
 
-	<dimen name="margin_top_form_item">10dp</dimen>
-	<dimen name="margin_top_empty_list_subtitle">10dp</dimen>
+	<dimen name="margin_top_form_item">8dp</dimen>
+	<dimen name="margin_top_empty_list_subtitle">8dp</dimen>
 	<dimen name="margin_card">7dp</dimen>
 
 	<dimen name="padding_horizontal_list">6dp</dimen>
 	<dimen name="padding_horizontal_list_item">8dp</dimen>
-	<dimen name="padding_form_layout">20dp</dimen>
+	<dimen name="padding_form_layout">16dp</dimen>
 	<dimen name="padding_bottom_card">2dp</dimen>
 	<dimen name="padding_horizontal_card">1dp</dimen>
 	<dimen name="padding_top_card_shadow">1dp</dimen>
