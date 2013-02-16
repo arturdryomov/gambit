@@ -37,15 +37,43 @@
 		<item name="android:background">@color/background_action_bar</item>
 		<item name="background">@color/background_action_bar</item>
 
+		<item name="android:displayOptions">showTitle|showHome|homeAsUp</item>
+		<item name="displayOptions">showTitle|showHome|homeAsUp</item>
+	</style>
+
+	<style name="Theme.Gambit.Home" parent="Theme.Gambit">
+		<item name="actionBarStyle">@style/Theme.Gambit.Home.ActionBar</item>
+		<item name="android:actionBarStyle">@style/Theme.Gambit.Home.ActionBar</item>
+	</style>
+
+	<style name="Theme.Gambit.Home.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showTitle</item>
 		<item name="displayOptions">showTitle</item>
 	</style>
 
 	<style name="Theme.Gambit.Cards" parent="Theme.Gambit">
+		<item name="actionBarStyle">@style/Theme.Gambit.Cards.ActionBar</item>
+		<item name="android:actionBarStyle">@style/Theme.Gambit.Cards.ActionBar</item>
+
 		<!-- Change background color -->
 		<item name="android:colorBackground">@color/background_card_container</item>
 		<item name="android:colorBackgroundCacheHint">@color/background_card_container</item>
 		<item name="android:windowBackground">@color/background_card_container</item>
+	</style>
+
+	<style name="Theme.Gambit.Cards.ActionBar" parent="Theme.Gambit.ActionBar">
+		<item name="android:displayOptions">showHome|homeAsUp</item>
+		<item name="displayOptions">showHome|homeAsUp</item>
+	</style>
+
+	<style name="Theme.Gambit.Operation" parent="Theme.Gambit">
+		<item name="actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
+		<item name="android:actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
+	</style>
+
+	<style name="Theme.Gambit.Operation.ActionBar" parent="Theme.Gambit.ActionBar">
+		<item name="android:displayOptions">showTitle</item>
+		<item name="displayOptions">showTitle</item>
 	</style>
 
 </resources>
