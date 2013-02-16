@@ -27,12 +27,17 @@ import ru.ming13.gambit.ui.activity.CardsActivity;
 import ru.ming13.gambit.ui.activity.CardsPagerActivity;
 import ru.ming13.gambit.ui.activity.DeckCreationActivity;
 import ru.ming13.gambit.ui.activity.DeckRenamingActivity;
+import ru.ming13.gambit.ui.activity.DecksActivity;
 import ru.ming13.gambit.ui.activity.LicensesActivity;
 
 
 public final class IntentFactory
 {
 	private IntentFactory() {
+	}
+
+	public static Intent createDecksIntent(Context context) {
+		return new Intent(context, DecksActivity.class);
 	}
 
 	public static Intent createDeckCreationIntent(Context context) {

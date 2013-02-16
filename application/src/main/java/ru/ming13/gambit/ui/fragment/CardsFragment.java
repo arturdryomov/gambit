@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
@@ -73,6 +74,8 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 
 		setUpCardsUri();
 
+		setUpHomeButton();
+
 		setHasOptionsMenu(true);
 	}
 
@@ -80,6 +83,10 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
 
 		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
+	}
+
+	public void setUpHomeButton() {
+		getSherlockActivity().getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
 	@Override
@@ -208,6 +215,10 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				navigateUp();
+				return true;
+
 			case R.id.menu_new_card:
 				callCardCreation();
 				return true;
@@ -215,6 +226,11 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void navigateUp() {
+		Intent intent = IntentFactory.createDecksIntent(getActivity());
+		NavUtils.navigateUpTo(getActivity(), intent);
 	}
 
 	private void callCardCreation() {

@@ -23,6 +23,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
@@ -71,11 +72,17 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pager);
 
+		setUpHomeButton();
+
 		setUpCardsUri();
 
 		loadCards();
 
 		setUpShakeListener();
+	}
+
+	public void setUpHomeButton() {
+		getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
 	private void setUpCardsUri() {
@@ -281,6 +288,10 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				navigateUp();
+				return true;
+
 			case R.id.menu_replay:
 				setCurrentCardToFirst();
 				return true;
@@ -293,6 +304,11 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void navigateUp() {
+		Intent intent = IntentFactory.createDecksIntent(this);
+		NavUtils.navigateUpTo(this, intent);
 	}
 
 	private void setCurrentCardToFirst() {
