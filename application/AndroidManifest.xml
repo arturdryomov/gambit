@@ -34,7 +34,8 @@
 		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:name=".ui.activity.DecksActivity">
+			android:name=".ui.activity.DecksActivity"
+			android:theme="@style/Theme.Gambit.Home">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -44,12 +45,14 @@
 
 		<activity
 			android:name=".ui.activity.DeckCreationActivity"
-			android:label="@string/title_new_deck">
+			android:label="@string/title_new_deck"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".ui.activity.DeckRenamingActivity"
-			android:label="@string/title_rename_deck">
+			android:label="@string/title_rename_deck"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
@@ -65,12 +68,14 @@
 
 		<activity
 			android:name=".ui.activity.CardCreationActivity"
-			android:label="@string/title_new_card">
+			android:label="@string/title_new_card"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".ui.activity.CardModificationActivity"
-			android:label="@string/title_edit_card">
+			android:label="@string/title_edit_card"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity

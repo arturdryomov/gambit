@@ -18,10 +18,14 @@ package ru.ming13.gambit.ui.activity;
 
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.webkit.WebView;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
 public class LicensesActivity extends SherlockActivity
@@ -35,9 +39,15 @@ public class LicensesActivity extends SherlockActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_licenses);
 
+		setUpHomeButton();
+
 		setUpLicenses();
 
 		restoreWebViewState(savedInstanceState);
+	}
+
+	public void setUpHomeButton() {
+		getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
 	private void setUpLicenses() {
@@ -63,5 +73,22 @@ public class LicensesActivity extends SherlockActivity
 		getWebView().saveState(outState);
 
 		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				navigateUp();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(menuItem);
+		}
+	}
+
+	private void navigateUp() {
+		Intent intent = IntentFactory.createDecksIntent(this);
+		NavUtils.navigateUpTo(this, intent);
 	}
 }
