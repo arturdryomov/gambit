@@ -23,6 +23,14 @@
 	<string name="title_edit_cards">Редактирование карточек</string>
 	<string name="title_new_card">Новая карточка</string>
 	<string name="title_edit_card">Редактирование карточки</string>
+	<string name="title_licenses">Open source лицензии</string>
+
+	<string name="empty_decks_title">Стопок нет</string>
+	<string name="empty_decks_subtitle">Попробуйте их создать</string>
+	<string name="empty_cards_title">Карточек нет</string>
+	<string name="empty_cards_subtitle">Попробуйте их создать</string>
+
+	<string name="button_create_cards">Создать</string>
 
 	<string name="error_empty_field">Не может быть пустым.</string>
 	<string name="error_deck_already_exists">Стопка с таким названием уже существует.</string>
@@ -31,14 +39,19 @@
 	<string name="hint_card_front_text">Текст лицевой стороны</string>
 	<string name="hint_card_back_text">Текст обратной стороны</string>
 
-	<string name="menu_done">Принять</string>
+	<string name="menu_done">Готово</string>
 	<string name="menu_cancel">Отменить</string>
 	<string name="menu_delete">Удалить</string>
 	<string name="menu_rename">Переименовать</string>
 	<string name="menu_edit">Редактировать</string>
-	<string name="menu_create_new_item">Создание нового элемента</string>
+	<string name="menu_new_deck">Новая стопка</string>
+	<string name="menu_new_card">Новая карточка</string>
 	<string name="menu_edit_cards">Редактировать карточки</string>
-	<string name="menu_shuffle">Перемешать</string>
-	<string name="menu_to_first_card">В начало</string>
+	<string name="menu_shuffle_enable">Включить перемешивание</string>
+	<string name="menu_shuffle_disable">Выключить перемешивание</string>
+	<string name="menu_replay">Пересмотреть</string>
+	<string name="menu_send_feedback">Написать разработчику</string>
+	<string name="menu_rate_application">Оценить приложение</string>
+	<string name="menu_licenses">Open source лицензии</string>
 
 </resources>

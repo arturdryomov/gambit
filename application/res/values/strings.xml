@@ -56,7 +56,10 @@
 	<string name="menu_replay">Replay</string>
 	<string name="menu_send_feedback">Send feedback</string>
 	<string name="menu_rate_application">Rate the application</string>
+	<string name="menu_licenses">Open source licenses</string>
 
-	<string name="mask_card_list_item">%1$s → %2$s</string>
+	<string name="mask_card_list_item" translable="false">
+		%1$s → %2$s
+	</string>
 
 </resources>

@@ -35,7 +35,7 @@
 
 	<item
 		android:id="@+id/menu_licenses"
-		android:title="@string/title_licenses"
+		android:title="@string/menu_licenses"
 		android:showAsAction="never" />
 
 </menu>
