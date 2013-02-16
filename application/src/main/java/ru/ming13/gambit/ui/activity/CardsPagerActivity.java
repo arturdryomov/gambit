@@ -81,7 +81,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 		setUpShakeListener();
 	}
 
-	public void setUpHomeButton() {
+	private void setUpHomeButton() {
 		getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
@@ -340,13 +340,11 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 	@Subscribe
 	public void onCardsListCalledFromCardsEmptyPager(CardsListCalledFromCardsEmptyPagerEvent cardsListCalledFromCardsEmptyPagerEvent) {
-		callCardsList();
+		callCardCreation();
 	}
 
-	private void callCardsList() {
-		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
-
-		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
+	private void callCardCreation() {
+		Intent intent = IntentFactory.createCardCreationIntent(this, cardsUri);
 		startActivity(intent);
 	}
 

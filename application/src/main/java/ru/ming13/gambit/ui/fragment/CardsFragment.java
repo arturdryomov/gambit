@@ -85,7 +85,7 @@ public class CardsFragment extends SherlockListFragment implements LoaderManager
 		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
 	}
 
-	public void setUpHomeButton() {
+	private void setUpHomeButton() {
 		getSherlockActivity().getSupportActionBar().setHomeButtonEnabled(true);
 	}
 

@@ -46,7 +46,7 @@ public class LicensesActivity extends SherlockActivity
 		restoreWebViewState(savedInstanceState);
 	}
 
-	public void setUpHomeButton() {
+	private void setUpHomeButton() {
 		getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
