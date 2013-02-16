@@ -36,9 +36,6 @@
 	<string name="menu_delete">Löschen</string>
 	<string name="menu_rename">Umbenennen</string>
 	<string name="menu_edit">Bearbeiten</string>
-	<string name="menu_create_new_item">Neues Element erschaffen</string>
 	<string name="menu_edit_cards">Karteien bearbeiten</string>
-	<string name="menu_shuffle">Durchmischen</string>
-	<string name="menu_to_first_card">Zurück</string>
 
 </resources>
