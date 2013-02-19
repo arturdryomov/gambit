@@ -57,7 +57,7 @@ public class CardCreationActivity extends FragmentWrapperActivity
 
 	private void callCardsList() {
 		Intent intent = IntentFactory.createCardsIntent(this, buildDeckUri());
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
 
