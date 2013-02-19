@@ -17,25 +17,41 @@
 
 <resources>
 
-	<string name="title_cards">Karteien</string>
-	<string name="title_new_deck">Neuer Stoß</string>
-	<string name="title_rename_deck">Stoß umbenennenk</string>
-	<string name="title_edit_cards">Karteien redigieren</string>
-	<string name="title_new_card">Neue Kartei</string>
-	<string name="title_edit_card">Kartei bearbeiten</string>
+	<string name="title_cards">Eine Flashkarte</string>
+	<string name="title_new_deck">Ein neuer Stoß</string>
+	<string name="title_rename_deck">Einen Stoß neu zu benennen</string>
+	<string name="title_edit_cards">Flashkarten bearbeiten</string>
+	<string name="title_new_card">Eine neue Flashkarte</string>
+	<string name="title_edit_card">Eine Flashkarte bearbeiten</string>
+	<string name="title_licenses">Die Lizenzen der Open Source</string>
 
-	<string name="error_empty_field">Es kann nicht leer sein.</string>
-	<string name="error_deck_already_exists">Es gibt schon einen Stoß mit solchem Namen.</string>
+	<string name="empty_decks_title">Keine Stöße</string>
+	<string name="empty_decks_subtitle">Versuche etwas zu erstellen</string>
+	<string name="empty_cards_title">Keine Flaschkarten</string>
+	<string name="empty_cards_subtitle">Versuche etwas zu erstellen</string>
 
-	<string name="hint_deck_name">Stoßname</string>
-	<string name="hint_card_front_text">Vorderflächetext</string>
-	<string name="hint_card_back_text">Rückseitetext</string>
+	<string name="button_create_cards">Erstelle etwas</string>
 
-	<string name="menu_done">Annehmen</string>
+	<string name="error_empty_field">Es sollte nicht leer sein.</string>
+	<string name="error_deck_already_exists">Ein Stoß mit diesem Namen existiert schon.</string>
+
+	<string name="hint_deck_name">Stoß Name</string>
+	<string name="hint_card_front_text">Text der Vorderseite</string>
+	<string name="hint_card_back_text">Text der Rückseite</string>
+
+	<string name="menu_done">Fertig</string>
 	<string name="menu_cancel">Abbrechen</string>
 	<string name="menu_delete">Löschen</string>
 	<string name="menu_rename">Umbenennen</string>
 	<string name="menu_edit">Bearbeiten</string>
-	<string name="menu_edit_cards">Karteien bearbeiten</string>
+	<string name="menu_new_deck">Ein neuer Stoß</string>
+	<string name="menu_new_card">Eine neue Flashkarte</string>
+	<string name="menu_edit_cards">Flashkarte bearbeiten</string>
+	<string name="menu_shuffle_enable">Mischen einschalten</string>
+	<string name="menu_shuffle_disable">Mischen ausschalten</string>
+	<string name="menu_replay">Wiedergabe</string>
+	<string name="menu_send_feedback">Das feedback schicken</string>
+	<string name="menu_rate_application">Die Applikation bewerten</string>
+	<string name="menu_licenses">Die Lizenzen der Open Source</string>
 
 </resources>
