@@ -22,16 +22,31 @@ public final class IntentExtras
 	private IntentExtras() {
 	}
 
-	public static final String DECK;
-	public static final String CARD;
+	private static final String EXTRA_PREFIX;
 
-	private static final String EXTRA_PREFIX = IntentFactory.class.getPackage().getName();
-
-	private static final String DECK_POSTFIX = "deck";
-	private static final String CARD_POSTFIX = "card";
+	public static final String DECK_URI;
+	public static final String CARDS_URI;
+	public static final String CARD_URI;
 
 	static {
-		DECK = String.format("%s.%s", EXTRA_PREFIX, DECK_POSTFIX);
-		CARD = String.format("%s.%s", EXTRA_PREFIX, CARD_POSTFIX);
+		EXTRA_PREFIX = IntentFactory.class.getPackage().getName();
+
+		DECK_URI = buildIntentExtraName(ExtraPostfixes.DECK_URI);
+		CARDS_URI = buildIntentExtraName(ExtraPostfixes.CARDS_URI);
+		CARD_URI = buildIntentExtraName(ExtraPostfixes.CARD_URI);
+	}
+
+	private static String buildIntentExtraName(String extraPostfix) {
+		return String.format("%s.%s", EXTRA_PREFIX, extraPostfix);
+	}
+
+	private static final class ExtraPostfixes
+	{
+		private ExtraPostfixes() {
+		}
+
+		public static final String DECK_URI = "deck_uri";
+		public static final String CARDS_URI = "cards_uri";
+		public static final String CARD_URI = "card_uri";
 	}
 }

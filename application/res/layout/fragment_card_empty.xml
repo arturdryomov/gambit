@@ -16,9 +16,25 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:text="@string/empty_cards"
-	android:textSize="@dimen/text_size_empty_card"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
 	android:gravity="center"
-	style="@style/FullParentLayout" />
+	style="@style/FullParentLayout">
+
+	<TextView
+		android:id="@+id/empty_title"
+		android:text="@string/empty_cards_title"
+		android:textSize="@dimen/text_size_empty_list_title"
+		android:textStyle="bold"
+		android:gravity="center_horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+
+	<Button
+		android:id="@+id/button_create_cards"
+		android:text="@string/button_create_cards"
+		android:layout_marginTop="@dimen/margin_top_empty_list_subtitle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+
+</LinearLayout>

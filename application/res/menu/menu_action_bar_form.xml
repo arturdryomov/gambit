@@ -21,12 +21,12 @@
 		android:id="@+id/menu_cancel"
 		android:icon="@drawable/ic_menu_cancel"
 		android:title="@string/menu_cancel"
-		android:showAsAction="always" />
+		android:showAsAction="always|withText" />
 
 	<item
-		android:id="@+id/menu_accept"
-		android:icon="@drawable/ic_menu_accept"
-		android:title="@string/menu_accept"
-		android:showAsAction="always" />
+		android:id="@+id/menu_done"
+		android:icon="@drawable/ic_menu_done"
+		android:title="@string/menu_done"
+		android:showAsAction="always|withText" />
 
 </menu>

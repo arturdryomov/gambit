@@ -24,31 +24,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Card;
 
 
-public class CardFragment extends SherlockFragment
+public class CardFragment extends SherlockFragment implements View.OnClickListener
 {
 	private static enum CardSide
 	{
 		FRONT, BACK
 	}
 
-	private Card card;
+	private String cardFrontSideText;
+	private String cardBackSideText;
 	private CardSide currentCardSide = CardSide.FRONT;
 
-	public static CardFragment newInstance(Card card) {
+	public static CardFragment newInstance(String cardFrontSideText, String cardBackSideText) {
 		CardFragment cardFragment = new CardFragment();
 
-		cardFragment.setArguments(buildArguments(card));
+		cardFragment.setArguments(buildArguments(cardFrontSideText, cardBackSideText));
 
 		return cardFragment;
 	}
 
-	private static Bundle buildArguments(Card card) {
+	private static Bundle buildArguments(String cardFrontSideText, String cardBackSideText) {
 		Bundle arguments = new Bundle();
 
-		arguments.putParcelable(FragmentArguments.CARD, card);
+		arguments.putString(FragmentArguments.CARD_FRONT_SIDE_TEXT, cardFrontSideText);
+		arguments.putString(FragmentArguments.CARD_BACK_SIDE_TEXT, cardBackSideText);
 
 		return arguments;
 	}
@@ -57,7 +58,8 @@ public class CardFragment extends SherlockFragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		card = getArguments().getParcelable(FragmentArguments.CARD);
+		cardFrontSideText = getArguments().getString(FragmentArguments.CARD_FRONT_SIDE_TEXT);
+		cardBackSideText = getArguments().getString(FragmentArguments.CARD_BACK_SIDE_TEXT);
 	}
 
 	@Override
@@ -77,13 +79,12 @@ public class CardFragment extends SherlockFragment
 	private void setUpCardClickListener() {
 		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
 
-		cardTextView.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view) {
-				flipCard();
-			}
-		});
+		cardTextView.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View view) {
+		flipCard();
 	}
 
 	private void flipCard() {
@@ -107,15 +108,15 @@ public class CardFragment extends SherlockFragment
 	private void setCurrentCardText() {
 		switch (currentCardSide) {
 			case FRONT:
-				setCardText(card.getFrontSideText());
+				setCardText(cardFrontSideText);
 				break;
 
 			case BACK:
-				setCardText(card.getBackSideText());
+				setCardText(cardBackSideText);
 				break;
 
 			default:
-				setCardText(card.getFrontSideText());
+				setCardText(cardFrontSideText);
 				break;
 		}
 	}

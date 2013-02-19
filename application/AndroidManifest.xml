@@ -17,24 +17,25 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="ru.ming13.gambit"
-	android:versionCode="6"
-	android:versionName="0.8.2"
+	android:versionCode="7"
+	android:versionName="0.8.5"
 	android:installLocation="auto">
 
 	<uses-permission android:name="android.permission.INTERNET" />
 
 	<uses-sdk
 		android:minSdkVersion="8"
-		android:targetSdkVersion="14" />
+		android:targetSdkVersion="16" />
 
 	<application
 		android:name="GambitApplication"
-		android:icon="@drawable/ic_launcher_gambit"
+		android:icon="@drawable/ic_launcher"
 		android:label="@string/application_name"
 		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:name=".ui.activity.DecksActivity">
+			android:name=".ui.activity.DecksActivity"
+			android:theme="@style/Theme.Gambit.Home">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -44,12 +45,14 @@
 
 		<activity
 			android:name=".ui.activity.DeckCreationActivity"
-			android:label="@string/title_new_deck">
+			android:label="@string/title_new_deck"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".ui.activity.DeckRenamingActivity"
-			android:label="@string/title_rename_deck">
+			android:label="@string/title_rename_deck"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
@@ -59,18 +62,31 @@
 
 		<activity
 			android:name=".ui.activity.CardsPagerActivity"
-			android:label="@string/title_cards">
+			android:label="@string/title_cards"
+			android:theme="@style/Theme.Gambit.Cards">
 		</activity>
 
 		<activity
 			android:name=".ui.activity.CardCreationActivity"
-			android:label="@string/title_new_card">
+			android:label="@string/title_new_card"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".ui.activity.CardModificationActivity"
-			android:label="@string/title_edit_card">
+			android:label="@string/title_edit_card"
+			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
-	</application>
 
+		<activity
+			android:name=".ui.activity.LicensesActivity"
+			android:label="@string/title_licenses">
+		</activity>
+
+		<provider
+			android:name=".provider.GambitProvider"
+			android:authorities="ru.ming13.gambit.provider"
+			android:exported="false">
+		</provider>
+	</application>
 </manifest>

@@ -17,47 +17,53 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import java.util.List;
-
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.ContextMenu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.adapter.CardsAdapter;
+import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.intent.IntentFactory;
-import ru.ming13.gambit.ui.loader.CardsLoader;
 import ru.ming13.gambit.ui.loader.Loaders;
-import ru.ming13.gambit.ui.loader.result.LoaderResult;
 import ru.ming13.gambit.ui.task.CardDeletionTask;
 import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class CardsFragment extends AdaptedListFragment<Card> implements LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>, ActionModeProvider.ContextMenuHandler
+public class CardsFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
 {
-	private Deck deck;
+	private Uri cardsUri;
 
-	public static CardsFragment newInstance(Deck deck) {
+	private CursorAdapter cardsAdapter;
+
+	public static CardsFragment newInstance(Uri deckUri) {
 		CardsFragment cardsFragment = new CardsFragment();
 
-		cardsFragment.setArguments(buildArguments(deck));
+		cardsFragment.setArguments(buildArguments(deckUri));
 
 		return cardsFragment;
 	}
 
-	private static Bundle buildArguments(Deck deck) {
+	private static Bundle buildArguments(Uri deckUri) {
 		Bundle bundle = new Bundle();
 
-		bundle.putParcelable(FragmentArguments.DECK, deck);
+		bundle.putParcelable(FragmentArguments.DECK_URI, deckUri);
 
 		return bundle;
 	}
@@ -66,40 +72,182 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		deck = getArguments().getParcelable(FragmentArguments.DECK);
+		setUpCardsUri();
+
+		setUpHomeButton();
+
+		setHasOptionsMenu(true);
+	}
+
+	private void setUpCardsUri() {
+		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
+
+		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
+	}
+
+	private void setUpHomeButton() {
+		getSherlockActivity().getSupportActionBar().setHomeButtonEnabled(true);
 	}
 
 	@Override
-	protected ArrayAdapter buildListAdapter() {
-		return new CardsAdapter(getActivity());
+	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+		return layoutInflater.inflate(R.layout.fragment_list, container, false);
 	}
 
 	@Override
-	protected void callListPopulation() {
-		getLoaderManager().restartLoader(Loaders.CARDS, null, this);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpCardsList();
+	}
+
+	private void setUpCardsList() {
+		setUpCardsAdapter();
+		loadCards();
+	}
+
+	private void setUpCardsAdapter() {
+		cardsAdapter = buildCardsAdapter();
+		setListAdapter(cardsAdapter);
+	}
+
+	private CursorAdapter buildCardsAdapter() {
+		String[] departureColumns = {GambitContract.Cards.FRONT_SIDE_TEXT};
+		int[] destinationFields = {R.id.text};
+
+		SimpleCursorAdapter cardsAdapter = new SimpleCursorAdapter(getActivity(),
+			R.layout.list_item_one_line, null, departureColumns, destinationFields, 0);
+
+		cardsAdapter.setViewBinder(buildCardsListItemViewBinder());
+
+		return cardsAdapter;
+	}
+
+	private SimpleCursorAdapter.ViewBinder buildCardsListItemViewBinder() {
+		String cardsListItemTextMask = getString(R.string.mask_card_list_item);
+
+		return new CardsListItemViewBinder(cardsListItemTextMask);
+	}
+
+	private static class CardsListItemViewBinder implements SimpleCursorAdapter.ViewBinder
+	{
+		private final String cardsListItemTextMask;
+
+		public CardsListItemViewBinder(String cardsListItemTextMask) {
+			this.cardsListItemTextMask = cardsListItemTextMask;
+		}
+
+		@Override
+		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+			TextView cardsListItemTextView = (TextView) view;
+			cardsListItemTextView.setText(buildCardsListItemText(cursor));
+
+			return true;
+		}
+
+		private String buildCardsListItemText(Cursor cursor) {
+			String cardFrontSideText = cursor.getString(
+				cursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
+			String cardBackSideText = cursor.getString(
+				cursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
+
+			return String.format(cardsListItemTextMask, cardFrontSideText, cardBackSideText);
+		}
+	}
+
+	private void loadCards() {
+		getLoaderManager().initLoader(Loaders.CARDS, null, this);
 	}
 
 	@Override
-	public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		setEmptyListText(R.string.loading_cards);
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		String[] projection = {GambitContract.Cards._ID, GambitContract.Cards.FRONT_SIDE_TEXT,
+			GambitContract.Cards.BACK_SIDE_TEXT};
+		String sort = GambitContract.Cards.FRONT_SIDE_TEXT;
 
-		return CardsLoader.newCurrentOrderInstance(getActivity(), deck);
+		return new CursorLoader(getActivity(), cardsUri, projection, null, null, sort);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-		List<Card> cards = cardsLoaderResult.getData();
+	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cursor) {
+		cardsAdapter.swapCursor(cursor);
 
-		if (cards.isEmpty()) {
-			setEmptyListText(R.string.empty_cards);
+		if (getListAdapter().isEmpty()) {
+			showNoCardsText();
 		}
 		else {
-			populateList(cards);
+			hideNoCardsText();
 		}
 	}
 
+	private void showNoCardsText() {
+		TextView emptyCardsTitleTextView = (TextView) getView().findViewById(R.id.empty_title);
+		TextView emptyCardsSubtitleTextView = (TextView) getView().findViewById(R.id.empty_subtitle);
+
+		setNoCardsTextVisibility(View.VISIBLE);
+
+		emptyCardsTitleTextView.setText(R.string.empty_cards_title);
+		emptyCardsSubtitleTextView.setText(R.string.empty_cards_subtitle);
+	}
+
+	private void setNoCardsTextVisibility(int visibility) {
+		TextView emptyCardsTitleTextView = (TextView) getView().findViewById(R.id.empty_title);
+		TextView emptyCardsSubtitleTextView = (TextView) getView().findViewById(R.id.empty_subtitle);
+
+		emptyCardsTitleTextView.setVisibility(visibility);
+		emptyCardsSubtitleTextView.setVisibility(visibility);
+	}
+
+	private void hideNoCardsText() {
+		setNoCardsTextVisibility(View.GONE);
+	}
+
 	@Override
-	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
+	public void onLoaderReset(Loader<Cursor> cardsLoader) {
+		cardsAdapter.swapCursor(null);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		menuInflater.inflate(R.menu.menu_action_bar_cards, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				navigateUp();
+				return true;
+
+			case R.id.menu_new_card:
+				callCardCreation();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(menuItem);
+		}
+	}
+
+	private void navigateUp() {
+		Intent intent = IntentFactory.createDecksIntent(getActivity());
+		NavUtils.navigateUpTo(getActivity(), intent);
+	}
+
+	private void callCardCreation() {
+		Intent intent = IntentFactory.createCardCreationIntent(getActivity(), cardsUri);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onListItemClick(ListView listView, View view, int position, long id) {
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, id);
+
+		callCardModification(cardUri);
+	}
+
+	private void callCardModification(Uri cardUri) {
+		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), cardUri);
+		startActivity(intent);
 	}
 
 	@Override
@@ -119,16 +267,16 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	}
 
 	@Override
-	public boolean handleContextMenu(MenuItem menuItem, int cardListPosition) {
-		Card card = getAdapter().getItem(cardListPosition);
+	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
+		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, listItemId);
 
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
-				callCardModification(card);
+				callCardModification(cardUri);
 				return true;
 
 			case R.id.menu_delete:
-				callCardDeletion(card);
+				callCardDeletion(cardUri);
 				return true;
 
 			default:
@@ -136,26 +284,8 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 		}
 	}
 
-	private void callCardModification(Card card) {
-		Intent intent = IntentFactory.createCardModificationIntent(getActivity(), card);
-		startActivity(intent);
-	}
-
-	private void callCardDeletion(Card card) {
-		deleteCardFromList(card);
-		deleteCardEntirely(card);
-	}
-
-	private void deleteCardFromList(Card card) {
-		getAdapter().remove(card);
-
-		if (getAdapter().isEmpty()) {
-			setEmptyListText(R.string.empty_cards);
-		}
-	}
-
-	private void deleteCardEntirely(Card card) {
-		CardDeletionTask.newInstance(deck, card).execute();
+	private void callCardDeletion(Uri cardUri) {
+		CardDeletionTask.execute(getActivity().getContentResolver(), cardUri);
 	}
 
 	@Override
@@ -166,38 +296,15 @@ public class CardsFragment extends AdaptedListFragment<Card> implements LoaderMa
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		int cardListPosition = getListPosition(menuItem);
+	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+		long cardListId = getListItemId(menuItem);
 
-		return handleContextMenu(menuItem, cardListPosition);
+		return handleContextMenu(menuItem, cardListId);
 	}
 
-	@Override
-	public void onListItemClick(ListView listView, View view, int listPosition, long rowId) {
-		Card card = getAdapter().getItem(listPosition);
+	private long getListItemId(android.view.MenuItem menuItem) {
+		AdapterView.AdapterContextMenuInfo menuItemInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 
-		callCardModification(card);
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.menu_action_bar_cards, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem menuItem) {
-		switch (menuItem.getItemId()) {
-			case R.id.menu_create_item:
-				callCardCreation();
-				return true;
-
-			default:
-				return super.onOptionsItemSelected(menuItem);
-		}
-	}
-
-	private void callCardCreation() {
-		Intent intent = IntentFactory.createCardCreationIntent(getActivity(), deck);
-		startActivity(intent);
+		return menuItemInfo.id;
 	}
 }

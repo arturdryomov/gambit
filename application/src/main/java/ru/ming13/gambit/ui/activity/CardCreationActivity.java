@@ -17,37 +17,72 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
-import ru.ming13.gambit.local.model.Deck;
-import ru.ming13.gambit.ui.fragment.CardOperationFragment;
+import com.squareup.otto.Subscribe;
+import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.CardCreatedEvent;
+import ru.ming13.gambit.ui.bus.CardCreationCancelledEvent;
+import ru.ming13.gambit.ui.fragment.CardCreationFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
-public class CardCreationActivity extends FragmentWrapperActivity implements CardOperationFragment.FormCallback
+public class CardCreationActivity extends FragmentWrapperActivity
 {
 	@Override
 	protected Fragment buildFragment() {
-		return CardOperationFragment.newCreationInstance(extractReceivedDeck());
+		return CardCreationFragment.newInstance(extractReceivedCardsUri());
 	}
 
-	private Deck extractReceivedDeck() {
-		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Uri extractReceivedCardsUri() {
+		Uri cardsUri = getIntent().getParcelableExtra(IntentExtras.CARDS_URI);
 
-		if (deck == null) {
+		if (cardsUri == null) {
 			throw new IntentException();
 		}
 
-		return deck;
+		return cardsUri;
 	}
 
-	@Override
-	public <Data> void onAccept(Data data) {
+	@Subscribe
+	public void onCardCreated(CardCreatedEvent cardCreatedEvent) {
+		callCardsList();
+
+		finish();
+	}
+
+	private void callCardsList() {
+		Intent intent = IntentFactory.createCardsIntent(this, buildDeckUri());
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
+
+	private Uri buildDeckUri() {
+		long deckId = GambitContract.Cards.getDeckId(extractReceivedCardsUri());
+
+		return GambitContract.Decks.buildDeckUri(deckId);
+	}
+
+	@Subscribe
+	public void onCardCreationCancelled(CardCreationCancelledEvent cardCreationCancelledEvent) {
 		finish();
 	}
 
 	@Override
-	public void onCancel() {
-		finish();
+	protected void onResume() {
+		super.onResume();
+
+		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		BusProvider.getInstance().unregister(this);
 	}
 }

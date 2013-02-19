@@ -19,43 +19,56 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Gambit Tests</name>
+	<parent>
+		<groupId>ru.ming13.gambit</groupId>
+		<artifactId>gambit-parent</artifactId>
+		<version>0.8.5</version>
+	</parent>
+
 	<artifactId>gambit-tests</artifactId>
 	<packaging>apk</packaging>
 
-	<parent>
-		<artifactId>gambit-parent</artifactId>
-		<version>0.8.2</version>
-		<groupId>ru.ming13.gambit</groupId>
-	</parent>
+	<name>Gambit Tests</name>
 
 	<dependencies>
 		<dependency>
+			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<version>${android.version}</version>
-			<groupId>com.google.android</groupId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
+			<groupId>com.google.android</groupId>
 			<artifactId>android-test</artifactId>
 			<version>${android.version}</version>
-			<groupId>com.google.android</groupId>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
+			<groupId>com.squareup</groupId>
+			<artifactId>fest-android</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.dexmaker</groupId>
+			<artifactId>dexmaker-mockito</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ru.ming13.gambit</groupId>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
-			<groupId>ru.ming13.gambit</groupId>
 			<scope>provided</scope>
 			<type>apk</type>
 		</dependency>
 
 		<dependency>
+			<groupId>ru.ming13.gambit</groupId>
 			<artifactId>gambit-application</artifactId>
 			<version>${project.version}</version>
-			<groupId>ru.ming13.gambit</groupId>
 			<scope>provided</scope>
 			<type>jar</type>
 		</dependency>
@@ -63,6 +76,11 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>

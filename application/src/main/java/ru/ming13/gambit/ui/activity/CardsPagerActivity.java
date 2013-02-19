@@ -17,39 +17,52 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import java.util.List;
-
+import android.content.Intent;
+import android.database.Cursor;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.squareup.otto.Subscribe;
 import com.squareup.seismic.ShakeDetector;
+import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
+import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
+import ru.ming13.gambit.ui.bus.BusProvider;
+import ru.ming13.gambit.ui.bus.CardsListCalledFromCardsEmptyPagerEvent;
+import ru.ming13.gambit.ui.bus.DeckCardsOrderQueriedEvent;
+import ru.ming13.gambit.ui.bus.DeckCurrentCardQueriedEvent;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
-import ru.ming13.gambit.ui.loader.CardsLoader;
+import ru.ming13.gambit.ui.intent.IntentFactory;
 import ru.ming13.gambit.ui.loader.Loaders;
-import ru.ming13.gambit.ui.loader.result.LoaderResult;
-import ru.ming13.gambit.ui.adapter.CardsPagerAdapter;
-import ru.ming13.gambit.ui.task.CurrentCardIndexChangingTask;
+import ru.ming13.gambit.ui.task.DeckCardsOrderQueryingTask;
+import ru.ming13.gambit.ui.task.DeckCardsOrderResettingTask;
+import ru.ming13.gambit.ui.task.DeckCardsOrderShufflingTask;
+import ru.ming13.gambit.ui.task.DeckCurrentCardQueryingTask;
+import ru.ming13.gambit.ui.task.DeckCurrentCardSavingTask;
 
 
-public class CardsPagerActivity extends SherlockFragmentActivity implements ShakeDetector.Listener, LoaderManager.LoaderCallbacks<LoaderResult<List<Card>>>
+public class CardsPagerActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
 {
 	private static enum CardsOrder
 	{
-		CURRENT, SHUFFLE, ORIGINAL
+		DEFAULT, SHUFFLE, ORIGINAL
 	}
 
-	private Deck deck;
+	private Uri cardsUri;
 
-	private CardsOrder cardsOrder = CardsOrder.CURRENT;
+	private CardsOrder cardsOrder = CardsOrder.DEFAULT;
 
 	private SensorManager sensorManager;
 	private ShakeDetector shakeDetector;
@@ -59,21 +72,151 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pager);
 
-		deck = extractReceivedDeck();
+		setUpHomeButton();
+
+		setUpCardsUri();
+
+		loadCards();
 
 		setUpShakeListener();
-
-		populatePager(savedInstanceState);
 	}
 
-	private Deck extractReceivedDeck() {
-		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private void setUpHomeButton() {
+		getSupportActionBar().setHomeButtonEnabled(true);
+	}
 
-		if (deck == null) {
+	private void setUpCardsUri() {
+		Uri deckUri = extractReceivedDeckUri();
+
+		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
+	}
+
+	private Uri extractReceivedDeckUri() {
+		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
+
+		if (deckUri == null) {
 			throw new IntentException();
 		}
 
-		return deck;
+		return deckUri;
+	}
+
+	private void loadCards() {
+		getSupportLoaderManager().initLoader(Loaders.CARDS, null, this);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
+		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
+		String sortOrder = String.format("%s, %s", GambitContract.Cards.ORDER_INDEX,
+			GambitContract.Cards.FRONT_SIDE_TEXT);
+
+		return new CursorLoader(this, cardsUri, projection, null, null, sortOrder);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
+		setUpCardsPagerAdapter(cardsCursor);
+
+		invalidateActionBarItems();
+
+		if (getCardsPagerAdapter().isEmpty()) {
+			return;
+		}
+
+		setUpCurrentCardIndex();
+		setUpCardsOrder();
+		setUpCardsPagerIndicator();
+	}
+
+	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
+		if (isOnlyCardsPagerAdapterCursorUpdatingRequired()) {
+			getCardsPagerAdapter().swapCursor(cardsCursor);
+			return;
+		}
+
+		CardsPagerAdapter adapter = new CardsPagerAdapter(getSupportFragmentManager(), cardsCursor);
+		getCardsPager().setAdapter(adapter);
+	}
+
+	private boolean isOnlyCardsPagerAdapterCursorUpdatingRequired() {
+		// Avoid setting adapter after orientation change: ViewPager saves adapter itself
+
+		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() != 0);
+	}
+
+	private ViewPager getCardsPager() {
+		return (ViewPager) findViewById(R.id.pager);
+	}
+
+	private CardsPagerAdapter getCardsPagerAdapter() {
+		return (CardsPagerAdapter) getCardsPager().getAdapter();
+	}
+
+	private void invalidateActionBarItems() {
+		supportInvalidateOptionsMenu();
+	}
+
+	private void setUpCurrentCardIndex() {
+		if (!isSettingCurrentCardIndexRequired()) {
+			return;
+		}
+
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
+		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
+	}
+
+	private boolean isSettingCurrentCardIndexRequired() {
+		// Avoid case when user changed order or current card already
+
+		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
+	}
+
+	@Subscribe
+	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent currentCardQueriedEvent) {
+		int currentCardIndex = currentCardQueriedEvent.getCurrentCardIndex();
+
+		setUpCurrentCardIndex(currentCardIndex);
+	}
+
+	private void setUpCurrentCardIndex(int currentCardIndex) {
+		getCardsPager().setCurrentItem(currentCardIndex);
+	}
+
+	private void setUpCardsOrder() {
+		if (cardsOrder != CardsOrder.DEFAULT) {
+			return;
+		}
+
+		DeckCardsOrderQueryingTask.execute(getContentResolver(), cardsUri);
+	}
+
+	@Subscribe
+	public void onCardsOrderQueriedEvent(DeckCardsOrderQueriedEvent cardsOrderQueriedEvent) {
+		switch (cardsOrderQueriedEvent.getCardsOrder()) {
+			case SHUFFLE:
+				cardsOrder = CardsOrder.SHUFFLE;
+				break;
+
+			case ORIGINAL:
+				cardsOrder = CardsOrder.ORIGINAL;
+				break;
+
+			default:
+				break;
+		}
+
+		invalidateActionBarItems();
+	}
+
+	private void setUpCardsPagerIndicator() {
+		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
+		indicator.setViewPager(getCardsPager());
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> cardsLoader) {
+		getCardsPagerAdapter().swapCursor(null);
 	}
 
 	private void setUpShakeListener() {
@@ -89,81 +232,55 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 	private void shuffleCards() {
 		cardsOrder = CardsOrder.SHUFFLE;
 
-		populatePager();
+		DeckCardsOrderShufflingTask.execute(getContentResolver(), cardsUri);
+
+		showCardsOrderChangingAnimation();
 	}
 
-	private void populatePager() {
-		getSupportLoaderManager().restartLoader(Loaders.CARDS, null, this);
-	}
+	private void showCardsOrderChangingAnimation() {
+		Animation shakingAnimation = AnimationUtils.loadAnimation(this, R.anim.shaking);
 
-	@Override
-	public Loader<LoaderResult<List<Card>>> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		switch (cardsOrder) {
-			case CURRENT:
-				return CardsLoader.newCurrentOrderInstance(this, deck);
-
-			case SHUFFLE:
-				return CardsLoader.newShuffleOrderInstance(this, deck);
-
-			case ORIGINAL:
-				return CardsLoader.newOriginalOrderInstance(this, deck);
-
-			default:
-				return CardsLoader.newCurrentOrderInstance(this, deck);
-		}
-	}
-
-	@Override
-	public void onLoadFinished(Loader<LoaderResult<List<Card>>> cardsLoader, LoaderResult<List<Card>> cardsLoaderResult) {
-		List<Card> cards = cardsLoaderResult.getData();
-
-		setUpCardsPagerAdapter(cards);
-		setUpCurrentCardIndex();
-	}
-
-	private void setUpCardsPagerAdapter(List<Card> cards) {
-		ViewPager cardsPager = getCardsPager();
-		CardsPagerAdapter cardsPagerAdapter = new CardsPagerAdapter(getSupportFragmentManager(), cards);
-
-		cardsPager.setAdapter(cardsPagerAdapter);
-
-		cardsPager.getAdapter().notifyDataSetChanged();
-	}
-
-	private ViewPager getCardsPager() {
-		return (ViewPager) findViewById(R.id.pager);
-	}
-
-	private void setUpCurrentCardIndex() {
-		if (cardsOrder == CardsOrder.CURRENT) {
-			int currentCardIndex = deck.getCurrentCardIndex();
-
-			getCardsPager().setCurrentItem(currentCardIndex);
-		}
-	}
-
-	@Override
-	public void onLoaderReset(Loader<LoaderResult<List<Card>>> cardsLoader) {
-	}
-
-	private void populatePager(Bundle savedInstanceState) {
-		if (!isSavedInstanceStateValid(savedInstanceState)) {
-			populatePager();
-		}
-		else {
-			setUpCardsPagerAdapter(null);
-
-			populatePager();
-		}
-	}
-
-	private boolean isSavedInstanceStateValid(Bundle savedInstanceState) {
-		return savedInstanceState != null;
+		getCardsPager().startAnimation(shakingAnimation);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager, menu);
+		if (!isShowingActionBarButtonsRequired()) {
+			return false;
+		}
+
+		switch (cardsOrder) {
+			case SHUFFLE:
+				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_enabled, menu);
+				return true;
+
+			case ORIGINAL:
+				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
+				return true;
+
+			case DEFAULT:
+				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	private boolean isShowingActionBarButtonsRequired() {
+		CardsPagerAdapter cardsPagerAdapter = getCardsPagerAdapter();
+
+		if (cardsPagerAdapter == null) {
+			return false;
+		}
+
+		if (cardsPagerAdapter.isEmpty()) {
+			return false;
+		}
+
+		if (cardsPagerAdapter.getCount() == 1) {
+			return false;
+		}
 
 		return true;
 	}
@@ -171,16 +288,17 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_back:
+			case android.R.id.home:
+				navigateUp();
+				return true;
+
+			case R.id.menu_replay:
 				setCurrentCardToFirst();
 				return true;
 
 			case R.id.menu_shuffle:
-				shuffleCards();
-				return true;
-
-			case R.id.menu_reset:
-				resetCardsOrder();
+				changeCardsOrder();
+				invalidateActionBarItems();
 				return true;
 
 			default:
@@ -188,31 +306,46 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		}
 	}
 
-	private void setCurrentCardToFirst() {
-		ViewPager cardsPager = getCardsPager();
+	private void navigateUp() {
+		Intent intent = IntentFactory.createDecksIntent(this);
+		NavUtils.navigateUpTo(this, intent);
+	}
 
-		cardsPager.setCurrentItem(0);
+	private void setCurrentCardToFirst() {
+		getCardsPager().setCurrentItem(0);
+	}
+
+	private void changeCardsOrder() {
+		switch (cardsOrder) {
+			case SHUFFLE:
+				resetCardsOrder();
+				break;
+
+			case ORIGINAL:
+				shuffleCards();
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	private void resetCardsOrder() {
 		cardsOrder = CardsOrder.ORIGINAL;
 
-		populatePager();
+		DeckCardsOrderResettingTask.execute(getContentResolver(), cardsUri);
+
+		showCardsOrderChangingAnimation();
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		saveCurrentCardIndex();
-
-		shakeDetector.stop();
+	@Subscribe
+	public void onCardsListCalledFromCardsEmptyPager(CardsListCalledFromCardsEmptyPagerEvent cardsListCalledFromCardsEmptyPagerEvent) {
+		callCardCreation();
 	}
 
-	private void saveCurrentCardIndex() {
-		int currentCardIndex = getCardsPager().getCurrentItem();
-
-		CurrentCardIndexChangingTask.newInstance(deck, currentCardIndex).execute();
+	private void callCardCreation() {
+		Intent intent = IntentFactory.createCardCreationIntent(this, cardsUri);
+		startActivity(intent);
 	}
 
 	@Override
@@ -220,5 +353,30 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Shak
 		super.onResume();
 
 		shakeDetector.start(sensorManager);
+
+		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		shakeDetector.stop();
+
+		BusProvider.getInstance().unregister(this);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		saveCurrentCardIndex();
+	}
+
+	private void saveCurrentCardIndex() {
+		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
+		int currentCardIndex = getCardsPager().getCurrentItem();
+
+		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);
 	}
 }

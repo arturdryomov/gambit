@@ -17,8 +17,8 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.net.Uri;
 import android.support.v4.app.Fragment;
-import ru.ming13.gambit.local.model.Deck;
 import ru.ming13.gambit.ui.fragment.CardsFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;
@@ -28,16 +28,16 @@ public class CardsActivity extends FragmentWrapperActivity
 {
 	@Override
 	protected Fragment buildFragment() {
-		return CardsFragment.newInstance(extractReceivedDeck());
+		return CardsFragment.newInstance(extractReceivedDeckUri());
 	}
 
-	private Deck extractReceivedDeck() {
-		Deck deck = getIntent().getParcelableExtra(IntentExtras.DECK);
+	private Uri extractReceivedDeckUri() {
+		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
 
-		if (deck == null) {
+		if (deckUri == null) {
 			throw new IntentException();
 		}
 
-		return deck;
+		return deckUri;
 	}
 }

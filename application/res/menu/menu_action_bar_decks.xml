@@ -18,9 +18,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:id="@+id/menu_create_item"
-		android:icon="@drawable/ic_menu_content_new"
-		android:title="@string/menu_create_new_item"
+		android:id="@+id/menu_new_deck"
+		android:icon="@drawable/ic_menu_new"
+		android:title="@string/menu_new_deck"
 		android:showAsAction="always" />
+
+	<item
+		android:id="@+id/menu_send_feedback"
+		android:title="@string/menu_send_feedback"
+		android:showAsAction="never" />
+
+	<item
+		android:id="@+id/menu_rate_application"
+		android:title="@string/menu_rate_application"
+		android:showAsAction="never" />
+
+	<item
+		android:id="@+id/menu_licenses"
+		android:title="@string/menu_licenses"
+		android:showAsAction="never" />
 
 </menu>

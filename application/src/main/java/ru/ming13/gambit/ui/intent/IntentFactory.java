@@ -19,14 +19,16 @@ package ru.ming13.gambit.ui.intent;
 
 import android.content.Context;
 import android.content.Intent;
-import ru.ming13.gambit.local.model.Card;
-import ru.ming13.gambit.local.model.Deck;
+import android.net.Uri;
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.activity.CardCreationActivity;
 import ru.ming13.gambit.ui.activity.CardModificationActivity;
 import ru.ming13.gambit.ui.activity.CardsActivity;
 import ru.ming13.gambit.ui.activity.CardsPagerActivity;
 import ru.ming13.gambit.ui.activity.DeckCreationActivity;
 import ru.ming13.gambit.ui.activity.DeckRenamingActivity;
+import ru.ming13.gambit.ui.activity.DecksActivity;
+import ru.ming13.gambit.ui.activity.LicensesActivity;
 
 
 public final class IntentFactory
@@ -34,42 +36,72 @@ public final class IntentFactory
 	private IntentFactory() {
 	}
 
+	public static Intent createDecksIntent(Context context) {
+		return new Intent(context, DecksActivity.class);
+	}
+
 	public static Intent createDeckCreationIntent(Context context) {
 		return new Intent(context, DeckCreationActivity.class);
 	}
 
-	public static Intent createDeckRenamingIntent(Context context, Deck deck) {
+	public static Intent createDeckRenamingIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, DeckRenamingActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}
 
-	public static Intent createCardsIntent(Context context, Deck deck) {
+	public static Intent createCardsIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, CardsActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}
 
-	public static Intent createCardCreationIntent(Context context, Deck deck) {
+	public static Intent createCardCreationIntent(Context context, Uri cardsUri) {
 		Intent intent = new Intent(context, CardCreationActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.CARDS_URI, cardsUri);
 
 		return intent;
 	}
 
-	public static Intent createCardModificationIntent(Context context, Card card) {
+	public static Intent createCardModificationIntent(Context context, Uri cardUri) {
 		Intent intent = new Intent(context, CardModificationActivity.class);
-		intent.putExtra(IntentExtras.CARD, card);
+		intent.putExtra(IntentExtras.CARD_URI, cardUri);
 
 		return intent;
 	}
 
-	public static Intent createCardsPagerIntent(Context context, Deck deck) {
+	public static Intent createCardsPagerIntent(Context context, Uri deckUri) {
 		Intent intent = new Intent(context, CardsPagerActivity.class);
-		intent.putExtra(IntentExtras.DECK, deck);
+		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
+	}
+
+	public static Intent createLicensesIntent(Context context) {
+		return new Intent(context, LicensesActivity.class);
+	}
+
+	public static Intent createFeedbackEmailIntent(Context context) {
+		String feedbackAddress = context.getString(R.string.email_address_feedback);
+		String feedbackSubject = context.getString(R.string.email_subject_feedback);
+
+		Uri emailUri = Uri.parse(
+			context.getString(R.string.email_uri_format, feedbackAddress, feedbackSubject));
+
+		return new Intent(Intent.ACTION_SENDTO, emailUri);
+	}
+
+	public static Intent createGooglePlayAppIntent(Context context) {
+		Uri googlePlayUri = Uri.parse(context.getString(R.string.url_app_google_play));
+
+		return new Intent(Intent.ACTION_VIEW, googlePlayUri);
+	}
+
+	public static Intent createGooglePlayWebIntent(Context context) {
+		Uri googlePlayUri = Uri.parse(context.getString(R.string.url_web_google_play));
+
+		return new Intent(Intent.ACTION_VIEW, googlePlayUri);
 	}
 }

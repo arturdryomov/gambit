@@ -30,7 +30,7 @@ public class ActionModeProvider
 {
 	public interface ContextMenuHandler
 	{
-		boolean handleContextMenu(MenuItem menuItem, int listItemPosition);
+		boolean handleContextMenu(MenuItem menuItem, long listItemId);
 	}
 
 	private final ListView listView;
@@ -71,7 +71,7 @@ public class ActionModeProvider
 
 		@Override
 		public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-			ActionModeCallback actionModeCallback = new ActionModeCallback(contextMenuHandler, position,
+			ActionModeCallback actionModeCallback = new ActionModeCallback(contextMenuHandler, id,
 				contextMenuResourceId);
 			listView.startActionMode(actionModeCallback);
 
@@ -84,13 +84,13 @@ public class ActionModeProvider
 		private final ContextMenuHandler contextMenuHandler;
 		private final int contextMenuResourceId;
 
-		private final int listItemPosition;
+		private final long listItemId;
 
-		public ActionModeCallback(ContextMenuHandler contextMenuHandler, int listItemPosition, int contextMenuResourceId) {
+		public ActionModeCallback(ContextMenuHandler contextMenuHandler, long listItemId, int contextMenuResourceId) {
 			this.contextMenuHandler = contextMenuHandler;
 			this.contextMenuResourceId = contextMenuResourceId;
 
-			this.listItemPosition = listItemPosition;
+			this.listItemId = listItemId;
 		}
 
 		@Override
@@ -107,7 +107,7 @@ public class ActionModeProvider
 
 		@Override
 		public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-			if (contextMenuHandler.handleContextMenu(menuItem, listItemPosition)) {
+			if (contextMenuHandler.handleContextMenu(menuItem, listItemId)) {
 				actionMode.finish();
 
 				return true;

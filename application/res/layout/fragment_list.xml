@@ -22,12 +22,35 @@
 		android:id="@android:id/list"
 		android:choiceMode="none"
 		android:orientation="vertical"
+		android:fastScrollEnabled="true"
+		android:scrollbarStyle="outsideOverlay"
+		android:paddingLeft="@dimen/padding_horizontal_list"
+		android:paddingRight="@dimen/padding_horizontal_list"
 		style="@style/FullParentLayout" />
 
-	<TextView
-		android:id="@android:id/empty"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true" />
+	<LinearLayout
+		android:orientation="vertical"
+		android:gravity="center"
+		style="@style/FullParentLayout">
+
+		<TextView
+			android:id="@+id/empty_title"
+			android:textSize="@dimen/text_size_empty_list_title"
+			android:textStyle="bold"
+			android:visibility="gone"
+			android:gravity="center_horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
+
+		<TextView
+			android:id="@+id/empty_subtitle"
+			android:textSize="@dimen/text_size_empty_list_subtitle"
+			android:visibility="gone"
+			android:gravity="center_horizontal"
+			android:layout_marginTop="@dimen/margin_top_empty_list_subtitle"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
+
+	</LinearLayout>
 
 </RelativeLayout>

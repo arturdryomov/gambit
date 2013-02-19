@@ -17,7 +17,6 @@
 package ru.ming13.gambit.ui.fragment;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,33 +29,9 @@ import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 
 
-/**
- * Parent activity should implement FormCallback to handle cancel and accept.
- * You could call finish() in callback methods for example.
- */
 abstract class FormFragment extends SherlockFragment
 {
 	private static final boolean ENABLE_OPTIONS_MENU_FILLING = true;
-
-	public interface FormCallback
-	{
-		<Data> void onAccept(Data data);
-
-		void onCancel();
-	}
-
-	private FormCallback formCallback;
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-
-		if (!(activity instanceof FormCallback)) {
-			throw new FragmentException();
-		}
-
-		formCallback = (FormCallback) activity;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
@@ -80,7 +55,7 @@ abstract class FormFragment extends SherlockFragment
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_accept:
+			case R.id.menu_done:
 				checkAndAcceptUserData();
 				return true;
 
@@ -97,7 +72,7 @@ abstract class FormFragment extends SherlockFragment
 		readUserDataFromFields();
 
 		if (isUserDataCorrect()) {
-			performAcceptAction(null);
+			performAcceptAction();
 		}
 		else {
 			setUpErrorMessages();
@@ -108,19 +83,11 @@ abstract class FormFragment extends SherlockFragment
 
 	protected abstract boolean isUserDataCorrect();
 
-	/**
-	 * If this method calls some async code you should call super.performAcceptAction()
-	 * on its’ finish to provide callback for the parent activity and finish job correct way.
-	 */
-	protected <Data> void performAcceptAction(Data data) {
-		formCallback.onAccept(data);
-	}
+	protected abstract void performAcceptAction();
 
 	protected abstract void setUpErrorMessages();
 
-	protected void performCancelAction() {
-		formCallback.onCancel();
-	}
+	protected abstract void performCancelAction();
 
 	protected String getTextFromEdit(int editTextId) {
 		return getEdit(editTextId).getText().toString().trim();
@@ -136,9 +103,5 @@ abstract class FormFragment extends SherlockFragment
 
 	protected void setErrorToEdit(int editTextId, int errorMessageResourceId) {
 		getEdit(editTextId).setError(getString(errorMessageResourceId));
-	}
-
-	protected void setErrorToEdit(int editTextId, String errorMessage) {
-		getEdit(editTextId).setError(errorMessage);
 	}
 }
