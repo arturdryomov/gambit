@@ -32,8 +32,9 @@
 
 	<repositories>
 		<repository>
-			<id>novoda-mvn-repo</id>
-			<url>https://github.com/novoda/public-mvn-repo/raw/master/releases</url>
+			<name>The BugSense Repository</name>
+			<id>bugsense-repo</id>
+			<url>http://mvn.bugsense.com/</url>
 		</repository>
 	</repositories>
 
@@ -78,7 +79,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.bugsense</groupId>
+			<groupId>com.bugsense.trace</groupId>
 			<artifactId>bugsense</artifactId>
 			<version>3.2</version>
 		</dependency>
