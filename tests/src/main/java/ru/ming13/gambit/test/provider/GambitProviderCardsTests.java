@@ -62,6 +62,34 @@ public class GambitProviderCardsTests extends GambitProviderTestCase
 		assertThat(actualCardBackSideText).isEqualTo(Content.CARD_BACK_SIDE_TEXT);
 	}
 
+	public void testCardInsertionWithSingleQuoteInTexts() {
+		String frontSideTextWithSingleQuote = String.format("\'%s", Content.CARD_FRONT_SIDE_TEXT);
+		String backSideTextWithSingleQuote = String.format("\'%s", Content.CARD_BACK_SIDE_TEXT);
+
+		Uri cardUri = insertCard(deckUri, frontSideTextWithSingleQuote, backSideTextWithSingleQuote);
+		assertThat(cardUri).isNotNull();
+
+		String actualCardFrontSideText = queryCardSidesTexts(cardUri).first;
+		String actualCardBackSideText = queryCardSidesTexts(cardUri).second;
+
+		assertThat(actualCardFrontSideText).isEqualTo(frontSideTextWithSingleQuote);
+		assertThat(actualCardBackSideText).isEqualTo(backSideTextWithSingleQuote);
+	}
+
+	public void testCardInsertionWithDoubleQuoteInTexts() {
+		String frontSideTextWithDoubleQuote = String.format("\"%s", Content.CARD_FRONT_SIDE_TEXT);
+		String backSideTextWithDoubleQuote = String.format("\"%s", Content.CARD_BACK_SIDE_TEXT);
+
+		Uri cardUri = insertCard(deckUri, frontSideTextWithDoubleQuote, backSideTextWithDoubleQuote);
+		assertThat(cardUri).isNotNull();
+
+		String actualCardFrontSideText = queryCardSidesTexts(cardUri).first;
+		String actualCardBackSideText = queryCardSidesTexts(cardUri).second;
+
+		assertThat(actualCardFrontSideText).isEqualTo(frontSideTextWithDoubleQuote);
+		assertThat(actualCardBackSideText).isEqualTo(backSideTextWithDoubleQuote);
+	}
+
 	public void testCardUpdating() {
 		Uri cardUri = insertCard(deckUri, Content.CARD_FRONT_SIDE_TEXT, Content.CARD_BACK_SIDE_TEXT);
 

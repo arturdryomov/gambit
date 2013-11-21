@@ -21,7 +21,7 @@
 
 	<groupId>ru.ming13.gambit</groupId>
 	<artifactId>gambit-parent</artifactId>
-	<version>0.8.5</version>
+	<version>0.8.6</version>
 	<packaging>pom</packaging>
 
 	<name>Gambit Parent</name>
@@ -35,7 +35,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<android.version>4.1.1.4</android.version>
-		<android.version.platform>16</android.version.platform>
+		<android.version.platform>19</android.version.platform>
 	</properties>
 
 	<build>
@@ -54,7 +54,7 @@
 				<plugin>
 					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 					<artifactId>android-maven-plugin</artifactId>
-					<version>3.5.0</version>
+					<version>3.8.0</version>
 					<extensions>true</extensions>
 					<configuration>
 						<sdk>

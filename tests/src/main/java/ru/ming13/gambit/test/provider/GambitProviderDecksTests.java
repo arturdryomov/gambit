@@ -49,6 +49,24 @@ public class GambitProviderDecksTests extends GambitProviderTestCase
 		assertThat(actualDeckTitle).isEqualTo(Content.DECK_TITLE);
 	}
 
+	public void testDeckWithSingleQuoteInTitleInsertion() {
+		String deckTitleWithSingleQuote = String.format("\'%s", Content.DECK_TITLE);
+		Uri deckUri = insertDeck(deckTitleWithSingleQuote);
+		assertThat(deckUri).isNotNull();
+
+		String actualDeckTitle = queryDeckTitle(deckUri);
+		assertThat(actualDeckTitle).isEqualTo(deckTitleWithSingleQuote);
+	}
+
+	public void testDeckWithDoubleQuoteInTitleInsertion() {
+		String deckTitleWithDoubleQuote = String.format("\"%s", Content.DECK_TITLE);
+		Uri deckUri = insertDeck(deckTitleWithDoubleQuote);
+		assertThat(deckUri).isNotNull();
+
+		String actualDeckTitle = queryDeckTitle(deckUri);
+		assertThat(actualDeckTitle).isEqualTo(deckTitleWithDoubleQuote);
+	}
+
 	public void testDuplicateDeckInsertion() {
 		try {
 			insertDeck(Content.DECK_TITLE);

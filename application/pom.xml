@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>ru.ming13.gambit</groupId>
 		<artifactId>gambit-parent</artifactId>
-		<version>0.8.5</version>
+		<version>0.8.6</version>
 	</parent>
 
 	<artifactId>gambit-application</artifactId>
@@ -32,8 +32,8 @@
 
 	<repositories>
 		<repository>
-			<id>novoda-mvn-repo</id>
-			<url>https://github.com/novoda/public-mvn-repo/raw/master/releases</url>
+			<id>bugsense-repo</id>
+			<url>http://www.bugsense.com/maven/</url>
 		</repository>
 	</repositories>
 
@@ -48,7 +48,7 @@
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
 			<artifactId>actionbarsherlock</artifactId>
-			<version>4.2.0</version>
+			<version>4.4.0</version>
 			<type>apklib</type>
 		</dependency>
 
@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>com.squareup</groupId>
 			<artifactId>otto</artifactId>
-			<version>1.3.3</version>
+			<version>1.3.4</version>
 		</dependency>
 
 		<dependency>
@@ -78,7 +78,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.bugsense</groupId>
+			<groupId>com.bugsense.trace</groupId>
 			<artifactId>bugsense</artifactId>
 			<version>3.2</version>
 		</dependency>
