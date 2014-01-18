@@ -17,18 +17,18 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.webkit.WebView;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.intent.IntentFactory;
 
 
-public class LicensesActivity extends SherlockActivity
+public class LicensesActivity extends Activity
 {
 	private static final String SCHEME = ContentResolver.SCHEME_FILE;
 	private static final String AUTHORITY = "android_asset";
@@ -47,7 +47,7 @@ public class LicensesActivity extends SherlockActivity
 	}
 
 	private void setUpHomeButton() {
-		getSupportActionBar().setHomeButtonEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 	}
 
 	private void setUpLicenses() {

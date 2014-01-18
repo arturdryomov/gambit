@@ -17,27 +17,27 @@
 package ru.ming13.gambit.ui.fragment;
 
 
+import android.app.ListFragment;
+import android.app.LoaderManager;
 import android.content.ActivityNotFoundException;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.intent.IntentFactory;
@@ -46,7 +46,7 @@ import ru.ming13.gambit.ui.task.DeckDeletionTask;
 import ru.ming13.gambit.ui.util.ActionModeProvider;
 
 
-public class DecksFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
+public class DecksFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
 {
 	private CursorAdapter decksAdapter;
 

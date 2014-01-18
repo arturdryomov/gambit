@@ -17,42 +17,24 @@
 
 <resources>
 
-	<style name="Theme.Gambit" parent="Theme.Sherlock.Light.DarkActionBar">
-		<item name="actionBarStyle">@style/Theme.Gambit.ActionBar</item>
+	<style name="Theme.Gambit" parent="@android:style/Theme.Holo">
 		<item name="android:actionBarStyle">@style/Theme.Gambit.ActionBar</item>
-
-		<!-- Show orange action bar button background on tap only on pre-Honeycomb devices. -->
-		<item name="actionBarItemBackground">@drawable/background_action_bar_item</item>
-
-		<!-- Fix pre-Honeycomb too light EditText error messages. -->
-		<item name="android:textColorSecondaryInverse">@android:color/secondary_text_light</item>
-
-		<!-- Change background color -->
-		<item name="android:colorBackground">@color/background_window</item>
-		<item name="android:colorBackgroundCacheHint">@color/background_window</item>
-		<item name="android:windowBackground">@color/background_window</item>
 	</style>
 
-	<style name="Theme.Gambit.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+	<style name="Theme.Gambit.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
 		<item name="android:background">@color/background_action_bar</item>
-		<item name="background">@color/background_action_bar</item>
-
 		<item name="android:displayOptions">showTitle|showHome|homeAsUp</item>
-		<item name="displayOptions">showTitle|showHome|homeAsUp</item>
 	</style>
 
 	<style name="Theme.Gambit.Home" parent="Theme.Gambit">
-		<item name="actionBarStyle">@style/Theme.Gambit.Home.ActionBar</item>
 		<item name="android:actionBarStyle">@style/Theme.Gambit.Home.ActionBar</item>
 	</style>
 
 	<style name="Theme.Gambit.Home.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showTitle</item>
-		<item name="displayOptions">showTitle</item>
 	</style>
 
 	<style name="Theme.Gambit.Cards" parent="Theme.Gambit">
-		<item name="actionBarStyle">@style/Theme.Gambit.Cards.ActionBar</item>
 		<item name="android:actionBarStyle">@style/Theme.Gambit.Cards.ActionBar</item>
 
 		<!-- Change background color -->
@@ -63,17 +45,14 @@
 
 	<style name="Theme.Gambit.Cards.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showHome|homeAsUp</item>
-		<item name="displayOptions">showHome|homeAsUp</item>
 	</style>
 
 	<style name="Theme.Gambit.Operation" parent="Theme.Gambit">
-		<item name="actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
 		<item name="android:actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
 	</style>
 
 	<style name="Theme.Gambit.Operation.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showTitle</item>
-		<item name="displayOptions">showTitle</item>
 	</style>
 
 </resources>

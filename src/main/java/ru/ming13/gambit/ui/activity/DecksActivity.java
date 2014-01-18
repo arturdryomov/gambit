@@ -17,7 +17,8 @@
 package ru.ming13.gambit.ui.activity;
 
 
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+
 import ru.ming13.gambit.ui.fragment.DecksFragment;
 
 

@@ -17,18 +17,18 @@
 package ru.ming13.gambit.ui.fragment;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.actionbarsherlock.app.SherlockFragment;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.CardsListCalledFromCardsEmptyPagerEvent;
 
 
-public class CardEmptyFragment extends SherlockFragment implements View.OnClickListener
+public class CardEmptyFragment extends Fragment implements View.OnClickListener
 {
 	public static CardEmptyFragment newInstance() {
 		return new CardEmptyFragment();

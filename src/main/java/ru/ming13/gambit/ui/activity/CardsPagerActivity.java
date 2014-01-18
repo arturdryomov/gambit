@@ -17,21 +17,21 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.squareup.otto.Subscribe;
 import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
@@ -53,7 +53,7 @@ import ru.ming13.gambit.ui.task.DeckCurrentCardQueryingTask;
 import ru.ming13.gambit.ui.task.DeckCurrentCardSavingTask;
 
 
-public class CardsPagerActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
+public class CardsPagerActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
 {
 	private static enum CardsOrder
 	{
@@ -82,7 +82,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void setUpHomeButton() {
-		getSupportActionBar().setHomeButtonEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
 	}
 
 	private void setUpCardsUri() {
@@ -102,7 +102,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void loadCards() {
-		getSupportLoaderManager().initLoader(Loaders.CARDS, null, this);
+		getLoaderManager().initLoader(Loaders.CARDS, null, this);
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 			return;
 		}
 
-		CardsPagerAdapter adapter = new CardsPagerAdapter(getSupportFragmentManager(), cardsCursor);
+		CardsPagerAdapter adapter = new CardsPagerAdapter(getFragmentManager(), cardsCursor);
 		getCardsPager().setAdapter(adapter);
 	}
 
@@ -154,7 +154,7 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 	}
 
 	private void invalidateActionBarItems() {
-		supportInvalidateOptionsMenu();
+		invalidateOptionsMenu();
 	}
 
 	private void setUpCurrentCardIndex() {
@@ -251,15 +251,15 @@ public class CardsPagerActivity extends SherlockFragmentActivity implements Load
 
 		switch (cardsOrder) {
 			case SHUFFLE:
-				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_enabled, menu);
+				getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_enabled, menu);
 				return true;
 
 			case ORIGINAL:
-				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
+				getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
 				return true;
 
 			case DEFAULT:
-				getSupportMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
+				getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
 				return true;
 
 			default:
