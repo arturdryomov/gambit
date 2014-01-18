@@ -17,13 +17,13 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 
-abstract class FragmentWrapperActivity extends SherlockFragmentActivity
+abstract class FragmentWrapperActivity extends Activity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +39,11 @@ abstract class FragmentWrapperActivity extends SherlockFragmentActivity
 	}
 
 	private boolean isFragmentInstalled() {
-		return getSupportFragmentManager().findFragmentById(android.R.id.content) != null;
+		return getFragmentManager().findFragmentById(android.R.id.content) != null;
 	}
 
 	private void installFragment() {
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
 		fragmentTransaction.add(android.R.id.content, buildFragment());
 

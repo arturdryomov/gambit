@@ -17,8 +17,8 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.app.Fragment;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import ru.ming13.gambit.ui.fragment.CardsFragment;
 import ru.ming13.gambit.ui.intent.IntentException;
 import ru.ming13.gambit.ui.intent.IntentExtras;

@@ -17,19 +17,19 @@
 package ru.ming13.gambit.ui.fragment;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import ru.ming13.gambit.R;
 
 
-abstract class FormFragment extends SherlockFragment
+abstract class FormFragment extends Fragment
 {
 	private static final boolean ENABLE_OPTIONS_MENU_FILLING = true;
 

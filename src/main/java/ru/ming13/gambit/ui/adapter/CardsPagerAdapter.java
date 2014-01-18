@@ -17,10 +17,11 @@
 package ru.ming13.gambit.ui.adapter;
 
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.database.Cursor;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
+
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.ui.fragment.CardEmptyFragment;
 import ru.ming13.gambit.ui.fragment.CardFragment;

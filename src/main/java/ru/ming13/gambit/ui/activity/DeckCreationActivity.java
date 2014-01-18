@@ -17,9 +17,9 @@
 package ru.ming13.gambit.ui.activity;
 
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import com.squareup.otto.Subscribe;
 import ru.ming13.gambit.ui.bus.BusProvider;
 import ru.ming13.gambit.ui.bus.DeckCreatedEvent;
