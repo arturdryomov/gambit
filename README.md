@@ -13,16 +13,28 @@ Gambit is a really simple flashcards viewer and manager for Android.
 
 ## Building
 
-The build requires Maven and the Android SDK to be installed.
+You will need JDK 1.6, Android SDK 22 and Gradle 1.8 installed.
 
-The building process is very simple.
+1. Install required Android components.
 
-* Run `mvn -f application/pom.xml clean package` to build the application.
-* Run `mvn clean integration-test` to build the application and run tests.
-* Run `mvn -f application/pom.xml clean package site` to build the application and generate reports site.
+  ```
+  $ android update sdk --no-ui --force --all --filter build-tools-19.0.0
+  $ android update sdk --no-ui --force --all --filter android-19
+  $ android update sdk --no-ui --force --all --filter extra-android-m2repository
+  ```
 
-For correct building you should set up API keys.
-Look at `application/res/xml/apis.template.xml` for details.
+2. Set API keys.
+
+  ```
+  $ cp src/main/res/xml/apis.template.xml src/main/res/values/apis.xml
+  $ vi src/main/res/values/apis.xml
+  ```
+
+3. Build application.
+
+  ```
+  $ gradle clean assembleDebug
+  ```
 
 ## Acknowledgements
 
