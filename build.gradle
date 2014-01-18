@@ -35,16 +35,12 @@ dependencies {
         maven {
             url "http://dl.bintray.com/populov/maven"
         }
-        maven {
-            url "http://www.bugsense.com/gradle/"
-        }
 
         mavenCentral()
     }
 
     compile "com.android.support:support-v4:19.0.+"
     compile "com.android.support:support-v13:19.0.+"
-    compile "com.bugsense.trace:bugsense:3.6"
     compile "com.squareup:otto:1.3.+"
     compile "com.squareup:seismic:1.0.+"
     compile "com.viewpagerindicator:library:2.4.1@aar"

@@ -28,7 +28,6 @@
 		android:targetSdkVersion="19" />
 
 	<application
-		android:name="GambitApplication"
 		android:icon="@drawable/ic_launcher"
 		android:label="@string/application_name"
 		android:theme="@style/Theme.Gambit">
