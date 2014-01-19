@@ -15,42 +15,45 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/FullParentLayout">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
 	<ListView
 		android:id="@android:id/list"
-		android:choiceMode="none"
-		android:orientation="vertical"
 		android:fastScrollEnabled="true"
 		android:scrollbarStyle="outsideOverlay"
-		android:paddingLeft="@dimen/padding_horizontal_list"
-		android:paddingRight="@dimen/padding_horizontal_list"
-		style="@style/FullParentLayout" />
+		android:paddingLeft="@dimen/padding_list"
+		android:paddingRight="@dimen/padding_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
 
 	<LinearLayout
+		android:id="@+id/layout_message"
+		android:visibility="gone"
 		android:orientation="vertical"
+		android:paddingLeft="@dimen/padding_list_message"
+		android:paddingRight="@dimen/padding_list_message"
 		android:gravity="center"
-		style="@style/FullParentLayout">
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
 		<TextView
-			android:id="@+id/empty_title"
-			android:textSize="@dimen/text_size_empty_list_title"
+			android:id="@+id/text_message_title"
+			android:textSize="@dimen/text_list_message_title"
 			android:textStyle="bold"
-			android:visibility="gone"
 			android:gravity="center_horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
 
 		<TextView
-			android:id="@+id/empty_subtitle"
-			android:textSize="@dimen/text_size_empty_list_subtitle"
-			android:visibility="gone"
+			android:id="@+id/text_message_summary"
+			android:textSize="@dimen/text_list_message_summary"
+			android:paddingTop="@dimen/padding_list_message_summary"
 			android:gravity="center_horizontal"
-			android:layout_marginTop="@dimen/margin_top_empty_list_subtitle"
-			android:layout_width="match_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"/>
 
 	</LinearLayout>
 
-</RelativeLayout>
+</FrameLayout>

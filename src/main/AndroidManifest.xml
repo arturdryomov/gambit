@@ -21,8 +21,6 @@
 	android:versionName="0.8.6"
 	android:installLocation="auto">
 
-	<uses-permission android:name="android.permission.INTERNET" />
-
 	<uses-sdk
 		android:minSdkVersion="14"
 		android:targetSdkVersion="19" />
@@ -33,7 +31,7 @@
 		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:name=".ui.activity.DecksActivity"
+			android:name=".activity.DecksActivity"
 			android:theme="@style/Theme.Gambit.Home">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -43,42 +41,42 @@
 		</activity>
 
 		<activity
-			android:name=".ui.activity.DeckCreationActivity"
+			android:name=".activity.DeckCreationActivity"
 			android:label="@string/title_new_deck"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
-			android:name=".ui.activity.DeckRenamingActivity"
+			android:name=".activity.DeckRenamingActivity"
 			android:label="@string/title_rename_deck"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
-			android:name=".ui.activity.CardsActivity"
+			android:name=".activity.CardsActivity"
 			android:label="@string/title_edit_cards">
 		</activity>
 
 		<activity
-			android:name=".ui.activity.CardsPagerActivity"
+			android:name=".activity.CardsPagerActivity"
 			android:label="@string/title_cards"
 			android:theme="@style/Theme.Gambit.Cards">
 		</activity>
 
 		<activity
-			android:name=".ui.activity.CardCreationActivity"
+			android:name=".activity.CardCreationActivity"
 			android:label="@string/title_new_card"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
-			android:name=".ui.activity.CardModificationActivity"
+			android:name=".activity.CardModificationActivity"
 			android:label="@string/title_edit_card"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
-			android:name=".ui.activity.LicensesActivity"
+			android:name=".activity.LicensesActivity"
 			android:label="@string/title_licenses">
 		</activity>
 

@@ -24,7 +24,7 @@
 	<TextView
 		android:id="@+id/empty_title"
 		android:text="@string/empty_cards_title"
-		android:textSize="@dimen/text_size_empty_list_title"
+		android:textSize="@dimen/text_list_message_title"
 		android:textStyle="bold"
 		android:gravity="center_horizontal"
 		android:layout_width="match_parent"

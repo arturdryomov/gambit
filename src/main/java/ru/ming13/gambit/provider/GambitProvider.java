@@ -31,8 +31,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import ru.ming13.gambit.db.DbOpenHelper;
-import ru.ming13.gambit.db.DbSchema;
+import ru.ming13.gambit.database.DbOpenHelper;
+import ru.ming13.gambit.database.DbSchema;
 
 
 public class GambitProvider extends ContentProvider

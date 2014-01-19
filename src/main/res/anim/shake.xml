@@ -16,7 +16,22 @@
   ~ limitations under the License.
   -->
 
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/web_licenses"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"/>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+	android:shareInterpolator="false"
+	android:ordering="sequentially">
+
+	<translate
+		android:fromXDelta="0%"
+		android:toXDelta="3%"
+		android:duration="150"
+		android:repeatCount="2"
+		android:interpolator="@android:anim/cycle_interpolator" />
+
+	<translate
+		android:fromXDelta="0%"
+		android:toXDelta="1%"
+		android:duration="100"
+		android:repeatCount="2"
+		android:interpolator="@android:anim/cycle_interpolator" />
+
+</set>

@@ -1,0 +1,67 @@
+/*
+ * Copyright 2012 Artur Dryomov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ru.ming13.gambit.activity;
+
+
+import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
+import com.squareup.otto.Subscribe;
+import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.DeckCreatedEvent;
+import ru.ming13.gambit.bus.DeckCreationCancelledEvent;
+import ru.ming13.gambit.fragment.DeckCreationFragment;
+import ru.ming13.gambit.intent.IntentFactory;
+
+
+public class DeckCreationActivity extends FragmentWrapperActivity
+{
+	@Override
+	protected Fragment buildFragment() {
+		return DeckCreationFragment.newInstance();
+	}
+
+	@Subscribe
+	public void onDeckCreated(DeckCreatedEvent deckCreatedEvent) {
+		callCardsList(deckCreatedEvent.getDeckUri());
+		finish();
+	}
+
+	private void callCardsList(Uri deckUri) {
+		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
+		startActivity(intent);
+	}
+
+	@Subscribe
+	public void onDeckCreationCancelled(DeckCreationCancelledEvent deckCreationCancelledEvent) {
+		finish();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		BusProvider.getInstance().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		BusProvider.getInstance().unregister(this);
+	}
+}

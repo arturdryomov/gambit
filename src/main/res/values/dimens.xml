@@ -17,21 +17,34 @@
 
 <resources>
 
+	<!-- Default metrics and typography style. -->
+
+	<dimen name="space_ui_element">8dp</dimen>
+	<dimen name="space_ui_element_double">16dp</dimen>
+
+	<dimen name="text_micro">12dp</dimen>
+	<dimen name="text_small">14sp</dimen>
+	<dimen name="text_medium">18sp</dimen>
+	<dimen name="text_large">22sp</dimen>
+
+	<!-- Actual dimensions. -->
+
 	<dimen name="margin_top_form_item">8dp</dimen>
 	<dimen name="margin_top_empty_list_subtitle">8dp</dimen>
 	<dimen name="margin_card">7dp</dimen>
 
-	<dimen name="padding_horizontal_list">6dp</dimen>
-	<dimen name="padding_horizontal_list_item">8dp</dimen>
-	<dimen name="padding_form_layout">16dp</dimen>
-	<dimen name="padding_bottom_card">2dp</dimen>
-	<dimen name="padding_horizontal_card">1dp</dimen>
-	<dimen name="padding_top_card_shadow">1dp</dimen>
+	<dimen name="padding_list">@dimen/space_ui_element_double</dimen>
+	<dimen name="padding_list_item">@dimen/space_ui_element</dimen>
+	<dimen name="padding_list_message">40dp</dimen>
+	<dimen name="padding_list_message_summary">@dimen/space_ui_element</dimen>
 
-	<dimen name="text_size_one_line_list_item">18sp</dimen>
+	<dimen name="padding_form_layout">16dp</dimen>
+
+	<dimen name="text_list_item">@dimen/text_medium</dimen>
+	<dimen name="text_list_message_title">@dimen/text_large</dimen>
+	<dimen name="text_list_message_summary">@dimen/text_medium</dimen>
+
 	<dimen name="text_size_card">30sp</dimen>
-	<dimen name="text_size_empty_list_title">22sp</dimen>
-	<dimen name="text_size_empty_list_subtitle">18sp</dimen>
 
 	<dimen name="height_card_indicator">2dp</dimen>
 

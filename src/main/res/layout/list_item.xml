@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -16,7 +14,11 @@
   ~ limitations under the License.
   -->
 
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/web_licenses"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/text"
+	android:singleLine="true"
+	android:textSize="@dimen/text_list_item"
+	android:gravity="center_vertical"
+	android:padding="@dimen/padding_list_item"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"/>
+	android:layout_height="?android:attr/listPreferredItemHeight" />
