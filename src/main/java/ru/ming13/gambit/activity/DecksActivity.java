@@ -17,15 +17,90 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.fragment.DecksFragment;
+import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.Intents;
 
 
-public class DecksActivity extends FragmentWrapperActivity
+public class DecksActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpFragment();
+	}
+
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
+
+	private Fragment buildFragment() {
 		return DecksFragment.newInstance();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_action_bar_decks, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case R.id.menu_new_deck:
+				startDeckCreationActivity();
+				return true;
+
+			case R.id.menu_send_feedback:
+				startFeedbackSending();
+				return true;
+
+			case R.id.menu_rate_application:
+				startApplicationRating();
+				return true;
+
+			case R.id.menu_licenses:
+				startLicensesActivity();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(menuItem);
+		}
+	}
+
+	private void startDeckCreationActivity() {
+		Intent intent = Intents.Builder.with(this).buildDeckCreationIntent();
+		startActivity(intent);
+	}
+
+	private void startFeedbackSending() {
+		Intent intent = Intents.Builder.with(this).buildFeedbackIntent();
+		startActivity(intent);
+	}
+
+	private void startApplicationRating() {
+		try {
+			Intent intent = Intents.Builder.with(this).buildGooglePlayAppIntent();
+			startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			Intent intent = Intents.Builder.with(this).buildGooglePlayWebIntent();
+			startActivity(intent);
+		}
+	}
+
+	private void startLicensesActivity() {
+		Intent intent = Intents.Builder.with(this).buildLicensesIntent();
+		startActivity(intent);
 	}
 }

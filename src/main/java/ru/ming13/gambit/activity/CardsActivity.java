@@ -17,27 +17,71 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.fragment.CardsFragment;
-import ru.ming13.gambit.intent.IntentException;
-import ru.ming13.gambit.intent.IntentExtras;
+import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.Intents;
 
 
-public class CardsActivity extends FragmentWrapperActivity
+public class CardsActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
-		return CardsFragment.newInstance(extractReceivedDeckUri());
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpFragment();
 	}
 
-	private Uri extractReceivedDeckUri() {
-		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
 
-		if (deckUri == null) {
-			throw new IntentException();
+	protected Fragment buildFragment() {
+		return CardsFragment.newInstance(getDeckUri());
+	}
+
+	private Uri getDeckUri() {
+		return getIntent().getParcelableExtra(Intents.Extras.URI);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_action_bar_cards, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+
+			case R.id.menu_new_card:
+				callCardCreationActivity();
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(menuItem);
 		}
+	}
 
-		return deckUri;
+	private void callCardCreationActivity() {
+		Intent intent = Intents.Builder.with(this).buildCardCreationIntent(getCardsUri());
+		startActivity(intent);
+	}
+
+	private Uri getCardsUri() {
+		return GambitContract.Cards.buildCardsUri(getDeckUri());
 	}
 }

@@ -17,33 +17,39 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
+
 import com.squareup.otto.Subscribe;
+
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckCreatedEvent;
 import ru.ming13.gambit.bus.DeckCreationCancelledEvent;
 import ru.ming13.gambit.fragment.DeckCreationFragment;
-import ru.ming13.gambit.intent.IntentFactory;
+import ru.ming13.gambit.util.Fragments;
 
 
-public class DeckCreationActivity extends FragmentWrapperActivity
+public class DeckCreationActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpFragment();
+	}
+
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
+
+	private Fragment buildFragment() {
 		return DeckCreationFragment.newInstance();
 	}
 
 	@Subscribe
 	public void onDeckCreated(DeckCreatedEvent deckCreatedEvent) {
-		callCardsList(deckCreatedEvent.getDeckUri());
 		finish();
-	}
-
-	private void callCardsList(Uri deckUri) {
-		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
-		startActivity(intent);
 	}
 
 	@Subscribe

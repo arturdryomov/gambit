@@ -21,6 +21,7 @@
 
 	<ListView
 		android:id="@android:id/list"
+		android:choiceMode="multipleChoiceModal"
 		android:fastScrollEnabled="true"
 		android:scrollbarStyle="outsideOverlay"
 		android:paddingLeft="@dimen/padding_list"

@@ -18,77 +18,40 @@ package ru.ming13.gambit.activity;
 
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Intent;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-import android.webkit.WebView;
-import ru.ming13.gambit.R;
-import ru.ming13.gambit.intent.IntentFactory;
+
+import ru.ming13.gambit.fragment.LicensesFragment;
+import ru.ming13.gambit.util.Fragments;
 
 
 public class LicensesActivity extends Activity
 {
-	private static final String SCHEME = ContentResolver.SCHEME_FILE;
-	private static final String AUTHORITY = "android_asset";
-	private static final String PATH = "licenses.html";
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_licenses);
 
-		setUpHomeButton();
-
-		setUpLicenses();
-
-		restoreWebViewState(savedInstanceState);
+		setUpFragment();
 	}
 
-	private void setUpHomeButton() {
-		getActionBar().setHomeButtonEnabled(true);
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
 	}
 
-	private void setUpLicenses() {
-		getWebView().loadUrl(buildLicensesUri());
-	}
-
-	private WebView getWebView() {
-		return (WebView) findViewById(R.id.licenses_webview);
-	}
-
-	private String buildLicensesUri() {
-		return String.format("%s:///%s/%s", SCHEME, AUTHORITY, PATH);
-	}
-
-	private void restoreWebViewState(Bundle savedState) {
-		if (savedState != null) {
-			getWebView().restoreState(savedState);
-		}
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		getWebView().saveState(outState);
-
-		super.onSaveInstanceState(outState);
+	private Fragment buildFragment() {
+		return LicensesFragment.newInstance();
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case android.R.id.home:
-				navigateUp();
+				finish();
 				return true;
 
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
-	}
-
-	private void navigateUp() {
-		Intent intent = IntentFactory.createDecksIntent(this);
-		NavUtils.navigateUpTo(this, intent);
 	}
 }

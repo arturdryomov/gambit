@@ -21,11 +21,11 @@
 		mailto:%1$s?subject=%2$s
 	</string>
 
-	<string name="email_address_feedback" translatable="false">
+	<string name="email_feedback_address" translatable="false">
 		artur.dryomov@gmail.com
 	</string>
 
-	<string name="email_subject_feedback" translatable="false">
+	<string name="email_feedback_subject" translatable="false">
 		Gambit Feedback
 	</string>
 

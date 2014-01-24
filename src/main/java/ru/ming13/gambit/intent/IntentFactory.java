@@ -84,8 +84,8 @@ public final class IntentFactory
 	}
 
 	public static Intent createFeedbackEmailIntent(Context context) {
-		String feedbackAddress = context.getString(R.string.email_address_feedback);
-		String feedbackSubject = context.getString(R.string.email_subject_feedback);
+		String feedbackAddress = context.getString(R.string.email_feedback_address);
+		String feedbackSubject = context.getString(R.string.email_feedback_subject);
 
 		Uri emailUri = Uri.parse(
 			context.getString(R.string.email_uri_format, feedbackAddress, feedbackSubject));

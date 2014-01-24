@@ -17,56 +17,45 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
 
-import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardCreatedEvent;
 import ru.ming13.gambit.bus.CardCreationCancelledEvent;
 import ru.ming13.gambit.fragment.CardCreationFragment;
-import ru.ming13.gambit.intent.IntentException;
-import ru.ming13.gambit.intent.IntentExtras;
-import ru.ming13.gambit.intent.IntentFactory;
+import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.Intents;
 
 
-public class CardCreationActivity extends FragmentWrapperActivity
+public class CardCreationActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
-		return CardCreationFragment.newInstance(extractReceivedCardsUri());
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpFragment();
 	}
 
-	private Uri extractReceivedCardsUri() {
-		Uri cardsUri = getIntent().getParcelableExtra(IntentExtras.CARDS_URI);
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
 
-		if (cardsUri == null) {
-			throw new IntentException();
-		}
+	private Fragment buildFragment() {
+		return CardCreationFragment.newInstance(getCardsUri());
+	}
 
-		return cardsUri;
+	private Uri getCardsUri() {
+		return getIntent().getParcelableExtra(Intents.Extras.URI);
 	}
 
 	@Subscribe
 	public void onCardCreated(CardCreatedEvent cardCreatedEvent) {
-		callCardsList();
-
 		finish();
-	}
-
-	private void callCardsList() {
-		Intent intent = IntentFactory.createCardsIntent(this, buildDeckUri());
-		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-	}
-
-	private Uri buildDeckUri() {
-		long deckId = GambitContract.Cards.getDeckId(extractReceivedCardsUri());
-
-		return GambitContract.Decks.buildDeckUri(deckId);
 	}
 
 	@Subscribe

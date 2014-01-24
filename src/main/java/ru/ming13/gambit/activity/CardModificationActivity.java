@@ -17,32 +17,40 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
+import android.os.Bundle;
+
 import com.squareup.otto.Subscribe;
+
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardEditedEvent;
 import ru.ming13.gambit.bus.CardEditingCancelledEvent;
 import ru.ming13.gambit.fragment.CardEditingFragment;
-import ru.ming13.gambit.intent.IntentException;
-import ru.ming13.gambit.intent.IntentExtras;
+import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.Intents;
 
 
-public class CardModificationActivity extends FragmentWrapperActivity
+public class CardModificationActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
-		return CardEditingFragment.newInstance(extractReceivedCardUri());
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpFragment();
 	}
 
-	private Uri extractReceivedCardUri() {
-		Uri cardUri = getIntent().getParcelableExtra(IntentExtras.CARD_URI);
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
 
-		if (cardUri == null) {
-			throw new IntentException();
-		}
+	private Fragment buildFragment() {
+		return CardEditingFragment.newInstance(getCardUri());
+	}
 
-		return cardUri;
+	private Uri getCardUri() {
+		return getIntent().getParcelableExtra(Intents.Extras.URI);
 	}
 
 	@Subscribe

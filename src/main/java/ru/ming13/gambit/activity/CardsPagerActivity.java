@@ -45,7 +45,7 @@ import ru.ming13.gambit.bus.DeckCurrentCardQueriedEvent;
 import ru.ming13.gambit.intent.IntentException;
 import ru.ming13.gambit.intent.IntentExtras;
 import ru.ming13.gambit.intent.IntentFactory;
-import ru.ming13.gambit.loader.Loaders;
+import ru.ming13.gambit.util.Loaders;
 import ru.ming13.gambit.task.DeckCardsOrderQueryingTask;
 import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;

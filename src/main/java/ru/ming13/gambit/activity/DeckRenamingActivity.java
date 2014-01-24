@@ -17,32 +17,40 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
+import android.os.Bundle;
+
 import com.squareup.otto.Subscribe;
+
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckRenamedEvent;
 import ru.ming13.gambit.bus.DeckRenamingCancelledEvent;
 import ru.ming13.gambit.fragment.DeckRenamingFragment;
-import ru.ming13.gambit.intent.IntentException;
-import ru.ming13.gambit.intent.IntentExtras;
+import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.Intents;
 
 
-public class DeckRenamingActivity extends FragmentWrapperActivity
+public class DeckRenamingActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
-		return DeckRenamingFragment.newInstance(extractReceivedDeckUri());
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpFragment();
 	}
 
-	private Uri extractReceivedDeckUri() {
-		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
 
-		if (deckUri == null) {
-			throw new IntentException();
-		}
+	private Fragment buildFragment() {
+		return DeckRenamingFragment.newInstance(getDeckUri());
+	}
 
-		return deckUri;
+	private Uri getDeckUri() {
+		return getIntent().getParcelableExtra(Intents.Extras.URI);
 	}
 
 	@Subscribe

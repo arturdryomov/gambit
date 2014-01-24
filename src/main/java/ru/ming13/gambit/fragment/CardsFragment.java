@@ -41,7 +41,7 @@ import android.widget.TextView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.intent.IntentFactory;
-import ru.ming13.gambit.loader.Loaders;
+import ru.ming13.gambit.util.Loaders;
 import ru.ming13.gambit.task.CardDeletionTask;
 import ru.ming13.gambit.util.ActionModeProvider;
 

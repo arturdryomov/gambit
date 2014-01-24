@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.loader;
+package ru.ming13.gambit.util;
 
 
 public final class Loaders
