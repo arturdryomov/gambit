@@ -82,7 +82,7 @@
 
 		<provider
 			android:name=".provider.GambitProvider"
-			android:authorities="ru.ming13.gambit.provider"
+			android:authorities="ru.ming13.gambit"
 			android:exported="false">
 		</provider>
 	</application>

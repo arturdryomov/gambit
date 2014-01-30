@@ -21,7 +21,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.DeckExistsException;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
@@ -50,22 +49,27 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 	private BusEvent createDeck() {
 		try {
-			Uri deckUri = contentResolver.insert(GambitContract.Decks.CONTENT_URI,
-				buildDeckValues(deckTitle));
+			Uri decksUri = buildDecksUri();
+			ContentValues deckValues = buildDeckValues(deckTitle);
+
+			Uri deckUri = contentResolver.insert(decksUri, deckValues);
 
 			return new DeckCreatedEvent(deckUri);
 		}
-		catch (DeckExistsException e) {
+		catch (RuntimeException e) {
 			return new DeckExistsEvent();
 		}
+	}
+
+	private Uri buildDecksUri() {
+		return GambitContract.Decks.getDecksUri();
 	}
 
 	private ContentValues buildDeckValues(String deckTitle) {
 		ContentValues deckValues = new ContentValues();
 
 		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
-		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX,
-			GambitContract.Decks.DEFAULT_CURRENT_CARD_INDEX);
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, GambitContract.Decks.Defaults.CURRENT_CARD_INDEX);
 
 		return deckValues;
 	}

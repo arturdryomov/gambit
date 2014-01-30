@@ -85,7 +85,7 @@ public class DecksFragment extends ListFragment implements LoaderManager.LoaderC
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		Uri uri = GambitContract.Decks.CONTENT_URI;
+		Uri uri = GambitContract.Decks.getDecksUri();
 		String[] projection = {GambitContract.Decks._ID, GambitContract.Decks.TITLE};
 		String sort = GambitContract.Decks.TITLE;
 
@@ -194,7 +194,7 @@ public class DecksFragment extends ListFragment implements LoaderManager.LoaderC
 		List<Uri> checkedDeckUris = new ArrayList<Uri>();
 
 		for (long checkedDeckId : getListView().getCheckedItemIds()) {
-			checkedDeckUris.add(GambitContract.Decks.buildDeckUri(checkedDeckId));
+			checkedDeckUris.add(GambitContract.Decks.getDeckUri(checkedDeckId));
 		}
 
 		return checkedDeckUris;
@@ -215,7 +215,7 @@ public class DecksFragment extends ListFragment implements LoaderManager.LoaderC
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		callCardsPager(GambitContract.Decks.buildDeckUri(id));
+		callCardsPager(GambitContract.Decks.getDeckUri(id));
 	}
 
 	private void callCardsPager(Uri deckUri) {

@@ -88,7 +88,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	private void setUpCardsUri() {
 		Uri deckUri = extractReceivedDeckUri();
 
-		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
+		cardsUri = GambitContract.Cards.getCardsUri(deckUri);
 	}
 
 	private Uri extractReceivedDeckUri() {
@@ -162,7 +162,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 			return;
 		}
 
-		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.getDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
 	}
 
@@ -374,7 +374,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void saveCurrentCardIndex() {
-		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
+		Uri deckUri = GambitContract.Decks.getDeckUri(GambitContract.Cards.getDeckId(cardsUri));
 		int currentCardIndex = getCardsPager().getCurrentItem();
 
 		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);

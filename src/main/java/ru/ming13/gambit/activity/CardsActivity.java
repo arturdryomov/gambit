@@ -82,6 +82,6 @@ public class CardsActivity extends Activity
 	}
 
 	private Uri getCardsUri() {
-		return GambitContract.Cards.buildCardsUri(getDeckUri());
+		return GambitContract.Cards.getCardsUri(getDeckUri());
 	}
 }

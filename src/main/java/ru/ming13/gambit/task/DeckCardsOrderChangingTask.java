@@ -17,9 +17,6 @@
 package ru.ming13.gambit.task;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.OperationApplicationException;
@@ -27,7 +24,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
-import ru.ming13.gambit.provider.BatchApplyingException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -72,7 +72,7 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private Uri buildCardUri(Cursor cardsCursor) {
-		return GambitContract.Cards.buildCardUri(cardsUri, extractCardId(cardsCursor));
+		return GambitContract.Cards.getCardUri(cardsUri, extractCardId(cardsCursor));
 	}
 
 	private long extractCardId(Cursor cardsCursor) {
@@ -102,12 +102,10 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	private void applyOperations(ArrayList<ContentProviderOperation> operations) {
 		try {
 			contentResolver.applyBatch(GambitContract.AUTHORITY, operations);
-		}
-		catch (RemoteException e) {
-			throw new BatchApplyingException();
-		}
-		catch (OperationApplicationException e) {
-			throw new BatchApplyingException();
+		} catch (RemoteException e) {
+			throw new RuntimeException();
+		} catch (OperationApplicationException e) {
+			throw new RuntimeException();
 		}
 	}
 }

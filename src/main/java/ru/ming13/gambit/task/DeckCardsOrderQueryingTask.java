@@ -60,7 +60,7 @@ public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
 			int cardOrderIndex = cardsCursor.getInt(
 				cardsCursor.getColumnIndex(GambitContract.Cards.ORDER_INDEX));
 
-			if (cardOrderIndex != GambitContract.Cards.DEFAULT_ORDER_INDEX) {
+			if (cardOrderIndex != GambitContract.Cards.Defaults.ORDER_INDEX) {
 				cardsShuffled = true;
 			}
 		}

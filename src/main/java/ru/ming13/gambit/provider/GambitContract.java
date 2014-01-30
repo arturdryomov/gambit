@@ -16,27 +16,19 @@
 
 package ru.ming13.gambit.provider;
 
-
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
+
 import ru.ming13.gambit.database.DbSchema;
 
-
-public class GambitContract
+public final class GambitContract
 {
-	public static final String AUTHORITY = "ru.ming13.gambit.provider";
-
-	private static final Uri CONTENT_URI;
-
-	static {
-		CONTENT_URI = new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(
-			AUTHORITY).build();
-	}
-
 	private GambitContract() {
 	}
+
+	public static final String AUTHORITY = "ru.ming13.gambit";
 
 	private interface DecksColumns
 	{
@@ -46,21 +38,27 @@ public class GambitContract
 
 	public static final class Decks implements BaseColumns, DecksColumns
 	{
-		public static final Uri CONTENT_URI;
-
-		public static final int DEFAULT_CURRENT_CARD_INDEX = DbSchema.DecksColumnsDefaultValues.CURRENT_CARD_INDEX;
-
-		static {
-			CONTENT_URI = GambitContract.CONTENT_URI.buildUpon().appendPath(
-				GambitProviderPaths.DECKS).build();
+		private Decks() {
 		}
 
-		public static Uri buildDeckUri(long deckId) {
-			return ContentUris.withAppendedId(CONTENT_URI, deckId);
+		public static final class Defaults
+		{
+			private Defaults() {
+			}
+
+			public static final int CURRENT_CARD_INDEX = 0;
+		}
+
+		public static Uri getDecksUri() {
+			return buildContentUri(getPathsBuilder().buildDecksPath());
+		}
+
+		public static Uri getDeckUri(long deckId) {
+			return buildContentUri(getPathsBuilder().buildDeckPath(String.valueOf(deckId)));
 		}
 
 		public static long getDeckId(Uri deckUri) {
-			return ContentUris.parseId(deckUri);
+			return parseId(deckUri);
 		}
 	}
 
@@ -74,32 +72,57 @@ public class GambitContract
 
 	public static final class Cards implements BaseColumns, CardsColumns
 	{
-		public static final Uri CONTENT_URI;
-
-		public static final int DEFAULT_ORDER_INDEX = DbSchema.CardsColumnsDefaultValues.ORDER_INDEX;
-
-		static {
-			CONTENT_URI = GambitContract.CONTENT_URI.buildUpon().appendPath(
-				GambitProviderPaths.CARDS).build();
+		private Cards() {
 		}
 
-		public static Uri buildCardsUri(Uri deckUri) {
-			return Uri.withAppendedPath(deckUri, GambitProviderPaths.Segments.CARDS);
+		public static final class Defaults
+		{
+			private Defaults() {
+			}
+
+			public static final int ORDER_INDEX = 0;
 		}
 
-		public static Uri buildCardUri(Uri cardsUri, long cardId) {
-			return ContentUris.withAppendedId(cardsUri, cardId);
+		public static Uri getCardsUri(Uri deckUri) {
+			long deckId = Decks.getDeckId(deckUri);
+
+			return buildContentUri(getPathsBuilder().buildCardsPath(String.valueOf(deckId)));
+		}
+
+		public static Uri getCardUri(Uri cardsUri, long cardId) {
+			long deckId = getDeckId(cardsUri);
+
+			return buildContentUri(getPathsBuilder().buildCardPath(String.valueOf(deckId), String.valueOf(cardId)));
 		}
 
 		public static long getDeckId(Uri cardsUri) {
-			final int cardsUriDeckIdSegmentIndex = 1;
+			final int deckIdSegmentPosition = 1;
 
-			String deckId = cardsUri.getPathSegments().get(cardsUriDeckIdSegmentIndex);
-			return Long.parseLong(deckId);
+			return parseId(cardsUri, deckIdSegmentPosition);
 		}
 
 		public static long getCardId(Uri cardUri) {
-			return ContentUris.parseId(cardUri);
+			return parseId(cardUri);
 		}
+	}
+
+	private static Uri buildContentUri(String path) {
+		return Uri.withAppendedPath(buildContentUri(), path);
+	}
+
+	private static Uri buildContentUri() {
+		return new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).build();
+	}
+
+	private static long parseId(Uri uri) {
+		return ContentUris.parseId(uri);
+	}
+
+	private static long parseId(Uri uri, int segmentPosition) {
+		return Long.valueOf(uri.getPathSegments().get(segmentPosition));
+	}
+
+	private static GambitPathsBuilder getPathsBuilder() {
+		return new GambitPathsBuilder();
 	}
 }

@@ -21,7 +21,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.DeckExistsException;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
@@ -56,7 +55,7 @@ public class DeckRenamingTask extends AsyncTask<Void, Void, BusEvent>
 
 			return new DeckRenamedEvent();
 		}
-		catch (DeckExistsException e) {
+		catch (RuntimeException e) {
 			return new DeckExistsEvent();
 		}
 	}

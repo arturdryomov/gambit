@@ -82,7 +82,7 @@ public class CardsFragment extends ListFragment implements LoaderManager.LoaderC
 	private void setUpCardsUri() {
 		Uri deckUri = getArguments().getParcelable(FragmentArguments.DECK_URI);
 
-		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
+		cardsUri = GambitContract.Cards.getCardsUri(deckUri);
 	}
 
 	private void setUpHomeButton() {
@@ -240,7 +240,7 @@ public class CardsFragment extends ListFragment implements LoaderManager.LoaderC
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, id);
+		Uri cardUri = GambitContract.Cards.getCardUri(cardsUri, id);
 
 		callCardModification(cardUri);
 	}
@@ -268,7 +268,7 @@ public class CardsFragment extends ListFragment implements LoaderManager.LoaderC
 
 	@Override
 	public boolean handleContextMenu(android.view.MenuItem menuItem, long listItemId) {
-		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, listItemId);
+		Uri cardUri = GambitContract.Cards.getCardUri(cardsUri, listItemId);
 
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
