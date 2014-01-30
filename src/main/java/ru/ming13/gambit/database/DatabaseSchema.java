@@ -20,10 +20,12 @@ package ru.ming13.gambit.database;
 import android.provider.BaseColumns;
 
 
-public class DbSchema
+public final class DatabaseSchema
 {
-	private DbSchema() {
+	private DatabaseSchema() {
 	}
+
+	static final String DATABASE_NAME = "gambit.db";
 
 	static final class Versions
 	{

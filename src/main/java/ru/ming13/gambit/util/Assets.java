@@ -17,9 +17,10 @@ public final class Assets
 		private Uri() {
 		}
 
-		public static final String AUTHORITY = "android_asset";
 		public static final String MASK = "%s:///%s/%s";
+
 		public static final String SCHEME = ContentResolver.SCHEME_FILE;
+		public static final String AUTHORITY = "android_asset";
 	}
 
 	private Assets() {

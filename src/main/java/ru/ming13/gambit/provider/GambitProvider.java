@@ -32,8 +32,9 @@ import android.net.Uri;
 
 import java.util.ArrayList;
 
-import ru.ming13.gambit.database.DbOpenHelper;
-import ru.ming13.gambit.database.DbSchema;
+import ru.ming13.gambit.database.DatabaseOpenHelper;
+import ru.ming13.gambit.database.DatabaseSchema;
+import ru.ming13.gambit.util.SqlBuilder;
 
 
 public class GambitProvider extends ContentProvider
@@ -43,7 +44,7 @@ public class GambitProvider extends ContentProvider
 
 	@Override
 	public boolean onCreate() {
-		databaseHelper = new DbOpenHelper(getContext());
+		databaseHelper = new DatabaseOpenHelper(getContext());
 		uriMatcher = GambitUriMatcher.getMatcher();
 
 		return true;
@@ -70,21 +71,21 @@ public class GambitProvider extends ContentProvider
 
 		switch (uriMatcher.match(uri)) {
 			case GambitUriMatcher.Codes.DECKS:
-				queryBuilder.setTables(DbSchema.Tables.DECKS);
+				queryBuilder.setTables(DatabaseSchema.Tables.DECKS);
 				break;
 
 			case GambitUriMatcher.Codes.DECK:
-				queryBuilder.setTables(DbSchema.Tables.DECKS);
+				queryBuilder.setTables(DatabaseSchema.Tables.DECKS);
 				queryBuilder.appendWhere(buildDeckSelectionClause(uri));
 				break;
 
 			case GambitUriMatcher.Codes.CARDS:
-				queryBuilder.setTables(DbSchema.Tables.CARDS);
+				queryBuilder.setTables(DatabaseSchema.Tables.CARDS);
 				queryBuilder.appendWhere(buildCardsSelectionClause(uri));
 				break;
 
 			case GambitUriMatcher.Codes.CARD:
-				queryBuilder.setTables(DbSchema.Tables.CARDS);
+				queryBuilder.setTables(DatabaseSchema.Tables.CARDS);
 				queryBuilder.appendWhere(buildCardSelectionClause(uri));
 				break;
 
@@ -98,23 +99,19 @@ public class GambitProvider extends ContentProvider
 	private String buildDeckSelectionClause(Uri deckUri) {
 		long deckId = GambitContract.Decks.getDeckId(deckUri);
 
-		return buildSelectionClause(DbSchema.DecksColumns._ID, deckId);
-	}
-
-	private String buildSelectionClause(String fieldName, long id) {
-		return String.format("%s = %d", fieldName, id);
+		return SqlBuilder.buildSelectionClause(DatabaseSchema.DecksColumns._ID, deckId);
 	}
 
 	private String buildCardsSelectionClause(Uri cardsUri) {
 		long deckId = GambitContract.Cards.getDeckId(cardsUri);
 
-		return buildSelectionClause(DbSchema.CardsColumns.DECK_ID, deckId);
+		return SqlBuilder.buildSelectionClause(DatabaseSchema.CardsColumns.DECK_ID, deckId);
 	}
 
 	private String buildCardSelectionClause(Uri cardUri) {
 		long cardId = GambitContract.Cards.getCardId(cardUri);
 
-		return buildSelectionClause(DbSchema.CardsColumns._ID, cardId);
+		return SqlBuilder.buildSelectionClause(DatabaseSchema.CardsColumns._ID, cardId);
 	}
 
 	private String buildUnsupportedUriDetailMessage(Uri unsupportedUri) {
@@ -155,13 +152,13 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private Uri insertDeck(SQLiteDatabase database, ContentValues deckValues) {
-		long deckId = database.insert(DbSchema.Tables.DECKS, null, deckValues);
+		long deckId = database.insert(DatabaseSchema.Tables.DECKS, null, deckValues);
 
 		return GambitContract.Decks.getDeckUri(deckId);
 	}
 
 	private Uri insertCard(SQLiteDatabase database, Uri cardsUri, ContentValues cardValues) {
-		long cardId = database.insert(DbSchema.Tables.CARDS, null, cardValues);
+		long cardId = database.insert(DatabaseSchema.Tables.CARDS, null, cardValues);
 
 		return GambitContract.Cards.getCardUri(cardsUri, cardId);
 	}
@@ -191,11 +188,11 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private int deleteDeck(SQLiteDatabase database, Uri deckUri) {
-		return database.delete(DbSchema.Tables.DECKS, buildDeckSelectionClause(deckUri), null);
+		return database.delete(DatabaseSchema.Tables.DECKS, buildDeckSelectionClause(deckUri), null);
 	}
 
 	private int deleteCard(SQLiteDatabase database, Uri cardUri) {
-		return database.delete(DbSchema.Tables.CARDS, buildCardSelectionClause(cardUri), null);
+		return database.delete(DatabaseSchema.Tables.CARDS, buildCardSelectionClause(cardUri), null);
 	}
 
 	@Override
@@ -223,11 +220,11 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private int updateDeck(SQLiteDatabase database, Uri deckUri, ContentValues deckValues) {
-		return database.update(DbSchema.Tables.DECKS, deckValues, buildDeckSelectionClause(deckUri), null);
+		return database.update(DatabaseSchema.Tables.DECKS, deckValues, buildDeckSelectionClause(deckUri), null);
 	}
 
 	private int updateCard(SQLiteDatabase database, Uri cardUri, ContentValues cardValues) {
-		return database.update(DbSchema.Tables.CARDS, cardValues, buildCardSelectionClause(cardUri), null);
+		return database.update(DatabaseSchema.Tables.CARDS, cardValues, buildCardSelectionClause(cardUri), null);
 	}
 
 	@Override

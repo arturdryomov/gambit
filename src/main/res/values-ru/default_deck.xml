@@ -17,7 +17,7 @@
 
 <resources>
 
-	<string name="example_deck_title_language">Russian</string>
+	<string name="default_deck_title_language">Russian</string>
 
 	<string name="android_version_froyo">Замороженный йогурт</string>
 	<string name="android_version_gingerbread">Имбирный пряник</string>

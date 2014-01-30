@@ -21,7 +21,7 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import ru.ming13.gambit.database.DbSchema;
+import ru.ming13.gambit.database.DatabaseSchema;
 
 public final class GambitContract
 {
@@ -32,8 +32,8 @@ public final class GambitContract
 
 	private interface DecksColumns
 	{
-		String TITLE = DbSchema.DecksColumns.TITLE;
-		String CURRENT_CARD_INDEX = DbSchema.DecksColumns.CURRENT_CARD_INDEX;
+		String TITLE = DatabaseSchema.DecksColumns.TITLE;
+		String CURRENT_CARD_INDEX = DatabaseSchema.DecksColumns.CURRENT_CARD_INDEX;
 	}
 
 	public static final class Decks implements BaseColumns, DecksColumns
@@ -64,10 +64,10 @@ public final class GambitContract
 
 	private interface CardsColumns
 	{
-		String DECK_ID = DbSchema.CardsColumns.DECK_ID;
-		String FRONT_SIDE_TEXT = DbSchema.CardsColumns.FRONT_SIDE_TEXT;
-		String BACK_SIDE_TEXT = DbSchema.CardsColumns.BACK_SIDE_TEXT;
-		String ORDER_INDEX = DbSchema.CardsColumns.ORDER_INDEX;
+		String DECK_ID = DatabaseSchema.CardsColumns.DECK_ID;
+		String FRONT_SIDE_TEXT = DatabaseSchema.CardsColumns.FRONT_SIDE_TEXT;
+		String BACK_SIDE_TEXT = DatabaseSchema.CardsColumns.BACK_SIDE_TEXT;
+		String ORDER_INDEX = DatabaseSchema.CardsColumns.ORDER_INDEX;
 	}
 
 	public static final class Cards implements BaseColumns, CardsColumns

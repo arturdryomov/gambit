@@ -17,12 +17,12 @@
 
 <resources>
 
-	<string name="example_deck_title_language">Spanish</string>
+	<string name="default_deck_title_language">Italian</string>
 
-	<string name="android_version_froyo">Yogur helado</string>
-	<string name="android_version_gingerbread">Pan de jengibre</string>
-	<string name="android_version_honeycomb">Panal</string>
-	<string name="android_version_ice_cream_sandwich">Sándwich de helado</string>
-	<string name="android_version_jelly_bean">Jelly Bean</string>
+	<string name="android_version_froyo">Yogurt gelato</string>
+	<string name="android_version_gingerbread">Panpepato</string>
+	<string name="android_version_honeycomb">Favo</string>
+	<string name="android_version_ice_cream_sandwich">Ice Cream Sandwich</string>
+	<string name="android_version_jelly_bean">Jelly Belly</string>
 
 </resources>
