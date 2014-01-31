@@ -21,22 +21,23 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.GambitContract;
+
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckCardsOrderQueriedEvent;
+import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
+import ru.ming13.gambit.provider.GambitContract;
 
 
-public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
+public class DeckCardsOrderLoadingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardsUri;
 
 	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
-		new DeckCardsOrderQueryingTask(contentResolver, cardsUri).execute();
+		new DeckCardsOrderLoadingTask(contentResolver, cardsUri).execute();
 	}
 
-	private DeckCardsOrderQueryingTask(ContentResolver contentResolver, Uri cardsUri) {
+	private DeckCardsOrderLoadingTask(ContentResolver contentResolver, Uri cardsUri) {
 		this.contentResolver = contentResolver;
 		this.cardsUri = cardsUri;
 	}
@@ -44,23 +45,19 @@ public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
 		if (areCardsShuffled()) {
-			return new DeckCardsOrderQueriedEvent(DeckCardsOrderQueriedEvent.CardsOrder.SHUFFLE);
-		}
-		else {
-			return new DeckCardsOrderQueriedEvent(DeckCardsOrderQueriedEvent.CardsOrder.ORIGINAL);
+			return new DeckCardsOrderLoadedEvent(DeckCardsOrderLoadedEvent.CardsOrder.SHUFFLE);
+		} else {
+			return new DeckCardsOrderLoadedEvent(DeckCardsOrderLoadedEvent.CardsOrder.ORIGINAL);
 		}
 	}
 
 	private boolean areCardsShuffled() {
 		boolean cardsShuffled = false;
 
-		Cursor cardsCursor = queryCards();
+		Cursor cardsCursor = loadCards();
 
 		while (cardsCursor.moveToNext()) {
-			int cardOrderIndex = cardsCursor.getInt(
-				cardsCursor.getColumnIndex(GambitContract.Cards.ORDER_INDEX));
-
-			if (cardOrderIndex != GambitContract.Cards.Defaults.ORDER_INDEX) {
+			if (getCardOrderIndex(cardsCursor) != GambitContract.Cards.Defaults.ORDER_INDEX) {
 				cardsShuffled = true;
 			}
 		}
@@ -70,10 +67,15 @@ public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
 		return cardsShuffled;
 	}
 
-	private Cursor queryCards() {
+	private Cursor loadCards() {
 		String[] projection = {GambitContract.Cards.ORDER_INDEX};
 
 		return contentResolver.query(cardsUri, projection, null, null, null);
+	}
+
+	private int getCardOrderIndex(Cursor cardsCursor) {
+		return cardsCursor.getInt(
+			cardsCursor.getColumnIndex(GambitContract.Cards.ORDER_INDEX));
 	}
 
 	@Override

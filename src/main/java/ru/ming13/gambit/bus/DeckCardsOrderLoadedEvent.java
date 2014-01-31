@@ -14,9 +14,23 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.intent;
+package ru.ming13.gambit.bus;
 
 
-public class IntentException extends RuntimeException
+public class DeckCardsOrderLoadedEvent implements BusEvent
 {
+	public static enum CardsOrder
+	{
+		SHUFFLE, ORIGINAL
+	}
+
+	private final CardsOrder cardsOrder;
+
+	public DeckCardsOrderLoadedEvent(CardsOrder cardsOrder) {
+		this.cardsOrder = cardsOrder;
+	}
+
+	public CardsOrder getCardsOrder() {
+		return cardsOrder;
+	}
 }

@@ -61,8 +61,18 @@ public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, card.getFrontSideText());
 		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, card.getBackSideText());
+		cardValues.put(GambitContract.Cards.DECK_ID, getDeckId());
+		cardValues.put(GambitContract.Cards.ORDER_INDEX, getOrderIndex());
 
 		return cardValues;
+	}
+
+	private long getDeckId() {
+		return GambitContract.Cards.getDeckId(cardsUri);
+	}
+
+	private int getOrderIndex() {
+		return GambitContract.Cards.Defaults.ORDER_INDEX;
 	}
 
 	@Override

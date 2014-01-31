@@ -17,20 +17,15 @@
 package ru.ming13.gambit.bus;
 
 
-public class DeckCardsOrderQueriedEvent implements BusEvent
+public class DeckCurrentCardLoadedEvent implements BusEvent
 {
-	public static enum CardsOrder
-	{
-		SHUFFLE, ORIGINAL
+	private final int currentCardIndex;
+
+	public DeckCurrentCardLoadedEvent(int currentCardIndex) {
+		this.currentCardIndex = currentCardIndex;
 	}
 
-	private final CardsOrder cardsOrder;
-
-	public DeckCardsOrderQueriedEvent(CardsOrder cardsOrder) {
-		this.cardsOrder = cardsOrder;
-	}
-
-	public CardsOrder getCardsOrder() {
-		return cardsOrder;
+	public int getCurrentCardIndex() {
+		return currentCardIndex;
 	}
 }

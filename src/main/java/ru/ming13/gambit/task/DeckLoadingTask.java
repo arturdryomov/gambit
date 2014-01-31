@@ -45,10 +45,10 @@ public class DeckLoadingTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		return new DeckLoadedEvent(new Deck(queryDeckTitle()));
+		return new DeckLoadedEvent(new Deck(loadDeckTitle()));
 	}
 
-	private String queryDeckTitle() {
+	private String loadDeckTitle() {
 		String[] projection = {GambitContract.Decks.TITLE};
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 

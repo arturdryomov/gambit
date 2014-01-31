@@ -46,12 +46,12 @@ public class CardLoadingTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		Pair<String, String> cardSideTexts = queryCardSideTexts();
+		Pair<String, String> cardSideTexts = loadCardSideTexts();
 
 		return new CardLoadedEvent(new Card(cardSideTexts.first, cardSideTexts.second));
 	}
 
-	private Pair<String, String> queryCardSideTexts() {
+	private Pair<String, String> loadCardSideTexts() {
 		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
 		Cursor cardCursor = contentResolver.query(cardUri, projection, null, null, null);
 

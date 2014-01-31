@@ -24,7 +24,6 @@ import android.os.AsyncTask;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckExistsEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
@@ -48,17 +47,13 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		return editDeck();
+		editDeck();
+
+		return new DeckSavedEvent();
 	}
 
-	private BusEvent editDeck() {
-		try {
-			contentResolver.update(deckUri, buildDeckValues(), null, null);
-
-			return new DeckSavedEvent();
-		} catch (RuntimeException e) {
-			return new DeckExistsEvent();
-		}
+	private void editDeck() {
+		contentResolver.update(deckUri, buildDeckValues(), null, null);
 	}
 
 	private ContentValues buildDeckValues() {

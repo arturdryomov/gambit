@@ -21,51 +21,53 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.GambitContract;
+
+import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckCurrentCardQueriedEvent;
+import ru.ming13.gambit.bus.DeckCurrentCardLoadedEvent;
+import ru.ming13.gambit.provider.GambitContract;
 
 
-public class DeckCurrentCardQueryingTask extends AsyncTask<Void, Void, Integer>
+public class DeckCurrentCardLoadingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri deckUri;
 
 	public static void execute(ContentResolver contentResolver, Uri deckUri) {
-		new DeckCurrentCardQueryingTask(contentResolver, deckUri).execute();
+		new DeckCurrentCardLoadingTask(contentResolver, deckUri).execute();
 	}
 
-	private DeckCurrentCardQueryingTask(ContentResolver contentResolver, Uri deckUri) {
+	private DeckCurrentCardLoadingTask(ContentResolver contentResolver, Uri deckUri) {
 		this.contentResolver = contentResolver;
 		this.deckUri = deckUri;
 	}
 
 	@Override
-	protected Integer doInBackground(Void... parameters) {
-		return queryCurrentCardIndex();
+	protected BusEvent doInBackground(Void... parameters) {
+		return new DeckCurrentCardLoadedEvent(loadCurrentCardIndex());
 	}
 
-	private int queryCurrentCardIndex() {
+	private int loadCurrentCardIndex() {
 		String[] projection = {GambitContract.Decks.CURRENT_CARD_INDEX};
 		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
-		int currentCardIndex = extractCurrentCardIndex(deckCursor);
+		int currentCardIndex = getCurrentCardIndex(deckCursor);
 
 		deckCursor.close();
 
 		return currentCardIndex;
 	}
 
-	private int extractCurrentCardIndex(Cursor deckCursor) {
+	private int getCurrentCardIndex(Cursor deckCursor) {
 		deckCursor.moveToFirst();
 
 		return deckCursor.getInt(deckCursor.getColumnIndex(GambitContract.Decks.CURRENT_CARD_INDEX));
 	}
 
 	@Override
-	protected void onPostExecute(Integer currentCardIndex) {
-		super.onPostExecute(currentCardIndex);
+	protected void onPostExecute(BusEvent busEvent) {
+		super.onPostExecute(busEvent);
 
-		BusProvider.getBus().post(new DeckCurrentCardQueriedEvent(currentCardIndex));
+		BusProvider.getBus().post(busEvent);
 	}
 }

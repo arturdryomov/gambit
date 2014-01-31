@@ -66,6 +66,7 @@ public final class GambitContract
 	{
 		String FRONT_SIDE_TEXT = DatabaseSchema.CardsColumns.FRONT_SIDE_TEXT;
 		String BACK_SIDE_TEXT = DatabaseSchema.CardsColumns.BACK_SIDE_TEXT;
+		String DECK_ID = DatabaseSchema.CardsColumns.DECK_ID;
 		String ORDER_INDEX = DatabaseSchema.CardsColumns.ORDER_INDEX;
 	}
 

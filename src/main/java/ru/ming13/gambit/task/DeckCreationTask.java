@@ -53,14 +53,15 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 		}
 	}
 
-	private Uri createDeck() {
-		Uri decksUri = buildDecksUri();
-		ContentValues deckValues = buildDeckValues();
-
-		return contentResolver.insert(decksUri, deckValues);
+	private boolean isDeckCorrect(Uri deckUri) {
+		return GambitContract.Decks.getDeckId(deckUri) >= 0;
 	}
 
-	private Uri buildDecksUri() {
+	private Uri createDeck() {
+		return contentResolver.insert(getDecksUri(), buildDeckValues());
+	}
+
+	private Uri getDecksUri() {
 		return GambitContract.Decks.getDecksUri();
 	}
 
@@ -68,13 +69,13 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 		ContentValues deckValues = new ContentValues();
 
 		deckValues.put(GambitContract.Decks.TITLE, deck.getTitle());
-		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, GambitContract.Decks.Defaults.CURRENT_CARD_INDEX);
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, getCurrentCardIndex());
 
 		return deckValues;
 	}
 
-	private boolean isDeckCorrect(Uri deckUri) {
-		return GambitContract.Decks.getDeckId(deckUri) >= 0;
+	private int getCurrentCardIndex() {
+		return GambitContract.Decks.Defaults.CURRENT_CARD_INDEX;
 	}
 
 	@Override

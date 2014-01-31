@@ -17,11 +17,12 @@
 package ru.ming13.gambit.task;
 
 
+import android.content.ContentResolver;
+import android.net.Uri;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.ContentResolver;
-import android.net.Uri;
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -41,12 +42,12 @@ public class DeckCardsOrderResettingTask extends DeckCardsOrderChangingTask
 	}
 
 	private List<Integer> generateDefaultCardsIndices(int indicesCount) {
-		List<Integer> defaultCardsIndices = new ArrayList<Integer>();
+		List<Integer> cardIndices = new ArrayList<Integer>();
 
 		for (int index = 0; index < indicesCount; index++) {
-			defaultCardsIndices.add(GambitContract.Cards.Defaults.ORDER_INDEX);
+			cardIndices.add(GambitContract.Cards.Defaults.ORDER_INDEX);
 		}
 
-		return defaultCardsIndices;
+		return cardIndices;
 	}
 }

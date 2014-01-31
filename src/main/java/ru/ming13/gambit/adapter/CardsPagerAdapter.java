@@ -53,6 +53,10 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 
 	@Override
 	public Fragment getItem(int position) {
+		if (cardsCursor == null) {
+			return null;
+		}
+
 		if (cardsCursor.getCount() == 0) {
 			return CardEmptyFragment.newInstance();
 		}
@@ -72,10 +76,22 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 	}
 
 	public void swapCursor(Cursor cardsCursor) {
+		if (this.cardsCursor == cardsCursor) {
+			return;
+		}
+
 		this.cardsCursor = cardsCursor;
+
+		if (this.cardsCursor != null) {
+			notifyDataSetChanged();
+		}
 	}
 
-	public boolean isEmpty() {
-		return (cardsCursor == null) || (cardsCursor.getCount() == 0);
+	@Override
+	public int getItemPosition(Object object) {
+		// This is a really dirty hack.
+		// Unfortunatelly I cannot find any nice method to force items redraw.
+
+		return POSITION_NONE;
 	}
 }
