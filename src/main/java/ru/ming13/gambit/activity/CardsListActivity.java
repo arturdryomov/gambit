@@ -46,7 +46,11 @@ public class CardsListActivity extends Activity
 	}
 
 	protected Fragment buildFragment() {
-		return CardsListFragment.newInstance(getDeckUri());
+		return CardsListFragment.newInstance(getCardsUri());
+	}
+
+	private Uri getCardsUri() {
+		return GambitContract.Cards.getCardsUri(getDeckUri());
 	}
 
 	private Uri getDeckUri() {
@@ -68,7 +72,7 @@ public class CardsListActivity extends Activity
 				return true;
 
 			case R.id.menu_new_card:
-				callCardCreationActivity();
+				startCardCreationActivity();
 				return true;
 
 			default:
@@ -76,12 +80,8 @@ public class CardsListActivity extends Activity
 		}
 	}
 
-	private void callCardCreationActivity() {
+	private void startCardCreationActivity() {
 		Intent intent = Intents.Builder.with(this).buildCardCreationIntent(getCardsUri());
 		startActivity(intent);
-	}
-
-	private Uri getCardsUri() {
-		return GambitContract.Cards.getCardsUri(getDeckUri());
 	}
 }

@@ -31,7 +31,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,7 +39,6 @@ import java.util.List;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
-import ru.ming13.gambit.intent.IntentFactory;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
 import ru.ming13.gambit.util.Intents;
@@ -72,11 +70,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void setUpDecksAdapter() {
-		setListAdapter(buildDecksAdapter());
-	}
-
-	private ListAdapter buildDecksAdapter() {
-		return new DecksListAdapter(getActivity());
+		setListAdapter(new DecksListAdapter(getActivity()));
 	}
 
 	private void setUpDecksContent() {
@@ -85,11 +79,16 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		Uri uri = GambitContract.Decks.getDecksUri();
+		Uri uri = getDecksUri();
+
 		String[] projection = {GambitContract.Decks._ID, GambitContract.Decks.TITLE};
 		String sort = GambitContract.Decks.TITLE;
 
 		return new CursorLoader(getActivity(), uri, projection, null, null, sort);
+	}
+
+	private Uri getDecksUri() {
+		return GambitContract.Decks.getDecksUri();
 	}
 
 	@Override
@@ -139,12 +138,12 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		MenuItem actionRenameDeck = actionMode.getMenu().findItem(R.id.menu_rename);
 		MenuItem actionEditCards = actionMode.getMenu().findItem(R.id.menu_edit_cards);
 
-		actionRenameDeck.setVisible(!areMultipleDecksSelected());
-		actionEditCards.setVisible(!areMultipleDecksSelected());
+		actionRenameDeck.setVisible(isSingleDeckSelected());
+		actionEditCards.setVisible(isSingleDeckSelected());
 	}
 
-	private boolean areMultipleDecksSelected() {
-		return getListView().getCheckedItemCount() > 1;
+	private boolean isSingleDeckSelected() {
+		return getListView().getCheckedItemCount() == 1;
 	}
 
 	@Override
@@ -165,15 +164,15 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_rename:
-				callDeckRenaming();
+				startDeckEditingActivity();
 				return true;
 
 			case R.id.menu_edit_cards:
-				callCardsList();
+				startCardsListActivity();
 				return true;
 
 			case R.id.menu_delete:
-				callDecksDeletion();
+				startDecksDeletion();
 				return true;
 
 			default:
@@ -181,8 +180,8 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		}
 	}
 
-	private void callDeckRenaming() {
-		Intent intent = Intents.Builder.with(getActivity()).buildDeckRenamingIntent(getCheckedDeckUri());
+	private void startDeckEditingActivity() {
+		Intent intent = Intents.Builder.with(getActivity()).buildDeckEditingIntent(getCheckedDeckUri());
 		startActivity(intent);
 	}
 
@@ -200,12 +199,12 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		return checkedDeckUris;
 	}
 
-	private void callCardsList() {
+	private void startCardsListActivity() {
 		Intent intent = Intents.Builder.with(getActivity()).buildCardsListIntent(getCheckedDeckUri());
 		startActivity(intent);
 	}
 
-	private void callDecksDeletion() {
+	private void startDecksDeletion() {
 		DecksDeletionTask.execute(getActivity().getContentResolver(), getCheckedDeckUris());
 	}
 
@@ -215,11 +214,11 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		callCardsPager(GambitContract.Decks.getDeckUri(id));
+		startCardsPagerActivity(GambitContract.Decks.getDeckUri(id));
 	}
 
-	private void callCardsPager(Uri deckUri) {
-		Intent intent = IntentFactory.createCardsPagerIntent(getActivity(), deckUri);
+	private void startCardsPagerActivity(Uri deckUri) {
+		Intent intent = Intents.Builder.with(getActivity()).buildCardsPagerIntent(deckUri);
 		startActivity(intent);
 	}
 }

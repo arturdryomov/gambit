@@ -6,9 +6,12 @@ import android.net.Uri;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.activity.CardCreationActivity;
+import ru.ming13.gambit.activity.CardEditingActivity;
 import ru.ming13.gambit.activity.CardsListActivity;
+import ru.ming13.gambit.activity.CardsPagerActivity;
 import ru.ming13.gambit.activity.DeckCreationActivity;
 import ru.ming13.gambit.activity.DeckEditingActivity;
+import ru.ming13.gambit.activity.DecksListActivity;
 import ru.ming13.gambit.activity.LicensesActivity;
 
 public final class Intents
@@ -47,12 +50,30 @@ public final class Intents
 			this.context = context;
 		}
 
+		public Intent buildDeckListIntent() {
+			return new Intent(context, DecksListActivity.class);
+		}
+
 		public Intent buildDeckCreationIntent() {
 			return new Intent(context, DeckCreationActivity.class);
 		}
 
-		public Intent buildDeckRenamingIntent(Uri deckUri) {
+		public Intent buildDeckEditingIntent(Uri deckUri) {
 			Intent intent = new Intent(context, DeckEditingActivity.class);
+			intent.putExtra(Extras.URI, deckUri);
+
+			return intent;
+		}
+
+		public Intent buildCardsListIntent(Uri deckUri) {
+			Intent intent = new Intent(context, CardsListActivity.class);
+			intent.putExtra(Extras.URI, deckUri);
+
+			return intent;
+		}
+
+		public Intent buildCardsPagerIntent(Uri deckUri) {
+			Intent intent = new Intent(context, CardsPagerActivity.class);
 			intent.putExtra(Extras.URI, deckUri);
 
 			return intent;
@@ -65,9 +86,9 @@ public final class Intents
 			return intent;
 		}
 
-		public Intent buildCardsListIntent(Uri deckUri) {
-			Intent intent = new Intent(context, CardsListActivity.class);
-			intent.putExtra(Extras.URI, deckUri);
+		public Intent buildCardEditingIntent(Uri cardUri) {
+			Intent intent = new Intent(context, CardEditingActivity.class);
+			intent.putExtra(Extras.URI, cardUri);
 
 			return intent;
 		}
