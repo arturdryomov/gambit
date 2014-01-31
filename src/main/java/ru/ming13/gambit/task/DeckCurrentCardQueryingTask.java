@@ -66,6 +66,6 @@ public class DeckCurrentCardQueryingTask extends AsyncTask<Void, Void, Integer>
 	protected void onPostExecute(Integer currentCardIndex) {
 		super.onPostExecute(currentCardIndex);
 
-		BusProvider.getInstance().post(new DeckCurrentCardQueriedEvent(currentCardIndex));
+		BusProvider.getBus().post(new DeckCurrentCardQueriedEvent(currentCardIndex));
 	}
 }

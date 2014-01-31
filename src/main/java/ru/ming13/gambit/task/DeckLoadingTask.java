@@ -18,60 +18,56 @@ package ru.ming13.gambit.task;
 
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.GambitContract;
+
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckExistsEvent;
-import ru.ming13.gambit.bus.DeckRenamedEvent;
+import ru.ming13.gambit.bus.DeckLoadedEvent;
+import ru.ming13.gambit.provider.GambitContract;
 
 
-public class DeckRenamingTask extends AsyncTask<Void, Void, BusEvent>
+public class DeckLoadingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri deckUri;
-	private final String deckTitle;
 
-	public static void execute(ContentResolver contentResolver, Uri deckUri, String deckTitle) {
-		new DeckRenamingTask(contentResolver, deckUri, deckTitle).execute();
+	public static void execute(ContentResolver contentResolver, Uri deckUri) {
+		new DeckLoadingTask(contentResolver, deckUri).execute();
 	}
 
-	private DeckRenamingTask(ContentResolver contentResolver, Uri deckUri, String deckTitle) {
+	private DeckLoadingTask(ContentResolver contentResolver, Uri deckUri) {
 		this.contentResolver = contentResolver;
 		this.deckUri = deckUri;
-		this.deckTitle = deckTitle;
 	}
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		return updateDeck();
+		return new DeckLoadedEvent(queryDeckTitle());
 	}
 
-	private BusEvent updateDeck() {
-		try {
-			contentResolver.update(deckUri, buildDeckValues(deckTitle), null, null);
+	private String queryDeckTitle() {
+		String[] projection = {GambitContract.Decks.TITLE};
+		Cursor deckCursor = contentResolver.query(deckUri, projection, null, null, null);
 
-			return new DeckRenamedEvent();
-		}
-		catch (RuntimeException e) {
-			return new DeckExistsEvent();
-		}
+		String deckTitle = getDeckTitle(deckCursor);
+
+		deckCursor.close();
+
+		return deckTitle;
 	}
 
-	private ContentValues buildDeckValues(String deckTitle) {
-		ContentValues deckValues = new ContentValues();
+	private String getDeckTitle(Cursor deckCursor) {
+		deckCursor.moveToFirst();
 
-		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
-
-		return deckValues;
+		return deckCursor.getString(deckCursor.getColumnIndex(GambitContract.Decks.TITLE));
 	}
 
 	@Override
 	protected void onPostExecute(BusEvent busEvent) {
 		super.onPostExecute(busEvent);
 
-		BusProvider.getInstance().post(busEvent);
+		BusProvider.getBus().post(busEvent);
 	}
 }

@@ -354,7 +354,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 
 		shakeDetector.start(sensorManager);
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
@@ -363,7 +363,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 
 		shakeDetector.stop();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 
 	@Override

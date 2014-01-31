@@ -80,6 +80,6 @@ public class DeckCardsOrderQueryingTask extends AsyncTask<Void, Void, BusEvent>
 	protected void onPostExecute(BusEvent busEvent) {
 		super.onPostExecute(busEvent);
 
-		BusProvider.getInstance().post(busEvent);
+		BusProvider.getBus().post(busEvent);
 	}
 }

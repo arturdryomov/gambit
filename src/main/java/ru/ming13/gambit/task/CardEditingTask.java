@@ -21,12 +21,14 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.GambitContract;
+
+import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardEditedEvent;
+import ru.ming13.gambit.bus.CardSavedEvent;
+import ru.ming13.gambit.provider.GambitContract;
 
 
-public class CardEditingTask extends AsyncTask<Void, Void, Void>
+public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardUri;
@@ -45,10 +47,10 @@ public class CardEditingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	@Override
-	protected Void doInBackground(Void... parameters) {
+	protected BusEvent doInBackground(Void... parameters) {
 		editCard();
 
-		return null;
+		return new CardSavedEvent();
 	}
 
 	private void editCard() {
@@ -65,9 +67,9 @@ public class CardEditingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
-		super.onPostExecute(result);
+	protected void onPostExecute(BusEvent busEvent) {
+		super.onPostExecute(busEvent);
 
-		BusProvider.getInstance().post(new CardEditedEvent());
+		BusProvider.getBus().post(busEvent);
 	}
 }

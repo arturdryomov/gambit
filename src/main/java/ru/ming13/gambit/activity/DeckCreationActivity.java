@@ -24,10 +24,13 @@ import android.os.Bundle;
 import com.squareup.otto.Subscribe;
 
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckCreatedEvent;
-import ru.ming13.gambit.bus.DeckCreationCancelledEvent;
-import ru.ming13.gambit.fragment.DeckCreationFragment;
+import ru.ming13.gambit.bus.DeckAssembledEvent;
+import ru.ming13.gambit.bus.DeckSavedEvent;
+import ru.ming13.gambit.bus.OperationCancelledEvent;
+import ru.ming13.gambit.fragment.DeckOperationFragment;
+import ru.ming13.gambit.task.DeckCreationTask;
 import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.OperationBar;
 
 
 public class DeckCreationActivity extends Activity
@@ -36,7 +39,12 @@ public class DeckCreationActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setUpBar();
 		setUpFragment();
+	}
+
+	private void setUpBar() {
+		OperationBar.at(this).show();
 	}
 
 	private void setUpFragment() {
@@ -44,16 +52,25 @@ public class DeckCreationActivity extends Activity
 	}
 
 	private Fragment buildFragment() {
-		return DeckCreationFragment.newInstance();
+		return DeckOperationFragment.newInstance();
 	}
 
 	@Subscribe
-	public void onDeckCreated(DeckCreatedEvent deckCreatedEvent) {
+	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
 	}
 
 	@Subscribe
-	public void onDeckCreationCancelled(DeckCreationCancelledEvent deckCreationCancelledEvent) {
+	public void onDeckAssembled(DeckAssembledEvent event) {
+		saveDeck(event.getDeckTitle());
+	}
+
+	private void saveDeck(String deckTitle) {
+		DeckCreationTask.execute(getContentResolver(), deckTitle);
+	}
+
+	@Subscribe
+	public void onDeckSaved(DeckSavedEvent event) {
 		finish();
 	}
 
@@ -61,13 +78,13 @@ public class DeckCreationActivity extends Activity
 	protected void onResume() {
 		super.onResume();
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 }

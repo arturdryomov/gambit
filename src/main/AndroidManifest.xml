@@ -31,13 +31,14 @@
 		android:theme="@style/Theme.Gambit">
 
 		<activity
-			android:name=".activity.DecksActivity"
+			android:name=".activity.DecksListActivity"
 			android:theme="@style/Theme.Gambit.Home">
+
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
-
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+
 		</activity>
 
 		<activity
@@ -47,13 +48,13 @@
 		</activity>
 
 		<activity
-			android:name=".activity.DeckRenamingActivity"
+			android:name=".activity.DeckEditingActivity"
 			android:label="@string/title_rename_deck"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
-			android:name=".activity.CardsActivity"
+			android:name=".activity.CardsListActivity"
 			android:label="@string/title_edit_cards">
 		</activity>
 
@@ -70,7 +71,7 @@
 		</activity>
 
 		<activity
-			android:name=".activity.CardModificationActivity"
+			android:name=".activity.CardEditingActivity"
 			android:label="@string/title_edit_card"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
@@ -85,5 +86,7 @@
 			android:authorities="ru.ming13.gambit"
 			android:exported="false">
 		</provider>
+
 	</application>
+
 </manifest>

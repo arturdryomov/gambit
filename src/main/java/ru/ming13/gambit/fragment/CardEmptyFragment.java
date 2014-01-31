@@ -53,20 +53,20 @@ public class CardEmptyFragment extends Fragment implements View.OnClickListener
 
 	@Override
 	public void onClick(View view) {
-		BusProvider.getInstance().post(new CardsListCalledFromCardsEmptyPagerEvent());
+		BusProvider.getBus().post(new CardsListCalledFromCardsEmptyPagerEvent());
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 }

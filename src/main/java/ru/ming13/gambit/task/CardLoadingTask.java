@@ -22,42 +22,46 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Pair;
-import ru.ming13.gambit.provider.GambitContract;
+
+import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardSidesQueriedEvent;
+import ru.ming13.gambit.bus.CardLoadedEvent;
+import ru.ming13.gambit.provider.GambitContract;
 
 
-public class CardSidesQueryingTask extends AsyncTask<Void, Void, Pair<String, String>>
+public class CardLoadingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardUri;
 
 	public static void execute(ContentResolver contentResolver, Uri cardUri) {
-		new CardSidesQueryingTask(contentResolver, cardUri).execute();
+		new CardLoadingTask(contentResolver, cardUri).execute();
 	}
 
-	private CardSidesQueryingTask(ContentResolver contentResolver, Uri cardUri) {
+	private CardLoadingTask(ContentResolver contentResolver, Uri cardUri) {
 		this.contentResolver = contentResolver;
 		this.cardUri = cardUri;
 	}
 
 	@Override
-	protected Pair<String, String> doInBackground(Void... parameters) {
-		return queryCardSidesText();
+	protected BusEvent doInBackground(Void... parameters) {
+		Pair<String, String> cardSideTexts = queryCardSideTexts();
+
+		return new CardLoadedEvent(cardSideTexts.first, cardSideTexts.second);
 	}
 
-	private Pair<String, String> queryCardSidesText() {
+	private Pair<String, String> queryCardSideTexts() {
 		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
 		Cursor cardCursor = contentResolver.query(cardUri, projection, null, null, null);
 
-		Pair<String, String> cardSidesText = extractCardSidesText(cardCursor);
+		Pair<String, String> cardSidesText = getCardSideTexts(cardCursor);
 
 		cardCursor.close();
 
 		return cardSidesText;
 	}
 
-	private Pair<String, String> extractCardSidesText(Cursor cardCursor) {
+	private Pair<String, String> getCardSideTexts(Cursor cardCursor) {
 		cardCursor.moveToFirst();
 
 		String cardFrontSideText = cardCursor.getString(
@@ -65,14 +69,13 @@ public class CardSidesQueryingTask extends AsyncTask<Void, Void, Pair<String, St
 		String cardBackSideText = cardCursor.getString(
 			cardCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 
-		return new Pair<String, String>(cardFrontSideText, cardBackSideText);
+		return Pair.create(cardFrontSideText, cardBackSideText);
 	}
 
 	@Override
-	protected void onPostExecute(Pair<String, String> cardSidesText) {
-		super.onPostExecute(cardSidesText);
+	protected void onPostExecute(BusEvent busEvent) {
+		super.onPostExecute(busEvent);
 
-		BusProvider.getInstance().post(
-			new CardSidesQueriedEvent(cardSidesText.first, cardSidesText.second));
+		BusProvider.getBus().post(busEvent);
 	}
 }

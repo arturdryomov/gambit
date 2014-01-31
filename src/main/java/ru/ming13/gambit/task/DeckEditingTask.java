@@ -24,46 +24,48 @@ import android.os.AsyncTask;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardSavedEvent;
+import ru.ming13.gambit.bus.DeckExistsEvent;
+import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.provider.GambitContract;
 
 
-public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
+public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final Uri cardsUri;
-	private final String cardFrontSideText;
-	private final String cardBackSideText;
+	private final Uri deckUri;
+	private final String deckTitle;
 
-	public static void execute(ContentResolver contentResolver, Uri cardsUri, String cardFrontSideText, String cardBackSideText) {
-		new CardCreationTask(contentResolver, cardsUri, cardFrontSideText, cardBackSideText).execute();
+	public static void execute(ContentResolver contentResolver, Uri deckUri, String deckTitle) {
+		new DeckEditingTask(contentResolver, deckUri, deckTitle).execute();
 	}
 
-	private CardCreationTask(ContentResolver contentResolver, Uri cardsUri, String cardFrontSideText, String cardBackSideText) {
+	private DeckEditingTask(ContentResolver contentResolver, Uri deckUri, String deckTitle) {
 		this.contentResolver = contentResolver;
-		this.cardsUri = cardsUri;
-		this.cardFrontSideText = cardFrontSideText;
-		this.cardBackSideText = cardBackSideText;
+		this.deckUri = deckUri;
+		this.deckTitle = deckTitle;
 	}
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		createCard();
-
-		return new CardSavedEvent();
+		return editDeck();
 	}
 
-	private void createCard() {
-		contentResolver.insert(cardsUri, buildCardValues());
+	private BusEvent editDeck() {
+		try {
+			contentResolver.update(deckUri, buildDeckValues(deckTitle), null, null);
+
+			return new DeckSavedEvent();
+		} catch (RuntimeException e) {
+			return new DeckExistsEvent();
+		}
 	}
 
-	private ContentValues buildCardValues() {
-		ContentValues cardValues = new ContentValues();
+	private ContentValues buildDeckValues(String deckTitle) {
+		ContentValues deckValues = new ContentValues();
 
-		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, cardFrontSideText);
-		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, cardBackSideText);
+		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
 
-		return cardValues;
+		return deckValues;
 	}
 
 	@Override

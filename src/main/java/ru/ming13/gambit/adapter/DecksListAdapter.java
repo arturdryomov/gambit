@@ -11,11 +11,11 @@ import android.widget.TextView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.provider.GambitContract;
 
-public class DecksAdapter extends CursorAdapter
+public class DecksListAdapter extends CursorAdapter
 {
 	private final LayoutInflater layoutInflater;
 
-	public DecksAdapter(Context context) {
+	public DecksListAdapter(Context context) {
 		super(context, null, 0);
 
 		layoutInflater = LayoutInflater.from(context);

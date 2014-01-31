@@ -26,13 +26,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.fragment.CardsFragment;
+import ru.ming13.gambit.fragment.CardsListFragment;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
 
-public class CardsActivity extends Activity
+public class CardsListActivity extends Activity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class CardsActivity extends Activity
 	}
 
 	protected Fragment buildFragment() {
-		return CardsFragment.newInstance(getDeckUri());
+		return CardsListFragment.newInstance(getDeckUri());
 	}
 
 	private Uri getDeckUri() {

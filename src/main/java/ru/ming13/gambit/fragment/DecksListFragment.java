@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.adapter.DecksAdapter;
+import ru.ming13.gambit.adapter.DecksListAdapter;
 import ru.ming13.gambit.intent.IntentFactory;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
@@ -47,10 +47,10 @@ import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
 
 
-public class DecksFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
+public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
 {
-	public static DecksFragment newInstance() {
-		return new DecksFragment();
+	public static DecksListFragment newInstance() {
+		return new DecksListFragment();
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class DecksFragment extends ListFragment implements LoaderManager.LoaderC
 	}
 
 	private ListAdapter buildDecksAdapter() {
-		return new DecksAdapter(getActivity());
+		return new DecksListAdapter(getActivity());
 	}
 
 	private void setUpDecksContent() {
@@ -103,8 +103,8 @@ public class DecksFragment extends ListFragment implements LoaderManager.LoaderC
 		}
 	}
 
-	private DecksAdapter getDecksAdapter() {
-		return (DecksAdapter) getListAdapter();
+	private DecksListAdapter getDecksAdapter() {
+		return (DecksListAdapter) getListAdapter();
 	}
 
 	private void showDecksMessage() {

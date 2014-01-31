@@ -46,14 +46,14 @@ import ru.ming13.gambit.task.CardDeletionTask;
 import ru.ming13.gambit.util.ActionModeProvider;
 
 
-public class CardsFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
+public class CardsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ActionModeProvider.ContextMenuHandler
 {
 	private Uri cardsUri;
 
 	private CursorAdapter cardsAdapter;
 
-	public static CardsFragment newInstance(Uri deckUri) {
-		CardsFragment cardsFragment = new CardsFragment();
+	public static CardsListFragment newInstance(Uri deckUri) {
+		CardsListFragment cardsFragment = new CardsListFragment();
 
 		cardsFragment.setArguments(buildArguments(deckUri));
 

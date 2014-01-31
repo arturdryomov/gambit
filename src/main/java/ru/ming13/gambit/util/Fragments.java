@@ -8,6 +8,14 @@ public final class Fragments
 	private Fragments() {
 	}
 
+	public static final class Arguments
+	{
+		private Arguments() {
+		}
+
+		public static final String URI = "uri";
+	}
+
 	public static final class Operator
 	{
 		private Operator() {

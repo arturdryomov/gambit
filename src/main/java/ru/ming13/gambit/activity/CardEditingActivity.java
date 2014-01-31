@@ -25,20 +25,28 @@ import android.os.Bundle;
 import com.squareup.otto.Subscribe;
 
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckRenamedEvent;
-import ru.ming13.gambit.bus.DeckRenamingCancelledEvent;
-import ru.ming13.gambit.fragment.DeckRenamingFragment;
+import ru.ming13.gambit.bus.CardAssembledEvent;
+import ru.ming13.gambit.bus.CardSavedEvent;
+import ru.ming13.gambit.bus.OperationCancelledEvent;
+import ru.ming13.gambit.fragment.CardOperationFragment;
+import ru.ming13.gambit.task.CardEditingTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
+import ru.ming13.gambit.util.OperationBar;
 
 
-public class DeckRenamingActivity extends Activity
+public class CardEditingActivity extends Activity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setUpBar();
 		setUpFragment();
+	}
+
+	private void setUpBar() {
+		OperationBar.at(this).show();
 	}
 
 	private void setUpFragment() {
@@ -46,34 +54,43 @@ public class DeckRenamingActivity extends Activity
 	}
 
 	private Fragment buildFragment() {
-		return DeckRenamingFragment.newInstance(getDeckUri());
+		return CardOperationFragment.newInstance(getCardUri());
 	}
 
-	private Uri getDeckUri() {
+	private Uri getCardUri() {
 		return getIntent().getParcelableExtra(Intents.Extras.URI);
 	}
 
 	@Subscribe
-	public void onDeckRenamed(DeckRenamedEvent deckRenamedEvent) {
+	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
 	}
 
 	@Subscribe
-	public void onDeckRenamingCancelled(DeckRenamingCancelledEvent deckRenamingCancelledEvent) {
-		finish();
+	public void onCardAssembled(CardAssembledEvent event) {
+		saveCard(event.getCardFrontSideText(), event.getCardBackSideText());
 	}
 
+	private void saveCard(String cardFrontSideText, String cardBackSideText) {
+		CardEditingTask.execute(getContentResolver(), getCardUri(), cardFrontSideText, cardBackSideText);
+	}
+
+	@Subscribe
+	public void onCardSaved(CardSavedEvent event) {
+		finish();
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 }

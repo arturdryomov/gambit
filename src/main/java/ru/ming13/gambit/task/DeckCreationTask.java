@@ -21,11 +21,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.GambitContract;
+
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckCreatedEvent;
 import ru.ming13.gambit.bus.DeckExistsEvent;
+import ru.ming13.gambit.bus.DeckSavedEvent;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
@@ -44,21 +45,18 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		return createDeck();
-	}
-
-	private BusEvent createDeck() {
-		try {
-			Uri decksUri = buildDecksUri();
-			ContentValues deckValues = buildDeckValues(deckTitle);
-
-			Uri deckUri = contentResolver.insert(decksUri, deckValues);
-
-			return new DeckCreatedEvent(deckUri);
-		}
-		catch (RuntimeException e) {
+		if (isDeckCorrect(createDeck())) {
+			return new DeckSavedEvent();
+		} else {
 			return new DeckExistsEvent();
 		}
+	}
+
+	private Uri createDeck() {
+		Uri decksUri = buildDecksUri();
+		ContentValues deckValues = buildDeckValues(deckTitle);
+
+		return contentResolver.insert(decksUri, deckValues);
 	}
 
 	private Uri buildDecksUri() {
@@ -74,10 +72,14 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 		return deckValues;
 	}
 
+	private boolean isDeckCorrect(Uri deckUri) {
+		return GambitContract.Decks.getDeckId(deckUri) >= 0;
+	}
+
 	@Override
 	protected void onPostExecute(BusEvent busEvent) {
 		super.onPostExecute(busEvent);
 
-		BusProvider.getInstance().post(busEvent);
+		BusProvider.getBus().post(busEvent);
 	}
 }

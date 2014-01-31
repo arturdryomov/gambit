@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:divider="?android:attr/dividerVertical"
+	android:showDividers="middle"
+	android:dividerPadding="12dp"
+	android:baselineAligned="false"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<FrameLayout
+		style="?android:actionButtonStyle"
+		android:id="@+id/button_cancel"
+		android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="match_parent">
+
+		<TextView
+			style="?android:actionBarTabTextStyle"
+			android:text="Cancel"
+			android:drawableLeft="@drawable/ic_menu_cancel"
+			android:drawablePadding="8dp"
+			android:gravity="center_vertical"
+			android:layout_gravity="center"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
+	</FrameLayout>
+
+	<FrameLayout
+		style="?android:actionButtonStyle"
+		android:id="@+id/button_save"
+		android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="match_parent">
+
+		<TextView
+			style="?android:actionBarTabTextStyle"
+			android:text="Save"
+			android:drawableLeft="@drawable/ic_menu_done"
+			android:drawablePadding="8dp"
+			android:gravity="center_vertical"
+			android:layout_gravity="center"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
+	</FrameLayout>
+
+</LinearLayout>

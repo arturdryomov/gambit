@@ -25,11 +25,14 @@ import android.os.Bundle;
 import com.squareup.otto.Subscribe;
 
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardCreatedEvent;
-import ru.ming13.gambit.bus.CardCreationCancelledEvent;
-import ru.ming13.gambit.fragment.CardCreationFragment;
+import ru.ming13.gambit.bus.CardAssembledEvent;
+import ru.ming13.gambit.bus.CardSavedEvent;
+import ru.ming13.gambit.bus.OperationCancelledEvent;
+import ru.ming13.gambit.fragment.CardOperationFragment;
+import ru.ming13.gambit.task.CardCreationTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
+import ru.ming13.gambit.util.OperationBar;
 
 
 public class CardCreationActivity extends Activity
@@ -38,7 +41,12 @@ public class CardCreationActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setUpBar();
 		setUpFragment();
+	}
+
+	private void setUpBar() {
+		OperationBar.at(this).show();
 	}
 
 	private void setUpFragment() {
@@ -46,7 +54,21 @@ public class CardCreationActivity extends Activity
 	}
 
 	private Fragment buildFragment() {
-		return CardCreationFragment.newInstance(getCardsUri());
+		return CardOperationFragment.newInstance();
+	}
+
+	@Subscribe
+	public void onOperationCancelled(OperationCancelledEvent event) {
+		finish();
+	}
+
+	@Subscribe
+	public void onCardAssembled(CardAssembledEvent event) {
+		saveCard(event.getCardFrontSideText(), event.getCardBackSideText());
+	}
+
+	private void saveCard(String cardFrontSideText, String cardBackSideText) {
+		CardCreationTask.execute(getContentResolver(), getCardsUri(), cardFrontSideText, cardBackSideText);
 	}
 
 	private Uri getCardsUri() {
@@ -54,12 +76,7 @@ public class CardCreationActivity extends Activity
 	}
 
 	@Subscribe
-	public void onCardCreated(CardCreatedEvent cardCreatedEvent) {
-		finish();
-	}
-
-	@Subscribe
-	public void onCardCreationCancelled(CardCreationCancelledEvent cardCreationCancelledEvent) {
+	public void onCardSaved(CardSavedEvent event) {
 		finish();
 	}
 
@@ -67,13 +84,13 @@ public class CardCreationActivity extends Activity
 	protected void onResume() {
 		super.onResume();
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 }

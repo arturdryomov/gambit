@@ -22,12 +22,12 @@ import android.content.Intent;
 import android.net.Uri;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.activity.CardCreationActivity;
-import ru.ming13.gambit.activity.CardModificationActivity;
-import ru.ming13.gambit.activity.CardsActivity;
+import ru.ming13.gambit.activity.CardEditingActivity;
+import ru.ming13.gambit.activity.CardsListActivity;
 import ru.ming13.gambit.activity.CardsPagerActivity;
 import ru.ming13.gambit.activity.DeckCreationActivity;
-import ru.ming13.gambit.activity.DeckRenamingActivity;
-import ru.ming13.gambit.activity.DecksActivity;
+import ru.ming13.gambit.activity.DeckEditingActivity;
+import ru.ming13.gambit.activity.DecksListActivity;
 import ru.ming13.gambit.activity.LicensesActivity;
 
 
@@ -37,7 +37,7 @@ public final class IntentFactory
 	}
 
 	public static Intent createDecksIntent(Context context) {
-		return new Intent(context, DecksActivity.class);
+		return new Intent(context, DecksListActivity.class);
 	}
 
 	public static Intent createDeckCreationIntent(Context context) {
@@ -45,14 +45,14 @@ public final class IntentFactory
 	}
 
 	public static Intent createDeckRenamingIntent(Context context, Uri deckUri) {
-		Intent intent = new Intent(context, DeckRenamingActivity.class);
+		Intent intent = new Intent(context, DeckEditingActivity.class);
 		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
 	}
 
 	public static Intent createCardsIntent(Context context, Uri deckUri) {
-		Intent intent = new Intent(context, CardsActivity.class);
+		Intent intent = new Intent(context, CardsListActivity.class);
 		intent.putExtra(IntentExtras.DECK_URI, deckUri);
 
 		return intent;
@@ -66,7 +66,7 @@ public final class IntentFactory
 	}
 
 	public static Intent createCardModificationIntent(Context context, Uri cardUri) {
-		Intent intent = new Intent(context, CardModificationActivity.class);
+		Intent intent = new Intent(context, CardEditingActivity.class);
 		intent.putExtra(IntentExtras.CARD_URI, cardUri);
 
 		return intent;
