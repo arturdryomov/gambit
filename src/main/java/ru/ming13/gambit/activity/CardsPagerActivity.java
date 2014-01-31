@@ -138,7 +138,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	@Subscribe
-	public void onCardsOrderQueried(DeckCardsOrderLoadedEvent event) {
+	public void onCardsOrderLoaded(DeckCardsOrderLoadedEvent event) {
 		switch (event.getCardsOrder()) {
 			case SHUFFLE:
 				currentCardsOrder = CardsOrder.SHUFFLE;

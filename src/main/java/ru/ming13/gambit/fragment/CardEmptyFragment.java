@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.bus.BusProvider;
 
 
 public class CardEmptyFragment extends Fragment implements View.OnClickListener
@@ -56,19 +55,5 @@ public class CardEmptyFragment extends Fragment implements View.OnClickListener
 
 	@Override
 	public void onClick(View view) {
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		BusProvider.getBus().register(this);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		BusProvider.getBus().unregister(this);
 	}
 }

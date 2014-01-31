@@ -82,47 +82,43 @@ public class CardFragment extends Fragment implements View.OnClickListener
 	@Override
 	public void onClick(View view) {
 		flipCard();
-	}
-
-	private void flipCard() {
-		switch (currentCardSide) {
-			case FRONT:
-				currentCardSide = CardSide.BACK;
-				break;
-
-			case BACK:
-				currentCardSide = CardSide.FRONT;
-				break;
-
-			default:
-				currentCardSide = CardSide.FRONT;
-				break;
-		}
 
 		setUpCardText();
 	}
 
-	private void setUpCardText() {
+	private void flipCard() {
+		currentCardSide = getFlippedCardSide();
+	}
+
+	private CardSide getFlippedCardSide() {
 		switch (currentCardSide) {
 			case FRONT:
-				setUpCardText(getCard().getFrontSideText());
-				break;
-
-			case BACK:
-				setUpCardText(getCard().getBackSideText());
-				break;
+				return CardSide.BACK;
 
 			default:
-				setUpCardText(getCard().getFrontSideText());
-				break;
+				return CardSide.FRONT;
 		}
 	}
 
-	private void setUpCardText(String text) {
-		getCardView().setText(text);
+	private void setUpCardText() {
+		setUpCardText(getCurrentCardText());
+	}
+
+	private String getCurrentCardText() {
+		switch (currentCardSide) {
+			case FRONT:
+				return getCard().getFrontSideText();
+
+			default:
+				return getCard().getBackSideText();
+		}
 	}
 
 	private Card getCard() {
 		return getArguments().getParcelable(Fragments.Arguments.CARD);
+	}
+
+	private void setUpCardText(String text) {
+		getCardView().setText(text);
 	}
 }
