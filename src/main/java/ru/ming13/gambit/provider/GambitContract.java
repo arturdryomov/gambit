@@ -64,7 +64,6 @@ public final class GambitContract
 
 	private interface CardsColumns
 	{
-		String DECK_ID = DatabaseSchema.CardsColumns.DECK_ID;
 		String FRONT_SIDE_TEXT = DatabaseSchema.CardsColumns.FRONT_SIDE_TEXT;
 		String BACK_SIDE_TEXT = DatabaseSchema.CardsColumns.BACK_SIDE_TEXT;
 		String ORDER_INDEX = DatabaseSchema.CardsColumns.ORDER_INDEX;

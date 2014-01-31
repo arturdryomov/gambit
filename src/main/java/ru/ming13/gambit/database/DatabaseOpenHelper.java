@@ -66,6 +66,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 			SqlBuilder.buildTableColumnDescription(
 				DatabaseSchema.CardsColumns._ID, DatabaseSchema.CardsColumnsParameters._ID),
 			SqlBuilder.buildTableColumnDescription(
+				DatabaseSchema.CardsColumns.DECK_ID, DatabaseSchema.CardsColumnsParameters.DECK_ID),
+			SqlBuilder.buildTableColumnDescription(
 				DatabaseSchema.CardsColumns.FRONT_SIDE_TEXT, DatabaseSchema.CardsColumnsParameters.FRONT_SIDE_TEXT),
 			SqlBuilder.buildTableColumnDescription(
 				DatabaseSchema.CardsColumns.BACK_SIDE_TEXT, DatabaseSchema.CardsColumnsParameters.BACK_SIDE_TEXT),
