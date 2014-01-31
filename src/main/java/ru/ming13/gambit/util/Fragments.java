@@ -13,6 +13,7 @@ public final class Fragments
 		private Arguments() {
 		}
 
+		public static final String CARD = "card";
 		public static final String URI = "uri";
 	}
 
