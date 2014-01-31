@@ -26,21 +26,22 @@ import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckExistsEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 
 public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final String deckTitle;
+	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, String deckTitle) {
-		new DeckCreationTask(contentResolver, deckTitle).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckCreationTask(contentResolver, deck).execute();
 	}
 
-	private DeckCreationTask(ContentResolver contentResolver, String deckTitle) {
+	private DeckCreationTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
-		this.deckTitle = deckTitle;
+		this.deck = deck;
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 	private Uri createDeck() {
 		Uri decksUri = buildDecksUri();
-		ContentValues deckValues = buildDeckValues(deckTitle);
+		ContentValues deckValues = buildDeckValues();
 
 		return contentResolver.insert(decksUri, deckValues);
 	}
@@ -63,10 +64,10 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 		return GambitContract.Decks.getDecksUri();
 	}
 
-	private ContentValues buildDeckValues(String deckTitle) {
+	private ContentValues buildDeckValues() {
 		ContentValues deckValues = new ContentValues();
 
-		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
+		deckValues.put(GambitContract.Decks.TITLE, deck.getTitle());
 		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, GambitContract.Decks.Defaults.CURRENT_CARD_INDEX);
 
 		return deckValues;

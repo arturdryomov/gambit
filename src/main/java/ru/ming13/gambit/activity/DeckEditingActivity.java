@@ -29,6 +29,7 @@ import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.fragment.DeckOperationFragment;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
@@ -68,11 +69,11 @@ public class DeckEditingActivity extends Activity
 
 	@Subscribe
 	public void onDeckAssembled(DeckAssembledEvent event) {
-		saveDeck(event.getDeckTitle());
+		saveDeck(event.getDeck());
 	}
 
-	private void saveDeck(String deckTitle) {
-		DeckEditingTask.execute(getContentResolver(), getDeckUri(), deckTitle);
+	private void saveDeck(Deck deck) {
+		DeckEditingTask.execute(getContentResolver(), getDeckUri(), deck);
 	}
 
 	@Subscribe

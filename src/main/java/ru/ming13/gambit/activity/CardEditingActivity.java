@@ -29,6 +29,7 @@ import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.fragment.CardOperationFragment;
+import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.task.CardEditingTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
@@ -68,18 +69,18 @@ public class CardEditingActivity extends Activity
 
 	@Subscribe
 	public void onCardAssembled(CardAssembledEvent event) {
-		saveCard(event.getCardFrontSideText(), event.getCardBackSideText());
+		saveCard(event.getCard());
 	}
 
-	private void saveCard(String cardFrontSideText, String cardBackSideText) {
-		CardEditingTask.execute(getContentResolver(), getCardUri(), cardFrontSideText, cardBackSideText);
+	private void saveCard(Card card) {
+		CardEditingTask.execute(getContentResolver(), getCardUri(), card);
 	}
 
 	@Subscribe
 	public void onCardSaved(CardSavedEvent event) {
 		finish();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();

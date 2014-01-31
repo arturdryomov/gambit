@@ -15,6 +15,7 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.CardLoadedEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
+import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.task.CardLoadingTask;
 import ru.ming13.gambit.util.Fragments;
 
@@ -68,12 +69,12 @@ public class CardOperationFragment extends Fragment
 
 	@Subscribe
 	public void onCardLoaded(CardLoadedEvent event) {
-		setUpCard(event.getCardFrontSideText(), event.getCardBackSideText());
+		setUpCard(event.getCard());
 	}
 
-	private void setUpCard(String cardFrontSideText, String cardBackSideText) {
-		getCardFrontSideTextView().setText(cardFrontSideText);
-		getCardBackSideTextView().setText(cardBackSideText);
+	private void setUpCard(Card card) {
+		getCardFrontSideTextView().setText(card.getFrontSideText());
+		getCardBackSideTextView().setText(card.getBackSideText());
 	}
 
 	private TextView getCardFrontSideTextView() {
@@ -110,7 +111,9 @@ public class CardOperationFragment extends Fragment
 	}
 
 	private void assembleCard() {
-		BusProvider.getBus().post(new CardAssembledEvent(getCardFrontSideText(), getCardBackSideText()));
+		Card card = new Card(getCardFrontSideText(), getCardBackSideText());
+
+		BusProvider.getBus().post(new CardAssembledEvent(card));
 	}
 
 	private void showErrorMessage() {

@@ -17,21 +17,17 @@
 package ru.ming13.gambit.bus;
 
 
+import ru.ming13.gambit.model.Card;
+
 public class CardLoadedEvent implements BusEvent
 {
-	private final String cardFrontSideText;
-	private final String cardBackSideText;
+	private final Card card;
 
-	public CardLoadedEvent(String cardFrontSideText, String cardBackSideText) {
-		this.cardFrontSideText = cardFrontSideText;
-		this.cardBackSideText = cardBackSideText;
+	public CardLoadedEvent(Card card) {
+		this.card = card;
 	}
 
-	public String getCardFrontSideText() {
-		return cardFrontSideText;
-	}
-
-	public String getCardBackSideText() {
-		return cardBackSideText;
+	public Card getCard() {
+		return card;
 	}
 }

@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardSavedEvent;
+import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -32,18 +33,16 @@ public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardUri;
-	private final String cardFrontSideText;
-	private final String cardBackSideText;
+	private final Card card;
 
-	public static void execute(ContentResolver contentResolver, Uri cardUri, String cardFrontSideText, String cardBackSideText) {
-		new CardEditingTask(contentResolver, cardUri, cardFrontSideText, cardBackSideText).execute();
+	public static void execute(ContentResolver contentResolver, Uri cardUri, Card card) {
+		new CardEditingTask(contentResolver, cardUri, card).execute();
 	}
 
-	private CardEditingTask(ContentResolver contentResolver, Uri cardUri, String cardFrontSideText, String cardBackSideText) {
+	private CardEditingTask(ContentResolver contentResolver, Uri cardUri, Card card) {
 		this.contentResolver = contentResolver;
 		this.cardUri = cardUri;
-		this.cardFrontSideText = cardFrontSideText;
-		this.cardBackSideText = cardBackSideText;
+		this.card = card;
 	}
 
 	@Override
@@ -60,8 +59,8 @@ public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 	private ContentValues buildCardValues() {
 		ContentValues cardValues = new ContentValues();
 
-		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, cardFrontSideText);
-		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, cardBackSideText);
+		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, card.getFrontSideText());
+		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, card.getBackSideText());
 
 		return cardValues;
 	}

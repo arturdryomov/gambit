@@ -26,6 +26,7 @@ import android.util.Pair;
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardLoadedEvent;
+import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -47,7 +48,7 @@ public class CardLoadingTask extends AsyncTask<Void, Void, BusEvent>
 	protected BusEvent doInBackground(Void... parameters) {
 		Pair<String, String> cardSideTexts = queryCardSideTexts();
 
-		return new CardLoadedEvent(cardSideTexts.first, cardSideTexts.second);
+		return new CardLoadedEvent(new Card(cardSideTexts.first, cardSideTexts.second));
 	}
 
 	private Pair<String, String> queryCardSideTexts() {

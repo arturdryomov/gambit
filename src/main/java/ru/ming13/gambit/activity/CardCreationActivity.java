@@ -29,6 +29,7 @@ import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.fragment.CardOperationFragment;
+import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.task.CardCreationTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
@@ -64,11 +65,11 @@ public class CardCreationActivity extends Activity
 
 	@Subscribe
 	public void onCardAssembled(CardAssembledEvent event) {
-		saveCard(event.getCardFrontSideText(), event.getCardBackSideText());
+		saveCard(event.getCard());
 	}
 
-	private void saveCard(String cardFrontSideText, String cardBackSideText) {
-		CardCreationTask.execute(getContentResolver(), getCardsUri(), cardFrontSideText, cardBackSideText);
+	private void saveCard(Card card) {
+		CardCreationTask.execute(getContentResolver(), getCardsUri(), card);
 	}
 
 	private Uri getCardsUri() {

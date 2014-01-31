@@ -28,6 +28,7 @@ import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.fragment.DeckOperationFragment;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.task.DeckCreationTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.OperationBar;
@@ -62,11 +63,11 @@ public class DeckCreationActivity extends Activity
 
 	@Subscribe
 	public void onDeckAssembled(DeckAssembledEvent event) {
-		saveDeck(event.getDeckTitle());
+		saveDeck(event.getDeck());
 	}
 
-	private void saveDeck(String deckTitle) {
-		DeckCreationTask.execute(getContentResolver(), deckTitle);
+	private void saveDeck(Deck deck) {
+		DeckCreationTask.execute(getContentResolver(), deck);
 	}
 
 	@Subscribe

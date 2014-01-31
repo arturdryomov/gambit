@@ -26,6 +26,7 @@ import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckExistsEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -33,16 +34,16 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri deckUri;
-	private final String deckTitle;
+	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, Uri deckUri, String deckTitle) {
-		new DeckEditingTask(contentResolver, deckUri, deckTitle).execute();
+	public static void execute(ContentResolver contentResolver, Uri deckUri, Deck deck) {
+		new DeckEditingTask(contentResolver, deckUri, deck).execute();
 	}
 
-	private DeckEditingTask(ContentResolver contentResolver, Uri deckUri, String deckTitle) {
+	private DeckEditingTask(ContentResolver contentResolver, Uri deckUri, Deck deck) {
 		this.contentResolver = contentResolver;
 		this.deckUri = deckUri;
-		this.deckTitle = deckTitle;
+		this.deck = deck;
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 
 	private BusEvent editDeck() {
 		try {
-			contentResolver.update(deckUri, buildDeckValues(deckTitle), null, null);
+			contentResolver.update(deckUri, buildDeckValues(), null, null);
 
 			return new DeckSavedEvent();
 		} catch (RuntimeException e) {
@@ -60,10 +61,10 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 		}
 	}
 
-	private ContentValues buildDeckValues(String deckTitle) {
+	private ContentValues buildDeckValues() {
 		ContentValues deckValues = new ContentValues();
 
-		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
+		deckValues.put(GambitContract.Decks.TITLE, deck.getTitle());
 
 		return deckValues;
 	}

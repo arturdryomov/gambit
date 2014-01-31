@@ -1,14 +1,16 @@
 package ru.ming13.gambit.bus;
 
+import ru.ming13.gambit.model.Deck;
+
 public class DeckAssembledEvent implements BusEvent
 {
-	private final String deckTitle;
+	private final Deck deck;
 
-	public DeckAssembledEvent(String deckTitle) {
-		this.deckTitle = deckTitle;
+	public DeckAssembledEvent(Deck deck) {
+		this.deck = deck;
 	}
 
-	public String getDeckTitle() {
-		return deckTitle;
+	public Deck getDeck() {
+		return deck;
 	}
 }

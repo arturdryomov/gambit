@@ -13,8 +13,10 @@ import com.squareup.otto.Subscribe;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckAssembledEvent;
+import ru.ming13.gambit.bus.DeckExistsEvent;
 import ru.ming13.gambit.bus.DeckLoadedEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.task.DeckLoadingTask;
 import ru.ming13.gambit.util.Fragments;
 
@@ -68,11 +70,11 @@ public class DeckOperationFragment extends Fragment
 
 	@Subscribe
 	public void onDeckLoaded(DeckLoadedEvent event) {
-		setUpDeck(event.getDeckTitle());
+		setUpDeck(event.getDeck());
 	}
 
-	private void setUpDeck(String deckTitle) {
-		getDeckTitleView().setText(deckTitle);
+	private void setUpDeck(Deck deck) {
+		getDeckTitleView().setText(deck.getTitle());
 	}
 
 	private TextView getDeckTitleView() {
@@ -101,13 +103,22 @@ public class DeckOperationFragment extends Fragment
 	}
 
 	private void assembleDeck() {
-		BusProvider.getBus().post(new DeckAssembledEvent(getDeckTitle()));
+		Deck deck = new Deck(getDeckTitle());
+
+		BusProvider.getBus().post(new DeckAssembledEvent(deck));
 	}
 
 	private void showErrorMessage() {
 		if (getDeckTitle().isEmpty()) {
 			getDeckTitleView().setError(getString(R.string.error_empty_field));
+		} else {
+			getDeckTitleView().setError(getString(R.string.error_deck_already_exists));
 		}
+	}
+
+	@Subscribe
+	public void onDeckExists(DeckExistsEvent event) {
+		showErrorMessage();
 	}
 
 	@Override

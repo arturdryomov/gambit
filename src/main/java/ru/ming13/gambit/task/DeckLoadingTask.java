@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckLoadedEvent;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -44,7 +45,7 @@ public class DeckLoadingTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		return new DeckLoadedEvent(queryDeckTitle());
+		return new DeckLoadedEvent(new Deck(queryDeckTitle()));
 	}
 
 	private String queryDeckTitle() {
