@@ -50,10 +50,6 @@ public final class Intents
 			this.context = context;
 		}
 
-		public Intent buildDeckListIntent() {
-			return new Intent(context, DecksListActivity.class);
-		}
-
 		public Intent buildDeckCreationIntent() {
 			return new Intent(context, DeckCreationActivity.class);
 		}

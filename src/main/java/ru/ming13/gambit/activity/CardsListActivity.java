@@ -45,7 +45,7 @@ public class CardsListActivity extends Activity
 		Fragments.Operator.set(this, buildFragment());
 	}
 
-	protected Fragment buildFragment() {
+	private Fragment buildFragment() {
 		return CardsListFragment.newInstance(getCardsUri());
 	}
 

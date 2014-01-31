@@ -21,7 +21,7 @@ public class Card implements Parcelable
 		return backSideText;
 	}
 
-	public Card(Parcel parcel) {
+	private Card(Parcel parcel) {
 		this.frontSideText = parcel.readString();
 		this.backSideText = parcel.readString();
 	}

@@ -15,7 +15,7 @@ public class Deck implements Parcelable
 		return title;
 	}
 
-	public Deck(Parcel parcel) {
+	private Deck(Parcel parcel) {
 		this.title = parcel.readString();
 	}
 
