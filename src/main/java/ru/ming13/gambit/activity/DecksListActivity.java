@@ -50,7 +50,7 @@ public class DecksListActivity extends Activity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_action_bar_decks, menu);
+		getMenuInflater().inflate(R.menu.action_bar_decks_list, menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -58,7 +58,7 @@ public class DecksListActivity extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_new_deck:
+			case R.id.menu_create:
 				startDeckCreationActivity();
 				return true;
 

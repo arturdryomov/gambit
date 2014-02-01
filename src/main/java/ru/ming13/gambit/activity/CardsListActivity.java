@@ -59,7 +59,7 @@ public class CardsListActivity extends Activity
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_action_bar_cards, menu);
+		getMenuInflater().inflate(R.menu.action_bar_cards_list, menu);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -71,7 +71,7 @@ public class CardsListActivity extends Activity
 				finish();
 				return true;
 
-			case R.id.menu_new_card:
+			case R.id.menu_create:
 				startCardCreationActivity();
 				return true;
 

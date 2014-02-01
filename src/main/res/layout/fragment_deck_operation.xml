@@ -16,17 +16,22 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/FullParentLayout">
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
 	<LinearLayout
-		style="@style/FormLayout">
+		android:orientation="vertical"
+		android:padding="@dimen/padding_operation"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
 
 		<EditText
 			android:id="@+id/edit_deck_title"
 			android:singleLine="true"
 			android:inputType="text|textCapSentences"
 			android:hint="@string/hint_deck_name"
-			style="@style/FormLayoutFirstItem" />
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
 
 	</LinearLayout>
 

@@ -18,15 +18,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:id="@+id/menu_edit"
-		android:icon="@drawable/ic_menu_edit"
-		android:title="@string/menu_edit"
-		android:showAsAction="always" />
+		android:id="@+id/menu_create"
+		android:icon="@drawable/ic_menu_create"
+		android:title="@string/menu_create_deck"
+		android:showAsAction="always"/>
 
 	<item
-		android:id="@+id/menu_delete"
-		android:icon="@drawable/ic_menu_remove"
-		android:title="@string/menu_delete"
-		android:showAsAction="always" />
+		android:id="@+id/menu_send_feedback"
+		android:title="@string/menu_send_feedback"
+		android:showAsAction="never"/>
+
+	<item
+		android:id="@+id/menu_rate_application"
+		android:title="@string/menu_rate_application"
+		android:showAsAction="never"/>
+
+	<item
+		android:id="@+id/menu_licenses"
+		android:title="@string/menu_licenses"
+		android:showAsAction="never"/>
 
 </menu>

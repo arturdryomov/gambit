@@ -31,7 +31,7 @@ public class CardsListAdapter extends CursorAdapter
 	}
 
 	private View buildCardView(ViewGroup viewGroup) {
-		return layoutInflater.inflate(R.layout.list_item, viewGroup, false);
+		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
 	}
 
 	private void setUpCardInformation(Context context, Cursor cardsCursor, View cardView) {

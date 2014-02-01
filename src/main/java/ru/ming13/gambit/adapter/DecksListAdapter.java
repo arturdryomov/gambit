@@ -31,7 +31,7 @@ public class DecksListAdapter extends CursorAdapter
 	}
 
 	private View buildDeckView(ViewGroup viewGroup) {
-		return layoutInflater.inflate(R.layout.list_item, viewGroup, false);
+		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
 	}
 
 	private void setUpDeckInformation(Cursor decksCursor, View deckView) {

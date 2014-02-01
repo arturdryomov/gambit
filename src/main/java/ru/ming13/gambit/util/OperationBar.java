@@ -35,7 +35,7 @@ public final class OperationBar implements View.OnClickListener
 	private View buildBarView() {
 		LayoutInflater layoutInflater = LayoutInflater.from(actionBar.getThemedContext());
 
-		return layoutInflater.inflate(R.layout.bar_operation, null);
+		return layoutInflater.inflate(R.layout.view_bar_operation, null);
 	}
 
 	private ActionBar.LayoutParams buildBarParams() {

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -16,7 +15,18 @@
   ~ limitations under the License.
   -->
 
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/web_licenses"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/menu_replay"
+		android:icon="@drawable/ic_menu_replay"
+		android:title="@string/menu_replay"
+		android:showAsAction="always"/>
+
+	<item
+		android:id="@+id/menu_shuffle"
+		android:icon="@drawable/ic_menu_shuffle_disabled"
+		android:title="@string/menu_shuffle_enable"
+		android:showAsAction="always"/>
+
+</menu>

@@ -45,7 +45,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pager);
+		setContentView(R.layout.activity_cards_pager);
 
 		setUpSeismometer();
 		setUpCards();
@@ -66,11 +66,11 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private ViewPager getCardsPager() {
-		return (ViewPager) findViewById(R.id.pager);
+		return (ViewPager) findViewById(R.id.pager_cards);
 	}
 
 	private void setUpCardsIndicator() {
-		UnderlinePageIndicator cardsIndicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
+		UnderlinePageIndicator cardsIndicator = (UnderlinePageIndicator) findViewById(R.id.indicator_cards);
 		cardsIndicator.setViewPager(getCardsPager());
 	}
 
@@ -167,7 +167,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (shouldActionsBeShown()) {
-			getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager, menu);
+			getMenuInflater().inflate(R.menu.action_bar_cards_pager, menu);
 
 			menu.findItem(R.id.menu_shuffle).setIcon(getShuffleActionIconResource());
 			menu.findItem(R.id.menu_shuffle).setTitle(getShuffleActionTitleResource());

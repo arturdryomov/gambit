@@ -43,36 +43,32 @@
 
 		<activity
 			android:name=".activity.DeckCreationActivity"
-			android:label="@string/title_new_deck"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".activity.DeckEditingActivity"
-			android:label="@string/title_rename_deck"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".activity.CardsListActivity"
-			android:label="@string/title_edit_cards">
+			android:label="@string/title_cards">
 		</activity>
 
 		<activity
 			android:name=".activity.CardsPagerActivity"
 			android:label="@string/title_cards"
-			android:theme="@style/Theme.Gambit.Cards">
+			android:theme="@style/Theme.Gambit.CardsPager">
 		</activity>
 
 		<activity
 			android:name=".activity.CardCreationActivity"
-			android:label="@string/title_new_card"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 
 		<activity
 			android:name=".activity.CardEditingActivity"
-			android:label="@string/title_edit_card"
 			android:theme="@style/Theme.Gambit.Operation">
 		</activity>
 

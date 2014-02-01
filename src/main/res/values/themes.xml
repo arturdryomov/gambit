@@ -34,8 +34,8 @@
 		<item name="android:displayOptions">showTitle</item>
 	</style>
 
-	<style name="Theme.Gambit.Cards" parent="Theme.Gambit">
-		<item name="android:actionBarStyle">@style/Theme.Gambit.Cards.ActionBar</item>
+	<style name="Theme.Gambit.CardsPager" parent="Theme.Gambit">
+		<item name="android:actionBarStyle">@style/Theme.Gambit.CardsPager.ActionBar</item>
 
 		<!-- Change background color -->
 		<item name="android:colorBackground">@color/background_card_container</item>
@@ -43,7 +43,7 @@
 		<item name="android:windowBackground">@color/background_card_container</item>
 	</style>
 
-	<style name="Theme.Gambit.Cards.ActionBar" parent="Theme.Gambit.ActionBar">
+	<style name="Theme.Gambit.CardsPager.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showHome|homeAsUp</item>
 	</style>
 

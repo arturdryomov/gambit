@@ -29,22 +29,21 @@
 
 	<!-- Actual dimensions. -->
 
-	<dimen name="margin_top_form_item">8dp</dimen>
-	<dimen name="margin_top_empty_list_subtitle">8dp</dimen>
-	<dimen name="margin_card">7dp</dimen>
+	<dimen name="margin_card">@dimen/space_ui_element</dimen>
 
 	<dimen name="padding_list">@dimen/space_ui_element_double</dimen>
 	<dimen name="padding_list_item">@dimen/space_ui_element</dimen>
-	<dimen name="padding_list_message">40dp</dimen>
-	<dimen name="padding_list_message_summary">@dimen/space_ui_element</dimen>
+	<dimen name="padding_message">40dp</dimen>
+	<dimen name="padding_message_summary">@dimen/space_ui_element</dimen>
+	<dimen name="padding_operation">@dimen/space_ui_element_double</dimen>
+	<dimen name="padding_operation_item">@dimen/space_ui_element</dimen>
+	<dimen name="padding_operation_bar_divider">12dp</dimen>
+	<dimen name="padding_operation_bar_drawable">@dimen/space_ui_element</dimen>
 
-	<dimen name="padding_form_layout">16dp</dimen>
-
+	<dimen name="text_card">30sp</dimen>
 	<dimen name="text_list_item">@dimen/text_medium</dimen>
-	<dimen name="text_list_message_title">@dimen/text_large</dimen>
-	<dimen name="text_list_message_summary">@dimen/text_medium</dimen>
-
-	<dimen name="text_size_card">30sp</dimen>
+	<dimen name="text_message_title">@dimen/text_large</dimen>
+	<dimen name="text_message_summary">@dimen/text_medium</dimen>
 
 	<dimen name="height_card_indicator">2dp</dimen>
 

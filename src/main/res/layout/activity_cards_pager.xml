@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2012 Artur Dryomov
   ~
@@ -15,18 +16,20 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-	<item
-		android:id="@+id/menu_cancel"
-		android:icon="@drawable/ic_menu_cancel"
-		android:title="@string/menu_cancel"
-		android:showAsAction="always|withText" />
+	<android.support.v4.view.ViewPager
+		android:id="@+id/pager_cards"
+		android:layout_alignParentTop="true"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
 
-	<item
-		android:id="@+id/menu_done"
-		android:icon="@drawable/ic_menu_done"
-		android:title="@string/menu_done"
-		android:showAsAction="always|withText" />
+	<com.viewpagerindicator.UnderlinePageIndicator
+		android:id="@+id/indicator_cards"
+		android:layout_alignParentBottom="true"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/height_card_indicator"/>
 
-</menu>
+</RelativeLayout>

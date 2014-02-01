@@ -148,7 +148,7 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-		actionMode.getMenuInflater().inflate(R.menu.menu_context_cards, menu);
+		actionMode.getMenuInflater().inflate(R.menu.context_cards_list, menu);
 
 		return true;
 	}

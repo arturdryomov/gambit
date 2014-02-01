@@ -18,15 +18,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:id="@+id/menu_replay"
-		android:icon="@drawable/ic_menu_replay"
-		android:title="@string/menu_replay"
-		android:showAsAction="always" />
-
-	<item
-		android:id="@+id/menu_shuffle"
-		android:icon="@drawable/ic_menu_shuffle_disabled"
-		android:title="@string/menu_shuffle_enable"
-		android:showAsAction="always" />
+		android:id="@+id/menu_create"
+		android:icon="@drawable/ic_menu_create"
+		android:title="@string/menu_create_card"
+		android:showAsAction="always"/>
 
 </menu>

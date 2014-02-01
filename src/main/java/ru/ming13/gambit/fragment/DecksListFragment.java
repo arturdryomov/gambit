@@ -148,7 +148,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-		actionMode.getMenuInflater().inflate(R.menu.menu_context_decks, menu);
+		actionMode.getMenuInflater().inflate(R.menu.context_decks_list, menu);
 
 		return true;
 	}
