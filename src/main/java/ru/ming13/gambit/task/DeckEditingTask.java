@@ -49,7 +49,7 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 	protected BusEvent doInBackground(Void... parameters) {
 		editDeck();
 
-		return new DeckSavedEvent();
+		return new DeckSavedEvent(deckUri);
 	}
 
 	private void editDeck() {

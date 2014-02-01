@@ -46,8 +46,10 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		if (isDeckCorrect(createDeck())) {
-			return new DeckSavedEvent();
+		Uri deckUri = createDeck();
+
+		if (isDeckCorrect(deckUri)) {
+			return new DeckSavedEvent(deckUri);
 		} else {
 			return new DeckExistsEvent();
 		}
