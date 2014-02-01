@@ -36,7 +36,7 @@
 	<dimen name="padding_message">40dp</dimen>
 	<dimen name="padding_message_summary">@dimen/space_ui_element</dimen>
 	<dimen name="padding_operation">@dimen/space_ui_element_double</dimen>
-	<dimen name="padding_operation_item">@dimen/space_ui_element</dimen>
+	<dimen name="padding_operation_item">@dimen/space_ui_element_double</dimen>
 	<dimen name="padding_operation_bar_divider">12dp</dimen>
 	<dimen name="padding_operation_bar_drawable">@dimen/space_ui_element</dimen>
 
