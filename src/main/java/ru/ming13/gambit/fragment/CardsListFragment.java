@@ -163,11 +163,15 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 		switch (menuItem.getItemId()) {
 			case R.id.menu_delete:
 				startCardsDeletion();
-				return true;
+				break;
 
 			default:
 				return false;
 		}
+
+		actionMode.finish();
+
+		return true;
 	}
 
 	private void startCardsDeletion() {

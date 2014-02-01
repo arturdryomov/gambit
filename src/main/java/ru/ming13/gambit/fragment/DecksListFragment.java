@@ -165,19 +165,23 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
 				startDeckEditingActivity();
-				return true;
+				break;
 
 			case R.id.menu_edit_cards:
 				startCardsListActivity();
-				return true;
+				break;
 
 			case R.id.menu_delete:
 				startDecksDeletion();
-				return true;
+				break;
 
 			default:
 				return false;
 		}
+
+		actionMode.finish();
+
+		return true;
 	}
 
 	private void startDeckEditingActivity() {
