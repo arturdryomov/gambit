@@ -26,11 +26,11 @@
 		<item name="android:displayOptions">showTitle|showHome|homeAsUp</item>
 	</style>
 
-	<style name="Theme.Gambit.Home" parent="Theme.Gambit">
-		<item name="android:actionBarStyle">@style/Theme.Gambit.Home.ActionBar</item>
+	<style name="Theme.Gambit.DecksList" parent="Theme.Gambit">
+		<item name="android:actionBarStyle">@style/Theme.Gambit.DecksList.ActionBar</item>
 	</style>
 
-	<style name="Theme.Gambit.Home.ActionBar" parent="Theme.Gambit.ActionBar">
+	<style name="Theme.Gambit.DecksList.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showTitle</item>
 	</style>
 

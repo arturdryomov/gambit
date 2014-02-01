@@ -45,6 +45,6 @@
 	<dimen name="text_message_title">@dimen/text_large</dimen>
 	<dimen name="text_message_summary">@dimen/text_medium</dimen>
 
-	<dimen name="height_card_indicator">2dp</dimen>
+	<dimen name="height_indicator_cards">2dp</dimen>
 
 </resources>

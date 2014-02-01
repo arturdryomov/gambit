@@ -135,10 +135,10 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void changeDecksActions(ActionMode actionMode) {
-		MenuItem actionRenameDeck = actionMode.getMenu().findItem(R.id.menu_rename);
+		MenuItem actionEditDeck = actionMode.getMenu().findItem(R.id.menu_edit);
 		MenuItem actionEditCards = actionMode.getMenu().findItem(R.id.menu_edit_cards);
 
-		actionRenameDeck.setVisible(isSingleDeckSelected());
+		actionEditDeck.setVisible(isSingleDeckSelected());
 		actionEditCards.setVisible(isSingleDeckSelected());
 	}
 
@@ -163,7 +163,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	@Override
 	public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_rename:
+			case R.id.menu_edit:
 				startDeckEditingActivity();
 				return true;
 

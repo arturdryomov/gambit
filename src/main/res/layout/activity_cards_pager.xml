@@ -30,6 +30,6 @@
 		android:id="@+id/indicator_cards"
 		android:layout_alignParentBottom="true"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/height_card_indicator"/>
+		android:layout_height="@dimen/height_indicator_cards"/>
 
 </RelativeLayout>

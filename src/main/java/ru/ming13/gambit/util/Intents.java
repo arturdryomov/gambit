@@ -11,7 +11,6 @@ import ru.ming13.gambit.activity.CardsListActivity;
 import ru.ming13.gambit.activity.CardsPagerActivity;
 import ru.ming13.gambit.activity.DeckCreationActivity;
 import ru.ming13.gambit.activity.DeckEditingActivity;
-import ru.ming13.gambit.activity.DecksListActivity;
 import ru.ming13.gambit.activity.LicensesActivity;
 
 public final class Intents

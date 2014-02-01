@@ -32,7 +32,7 @@
 
 		<activity
 			android:name=".activity.DecksListActivity"
-			android:theme="@style/Theme.Gambit.Home">
+			android:theme="@style/Theme.Gambit.DecksList">
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -58,7 +58,6 @@
 
 		<activity
 			android:name=".activity.CardsPagerActivity"
-			android:label="@string/title_cards"
 			android:theme="@style/Theme.Gambit.CardsPager">
 		</activity>
 
