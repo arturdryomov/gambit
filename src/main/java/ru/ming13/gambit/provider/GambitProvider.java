@@ -26,6 +26,7 @@ import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -220,11 +221,19 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private int updateDeck(SQLiteDatabase database, Uri deckUri, ContentValues deckValues) {
-		return database.update(DatabaseSchema.Tables.DECKS, deckValues, buildDeckSelectionClause(deckUri), null);
+		try {
+			return database.update(DatabaseSchema.Tables.DECKS, deckValues, buildDeckSelectionClause(deckUri), null);
+		} catch (SQLiteException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private int updateCard(SQLiteDatabase database, Uri cardUri, ContentValues cardValues) {
-		return database.update(DatabaseSchema.Tables.CARDS, cardValues, buildCardSelectionClause(cardUri), null);
+		try {
+			return database.update(DatabaseSchema.Tables.CARDS, cardValues, buildCardSelectionClause(cardUri), null);
+		} catch (SQLiteException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
