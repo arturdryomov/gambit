@@ -21,59 +21,67 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.DeckExistsException;
-import ru.ming13.gambit.provider.GambitContract;
+
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckCreatedEvent;
 import ru.ming13.gambit.bus.DeckExistsEvent;
+import ru.ming13.gambit.bus.DeckSavedEvent;
+import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.provider.GambitContract;
 
 
 public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final String deckTitle;
+	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, String deckTitle) {
-		new DeckCreationTask(contentResolver, deckTitle).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckCreationTask(contentResolver, deck).execute();
 	}
 
-	private DeckCreationTask(ContentResolver contentResolver, String deckTitle) {
+	private DeckCreationTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
-		this.deckTitle = deckTitle;
+		this.deck = deck;
 	}
 
 	@Override
 	protected BusEvent doInBackground(Void... parameters) {
-		return createDeck();
-	}
-
-	private BusEvent createDeck() {
-		try {
-			Uri deckUri = contentResolver.insert(GambitContract.Decks.CONTENT_URI,
-				buildDeckValues(deckTitle));
-
-			return new DeckCreatedEvent(deckUri);
-		}
-		catch (DeckExistsException e) {
+		if (isDeckCorrect(createDeck())) {
+			return new DeckSavedEvent();
+		} else {
 			return new DeckExistsEvent();
 		}
 	}
 
-	private ContentValues buildDeckValues(String deckTitle) {
+	private boolean isDeckCorrect(Uri deckUri) {
+		return GambitContract.Decks.getDeckId(deckUri) >= 0;
+	}
+
+	private Uri createDeck() {
+		return contentResolver.insert(getDecksUri(), buildDeckValues());
+	}
+
+	private Uri getDecksUri() {
+		return GambitContract.Decks.getDecksUri();
+	}
+
+	private ContentValues buildDeckValues() {
 		ContentValues deckValues = new ContentValues();
 
-		deckValues.put(GambitContract.Decks.TITLE, deckTitle);
-		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX,
-			GambitContract.Decks.DEFAULT_CURRENT_CARD_INDEX);
+		deckValues.put(GambitContract.Decks.TITLE, deck.getTitle());
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, getCurrentCardIndex());
 
 		return deckValues;
+	}
+
+	private int getCurrentCardIndex() {
+		return GambitContract.Decks.Defaults.CURRENT_CARD_INDEX;
 	}
 
 	@Override
 	protected void onPostExecute(BusEvent busEvent) {
 		super.onPostExecute(busEvent);
 
-		BusProvider.getInstance().post(busEvent);
+		BusProvider.getBus().post(busEvent);
 	}
 }

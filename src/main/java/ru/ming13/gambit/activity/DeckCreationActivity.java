@@ -17,37 +17,61 @@
 package ru.ming13.gambit.activity;
 
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
+
 import com.squareup.otto.Subscribe;
+
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckCreatedEvent;
-import ru.ming13.gambit.bus.DeckCreationCancelledEvent;
-import ru.ming13.gambit.fragment.DeckCreationFragment;
-import ru.ming13.gambit.intent.IntentFactory;
+import ru.ming13.gambit.bus.DeckAssembledEvent;
+import ru.ming13.gambit.bus.DeckSavedEvent;
+import ru.ming13.gambit.bus.OperationCancelledEvent;
+import ru.ming13.gambit.fragment.DeckOperationFragment;
+import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.task.DeckCreationTask;
+import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.OperationBar;
 
 
-public class DeckCreationActivity extends FragmentWrapperActivity
+public class DeckCreationActivity extends Activity
 {
 	@Override
-	protected Fragment buildFragment() {
-		return DeckCreationFragment.newInstance();
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setUpBar();
+		setUpFragment();
+	}
+
+	private void setUpBar() {
+		OperationBar.at(this).show();
+	}
+
+	private void setUpFragment() {
+		Fragments.Operator.set(this, buildFragment());
+	}
+
+	private Fragment buildFragment() {
+		return DeckOperationFragment.newInstance();
 	}
 
 	@Subscribe
-	public void onDeckCreated(DeckCreatedEvent deckCreatedEvent) {
-		callCardsList(deckCreatedEvent.getDeckUri());
+	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
 	}
 
-	private void callCardsList(Uri deckUri) {
-		Intent intent = IntentFactory.createCardsIntent(this, deckUri);
-		startActivity(intent);
+	@Subscribe
+	public void onDeckAssembled(DeckAssembledEvent event) {
+		saveDeck(event.getDeck());
+	}
+
+	private void saveDeck(Deck deck) {
+		DeckCreationTask.execute(getContentResolver(), deck);
 	}
 
 	@Subscribe
-	public void onDeckCreationCancelled(DeckCreationCancelledEvent deckCreationCancelledEvent) {
+	public void onDeckSaved(DeckSavedEvent event) {
 		finish();
 	}
 
@@ -55,13 +79,13 @@ public class DeckCreationActivity extends FragmentWrapperActivity
 	protected void onResume() {
 		super.onResume();
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 }

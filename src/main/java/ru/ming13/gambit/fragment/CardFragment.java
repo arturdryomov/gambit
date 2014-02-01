@@ -23,7 +23,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.util.Fragments;
 
 
 public class CardFragment extends Fragment implements View.OnClickListener
@@ -33,33 +36,22 @@ public class CardFragment extends Fragment implements View.OnClickListener
 		FRONT, BACK
 	}
 
-	private String cardFrontSideText;
-	private String cardBackSideText;
 	private CardSide currentCardSide = CardSide.FRONT;
 
-	public static CardFragment newInstance(String cardFrontSideText, String cardBackSideText) {
+	public static CardFragment newInstance(Card card) {
 		CardFragment cardFragment = new CardFragment();
 
-		cardFragment.setArguments(buildArguments(cardFrontSideText, cardBackSideText));
+		cardFragment.setArguments(buildArguments(card));
 
 		return cardFragment;
 	}
 
-	private static Bundle buildArguments(String cardFrontSideText, String cardBackSideText) {
+	private static Bundle buildArguments(Card card) {
 		Bundle arguments = new Bundle();
 
-		arguments.putString(FragmentArguments.CARD_FRONT_SIDE_TEXT, cardFrontSideText);
-		arguments.putString(FragmentArguments.CARD_BACK_SIDE_TEXT, cardBackSideText);
+		arguments.putParcelable(Fragments.Arguments.CARD, card);
 
 		return arguments;
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		cardFrontSideText = getArguments().getString(FragmentArguments.CARD_FRONT_SIDE_TEXT);
-		cardBackSideText = getArguments().getString(FragmentArguments.CARD_BACK_SIDE_TEXT);
 	}
 
 	@Override
@@ -71,59 +63,62 @@ public class CardFragment extends Fragment implements View.OnClickListener
 	public void onStart() {
 		super.onStart();
 
-		setUpCardClickListener();
-
-		setCurrentCardText();
+		setUpCard();
 	}
 
-	private void setUpCardClickListener() {
-		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
+	private void setUpCard() {
+		setUpCardListener();
+		setUpCardText();
+	}
 
-		cardTextView.setOnClickListener(this);
+	private void setUpCardListener() {
+		getCardView().setOnClickListener(this);
+	}
+
+	private TextView getCardView() {
+		return (TextView) getView().findViewById(R.id.text);
 	}
 
 	@Override
 	public void onClick(View view) {
 		flipCard();
+
+		setUpCardText();
 	}
 
 	private void flipCard() {
-		switch (currentCardSide) {
-			case FRONT:
-				currentCardSide = CardSide.BACK;
-				break;
-
-			case BACK:
-				currentCardSide = CardSide.FRONT;
-				break;
-
-			default:
-				currentCardSide = CardSide.FRONT;
-				break;
-		}
-
-		setCurrentCardText();
+		currentCardSide = getFlippedCardSide();
 	}
 
-	private void setCurrentCardText() {
+	private CardSide getFlippedCardSide() {
 		switch (currentCardSide) {
 			case FRONT:
-				setCardText(cardFrontSideText);
-				break;
-
-			case BACK:
-				setCardText(cardBackSideText);
-				break;
+				return CardSide.BACK;
 
 			default:
-				setCardText(cardFrontSideText);
-				break;
+				return CardSide.FRONT;
 		}
 	}
 
-	private void setCardText(String text) {
-		TextView cardTextView = (TextView) getView().findViewById(R.id.text);
+	private void setUpCardText() {
+		setUpCardText(getCurrentCardText());
+	}
 
-		cardTextView.setText(text);
+	private String getCurrentCardText() {
+		switch (currentCardSide) {
+			case FRONT:
+				return getCard().getFrontSideText();
+
+			default:
+				return getCard().getBackSideText();
+		}
+	}
+
+	private Card getCard() {
+		return getArguments().getParcelable(Fragments.Arguments.CARD);
+	}
+
+	private void setUpCardText(String text) {
+		getCardView().setText(text);
 	}
 }

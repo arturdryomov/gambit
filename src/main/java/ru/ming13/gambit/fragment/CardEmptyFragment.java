@@ -23,9 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardsListCalledFromCardsEmptyPagerEvent;
 
 
 public class CardEmptyFragment extends Fragment implements View.OnClickListener
@@ -43,30 +42,18 @@ public class CardEmptyFragment extends Fragment implements View.OnClickListener
 	public void onStart() {
 		super.onStart();
 
-		setUpCreateCardsButtonListener();
+		setUpCardListener();
 	}
 
-	private void setUpCreateCardsButtonListener() {
-		Button createCardsButton = (Button) getView().findViewById(R.id.button_create_cards);
-		createCardsButton.setOnClickListener(this);
+	private void setUpCardListener() {
+		getCreateCardsButton().setOnClickListener(this);
+	}
+
+	private Button getCreateCardsButton() {
+		return (Button) getView().findViewById(R.id.button_create_cards);
 	}
 
 	@Override
 	public void onClick(View view) {
-		BusProvider.getInstance().post(new CardsListCalledFromCardsEmptyPagerEvent());
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		BusProvider.getInstance().register(this);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		BusProvider.getInstance().unregister(this);
 	}
 }

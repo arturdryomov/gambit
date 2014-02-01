@@ -17,15 +17,17 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/FullParentLayout">
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
 	<TextView
 		android:id="@+id/text"
-		android:textSize="@dimen/text_size_card"
+		android:textSize="@dimen/text_card"
 		android:background="@drawable/bg_card"
 		android:layout_centerInParent="true"
 		android:gravity="center"
 		android:layout_margin="@dimen/margin_card"
-		style="@style/FullParentLayout" />
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
 
 </RelativeLayout>

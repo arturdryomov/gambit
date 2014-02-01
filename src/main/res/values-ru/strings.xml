@@ -39,13 +39,12 @@
 	<string name="hint_card_front_text">Текст лицевой стороны</string>
 	<string name="hint_card_back_text">Текст обратной стороны</string>
 
-	<string name="menu_done">Готово</string>
 	<string name="menu_cancel">Отменить</string>
 	<string name="menu_delete">Удалить</string>
 	<string name="menu_rename">Переименовать</string>
 	<string name="menu_edit">Редактировать</string>
-	<string name="menu_new_deck">Новая стопка</string>
-	<string name="menu_new_card">Новая карточка</string>
+	<string name="menu_create_deck">Новая стопка</string>
+	<string name="menu_create_card">Новая карточка</string>
 	<string name="menu_edit_cards">Редактировать карточки</string>
 	<string name="menu_shuffle_enable">Включить перемешивание</string>
 	<string name="menu_shuffle_disable">Выключить перемешивание</string>

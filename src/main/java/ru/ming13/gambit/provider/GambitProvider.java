@@ -17,60 +17,75 @@
 package ru.ming13.gambit.provider;
 
 
-import java.util.ArrayList;
-
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import ru.ming13.gambit.database.DbOpenHelper;
-import ru.ming13.gambit.database.DbSchema;
+
+import java.util.ArrayList;
+
+import ru.ming13.gambit.database.DatabaseOpenHelper;
+import ru.ming13.gambit.database.DatabaseSchema;
+import ru.ming13.gambit.util.SqlBuilder;
 
 
 public class GambitProvider extends ContentProvider
 {
 	private SQLiteOpenHelper databaseHelper;
-
 	private UriMatcher uriMatcher;
 
 	@Override
 	public boolean onCreate() {
-		databaseHelper = new DbOpenHelper(getContext());
-
-		uriMatcher = GambitProviderPaths.buildUriMatcher();
+		databaseHelper = new DatabaseOpenHelper(getContext());
+		uriMatcher = GambitUriMatcher.getMatcher();
 
 		return true;
 	}
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArguments, String sortOrder) {
+		Cursor cursor = buildQueryBuilder(uri).query(
+			databaseHelper.getReadableDatabase(),
+			projection,
+			selection,
+			selectionArguments,
+			null,
+			null,
+			sortOrder);
+
+		cursor.setNotificationUri(getContentResolver(), uri);
+
+		return cursor;
+	}
+
+	private SQLiteQueryBuilder buildQueryBuilder(Uri uri) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
 		switch (uriMatcher.match(uri)) {
-			case GambitProviderPaths.Codes.DECKS:
-				queryBuilder.setTables(DbSchema.Tables.DECKS);
+			case GambitUriMatcher.Codes.DECKS:
+				queryBuilder.setTables(DatabaseSchema.Tables.DECKS);
 				break;
 
-			case GambitProviderPaths.Codes.DECK:
-				queryBuilder.setTables(DbSchema.Tables.DECKS);
+			case GambitUriMatcher.Codes.DECK:
+				queryBuilder.setTables(DatabaseSchema.Tables.DECKS);
 				queryBuilder.appendWhere(buildDeckSelectionClause(uri));
 				break;
 
-			case GambitProviderPaths.Codes.CARDS:
-				queryBuilder.setTables(DbSchema.Tables.CARDS);
+			case GambitUriMatcher.Codes.CARDS:
+				queryBuilder.setTables(DatabaseSchema.Tables.CARDS);
 				queryBuilder.appendWhere(buildCardsSelectionClause(uri));
 				break;
 
-			case GambitProviderPaths.Codes.CARD:
-				queryBuilder.setTables(DbSchema.Tables.CARDS);
+			case GambitUriMatcher.Codes.CARD:
+				queryBuilder.setTables(DatabaseSchema.Tables.CARDS);
 				queryBuilder.appendWhere(buildCardSelectionClause(uri));
 				break;
 
@@ -78,38 +93,33 @@ public class GambitProvider extends ContentProvider
 				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 
-		Cursor cursor = queryBuilder.query(databaseHelper.getReadableDatabase(), projection, selection,
-			selectionArguments, null, null, sortOrder);
-
-		cursor.setNotificationUri(getContext().getContentResolver(), uri);
-
-		return cursor;
+		return queryBuilder;
 	}
 
 	private String buildDeckSelectionClause(Uri deckUri) {
 		long deckId = GambitContract.Decks.getDeckId(deckUri);
 
-		return buildSelectionClause(DbSchema.DecksColumns._ID, deckId);
-	}
-
-	private String buildSelectionClause(String fieldName, long id) {
-		return String.format("%s = %d", fieldName, id);
+		return SqlBuilder.buildSelectionClause(DatabaseSchema.DecksColumns._ID, deckId);
 	}
 
 	private String buildCardsSelectionClause(Uri cardsUri) {
 		long deckId = GambitContract.Cards.getDeckId(cardsUri);
 
-		return buildSelectionClause(DbSchema.CardsColumns.DECK_ID, deckId);
+		return SqlBuilder.buildSelectionClause(DatabaseSchema.CardsColumns.DECK_ID, deckId);
 	}
 
 	private String buildCardSelectionClause(Uri cardUri) {
 		long cardId = GambitContract.Cards.getCardId(cardUri);
 
-		return buildSelectionClause(DbSchema.CardsColumns._ID, cardId);
+		return SqlBuilder.buildSelectionClause(DatabaseSchema.CardsColumns._ID, cardId);
 	}
 
 	private String buildUnsupportedUriDetailMessage(Uri unsupportedUri) {
 		return String.format("Unsupported URI: %s", unsupportedUri.toString());
+	}
+
+	private ContentResolver getContentResolver() {
+		return getContext().getContentResolver();
 	}
 
 	@Override
@@ -119,251 +129,122 @@ public class GambitProvider extends ContentProvider
 
 	@Override
 	public Uri insert(Uri uri, ContentValues contentValues) {
-		switch (uriMatcher.match(uri)) {
-			case GambitProviderPaths.Codes.DECKS:
-				return insertDeck(contentValues);
+		Uri insertedContentsUri = insertContents(uri, contentValues);
 
-			case GambitProviderPaths.Codes.CARDS:
-				return insertCard(uri, contentValues);
+		getContentResolver().notifyChange(insertedContentsUri, null);
+
+		return insertedContentsUri;
+	}
+
+	private Uri insertContents(Uri uri, ContentValues contentValues) {
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+		switch (uriMatcher.match(uri)) {
+			case GambitUriMatcher.Codes.DECKS:
+				return insertDeck(database, contentValues);
+
+			case GambitUriMatcher.Codes.CARDS:
+				return insertCard(database, uri, contentValues);
 
 			default:
 				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 	}
 
-	private Uri insertDeck(ContentValues deckValues) {
-		if (!areDeckValuesValidForInsertion(deckValues)) {
-			throw new IllegalArgumentException("Content values are not valid.");
-		}
+	private Uri insertDeck(SQLiteDatabase database, ContentValues deckValues) {
+		long deckId = database.insert(DatabaseSchema.Tables.DECKS, null, deckValues);
 
-		if (!isDeckTitleUnique(deckValues)) {
-			throw new DeckExistsException();
-		}
-
-		return createDeck(deckValues);
+		return GambitContract.Decks.getDeckUri(deckId);
 	}
 
-	private boolean areDeckValuesValidForInsertion(ContentValues deckValues) {
-		return deckValues.containsKey(DbSchema.DecksColumns.TITLE) && deckValues.containsKey(
-			DbSchema.DecksColumns.CURRENT_CARD_INDEX);
-	}
+	private Uri insertCard(SQLiteDatabase database, Uri cardsUri, ContentValues cardValues) {
+		long cardId = database.insert(DatabaseSchema.Tables.CARDS, null, cardValues);
 
-	private boolean isDeckTitleUnique(ContentValues deckValues) {
-		String deckTitle = deckValues.getAsString(DbSchema.DecksColumns.TITLE);
-
-		return queryDecksCount(deckTitle) == 0;
-	}
-
-	private long queryDecksCount(String deckTitle) {
-		SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
-		return DatabaseUtils.longForQuery(database, buildDecksCountQuery(deckTitle), null);
-	}
-
-	private String buildDecksCountQuery(String deckTitle) {
-		StringBuilder queryBuilder = new StringBuilder();
-
-		queryBuilder.append(String.format("select count(%s) ", DbSchema.DecksColumns._ID));
-		queryBuilder.append(String.format("from %s ", DbSchema.Tables.DECKS));
-		queryBuilder.append(String.format("where upper(%s) = upper(%s)", DbSchema.DecksColumns.TITLE,
-			DatabaseUtils.sqlEscapeString(deckTitle)));
-
-		return queryBuilder.toString();
-	}
-
-	private Uri createDeck(ContentValues deckValues) {
-		SQLiteDatabase database = databaseHelper.getWritableDatabase();
-		long deckId = database.insert(DbSchema.Tables.DECKS, null, deckValues);
-
-		Uri deckUri = GambitContract.Decks.buildDeckUri(deckId);
-		getContext().getContentResolver().notifyChange(deckUri, null);
-
-		return deckUri;
-	}
-
-	private Uri insertCard(Uri cardsUri, ContentValues cardValues) {
-		if (!areCardValuesValidForInsertion(cardValues)) {
-			throw new IllegalArgumentException("Content values are not valid.");
-		}
-
-		setCardInsertionDefaults(cardsUri, cardValues);
-
-		return createCard(cardsUri, cardValues);
-	}
-
-	private boolean areCardValuesValidForInsertion(ContentValues cardValues) {
-		return cardValues.containsKey(DbSchema.CardsColumns.FRONT_SIDE_TEXT) && cardValues.containsKey(
-			DbSchema.CardsColumns.BACK_SIDE_TEXT);
-	}
-
-	private void setCardInsertionDefaults(Uri cardsUri, ContentValues cardValues) {
-		long deckId = GambitContract.Cards.getDeckId(cardsUri);
-		long cardOrderIndex = calculateCardOrderIndex(deckId);
-
-		cardValues.put(DbSchema.CardsColumns.DECK_ID, deckId);
-		cardValues.put(DbSchema.CardsColumns.ORDER_INDEX, cardOrderIndex);
-	}
-
-	private long calculateCardOrderIndex(long deckId) {
-		if (isCardOrderIndexUsed(deckId)) {
-			return queryCardsCount(deckId);
-		}
-
-		return DbSchema.CardsColumnsDefaultValues.ORDER_INDEX;
-	}
-
-	private boolean isCardOrderIndexUsed(long deckId) {
-		SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
-		return DatabaseUtils.longForQuery(database, buildMaximumCardsOrderIndexQuery(deckId),
-			null) != DbSchema.CardsColumnsDefaultValues.ORDER_INDEX;
-	}
-
-	private String buildMaximumCardsOrderIndexQuery(long deckId) {
-		StringBuilder queryBuilder = new StringBuilder();
-
-		queryBuilder.append(String.format("select max(%s) ", DbSchema.CardsColumns.ORDER_INDEX));
-		queryBuilder.append(String.format("from %s ", DbSchema.Tables.CARDS));
-		queryBuilder.append(String.format("where %s = %d", DbSchema.CardsColumns.DECK_ID, deckId));
-
-		return queryBuilder.toString();
-	}
-
-	private long queryCardsCount(long deckId) {
-		SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
-		return DatabaseUtils.longForQuery(database, buildCardsCountQuery(deckId), null);
-	}
-
-	private String buildCardsCountQuery(long deckId) {
-		StringBuilder queryBuilder = new StringBuilder();
-
-		queryBuilder.append(String.format("select count(%s) ", DbSchema.CardsColumns._ID));
-		queryBuilder.append(String.format("from %s ", DbSchema.Tables.CARDS));
-		queryBuilder.append(String.format("where %s = %d", DbSchema.CardsColumns.DECK_ID, deckId));
-
-		return queryBuilder.toString();
-	}
-
-	private Uri createCard(Uri cardsUri, ContentValues cardValues) {
-		SQLiteDatabase database = databaseHelper.getWritableDatabase();
-		long cardId = database.insert(DbSchema.Tables.CARDS, null, cardValues);
-
-		Uri cardUri = GambitContract.Cards.buildCardUri(cardsUri, cardId);
-		getContext().getContentResolver().notifyChange(cardUri, null);
-
-		return cardUri;
+		return GambitContract.Cards.getCardUri(cardsUri, cardId);
 	}
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArguments) {
-		switch (uriMatcher.match(uri)) {
-			case GambitProviderPaths.Codes.DECK:
-				return deleteDeck(uri);
+		int deletedCount = deleteContents(uri);
 
-			case GambitProviderPaths.Codes.CARD:
-				return deleteCard(uri);
+		getContentResolver().notifyChange(uri, null);
+
+		return deletedCount;
+	}
+
+	private int deleteContents(Uri uri) {
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+		switch (uriMatcher.match(uri)) {
+			case GambitUriMatcher.Codes.DECK:
+				return deleteDeck(database, uri);
+
+			case GambitUriMatcher.Codes.CARD:
+				return deleteCard(database, uri);
 
 			default:
 				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 	}
 
-	private int deleteDeck(Uri deckUri) {
-		SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
-		int affectedRowsCount = database.delete(DbSchema.Tables.DECKS,
-			buildDeckSelectionClause(deckUri), null);
-		getContext().getContentResolver().notifyChange(deckUri, null);
-
-		return affectedRowsCount;
+	private int deleteDeck(SQLiteDatabase database, Uri deckUri) {
+		return database.delete(DatabaseSchema.Tables.DECKS, buildDeckSelectionClause(deckUri), null);
 	}
 
-	private int deleteCard(Uri cardUri) {
-		SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
-		int affectedRowsCount = database.delete(DbSchema.Tables.CARDS,
-			buildCardSelectionClause(cardUri), null);
-		getContext().getContentResolver().notifyChange(cardUri, null);
-
-		return affectedRowsCount;
+	private int deleteCard(SQLiteDatabase database, Uri cardUri) {
+		return database.delete(DatabaseSchema.Tables.CARDS, buildCardSelectionClause(cardUri), null);
 	}
 
 	@Override
 	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArguments) {
-		switch (uriMatcher.match(uri)) {
-			case GambitProviderPaths.Codes.DECK:
-				return updateDeck(uri, contentValues);
+		int updatedCount = updateContents(uri, contentValues);
 
-			case GambitProviderPaths.Codes.CARD:
-				return updateCard(uri, contentValues);
+		getContentResolver().notifyChange(uri, null);
+
+		return updatedCount;
+	}
+
+	private int updateContents(Uri uri, ContentValues contentValues) {
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+		switch (uriMatcher.match(uri)) {
+			case GambitUriMatcher.Codes.DECK:
+				return updateDeck(database, uri, contentValues);
+
+			case GambitUriMatcher.Codes.CARD:
+				return updateCard(database, uri, contentValues);
 
 			default:
 				throw new IllegalArgumentException(buildUnsupportedUriDetailMessage(uri));
 		}
 	}
 
-	private int updateDeck(Uri deckUri, ContentValues deckValues) {
-		if (!areDeckValuesValidForUpdating(deckValues)) {
-			throw new DeckExistsException();
-		}
-
-		SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
-		int affectedRowsContent = database.update(DbSchema.Tables.DECKS, deckValues,
-			buildDeckSelectionClause(deckUri), null);
-
-		if (!isOnlyCurrentCardIndexUpdated(deckValues)) {
-			getContext().getContentResolver().notifyChange(deckUri, null);
-		}
-
-		return affectedRowsContent;
+	private int updateDeck(SQLiteDatabase database, Uri deckUri, ContentValues deckValues) {
+		return database.update(DatabaseSchema.Tables.DECKS, deckValues, buildDeckSelectionClause(deckUri), null);
 	}
 
-	private boolean areDeckValuesValidForUpdating(ContentValues deckValues) {
-		if (!deckValues.containsKey(DbSchema.DecksColumns.TITLE)) {
-			return true;
-		}
-
-		return isDeckTitleUnique(deckValues);
-	}
-
-	private boolean isOnlyCurrentCardIndexUpdated(ContentValues deckValues) {
-		if (deckValues.containsKey(DbSchema.DecksColumns.TITLE)) {
-			return false;
-		}
-
-		return deckValues.containsKey(DbSchema.DecksColumns.CURRENT_CARD_INDEX);
-	}
-
-	private int updateCard(Uri cardUri, ContentValues cardValues) {
-		SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
-		int affectedRowsCount = database.update(DbSchema.Tables.CARDS, cardValues,
-			buildCardSelectionClause(cardUri), null);
-		getContext().getContentResolver().notifyChange(cardUri, null);
-
-		return affectedRowsCount;
+	private int updateCard(SQLiteDatabase database, Uri cardUri, ContentValues cardValues) {
+		return database.update(DatabaseSchema.Tables.CARDS, cardValues, buildCardSelectionClause(cardUri), null);
 	}
 
 	@Override
 	public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
 		SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
-		database.beginTransaction();
 		try {
+			database.beginTransaction();
+
 			ContentProviderResult[] results = new ContentProviderResult[operations.size()];
 
-			for (int operationIndex = 0; operationIndex < operations.size(); operationIndex++) {
-				ContentProviderOperation operation = operations.get(operationIndex);
-				results[operationIndex] = operation.apply(this, results, operationIndex);
+			for (int operationPosition = 0; operationPosition < operations.size(); operationPosition++) {
+				ContentProviderOperation operation = operations.get(operationPosition);
+				results[operationPosition] = operation.apply(this, results, operationPosition);
 			}
 
 			database.setTransactionSuccessful();
 
 			return results;
-		}
-		finally {
+		} finally {
 			database.endTransaction();
 		}
 	}

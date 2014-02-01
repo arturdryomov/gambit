@@ -17,49 +17,39 @@
 
 <resources>
 
-	<string name="application_name" translatable="false">
-		Gambit
-	</string>
+	<string name="application_name" translatable="false">Gambit</string>
 
 	<string name="title_cards">Flashcards</string>
-	<string name="title_new_deck">New deck</string>
-	<string name="title_rename_deck">Rename deck</string>
-	<string name="title_edit_cards">Edit flashcards</string>
-	<string name="title_new_card">New flashcard</string>
-	<string name="title_edit_card">Edit flashcard</string>
 	<string name="title_licenses">Open source licenses</string>
 
-	<string name="empty_decks_title">No decks</string>
-	<string name="empty_decks_subtitle">Try to create some</string>
 	<string name="empty_cards_title">No flashcards</string>
 	<string name="empty_cards_subtitle">Try to create some</string>
+	<string name="empty_decks_title">No decks</string>
+	<string name="empty_decks_subtitle">Try to create some</string>
 
 	<string name="button_create_cards">Create some</string>
 
-	<string name="error_empty_field">Should not be empty.</string>
 	<string name="error_deck_already_exists">Deck with such name already exists.</string>
+	<string name="error_empty_field">Should not be empty.</string>
 
-	<string name="hint_deck_name">Deck name</string>
-	<string name="hint_card_front_text">Front side text</string>
 	<string name="hint_card_back_text">Back side text</string>
+	<string name="hint_card_front_text">Front side text</string>
+	<string name="hint_deck_name">Deck name</string>
 
-	<string name="menu_done">Done</string>
 	<string name="menu_cancel">Cancel</string>
+	<string name="menu_create_card">New flashcard</string>
+	<string name="menu_create_deck">New deck</string>
 	<string name="menu_delete">Delete</string>
-	<string name="menu_rename">Rename</string>
 	<string name="menu_edit">Edit</string>
-	<string name="menu_new_deck">New deck</string>
-	<string name="menu_new_card">New flashcard</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
-	<string name="menu_shuffle_enable">Enable shuffle</string>
-	<string name="menu_shuffle_disable">Disable shuffle</string>
-	<string name="menu_replay">Replay</string>
-	<string name="menu_send_feedback">Send feedback</string>
-	<string name="menu_rate_application">Rate the application</string>
 	<string name="menu_licenses">Open source licenses</string>
+	<string name="menu_rate_application">Rate the application</string>
+	<string name="menu_replay">Replay</string>
+	<string name="menu_save">Save</string>
+	<string name="menu_send_feedback">Send feedback</string>
+	<string name="menu_shuffle_disable">Disable shuffle</string>
+	<string name="menu_shuffle_enable">Enable shuffle</string>
 
-	<string name="mask_card_list_item" translable="false">
-		%1$s → %2$s
-	</string>
+	<string name="mask_card_list_item" translable="false">%1$s → %2$s</string>
 
 </resources>

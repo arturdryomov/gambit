@@ -30,7 +30,7 @@ public class BusProvider
 		public static final Bus BUS = new Bus();
 	}
 
-	public static Bus getInstance() {
+	public static Bus getBus() {
 		return BusHolder.BUS;
 	}
 }

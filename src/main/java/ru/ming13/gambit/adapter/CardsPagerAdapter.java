@@ -22,6 +22,7 @@ import android.app.FragmentManager;
 import android.database.Cursor;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
+import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.fragment.CardEmptyFragment;
 import ru.ming13.gambit.fragment.CardFragment;
@@ -52,29 +53,45 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 
 	@Override
 	public Fragment getItem(int position) {
+		if (cardsCursor == null) {
+			return null;
+		}
+
 		if (cardsCursor.getCount() == 0) {
 			return CardEmptyFragment.newInstance();
 		}
 
+		return CardFragment.newInstance(getCard(position));
+	}
+
+	private Card getCard(int position) {
 		cardsCursor.moveToPosition(position);
 
-		return CardFragment.newInstance(extractCardFrontSideText(cardsCursor),
-			extractCardBackSideText(cardsCursor));
-	}
+		String cardFrontSideText = cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
+		String cardBackSideText = cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 
-	private String extractCardFrontSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
-	}
-
-	private String extractCardBackSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
+		return new Card(cardFrontSideText, cardBackSideText);
 	}
 
 	public void swapCursor(Cursor cardsCursor) {
+		if (this.cardsCursor == cardsCursor) {
+			return;
+		}
+
 		this.cardsCursor = cardsCursor;
+
+		if (this.cardsCursor != null) {
+			notifyDataSetChanged();
+		}
 	}
 
-	public boolean isEmpty() {
-		return (cardsCursor == null) || (cardsCursor.getCount() == 0);
+	@Override
+	public int getItemPosition(Object object) {
+		// This is a really dirty hack.
+		// Unfortunatelly I cannot find any nice method to force items redraw.
+
+		return POSITION_NONE;
 	}
 }

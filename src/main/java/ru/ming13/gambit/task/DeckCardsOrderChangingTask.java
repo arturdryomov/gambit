@@ -17,9 +17,6 @@
 package ru.ming13.gambit.task;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.OperationApplicationException;
@@ -27,7 +24,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
-import ru.ming13.gambit.provider.BatchApplyingException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -54,7 +54,7 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	private List<Uri> getCardsUris() {
 		List<Uri> cardsUris = new ArrayList<Uri>();
 
-		Cursor cardsCursor = queryCards();
+		Cursor cardsCursor = loadCards();
 
 		while (cardsCursor.moveToNext()) {
 			cardsUris.add(buildCardUri(cardsCursor));
@@ -65,17 +65,17 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 		return cardsUris;
 	}
 
-	private Cursor queryCards() {
+	private Cursor loadCards() {
 		String[] projection = {GambitContract.Cards._ID};
 
 		return contentResolver.query(cardsUri, projection, null, null, null);
 	}
 
 	private Uri buildCardUri(Cursor cardsCursor) {
-		return GambitContract.Cards.buildCardUri(cardsUri, extractCardId(cardsCursor));
+		return GambitContract.Cards.getCardUri(cardsUri, getCardId(cardsCursor));
 	}
 
-	private long extractCardId(Cursor cardsCursor) {
+	private long getCardId(Cursor cardsCursor) {
 		return cardsCursor.getLong(cardsCursor.getColumnIndex(GambitContract.Cards._ID));
 	}
 
@@ -95,19 +95,18 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private ContentProviderOperation buildChangingOrderOperation(Uri cardUri, Integer cardOrderIndex) {
-		return ContentProviderOperation.newUpdate(cardUri).withValue(GambitContract.Cards.ORDER_INDEX,
-			cardOrderIndex).build();
+		return ContentProviderOperation.newUpdate(cardUri)
+			.withValue(GambitContract.Cards.ORDER_INDEX, cardOrderIndex)
+			.build();
 	}
 
 	private void applyOperations(ArrayList<ContentProviderOperation> operations) {
 		try {
 			contentResolver.applyBatch(GambitContract.AUTHORITY, operations);
-		}
-		catch (RemoteException e) {
-			throw new BatchApplyingException();
-		}
-		catch (OperationApplicationException e) {
-			throw new BatchApplyingException();
+		} catch (RemoteException e) {
+			throw new RuntimeException(e);
+		} catch (OperationApplicationException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

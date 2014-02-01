@@ -21,6 +21,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
+
 import ru.ming13.gambit.provider.GambitContract;
 
 
@@ -42,12 +43,12 @@ public class DeckCurrentCardSavingTask extends AsyncTask<Void, Void, Void>
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
-		updateDeck();
+		editDeck();
 
 		return null;
 	}
 
-	private void updateDeck() {
+	private void editDeck() {
 		contentResolver.update(deckUri, buildDeckValues(), null, null);
 	}
 

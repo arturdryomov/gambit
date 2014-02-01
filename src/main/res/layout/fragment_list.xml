@@ -21,6 +21,7 @@
 
 	<ListView
 		android:id="@android:id/list"
+		android:choiceMode="multipleChoiceModal"
 		android:fastScrollEnabled="true"
 		android:scrollbarStyle="outsideOverlay"
 		android:paddingLeft="@dimen/padding_list"
@@ -32,15 +33,15 @@
 		android:id="@+id/layout_message"
 		android:visibility="gone"
 		android:orientation="vertical"
-		android:paddingLeft="@dimen/padding_list_message"
-		android:paddingRight="@dimen/padding_list_message"
+		android:paddingLeft="@dimen/padding_message"
+		android:paddingRight="@dimen/padding_message"
 		android:gravity="center"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
 		<TextView
 			android:id="@+id/text_message_title"
-			android:textSize="@dimen/text_list_message_title"
+			android:textSize="@dimen/text_message_title"
 			android:textStyle="bold"
 			android:gravity="center_horizontal"
 			android:layout_width="match_parent"
@@ -48,8 +49,8 @@
 
 		<TextView
 			android:id="@+id/text_message_summary"
-			android:textSize="@dimen/text_list_message_summary"
-			android:paddingTop="@dimen/padding_list_message_summary"
+			android:textSize="@dimen/text_message_summary"
+			android:paddingTop="@dimen/padding_message_summary"
 			android:gravity="center_horizontal"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"/>

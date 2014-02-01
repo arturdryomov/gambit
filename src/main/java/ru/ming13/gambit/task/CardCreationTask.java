@@ -21,34 +21,35 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
-import ru.ming13.gambit.provider.GambitContract;
+
+import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardCreatedEvent;
+import ru.ming13.gambit.bus.CardSavedEvent;
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.provider.GambitContract;
 
 
-public class CardCreationTask extends AsyncTask<Void, Void, Void>
+public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
 	private final Uri cardsUri;
-	private final String cardFrontSideText;
-	private final String cardBackSideText;
+	private final Card card;
 
-	public static void execute(ContentResolver contentResolver, Uri cardsUri, String cardFrontSideText, String cardBackSideText) {
-		new CardCreationTask(contentResolver, cardsUri, cardFrontSideText, cardBackSideText).execute();
+	public static void execute(ContentResolver contentResolver, Uri cardsUri, Card card) {
+		new CardCreationTask(contentResolver, cardsUri, card).execute();
 	}
 
-	private CardCreationTask(ContentResolver contentResolver, Uri cardsUri, String cardFrontSideText, String cardBackSideText) {
+	private CardCreationTask(ContentResolver contentResolver, Uri cardsUri, Card card) {
 		this.contentResolver = contentResolver;
 		this.cardsUri = cardsUri;
-		this.cardFrontSideText = cardFrontSideText;
-		this.cardBackSideText = cardBackSideText;
+		this.card = card;
 	}
 
 	@Override
-	protected Void doInBackground(Void... parameters) {
+	protected BusEvent doInBackground(Void... parameters) {
 		createCard();
 
-		return null;
+		return new CardSavedEvent();
 	}
 
 	private void createCard() {
@@ -58,16 +59,26 @@ public class CardCreationTask extends AsyncTask<Void, Void, Void>
 	private ContentValues buildCardValues() {
 		ContentValues cardValues = new ContentValues();
 
-		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, cardFrontSideText);
-		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, cardBackSideText);
+		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, card.getFrontSideText());
+		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, card.getBackSideText());
+		cardValues.put(GambitContract.Cards.DECK_ID, getDeckId());
+		cardValues.put(GambitContract.Cards.ORDER_INDEX, getOrderIndex());
 
 		return cardValues;
 	}
 
-	@Override
-	protected void onPostExecute(Void result) {
-		super.onPostExecute(result);
+	private long getDeckId() {
+		return GambitContract.Cards.getDeckId(cardsUri);
+	}
 
-		BusProvider.getInstance().post(new CardCreatedEvent());
+	private int getOrderIndex() {
+		return GambitContract.Cards.Defaults.ORDER_INDEX;
+	}
+
+	@Override
+	protected void onPostExecute(BusEvent busEvent) {
+		super.onPostExecute(busEvent);
+
+		BusProvider.getBus().post(busEvent);
 	}
 }

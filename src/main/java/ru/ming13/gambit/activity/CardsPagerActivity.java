@@ -1,304 +1,218 @@
-/*
- * Copyright 2012 Artur Dryomov
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package ru.ming13.gambit.activity;
-
 
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
 import com.squareup.otto.Subscribe;
-import com.squareup.seismic.ShakeDetector;
 import com.viewpagerindicator.UnderlinePageIndicator;
+
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardsListCalledFromCardsEmptyPagerEvent;
-import ru.ming13.gambit.bus.DeckCardsOrderQueriedEvent;
-import ru.ming13.gambit.bus.DeckCurrentCardQueriedEvent;
-import ru.ming13.gambit.intent.IntentException;
-import ru.ming13.gambit.intent.IntentExtras;
-import ru.ming13.gambit.intent.IntentFactory;
-import ru.ming13.gambit.loader.Loaders;
-import ru.ming13.gambit.task.DeckCardsOrderQueryingTask;
+import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
+import ru.ming13.gambit.bus.DeckCurrentCardLoadedEvent;
+import ru.ming13.gambit.bus.DeviceShakeEvent;
+import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
 import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
-import ru.ming13.gambit.task.DeckCurrentCardQueryingTask;
+import ru.ming13.gambit.task.DeckCurrentCardLoadingTask;
 import ru.ming13.gambit.task.DeckCurrentCardSavingTask;
+import ru.ming13.gambit.util.Intents;
+import ru.ming13.gambit.util.Loaders;
+import ru.ming13.gambit.util.Seismometer;
 
-
-public class CardsPagerActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>, ShakeDetector.Listener
+public class CardsPagerActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>
 {
 	private static enum CardsOrder
 	{
 		DEFAULT, SHUFFLE, ORIGINAL
 	}
 
-	private Uri cardsUri;
+	private CardsOrder currentCardsOrder = CardsOrder.DEFAULT;
 
-	private CardsOrder cardsOrder = CardsOrder.DEFAULT;
-
-	private SensorManager sensorManager;
-	private ShakeDetector shakeDetector;
+	private Seismometer seismometer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pager);
+		setContentView(R.layout.activity_cards_pager);
 
-		setUpHomeButton();
-
-		setUpCardsUri();
-
-		loadCards();
-
-		setUpShakeListener();
+		setUpSeismometer();
+		setUpCards();
 	}
 
-	private void setUpHomeButton() {
-		getActionBar().setHomeButtonEnabled(true);
+	private void setUpSeismometer() {
+		seismometer = new Seismometer(this);
 	}
 
-	private void setUpCardsUri() {
-		Uri deckUri = extractReceivedDeckUri();
-
-		cardsUri = GambitContract.Cards.buildCardsUri(deckUri);
+	private void setUpCards() {
+		setUpCardsAdapter();
+		setUpCardsIndicator();
+		setUpCardsContent();
 	}
 
-	private Uri extractReceivedDeckUri() {
-		Uri deckUri = getIntent().getParcelableExtra(IntentExtras.DECK_URI);
-
-		if (deckUri == null) {
-			throw new IntentException();
-		}
-
-		return deckUri;
+	private void setUpCardsAdapter() {
+		getCardsPager().setAdapter(new CardsPagerAdapter(getFragmentManager(), null));
 	}
 
-	private void loadCards() {
+	private ViewPager getCardsPager() {
+		return (ViewPager) findViewById(R.id.pager_cards);
+	}
+
+	private void setUpCardsIndicator() {
+		UnderlinePageIndicator cardsIndicator = (UnderlinePageIndicator) findViewById(R.id.indicator_cards);
+		cardsIndicator.setViewPager(getCardsPager());
+	}
+
+	private void setUpCardsContent() {
 		getLoaderManager().initLoader(Loaders.CARDS, null, this);
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
-		String sortOrder = String.format("%s, %s", GambitContract.Cards.ORDER_INDEX,
-			GambitContract.Cards.FRONT_SIDE_TEXT);
+		Uri uri = getCardsUri();
 
-		return new CursorLoader(this, cardsUri, projection, null, null, sortOrder);
+		String[] projection = {GambitContract.Cards.FRONT_SIDE_TEXT, GambitContract.Cards.BACK_SIDE_TEXT};
+		String sortOrder = String.format("%s, %s", GambitContract.Cards.ORDER_INDEX, GambitContract.Cards.FRONT_SIDE_TEXT);
+
+		return new CursorLoader(this, uri, projection, null, null, sortOrder);
+	}
+
+	private Uri getCardsUri() {
+		return GambitContract.Cards.getCardsUri(getDeckUri());
+	}
+
+	private Uri getDeckUri() {
+		return getIntent().getParcelableExtra(Intents.Extras.URI);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
-		setUpCardsPagerAdapter(cardsCursor);
+		getCardsAdapter().swapCursor(cardsCursor);
 
-		invalidateActionBarItems();
-
-		if (getCardsPagerAdapter().isEmpty()) {
-			return;
-		}
-
-		setUpCurrentCardIndex();
-		setUpCardsOrder();
-		setUpCardsPagerIndicator();
+		setUpCurrentCard();
+		setUpCurrentCardsOrder();
 	}
 
-	private void setUpCardsPagerAdapter(Cursor cardsCursor) {
-		if (isOnlyCardsPagerAdapterCursorUpdatingRequired()) {
-			getCardsPagerAdapter().swapCursor(cardsCursor);
-			return;
-		}
-
-		CardsPagerAdapter adapter = new CardsPagerAdapter(getFragmentManager(), cardsCursor);
-		getCardsPager().setAdapter(adapter);
-	}
-
-	private boolean isOnlyCardsPagerAdapterCursorUpdatingRequired() {
-		// Avoid setting adapter after orientation change: ViewPager saves adapter itself
-
-		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() != 0);
-	}
-
-	private ViewPager getCardsPager() {
-		return (ViewPager) findViewById(R.id.pager);
-	}
-
-	private CardsPagerAdapter getCardsPagerAdapter() {
+	private CardsPagerAdapter getCardsAdapter() {
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
 	}
 
-	private void invalidateActionBarItems() {
-		invalidateOptionsMenu();
-	}
-
-	private void setUpCurrentCardIndex() {
-		if (!isSettingCurrentCardIndexRequired()) {
-			return;
+	private void setUpCurrentCard() {
+		if (shouldCurrentCardBeSet()) {
+			DeckCurrentCardLoadingTask.execute(getContentResolver(), getDeckUri());
 		}
-
-		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
-		DeckCurrentCardQueryingTask.execute(getContentResolver(), deckUri);
 	}
 
-	private boolean isSettingCurrentCardIndexRequired() {
-		// Avoid case when user changed order or current card already
-
-		return (cardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
+	private boolean shouldCurrentCardBeSet() {
+		return (currentCardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
 	}
 
 	@Subscribe
-	public void onCurrentCardQueried(DeckCurrentCardQueriedEvent currentCardQueriedEvent) {
-		int currentCardIndex = currentCardQueriedEvent.getCurrentCardIndex();
-
-		setUpCurrentCardIndex(currentCardIndex);
+	public void onCurrentCardLoaded(DeckCurrentCardLoadedEvent event) {
+		setUpCurrentCard(event.getCurrentCardIndex());
 	}
 
-	private void setUpCurrentCardIndex(int currentCardIndex) {
-		getCardsPager().setCurrentItem(currentCardIndex);
+	private void setUpCurrentCard(int currentCard) {
+		getCardsPager().setCurrentItem(currentCard);
 	}
 
-	private void setUpCardsOrder() {
-		if (cardsOrder != CardsOrder.DEFAULT) {
-			return;
+	private void setUpCurrentCardsOrder() {
+		if (shouldCurrentCardsOrderBeSet()) {
+			DeckCardsOrderLoadingTask.execute(getContentResolver(), getCardsUri());
 		}
+	}
 
-		DeckCardsOrderQueryingTask.execute(getContentResolver(), cardsUri);
+	private boolean shouldCurrentCardsOrderBeSet() {
+		return currentCardsOrder == CardsOrder.DEFAULT;
 	}
 
 	@Subscribe
-	public void onCardsOrderQueriedEvent(DeckCardsOrderQueriedEvent cardsOrderQueriedEvent) {
-		switch (cardsOrderQueriedEvent.getCardsOrder()) {
+	public void onCardsOrderLoaded(DeckCardsOrderLoadedEvent event) {
+		switch (event.getCardsOrder()) {
 			case SHUFFLE:
-				cardsOrder = CardsOrder.SHUFFLE;
+				currentCardsOrder = CardsOrder.SHUFFLE;
 				break;
 
 			case ORIGINAL:
-				cardsOrder = CardsOrder.ORIGINAL;
+				currentCardsOrder = CardsOrder.ORIGINAL;
 				break;
 
 			default:
 				break;
 		}
 
-		invalidateActionBarItems();
+		changeAvailableActions();
 	}
 
-	private void setUpCardsPagerIndicator() {
-		UnderlinePageIndicator indicator = (UnderlinePageIndicator) findViewById(R.id.indicator);
-		indicator.setViewPager(getCardsPager());
+	private void changeAvailableActions() {
+		invalidateOptionsMenu();
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> cardsLoader) {
-		getCardsPagerAdapter().swapCursor(null);
-	}
-
-	private void setUpShakeListener() {
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		shakeDetector = new ShakeDetector(this);
-	}
-
-	@Override
-	public void hearShake() {
-		shuffleCards();
-	}
-
-	private void shuffleCards() {
-		cardsOrder = CardsOrder.SHUFFLE;
-
-		DeckCardsOrderShufflingTask.execute(getContentResolver(), cardsUri);
-
-		showCardsOrderChangingAnimation();
-	}
-
-	private void showCardsOrderChangingAnimation() {
-		Animation shakingAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
-
-		getCardsPager().startAnimation(shakingAnimation);
+		getCardsAdapter().swapCursor(null);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!isShowingActionBarButtonsRequired()) {
-			return false;
+		if (shouldActionsBeShown()) {
+			getMenuInflater().inflate(R.menu.action_bar_cards_pager, menu);
+
+			menu.findItem(R.id.menu_shuffle).setIcon(getShuffleActionIconResource());
+			menu.findItem(R.id.menu_shuffle).setTitle(getShuffleActionTitleResource());
 		}
 
-		switch (cardsOrder) {
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	private boolean shouldActionsBeShown() {
+		return getCardsAdapter().getCount() > 1;
+	}
+
+	private int getShuffleActionIconResource() {
+		switch (currentCardsOrder) {
 			case SHUFFLE:
-				getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_enabled, menu);
-				return true;
-
-			case ORIGINAL:
-				getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
-				return true;
-
-			case DEFAULT:
-				getMenuInflater().inflate(R.menu.menu_action_bar_cards_pager_shuffle_disabled, menu);
-				return true;
+				return R.drawable.ic_menu_shuffle_enabled;
 
 			default:
-				return false;
+				return R.drawable.ic_menu_shuffle_disabled;
 		}
 	}
 
-	private boolean isShowingActionBarButtonsRequired() {
-		CardsPagerAdapter cardsPagerAdapter = getCardsPagerAdapter();
+	private int getShuffleActionTitleResource() {
+		switch (currentCardsOrder) {
+			case SHUFFLE:
+				return R.string.menu_shuffle_disable;
 
-		if (cardsPagerAdapter == null) {
-			return false;
+			default:
+				return R.string.menu_shuffle_enable;
 		}
-
-		if (cardsPagerAdapter.isEmpty()) {
-			return false;
-		}
-
-		if (cardsPagerAdapter.getCount() == 1) {
-			return false;
-		}
-
-		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case android.R.id.home:
-				navigateUp();
+				finish();
 				return true;
 
 			case R.id.menu_replay:
-				setCurrentCardToFirst();
+				replayCards();
 				return true;
 
 			case R.id.menu_shuffle:
-				changeCardsOrder();
-				invalidateActionBarItems();
+				switchCardsOrder();
 				return true;
 
 			default:
@@ -306,77 +220,77 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 		}
 	}
 
-	private void navigateUp() {
-		Intent intent = IntentFactory.createDecksIntent(this);
-		NavUtils.navigateUpTo(this, intent);
-	}
-
-	private void setCurrentCardToFirst() {
+	private void replayCards() {
 		getCardsPager().setCurrentItem(0);
 	}
 
-	private void changeCardsOrder() {
-		switch (cardsOrder) {
-			case SHUFFLE:
-				resetCardsOrder();
-				break;
-
+	private void switchCardsOrder() {
+		switch (currentCardsOrder) {
 			case ORIGINAL:
 				shuffleCards();
 				break;
 
 			default:
+				orderCards();
 				break;
 		}
 	}
 
-	private void resetCardsOrder() {
-		cardsOrder = CardsOrder.ORIGINAL;
+	private void shuffleCards() {
+		DeckCardsOrderShufflingTask.execute(getContentResolver(), getCardsUri());
 
-		DeckCardsOrderResettingTask.execute(getContentResolver(), cardsUri);
+		switchCardsOrder(CardsOrder.SHUFFLE);
+	}
 
-		showCardsOrderChangingAnimation();
+	private void switchCardsOrder(CardsOrder cardsOrder) {
+		currentCardsOrder = cardsOrder;
+
+		animateCardsShaking();
+
+		changeAvailableActions();
+	}
+
+	private void animateCardsShaking() {
+		getCardsPager().startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+	}
+
+	private void orderCards() {
+		DeckCardsOrderResettingTask.execute(getContentResolver(), getCardsUri());
+
+		switchCardsOrder(CardsOrder.ORIGINAL);
 	}
 
 	@Subscribe
-	public void onCardsListCalledFromCardsEmptyPager(CardsListCalledFromCardsEmptyPagerEvent cardsListCalledFromCardsEmptyPagerEvent) {
-		callCardCreation();
-	}
-
-	private void callCardCreation() {
-		Intent intent = IntentFactory.createCardCreationIntent(this, cardsUri);
-		startActivity(intent);
+	public void onDeviceShaked(DeviceShakeEvent event) {
+		shuffleCards();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		shakeDetector.start(sensorManager);
+		seismometer.enable();
 
-		BusProvider.getInstance().register(this);
+		BusProvider.getBus().register(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
-		shakeDetector.stop();
+		seismometer.disable();
 
-		BusProvider.getInstance().unregister(this);
+		BusProvider.getBus().unregister(this);
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onDestroy() {
+		super.onDestroy();
 
-		saveCurrentCardIndex();
+		saveCurrentCard();
 	}
 
-	private void saveCurrentCardIndex() {
-		Uri deckUri = GambitContract.Decks.buildDeckUri(GambitContract.Cards.getDeckId(cardsUri));
-		int currentCardIndex = getCardsPager().getCurrentItem();
-
-		DeckCurrentCardSavingTask.execute(getContentResolver(), deckUri, currentCardIndex);
+	private void saveCurrentCard() {
+		DeckCurrentCardSavingTask.execute(getContentResolver(), getDeckUri(), getCardsPager().getCurrentItem());
 	}
 }
