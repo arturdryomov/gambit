@@ -50,6 +50,7 @@
 		<TextView
 			android:id="@+id/text_message_summary"
 			android:textSize="@dimen/text_message_summary"
+			android:textStyle="italic"
 			android:paddingTop="@dimen/padding_message_summary"
 			android:gravity="center_horizontal"
 			android:layout_width="wrap_content"
