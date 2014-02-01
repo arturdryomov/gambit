@@ -32,12 +32,17 @@
 
 	<style name="Theme.Gambit.DecksList.ActionBar" parent="Theme.Gambit.ActionBar">
 		<item name="android:displayOptions">showTitle</item>
+		<item name="android:titleTextStyle">@style/Theme.Gambit.DecksList.ActionBar.Title</item>
+	</style>
+
+	<style name="Theme.Gambit.DecksList.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+		<item name="android:textColor">@color/text_application_name</item>
+		<item name="android:textStyle">bold</item>
 	</style>
 
 	<style name="Theme.Gambit.CardsPager" parent="Theme.Gambit">
 		<item name="android:actionBarStyle">@style/Theme.Gambit.CardsPager.ActionBar</item>
 
-		<!-- Change background color -->
 		<item name="android:colorBackground">@color/background_card_container</item>
 		<item name="android:colorBackgroundCacheHint">@color/background_card_container</item>
 		<item name="android:windowBackground">@color/background_card_container</item>
