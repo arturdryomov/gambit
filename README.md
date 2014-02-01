@@ -13,7 +13,7 @@ Gambit is a really simple flashcards viewer and manager for Android.
 
 ## Building
 
-You will need JDK 1.6, Android SDK 22 and Gradle 1.8 installed.
+You will need JDK 1.6, Android SDK 22 and Gradle 1.10 installed.
 
 1. Install required Android components.
 
@@ -23,14 +23,7 @@ You will need JDK 1.6, Android SDK 22 and Gradle 1.8 installed.
   $ android update sdk --no-ui --force --all --filter extra-android-m2repository
   ```
 
-2. Set API keys.
-
-  ```
-  $ cp src/main/res/xml/apis.template.xml src/main/res/values/apis.xml
-  $ vi src/main/res/values/apis.xml
-  ```
-
-3. Build application.
+2. Build application.
 
   ```
   $ gradle clean assembleDebug
@@ -40,10 +33,9 @@ You will need JDK 1.6, Android SDK 22 and Gradle 1.8 installed.
 
 Gambit uses some open source libraries and tools:
 
-* [ViewPagerIndicator][ViewPagerIndicator link]
-* [Apache Commons Lang][Apache Commons Lang link]
-* [Seismic][Seismic link]
 * [Otto][Otto link]
+* [Seismic][Seismic link]
+* [ViewPagerIndicator][ViewPagerIndicator link]
 
 
   [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
@@ -51,7 +43,6 @@ Gambit uses some open source libraries and tools:
 
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
-  [ViewPagerIndicator link]: http://viewpagerindicator.com
-  [Apache Commons Lang link]: http://commons.apache.org/lang
-  [Seismic link]: https://github.com/square/seismic
   [Otto link]: http://square.github.com/otto
+  [Seismic link]: https://github.com/square/seismic
+  [ViewPagerIndicator link]: http://viewpagerindicator.com
