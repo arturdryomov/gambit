@@ -73,8 +73,8 @@ public class CardOperationFragment extends Fragment
 	}
 
 	private void setUpCard(Card card) {
-		getCardFrontSideTextView().setText(card.getFrontSideText());
-		getCardBackSideTextView().setText(card.getBackSideText());
+		getCardFrontSideTextView().append(card.getFrontSideText());
+		getCardBackSideTextView().append(card.getBackSideText());
 	}
 
 	private TextView getCardFrontSideTextView() {

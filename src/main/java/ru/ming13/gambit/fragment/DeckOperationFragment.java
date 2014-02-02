@@ -74,7 +74,7 @@ public class DeckOperationFragment extends Fragment
 	}
 
 	private void setUpDeck(Deck deck) {
-		getDeckTitleView().setText(deck.getTitle());
+		getDeckTitleView().append(deck.getTitle());
 	}
 
 	private TextView getDeckTitleView() {
