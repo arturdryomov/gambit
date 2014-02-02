@@ -35,6 +35,7 @@ Gambit uses some open source libraries and tools:
 
 * [Otto][Otto link]
 * [Seismic][Seismic link]
+* [TransitionsBackport][TransitionsBackport link]
 * [ViewPagerIndicator][ViewPagerIndicator link]
 
 
@@ -45,4 +46,5 @@ Gambit uses some open source libraries and tools:
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
   [Otto link]: http://square.github.com/otto
   [Seismic link]: https://github.com/square/seismic
+  [TransitionsBackport link]: https://github.com/guerwan/TransitionsBackport
   [ViewPagerIndicator link]: http://viewpagerindicator.com
