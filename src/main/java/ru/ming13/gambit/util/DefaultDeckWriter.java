@@ -38,18 +38,19 @@ import ru.ming13.gambit.database.DatabaseSchema;
 public final class DefaultDeckWriter
 {
 	private static final int[] ANDROID_VERSIONS_RESOURCES = {
+		R.string.android_version_cupcake,
+		R.string.android_version_donut,
+		R.string.android_version_eclair,
 		R.string.android_version_froyo,
 		R.string.android_version_gingerbread,
 		R.string.android_version_honeycomb,
 		R.string.android_version_ice_cream_sandwich,
-		R.string.android_version_jelly_bean
+		R.string.android_version_jelly_bean,
+		R.string.android_version_kitkat
 	};
 
 	private static final String[] SUPPORTED_LANGUAGE_CODES = {
 		"de",
-		"es",
-		"fr",
-		"it",
 		"ru"
 	};
 

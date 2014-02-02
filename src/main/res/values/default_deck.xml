@@ -21,10 +21,14 @@
 
 	<string name="default_deck_title_language">English</string>
 
+	<string name="android_version_cupcake">Cupcake</string>
+	<string name="android_version_donut">Donut</string>
+	<string name="android_version_eclair">Eclair</string>
 	<string name="android_version_froyo">Froyo</string>
 	<string name="android_version_gingerbread">Gingerbread</string>
 	<string name="android_version_honeycomb">Honeycomb</string>
 	<string name="android_version_ice_cream_sandwich">Ice Cream Sandwich</string>
 	<string name="android_version_jelly_bean">Jelly Bean</string>
+	<string name="android_version_kitkat">KitKat</string>
 
 </resources>

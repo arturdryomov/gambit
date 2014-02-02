@@ -19,10 +19,14 @@
 
 	<string name="default_deck_title_language">Russian</string>
 
+	<string name="android_version_cupcake">Кекс</string>
+	<string name="android_version_donut">Пончик</string>
+	<string name="android_version_eclair">Эклер</string>
 	<string name="android_version_froyo">Замороженный йогурт</string>
 	<string name="android_version_gingerbread">Имбирный пряник</string>
 	<string name="android_version_honeycomb">Медовые соты</string>
 	<string name="android_version_ice_cream_sandwich">Мороженое-брикет</string>
 	<string name="android_version_jelly_bean">Жевательный леденец</string>
+	<string name="android_version_kitkat">КитКат</string>
 
 </resources>
