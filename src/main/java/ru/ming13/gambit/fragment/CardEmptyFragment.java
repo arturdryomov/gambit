@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.CardCreationCalledEvent;
 
 
 public class CardEmptyFragment extends Fragment implements View.OnClickListener
@@ -55,5 +57,6 @@ public class CardEmptyFragment extends Fragment implements View.OnClickListener
 
 	@Override
 	public void onClick(View view) {
+		BusProvider.getBus().post(new CardCreationCalledEvent());
 	}
 }

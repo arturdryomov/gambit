@@ -22,6 +22,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -68,7 +69,7 @@ public class CardsListActivity extends Activity
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case android.R.id.home:
-				finish();
+				navigateUp();
 				return true;
 
 			case R.id.menu_create:
@@ -78,6 +79,10 @@ public class CardsListActivity extends Activity
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void navigateUp() {
+		NavUtils.navigateUpFromSameTask(this);
 	}
 
 	private void startCardCreationActivity() {

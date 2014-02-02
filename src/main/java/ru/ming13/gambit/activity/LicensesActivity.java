@@ -20,6 +20,7 @@ package ru.ming13.gambit.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import ru.ming13.gambit.fragment.LicensesFragment;
@@ -47,11 +48,15 @@ public class LicensesActivity extends Activity
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case android.R.id.home:
-				finish();
+				navigateUp();
 				return true;
 
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void navigateUp() {
+		NavUtils.navigateUpFromSameTask(this);
 	}
 }

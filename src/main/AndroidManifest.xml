@@ -23,7 +23,7 @@
 
 	<uses-sdk
 		android:minSdkVersion="14"
-		android:targetSdkVersion="19" />
+		android:targetSdkVersion="19"/>
 
 	<application
 		android:icon="@drawable/ic_launcher"
@@ -35,8 +35,8 @@
 			android:theme="@style/Theme.Gambit.DecksList">
 
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 
 		</activity>
@@ -54,11 +54,21 @@
 		<activity
 			android:name=".activity.CardsListActivity"
 			android:label="@string/title_cards">
+
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activity.DecksListActivity"/>
+
 		</activity>
 
 		<activity
 			android:name=".activity.CardsPagerActivity"
 			android:theme="@style/Theme.Gambit.CardsPager">
+
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activity.DecksListActivity"/>
+
 		</activity>
 
 		<activity
@@ -74,6 +84,11 @@
 		<activity
 			android:name=".activity.LicensesActivity"
 			android:label="@string/title_licenses">
+
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activity.DecksListActivity"/>
+
 		</activity>
 
 		<provider

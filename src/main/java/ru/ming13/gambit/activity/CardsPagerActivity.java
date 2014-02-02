@@ -3,10 +3,12 @@ package ru.ming13.gambit.activity;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import com.viewpagerindicator.UnderlinePageIndicator;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.CardCreationCalledEvent;
 import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
 import ru.ming13.gambit.bus.DeckCurrentCardLoadedEvent;
 import ru.ming13.gambit.bus.DeviceShakeEvent;
@@ -164,6 +167,17 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 		getCardsAdapter().swapCursor(null);
 	}
 
+	@Subscribe
+	public void onCardCreationCalled(CardCreationCalledEvent event) {
+		startCardCreationStack();
+	}
+
+	private void startCardCreationStack() {
+		startActivities(new Intent[]{
+			Intents.Builder.with(this).buildCardsListIntent(getDeckUri()),
+			Intents.Builder.with(this).buildCardCreationIntent(getCardsUri())});
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (shouldActionsBeShown()) {
@@ -204,7 +218,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case android.R.id.home:
-				finish();
+				navigateUp();
 				return true;
 
 			case R.id.menu_replay:
@@ -218,6 +232,10 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
+	}
+
+	private void navigateUp() {
+		NavUtils.navigateUpFromSameTask(this);
 	}
 
 	private void replayCards() {
