@@ -25,6 +25,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -93,17 +94,29 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> decksLoader, Cursor decksCursor) {
+		setUpDecksAnimations();
+
 		getDecksAdapter().swapCursor(decksCursor);
 
-		if (getDecksAdapter().isEmpty()) {
-			showDecksMessage();
-		} else {
-			hideDecksMessage();
+		setUpDecksMessage();
+	}
+
+	private void setUpDecksAnimations() {
+		if (!getDecksAdapter().isEmpty()) {
+			TransitionManager.beginDelayedTransition(getListView());
 		}
 	}
 
 	private DecksListAdapter getDecksAdapter() {
 		return (DecksListAdapter) getListAdapter();
+	}
+
+	private void setUpDecksMessage() {
+		if (getDecksAdapter().isEmpty()) {
+			showDecksMessage();
+		} else {
+			hideDecksMessage();
+		}
 	}
 
 	private void showDecksMessage() {

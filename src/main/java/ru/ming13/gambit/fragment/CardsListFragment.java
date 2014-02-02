@@ -25,6 +25,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -106,17 +107,29 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
+		setUpCardsAnimations();
+
 		getCardsAdapter().swapCursor(cardsCursor);
 
-		if (getCardsAdapter().isEmpty()) {
-			showCardsMessage();
-		} else {
-			hideCardsMessage();
+		setUpCardsMessage();
+	}
+
+	private void setUpCardsAnimations() {
+		if (!getCardsAdapter().isEmpty()) {
+			TransitionManager.beginDelayedTransition(getListView());
 		}
 	}
 
 	private CardsListAdapter getCardsAdapter() {
 		return (CardsListAdapter) getListAdapter();
+	}
+
+	private void setUpCardsMessage() {
+		if (getCardsAdapter().isEmpty()) {
+			showCardsMessage();
+		} else {
+			hideCardsMessage();
+		}
 	}
 
 	private void showCardsMessage() {
