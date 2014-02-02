@@ -17,8 +17,7 @@
 
 <resources>
 
-	<string name="default_deck_title" translatable="false">Android Versions</string>
-
+	<string name="default_deck_title">Android Versions</string>
 	<string name="default_deck_title_language">English</string>
 
 	<string name="android_version_cupcake">Cupcake</string>

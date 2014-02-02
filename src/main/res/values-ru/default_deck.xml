@@ -17,6 +17,7 @@
 
 <resources>
 
+	<string name="default_deck_title">Версии Android</string>
 	<string name="default_deck_title_language">Russian</string>
 
 	<string name="android_version_cupcake">Кекс</string>

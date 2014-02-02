@@ -68,11 +68,15 @@ public final class DefaultDeckWriter
 		this.context = context;
 		this.database = database;
 
-		localeForFrontText = Locale.ENGLISH;
-		localeForBackText = selectLocaleForBackText();
+		localeForFrontText = getLocaleForFrontText();
+		localeForBackText = getLocaleForBackText();
 	}
 
-	private Locale selectLocaleForBackText() {
+	private Locale getLocaleForFrontText() {
+		return Locale.ENGLISH;
+	}
+
+	private Locale getLocaleForBackText() {
 		if (isCurrentLocaleSupported()) {
 			return getCurrentLocale();
 		} else {
@@ -148,6 +152,7 @@ public final class DefaultDeckWriter
 
 	private void restoreLocale(Locale locale) {
 		// Recreate Resources with original locale to avoid weird things
+
 		buildResources(locale);
 	}
 
@@ -174,10 +179,11 @@ public final class DefaultDeckWriter
 	}
 
 	private String buildDeckTitle() {
-		String deckTitle = getDeckTitle();
-		String deckTitleLanguage = getDeckTitleLanguage(localeForBackText);
-
-		return String.format("%s (%s)", deckTitle, deckTitleLanguage);
+		if (isCurrentLocaleSupported()) {
+			return getDeckTitle();
+		} else {
+			return String.format("%s (%s)", getDeckTitle(), getDeckTitleLanguage(localeForBackText));
+		}
 	}
 
 	private String getDeckTitle() {
