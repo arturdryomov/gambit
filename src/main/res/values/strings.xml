@@ -37,8 +37,8 @@
 	<string name="hint_deck_name">Deck name</string>
 
 	<string name="menu_cancel">Cancel</string>
-	<string name="menu_create_card">New flashcard</string>
-	<string name="menu_create_deck">New deck</string>
+	<string name="menu_create_card">Create flashcard</string>
+	<string name="menu_create_deck">Create deck</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_edit">Edit</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
@@ -50,6 +50,6 @@
 	<string name="menu_shuffle_disable">Disable shuffle</string>
 	<string name="menu_shuffle_enable">Enable shuffle</string>
 
-	<string name="mask_card_list_item" translable="false">%1$s → %2$s</string>
+	<string name="mask_card_list_item" translatable="false">%1$s → %2$s</string>
 
 </resources>
