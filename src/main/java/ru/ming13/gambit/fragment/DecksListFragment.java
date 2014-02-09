@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.fragment;
 
-
 import android.app.ListFragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -44,7 +43,6 @@ import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
-
 
 public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
 {

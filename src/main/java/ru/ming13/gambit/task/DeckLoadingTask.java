@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.task;
 
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,7 +26,6 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckLoadedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
-
 
 public class DeckLoadingTask extends AsyncTask<Void, Void, BusEvent>
 {

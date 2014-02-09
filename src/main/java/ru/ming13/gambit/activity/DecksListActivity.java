@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.activity;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
@@ -29,7 +28,6 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.fragment.DecksListFragment;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
-
 
 public class DecksListActivity extends Activity
 {

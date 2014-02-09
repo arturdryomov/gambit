@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.adapter;
 
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.database.Cursor;
@@ -26,7 +25,6 @@ import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.fragment.CardEmptyFragment;
 import ru.ming13.gambit.fragment.CardFragment;
-
 
 public class CardsPagerAdapter extends FragmentStatePagerAdapter
 {

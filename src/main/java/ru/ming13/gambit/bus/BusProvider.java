@@ -16,9 +16,7 @@
 
 package ru.ming13.gambit.bus;
 
-
 import com.squareup.otto.Bus;
-
 
 public class BusProvider
 {

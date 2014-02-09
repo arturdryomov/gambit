@@ -16,14 +16,12 @@
 
 package ru.ming13.gambit.database;
 
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import ru.ming13.gambit.util.DefaultDeckWriter;
 import ru.ming13.gambit.util.SqlBuilder;
-
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper
 {

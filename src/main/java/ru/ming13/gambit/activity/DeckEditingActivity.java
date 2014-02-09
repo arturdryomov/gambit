@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.activity;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
@@ -34,7 +33,6 @@ import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.OperationBar;
-
 
 public class DeckEditingActivity extends Activity
 {

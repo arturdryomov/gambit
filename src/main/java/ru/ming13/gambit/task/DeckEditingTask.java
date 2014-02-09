@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.task;
 
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
@@ -28,7 +27,6 @@ import ru.ming13.gambit.bus.DeckExistsEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
-
 
 public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 {

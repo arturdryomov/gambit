@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.provider;
 
-
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import ru.ming13.gambit.database.DatabaseOpenHelper;
 import ru.ming13.gambit.database.DatabaseSchema;
 import ru.ming13.gambit.util.SqlBuilder;
-
 
 public class GambitProvider extends ContentProvider
 {

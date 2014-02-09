@@ -16,14 +16,12 @@
 
 package ru.ming13.gambit.task;
 
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import ru.ming13.gambit.provider.GambitContract;
-
 
 public class DeckCurrentCardSavingTask extends AsyncTask<Void, Void, Void>
 {

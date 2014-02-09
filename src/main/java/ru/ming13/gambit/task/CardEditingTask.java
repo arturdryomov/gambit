@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.task;
 
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
@@ -27,7 +26,6 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
-
 
 public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 {

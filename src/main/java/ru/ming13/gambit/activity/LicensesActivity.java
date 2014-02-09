@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.activity;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import android.view.MenuItem;
 
 import ru.ming13.gambit.fragment.LicensesFragment;
 import ru.ming13.gambit.util.Fragments;
-
 
 public class LicensesActivity extends Activity
 {

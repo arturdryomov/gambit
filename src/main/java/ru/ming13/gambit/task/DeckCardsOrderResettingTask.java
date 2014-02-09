@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.task;
 
-
 import android.content.ContentResolver;
 import android.net.Uri;
 
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ming13.gambit.provider.GambitContract;
-
 
 public class DeckCardsOrderResettingTask extends DeckCardsOrderChangingTask
 {

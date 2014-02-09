@@ -22,6 +22,6 @@ public final class Loaders
 	private Loaders() {
 	}
 
-	public static final int DECKS = 0;
-	public static final int CARDS = 1;
+	public static final int DECKS = 1;
+	public static final int CARDS = 2;
 }

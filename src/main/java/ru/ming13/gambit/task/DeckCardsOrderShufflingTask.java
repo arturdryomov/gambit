@@ -16,14 +16,12 @@
 
 package ru.ming13.gambit.task;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import android.content.ContentResolver;
 import android.net.Uri;
-
 
 public class DeckCardsOrderShufflingTask extends DeckCardsOrderChangingTask
 {

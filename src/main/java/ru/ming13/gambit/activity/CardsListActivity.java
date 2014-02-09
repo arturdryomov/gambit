@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.activity;
 
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -31,7 +30,6 @@ import ru.ming13.gambit.fragment.CardsListFragment;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
-
 
 public class CardsListActivity extends Activity
 {

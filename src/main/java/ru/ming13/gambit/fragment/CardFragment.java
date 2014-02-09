@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.fragment;
 
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.util.Fragments;
-
 
 public class CardFragment extends Fragment implements View.OnClickListener
 {

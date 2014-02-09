@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.bus;
 
-
 import ru.ming13.gambit.model.Card;
 
 public class CardLoadedEvent implements BusEvent

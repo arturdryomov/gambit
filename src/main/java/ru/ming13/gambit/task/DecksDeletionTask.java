@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.task;
 
-
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.OperationApplicationException;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ming13.gambit.provider.GambitContract;
-
 
 public class DecksDeletionTask extends AsyncTask<Void, Void, Void>
 {

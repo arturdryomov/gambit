@@ -16,7 +16,6 @@
 
 package ru.ming13.gambit.util;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -33,7 +32,6 @@ import java.util.Random;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.database.DatabaseSchema;
-
 
 public final class DefaultDeckWriter
 {

@@ -16,9 +16,7 @@
 
 package ru.ming13.gambit.database;
 
-
 import android.provider.BaseColumns;
-
 
 public final class DatabaseSchema
 {
