@@ -12,14 +12,21 @@ apply plugin: "android"
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19"
+    buildToolsVersion "19.0.1"
 
     signingConfigs {
+        def signingFile = file("signing.properties")
+        def signingProperties = new Properties()
+
         release {
-            storeFile file("store-file")
-            storePassword "store-password"
-            keyAlias "key-alias"
-            keyPassword "key-password"
+            if (signingFile.exists()) {
+                signingProperties.load(signingFile.newInputStream())
+
+                storeFile file(signingProperties["store.file"])
+                storePassword signingProperties["store.password"]
+                keyAlias signingProperties["key.alias"]
+                keyPassword signingProperties["key.password"]
+            }
         }
     }
 
