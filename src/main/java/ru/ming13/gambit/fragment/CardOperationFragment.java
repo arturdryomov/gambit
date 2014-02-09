@@ -47,8 +47,8 @@ public class CardOperationFragment extends Fragment
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		setUpCard();
 	}

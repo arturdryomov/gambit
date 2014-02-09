@@ -15,20 +15,6 @@ public class Deck implements Parcelable
 		return title;
 	}
 
-	private Deck(Parcel parcel) {
-		this.title = parcel.readString();
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeString(title);
-	}
-
 	public static final Creator<Deck> CREATOR = new Creator<Deck>()
 	{
 		@Override
@@ -41,4 +27,18 @@ public class Deck implements Parcelable
 			return new Deck[size];
 		}
 	};
+
+	private Deck(Parcel parcel) {
+		this.title = parcel.readString();
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeString(title);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 }

@@ -23,15 +23,16 @@ public class DecksListAdapter extends CursorAdapter
 
 	@Override
 	public View newView(Context context, Cursor decksCursor, ViewGroup viewGroup) {
-		View deckView = buildDeckView(viewGroup);
-
-		setUpDeckInformation(decksCursor, deckView);
-
-		return deckView;
+		return buildDeckView(viewGroup);
 	}
 
 	private View buildDeckView(ViewGroup viewGroup) {
 		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
+	}
+
+	@Override
+	public void bindView(View deckView, Context context, Cursor decksCursor) {
+		setUpDeckInformation(decksCursor, deckView);
 	}
 
 	private void setUpDeckInformation(Cursor decksCursor, View deckView) {
@@ -43,10 +44,5 @@ public class DecksListAdapter extends CursorAdapter
 
 	private String getDeckTitle(Cursor decksCursor) {
 		return decksCursor.getString(decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
-	}
-
-	@Override
-	public void bindView(View deckView, Context context, Cursor decksCursor) {
-		setUpDeckInformation(decksCursor, deckView);
 	}
 }

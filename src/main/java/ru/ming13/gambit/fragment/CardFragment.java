@@ -60,8 +60,8 @@ public class CardFragment extends Fragment implements View.OnClickListener
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		setUpCard();
 	}

@@ -106,12 +106,12 @@ public final class GambitContract
 		}
 	}
 
-	private static Uri buildContentUri(String path) {
-		return Uri.withAppendedPath(buildContentUri(), path);
-	}
-
 	private static Uri buildContentUri() {
 		return new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT).authority(AUTHORITY).build();
+	}
+
+	private static Uri buildContentUri(String path) {
+		return Uri.withAppendedPath(buildContentUri(), path);
 	}
 
 	private static long parseId(Uri uri) {

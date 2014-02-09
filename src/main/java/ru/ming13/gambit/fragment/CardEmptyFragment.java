@@ -41,8 +41,8 @@ public class CardEmptyFragment extends Fragment implements View.OnClickListener
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		setUpCardListener();
 	}

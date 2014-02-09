@@ -21,22 +21,6 @@ public class Card implements Parcelable
 		return backSideText;
 	}
 
-	private Card(Parcel parcel) {
-		this.frontSideText = parcel.readString();
-		this.backSideText = parcel.readString();
-	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel parcel, int flags) {
-		parcel.writeString(frontSideText);
-		parcel.writeString(backSideText);
-	}
-
 	public static final Creator<Card> CREATOR = new Creator<Card>() {
 		@Override
 		public Card createFromParcel(Parcel parcel) {
@@ -48,4 +32,20 @@ public class Card implements Parcelable
 			return new Card[size];
 		}
 	};
+
+	private Card(Parcel parcel) {
+		this.frontSideText = parcel.readString();
+		this.backSideText = parcel.readString();
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeString(frontSideText);
+		parcel.writeString(backSideText);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 }

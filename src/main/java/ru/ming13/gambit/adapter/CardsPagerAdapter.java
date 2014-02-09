@@ -89,9 +89,6 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 
 	@Override
 	public int getItemPosition(Object object) {
-		// This is a really dirty hack.
-		// Unfortunatelly I cannot find any nice method to force items redraw.
-
 		return POSITION_NONE;
 	}
 }

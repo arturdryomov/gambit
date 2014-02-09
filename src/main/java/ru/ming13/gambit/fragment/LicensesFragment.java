@@ -1,5 +1,6 @@
 package ru.ming13.gambit.fragment;
 
+import android.os.Bundle;
 import android.webkit.WebViewFragment;
 
 import ru.ming13.gambit.util.Assets;
@@ -11,8 +12,8 @@ public class LicensesFragment extends WebViewFragment
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
 		setUpLicenses();
 	}

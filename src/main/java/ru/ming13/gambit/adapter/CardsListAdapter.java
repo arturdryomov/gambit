@@ -23,15 +23,16 @@ public class CardsListAdapter extends CursorAdapter
 
 	@Override
 	public View newView(Context context, Cursor cardsCursor, ViewGroup viewGroup) {
-		View cardView = buildCardView(viewGroup);
-
-		setUpCardInformation(context, cardsCursor, cardView);
-
-		return cardView;
+		return buildCardView(viewGroup);
 	}
 
 	private View buildCardView(ViewGroup viewGroup) {
 		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
+	}
+
+	@Override
+	public void bindView(View cardView, Context context, Cursor cardsCursor) {
+		setUpCardInformation(context, cardsCursor, cardView);
 	}
 
 	private void setUpCardInformation(Context context, Cursor cardsCursor, View cardView) {
@@ -49,10 +50,5 @@ public class CardsListAdapter extends CursorAdapter
 
 	private String getCardBackSideText(Cursor cardsCursor) {
 		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
-	}
-
-	@Override
-	public void bindView(View cardView, Context context, Cursor cardsCursor) {
-		setUpCardInformation(context, cardsCursor, cardView);
 	}
 }
