@@ -18,9 +18,6 @@
 <resources>
 
 	<color name="background_action_bar">#0099cc</color>
-
-	<color name="background_card">@android:color/white</color>
-	<color name="background_card_shadow">#d8d8d8</color>
 	<color name="background_card_container">#e5e5e5</color>
 
 	<color name="mask_shuffle_enabled">#d6a042</color>
