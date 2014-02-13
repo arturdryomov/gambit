@@ -29,4 +29,10 @@
 		android:title="@string/menu_shuffle_enable"
 		android:showAsAction="always"/>
 
+	<item
+		android:id="@+id/menu_flip"
+		android:icon="@drawable/ic_menu_flip"
+		android:title="@string/menu_flip"
+		android:showAsAction="always"/>
+
 </menu>

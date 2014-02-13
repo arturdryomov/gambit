@@ -40,6 +40,7 @@
 	<string name="menu_delete">Löschen</string>
 	<string name="menu_edit">Bearbeiten</string>
 	<string name="menu_edit_cards">Flashkarte bearbeiten</string>
+	<string name="menu_flip">Flip</string>
 	<string name="menu_licenses">Die Lizenzen der Open Source</string>
 	<string name="menu_rate_application">Die Applikation bewerten</string>
 	<string name="menu_replay">Wiedergabe</string>

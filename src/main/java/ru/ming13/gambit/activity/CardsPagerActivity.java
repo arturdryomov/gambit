@@ -41,6 +41,7 @@ import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
 import ru.ming13.gambit.bus.DeckCurrentCardLoadedEvent;
 import ru.ming13.gambit.bus.DeviceShakedEvent;
 import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.task.DeckCardsFlippingTask;
 import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
 import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
@@ -245,6 +246,10 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 				switchCardsOrder();
 				return true;
 
+			case R.id.menu_flip:
+				flipCards();
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
@@ -297,6 +302,10 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	@Subscribe
 	public void onDeviceShaked(DeviceShakedEvent event) {
 		shuffleCards();
+	}
+
+	private void flipCards() {
+		DeckCardsFlippingTask.execute(getContentResolver(), getCardsUri());
 	}
 
 	@Override

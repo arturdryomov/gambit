@@ -55,7 +55,7 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 		Cursor cardsCursor = loadCards();
 
 		while (cardsCursor.moveToNext()) {
-			cardsUris.add(buildCardUri(cardsCursor));
+			cardsUris.add(buildCardUri(getCardId(cardsCursor)));
 		}
 
 		cardsCursor.close();
@@ -69,8 +69,8 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 		return contentResolver.query(cardsUri, projection, null, null, null);
 	}
 
-	private Uri buildCardUri(Cursor cardsCursor) {
-		return GambitContract.Cards.getCardUri(cardsUri, getCardId(cardsCursor));
+	private Uri buildCardUri(long cardId) {
+		return GambitContract.Cards.getCardUri(cardsUri, cardId);
 	}
 
 	private long getCardId(Cursor cardsCursor) {

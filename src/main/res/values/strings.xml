@@ -42,6 +42,7 @@
 	<string name="menu_delete">Delete</string>
 	<string name="menu_edit">Edit</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
+	<string name="menu_flip">Flip</string>
 	<string name="menu_licenses">Open source licenses</string>
 	<string name="menu_rate_application">Rate the application</string>
 	<string name="menu_replay">Replay</string>
