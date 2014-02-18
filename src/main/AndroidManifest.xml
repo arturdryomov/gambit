@@ -82,6 +82,16 @@
 		</activity>
 
 		<activity
+			android:name=".activity.BackupActivity"
+			android:label="@string/title_backup">
+
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activity.DecksListActivity"/>
+
+		</activity>
+
+		<activity
 			android:name=".activity.LicensesActivity"
 			android:label="@string/title_licenses">
 

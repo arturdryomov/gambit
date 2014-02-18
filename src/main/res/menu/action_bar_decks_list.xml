@@ -24,6 +24,11 @@
 		android:showAsAction="always"/>
 
 	<item
+		android:id="@+id/menu_backup"
+		android:title="@string/title_backup"
+		android:showAsAction="never"/>
+
+	<item
 		android:id="@+id/menu_rate_application"
 		android:title="@string/menu_rate_application"
 		android:showAsAction="never"/>

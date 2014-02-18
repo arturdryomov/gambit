@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.activity.BackupActivity;
 import ru.ming13.gambit.activity.CardCreationActivity;
 import ru.ming13.gambit.activity.CardEditingActivity;
 import ru.ming13.gambit.activity.CardsListActivity;
@@ -106,6 +107,10 @@ public final class Intents
 			intent.putExtra(Extras.CARD, card);
 
 			return intent;
+		}
+
+		public Intent buildBackupIntent() {
+			return new Intent(context, BackupActivity.class);
 		}
 
 		public Intent buildLicensesIntent() {

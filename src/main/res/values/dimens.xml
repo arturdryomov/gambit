@@ -29,22 +29,29 @@
 
 	<!-- Actual dimensions. -->
 
+	<dimen name="height_button">40dp</dimen>
+	<dimen name="height_indicator_cards">2dp</dimen>
+
+	<dimen name="margin_button">@dimen/space_ui_element_double</dimen>
 	<dimen name="margin_card">@dimen/space_ui_element</dimen>
 
+	<dimen name="padding_button">48dp</dimen>
+	<dimen name="padding_backup_message_horizontal">48dp</dimen>
+	<dimen name="padding_backup_message_vertical">24dp</dimen>
 	<dimen name="padding_list">@dimen/space_ui_element_double</dimen>
 	<dimen name="padding_list_item">@dimen/space_ui_element</dimen>
-	<dimen name="padding_message">40dp</dimen>
-	<dimen name="padding_message_summary">@dimen/space_ui_element</dimen>
+	<dimen name="padding_list_message">40dp</dimen>
+	<dimen name="padding_list_message_summary">@dimen/space_ui_element</dimen>
 	<dimen name="padding_operation">@dimen/space_ui_element_double</dimen>
 	<dimen name="padding_operation_item">@dimen/space_ui_element_double</dimen>
 	<dimen name="padding_operation_bar_divider">12dp</dimen>
 	<dimen name="padding_operation_bar_drawable">@dimen/space_ui_element</dimen>
 
+	<dimen name="size_logo_google_drive">120dp</dimen>
+
 	<dimen name="text_card">30sp</dimen>
 	<dimen name="text_list_item">@dimen/text_medium</dimen>
 	<dimen name="text_message_title">@dimen/text_large</dimen>
 	<dimen name="text_message_summary">@dimen/text_medium</dimen>
-
-	<dimen name="height_indicator_cards">2dp</dimen>
 
 </resources>

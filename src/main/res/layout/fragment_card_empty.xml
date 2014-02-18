@@ -33,7 +33,7 @@
 	<Button
 		android:id="@+id/button_create_cards"
 		android:text="@string/button_create_cards"
-		android:layout_marginTop="@dimen/padding_message_summary"
+		android:layout_marginTop="@dimen/padding_list_message_summary"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"/>
 
