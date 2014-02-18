@@ -33,8 +33,15 @@
 	<Button
 		android:id="@+id/button_create_cards"
 		android:text="@string/button_create_cards"
-		android:layout_marginTop="@dimen/padding_list_message_summary"
+		android:textAllCaps="true"
+		android:textColor="@android:color/white"
+		android:textSize="@dimen/text_small"
+		android:textStyle="bold"
+		android:background="@drawable/bg_button"
+		android:layout_marginTop="@dimen/margin_button"
+		android:paddingRight="@dimen/padding_button"
+		android:paddingLeft="@dimen/padding_button"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"/>
+		android:layout_height="@dimen/height_button"/>
 
 </LinearLayout>
