@@ -31,9 +31,6 @@ public final class DatabaseSchema
 		}
 
 		public static final int CURRENT = 4;
-		public static final int LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION = 3;
-		public static final int LATEST_WITH_UPDATE_TIME_SUPPORT = 2;
-		public static final int LATEST_WITH_CAMEL_NAMING_STYLE = 1;
 	}
 
 	public static final class Tables
@@ -43,7 +40,6 @@ public final class DatabaseSchema
 
 		public static final String DECKS = "Decks";
 		public static final String CARDS = "Cards";
-		public static final String DB_LAST_UPDATE_TIME = "DbLastUpdateTime";
 	}
 
 	public static final class DecksColumns implements BaseColumns
@@ -90,16 +86,10 @@ public final class DatabaseSchema
 		}
 
 		public static final String _ID = "integer primary key autoincrement not null unique";
-		public static final String DECK_ID;
+		public static final String DECK_ID = "integer not null references Decks(_id) on delete cascade";
 		public static final String FRONT_SIDE_TEXT = "text not null";
 		public static final String BACK_SIDE_TEXT = "text not null";
 		public static final String ORDER_INDEX = "int not null";
-
-		static {
-			final String deckForeignKeyMask = "integer not null references %s(%s) on delete cascade";
-
-			DECK_ID = String.format(deckForeignKeyMask, Tables.DECKS, DecksColumns._ID);
-		}
 	}
 
 	public static final class CardsColumnsDefaultValues

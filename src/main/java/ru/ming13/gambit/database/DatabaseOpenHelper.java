@@ -36,7 +36,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		createTables(database);
-
 		createDefaultDeck(database);
 	}
 
@@ -46,7 +45,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void createTable(SQLiteDatabase database, String tableName, String tableDescription) {
-		database.execSQL(SqlBuilder.buildCreateTableClause(tableName, tableDescription));
+		database.execSQL(SqlBuilder.buildTableCreationClause(tableName, tableDescription));
 	}
 
 	private String buildDecksTableDescription() {
@@ -79,71 +78,5 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldDatabaseVersion, int newDatabaseVersion) {
-		switch (oldDatabaseVersion) {
-			case DatabaseSchema.Versions.LATEST_WITH_CAMEL_NAMING_STYLE:
-				dropTables(database);
-				createTables(database);
-				break;
-
-			case DatabaseSchema.Versions.LATEST_WITH_UPDATE_TIME_SUPPORT:
-				migrateFromUpdateTimeSupport(database);
-				migrateFromDeckCardsWithoutCascadeDeletion(database);
-				break;
-
-			case DatabaseSchema.Versions.LATEST_WITHOUT_DECK_CARDS_CASCADE_DELETION:
-				migrateFromDeckCardsWithoutCascadeDeletion(database);
-				break;
-
-			default:
-				dropTables(database);
-				createTables(database);
-				break;
-		}
-	}
-
-	private void dropTables(SQLiteDatabase database) {
-		dropTable(database, DatabaseSchema.Tables.DECKS);
-		dropTable(database, DatabaseSchema.Tables.CARDS);
-		dropTable(database, DatabaseSchema.Tables.DB_LAST_UPDATE_TIME);
-	}
-
-	private void dropTable(SQLiteDatabase database, String tableName) {
-		database.execSQL(SqlBuilder.buildDropTableClause(tableName));
-	}
-
-	private void migrateFromUpdateTimeSupport(SQLiteDatabase database) {
-		dropTable(database, DatabaseSchema.Tables.DB_LAST_UPDATE_TIME);
-	}
-
-	private void migrateFromDeckCardsWithoutCascadeDeletion(SQLiteDatabase database) {
-		createTempTable(database, buildTempTableName(DatabaseSchema.Tables.CARDS), buildCardsTableDescription());
-		copyTableContents(database, DatabaseSchema.Tables.CARDS, buildTempTableName(DatabaseSchema.Tables.CARDS));
-
-		dropTable(database, DatabaseSchema.Tables.CARDS);
-		createTable(database, DatabaseSchema.Tables.CARDS, buildCardsTableDescription());
-
-		copyTableContents(database, buildTempTableName(DatabaseSchema.Tables.CARDS), DatabaseSchema.Tables.CARDS);
-		dropTable(database, buildTempTableName(DatabaseSchema.Tables.CARDS));
-	}
-
-	private void createTempTable(SQLiteDatabase database, String tableName, String tableDescription) {
-		database.execSQL(SqlBuilder.buildCreateTempTableClause(tableName, tableDescription));
-	}
-
-	private String buildTempTableName(String originalTableName) {
-		return String.format("%sTemp", originalTableName);
-	}
-
-	private void copyTableContents(SQLiteDatabase database, String departureTableName, String destinationTableName) {
-		database.execSQL(SqlBuilder.buildCopyTableClause(departureTableName, destinationTableName));
-	}
-
-	@Override
-	public SQLiteDatabase getWritableDatabase() {
-		SQLiteDatabase database = super.getWritableDatabase();
-
-		database.execSQL(SqlBuilder.buildPragmaForeignKeysClause());
-
-		return database;
 	}
 }
