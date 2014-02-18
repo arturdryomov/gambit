@@ -24,20 +24,21 @@ import android.os.AsyncTask;
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 public class DeckCardsOrderLoadingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final Uri cardsUri;
+	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
-		new DeckCardsOrderLoadingTask(contentResolver, cardsUri).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckCardsOrderLoadingTask(contentResolver, deck).execute();
 	}
 
-	private DeckCardsOrderLoadingTask(ContentResolver contentResolver, Uri cardsUri) {
+	private DeckCardsOrderLoadingTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
-		this.cardsUri = cardsUri;
+		this.deck = deck;
 	}
 
 	@Override
@@ -68,7 +69,11 @@ public class DeckCardsOrderLoadingTask extends AsyncTask<Void, Void, BusEvent>
 	private Cursor loadCards() {
 		String[] projection = {GambitContract.Cards.ORDER_INDEX};
 
-		return contentResolver.query(cardsUri, projection, null, null, null);
+		return contentResolver.query(buildCardsUri(), projection, null, null, null);
+	}
+
+	private Uri buildCardsUri() {
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	private int getCardOrderIndex(Cursor cardsCursor) {

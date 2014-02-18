@@ -18,7 +18,6 @@ package ru.ming13.gambit.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
@@ -27,7 +26,7 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
-import ru.ming13.gambit.fragment.DeckOperationFragment;
+import ru.ming13.gambit.fragment.DeckEditingFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Fragments;
@@ -53,11 +52,11 @@ public class DeckEditingActivity extends Activity
 	}
 
 	private Fragment buildFragment() {
-		return DeckOperationFragment.newInstance(getDeckUri());
+		return DeckEditingFragment.newInstance(getDeck());
 	}
 
-	private Uri getDeckUri() {
-		return getIntent().getParcelableExtra(Intents.Extras.URI);
+	private Deck getDeck() {
+		return getIntent().getParcelableExtra(Intents.Extras.DECK);
 	}
 
 	@Subscribe
@@ -71,7 +70,7 @@ public class DeckEditingActivity extends Activity
 	}
 
 	private void saveDeck(Deck deck) {
-		DeckEditingTask.execute(getContentResolver(), getDeckUri(), deck);
+		DeckEditingTask.execute(getContentResolver(), deck);
 	}
 
 	@Subscribe

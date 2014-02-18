@@ -17,7 +17,6 @@
 package ru.ming13.gambit.fragment;
 
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,72 +28,19 @@ import com.squareup.otto.Subscribe;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckAssembledEvent;
-import ru.ming13.gambit.bus.DeckExistsEvent;
-import ru.ming13.gambit.bus.DeckLoadedEvent;
+import ru.ming13.gambit.bus.DeckNotSavedEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Deck;
-import ru.ming13.gambit.task.DeckLoadingTask;
-import ru.ming13.gambit.util.Fragments;
 
-public class DeckOperationFragment extends Fragment
+public class DeckCreationFragment extends Fragment
 {
-	public static DeckOperationFragment newInstance() {
-		return newInstance(null);
-	}
-
-	public static DeckOperationFragment newInstance(Uri deckUri) {
-		DeckOperationFragment fragment = new DeckOperationFragment();
-
-		fragment.setArguments(buildArguments(deckUri));
-
-		return fragment;
-	}
-
-	private static Bundle buildArguments(Uri deckUri) {
-		Bundle arguments = new Bundle();
-
-		arguments.putParcelable(Fragments.Arguments.URI, deckUri);
-
-		return arguments;
+	public static DeckCreationFragment newInstance() {
+		return new DeckCreationFragment();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_deck_operation, fragmentContainer, false);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
-		setUpDeck();
-	}
-
-	private void setUpDeck() {
-		if (isDeckUriCorrect()) {
-			DeckLoadingTask.execute(getActivity().getContentResolver(), getDeckUri());
-		}
-	}
-
-	private boolean isDeckUriCorrect() {
-		return getDeckUri() != null;
-	}
-
-	private Uri getDeckUri() {
-		return getArguments().getParcelable(Fragments.Arguments.URI);
-	}
-
-	@Subscribe
-	public void onDeckLoaded(DeckLoadedEvent event) {
-		setUpDeck(event.getDeck());
-	}
-
-	private void setUpDeck(Deck deck) {
-		getDeckTitleView().append(deck.getTitle());
-	}
-
-	private TextView getDeckTitleView() {
-		return (TextView) getView().findViewById(R.id.edit_deck_title);
 	}
 
 	@Subscribe
@@ -118,6 +64,10 @@ public class DeckOperationFragment extends Fragment
 		return getDeckTitleView().getText().toString().trim();
 	}
 
+	private TextView getDeckTitleView() {
+		return (TextView) getView().findViewById(R.id.edit_deck_title);
+	}
+
 	private void assembleDeck() {
 		Deck deck = new Deck(getDeckTitle());
 
@@ -133,7 +83,7 @@ public class DeckOperationFragment extends Fragment
 	}
 
 	@Subscribe
-	public void onDeckExists(DeckExistsEvent event) {
+	public void onDeckNotSaved(DeckNotSavedEvent event) {
 		showErrorMessage();
 	}
 

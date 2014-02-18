@@ -157,9 +157,10 @@ public class GambitProvider extends ContentProvider
 	}
 
 	private Uri insertCard(SQLiteDatabase database, Uri cardsUri, ContentValues cardValues) {
+		long deckId = GambitContract.Cards.getDeckId(cardsUri);
 		long cardId = database.insert(DatabaseSchema.Tables.CARDS, null, cardValues);
 
-		return GambitContract.Cards.getCardUri(cardsUri, cardId);
+		return GambitContract.Cards.getCardUri(deckId, cardId);
 	}
 
 	@Override

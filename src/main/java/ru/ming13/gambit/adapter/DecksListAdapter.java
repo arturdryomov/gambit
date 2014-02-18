@@ -53,12 +53,14 @@ public class DecksListAdapter extends CursorAdapter
 
 	private void setUpDeckInformation(Cursor decksCursor, View deckView) {
 		TextView deckTextView = (TextView) deckView;
+
 		String deckTitle = getDeckTitle(decksCursor);
 
 		deckTextView.setText(deckTitle);
 	}
 
 	private String getDeckTitle(Cursor decksCursor) {
-		return decksCursor.getString(decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
+		return decksCursor.getString(
+			decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
 	}
 }

@@ -25,21 +25,22 @@ import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final Uri cardsUri;
+	private final Deck deck;
 	private final Card card;
 
-	public static void execute(ContentResolver contentResolver, Uri cardsUri, Card card) {
-		new CardCreationTask(contentResolver, cardsUri, card).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck, Card card) {
+		new CardCreationTask(contentResolver, deck, card).execute();
 	}
 
-	private CardCreationTask(ContentResolver contentResolver, Uri cardsUri, Card card) {
+	private CardCreationTask(ContentResolver contentResolver, Deck deck, Card card) {
 		this.contentResolver = contentResolver;
-		this.cardsUri = cardsUri;
+		this.deck = deck;
 		this.card = card;
 	}
 
@@ -51,7 +52,11 @@ public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 	}
 
 	private void createCard() {
-		contentResolver.insert(cardsUri, buildCardValues());
+		contentResolver.insert(buildCardsUri(), buildCardValues());
+	}
+
+	private Uri buildCardsUri() {
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	private ContentValues buildCardValues() {
@@ -59,17 +64,13 @@ public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 
 		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, card.getFrontSideText());
 		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, card.getBackSideText());
-		cardValues.put(GambitContract.Cards.DECK_ID, getDeckId());
-		cardValues.put(GambitContract.Cards.ORDER_INDEX, getOrderIndex());
+		cardValues.put(GambitContract.Cards.DECK_ID, deck.getId());
+		cardValues.put(GambitContract.Cards.ORDER_INDEX, getCardOrderIndex());
 
 		return cardValues;
 	}
 
-	private long getDeckId() {
-		return GambitContract.Cards.getDeckId(cardsUri);
-	}
-
-	private int getOrderIndex() {
+	private int getCardOrderIndex() {
 		return GambitContract.Cards.Defaults.ORDER_INDEX;
 	}
 

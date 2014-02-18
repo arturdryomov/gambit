@@ -28,66 +28,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 public class DeckCardsFlippingTask extends AsyncTask<Void, Void, Void>
 {
 	private final ContentResolver contentResolver;
-	private final Uri cardsUri;
+	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
-		new DeckCardsFlippingTask(contentResolver, cardsUri).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckCardsFlippingTask(contentResolver, deck).execute();
 	}
 
-	private DeckCardsFlippingTask(ContentResolver contentResolver, Uri cardsUri) {
+	private DeckCardsFlippingTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
-		this.cardsUri = cardsUri;
+		this.deck = deck;
 	}
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
 		Cursor cardsCursor = loadCards();
 
-		List<Uri> cardsUris = getCardsUris(cardsCursor);
 		List<Card> cards = getCards(cardsCursor);
 
 		cardsCursor.close();
 
-		flipCards(cardsUris, cards);
+		flipCards(cards);
 
 		return null;
 	}
 
 	private Cursor loadCards() {
-		String[] projection = {
-			GambitContract.Cards._ID,
-			GambitContract.Cards.FRONT_SIDE_TEXT,
-			GambitContract.Cards.BACK_SIDE_TEXT};
-
 		String sortOrder = GambitContract.Cards._ID;
 
-		return contentResolver.query(cardsUri, projection, null, null, sortOrder);
+		return contentResolver.query(buildCardsUri(), null, null, null, sortOrder);
 	}
 
-	private List<Uri> getCardsUris(Cursor cardsCursor) {
-		List<Uri> cardsUris = new ArrayList<Uri>();
-
-		cardsCursor.moveToFirst();
-		cardsCursor.moveToPrevious();
-
-		while (cardsCursor.moveToNext()) {
-			cardsUris.add(buildCardUri(getCardId(cardsCursor)));
-		}
-
-		return cardsUris;
-	}
-
-	private Uri buildCardUri(long cardId) {
-		return GambitContract.Cards.getCardUri(cardsUri, cardId);
-	}
-
-	private long getCardId(Cursor cardsCursor) {
-		return cardsCursor.getLong(cardsCursor.getColumnIndex(GambitContract.Cards._ID));
+	private Uri buildCardsUri() {
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	private List<Card> getCards(Cursor cardsCursor) {
@@ -97,23 +75,26 @@ public class DeckCardsFlippingTask extends AsyncTask<Void, Void, Void>
 		cardsCursor.moveToPrevious();
 
 		while (cardsCursor.moveToNext()) {
-			cards.add(new Card(getCardFrontSideText(cardsCursor), getCardBackSideText(cardsCursor)));
+			cards.add(getCard(cardsCursor));
 		}
 
 		return cards;
 	}
 
-	private String getCardFrontSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
+	private Card getCard(Cursor cardsCursor) {
+		long cardId = cardsCursor.getLong(
+			cardsCursor.getColumnIndex(GambitContract.Cards._ID));
+		String cardFrontSideText = cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
+		String cardBackSideText = cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
+
+		return new Card(cardId, cardFrontSideText, cardBackSideText);
 	}
 
-	private String getCardBackSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
-	}
-
-	private void flipCards(List<Uri> cardsUris, List<Card> cards) {
+	private void flipCards(List<Card> cards) {
 		try {
-			contentResolver.applyBatch(GambitContract.AUTHORITY, buildCardsFlippingOperations(cardsUris, cards));
+			contentResolver.applyBatch(GambitContract.AUTHORITY, buildCardsFlippingOperations(cards));
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
 		} catch (OperationApplicationException e) {
@@ -121,23 +102,24 @@ public class DeckCardsFlippingTask extends AsyncTask<Void, Void, Void>
 		}
 	}
 
-	private ArrayList<ContentProviderOperation> buildCardsFlippingOperations(List<Uri> cardsUris, List<Card> cards) {
+	private ArrayList<ContentProviderOperation> buildCardsFlippingOperations(List<Card> cards) {
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
-		for (int cardIndex = 0; cardIndex < cardsUris.size(); cardIndex++) {
-			Uri cardUri = cardsUris.get(cardIndex);
-			Card card = cards.get(cardIndex);
-
-			operations.add(buildCardFlippingOperation(cardUri, card));
+		for (Card card : cards) {
+			operations.add(buildCardFlippingOperation(card));
 		}
 
 		return operations;
 	}
 
-	private ContentProviderOperation buildCardFlippingOperation(Uri cardUri, Card card) {
-		return ContentProviderOperation.newUpdate(cardUri)
+	private ContentProviderOperation buildCardFlippingOperation(Card card) {
+		return ContentProviderOperation.newUpdate(buildCardUri(card))
 			.withValue(GambitContract.Cards.FRONT_SIDE_TEXT, card.getBackSideText())
 			.withValue(GambitContract.Cards.BACK_SIDE_TEXT, card.getFrontSideText())
 			.build();
+	}
+
+	private Uri buildCardUri(Card card) {
+		return GambitContract.Cards.getCardUri(deck.getId(),card.getId());
 	}
 }

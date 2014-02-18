@@ -28,6 +28,8 @@ import ru.ming13.gambit.activity.CardsPagerActivity;
 import ru.ming13.gambit.activity.DeckCreationActivity;
 import ru.ming13.gambit.activity.DeckEditingActivity;
 import ru.ming13.gambit.activity.LicensesActivity;
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 
 public final class Intents
 {
@@ -39,7 +41,8 @@ public final class Intents
 		private Extras() {
 		}
 
-		public static final String URI = "uri";
+		public static final String DECK = "deck";
+		public static final String CARD = "card";
 	}
 
 	private static final class UriMasks
@@ -69,37 +72,38 @@ public final class Intents
 			return new Intent(context, DeckCreationActivity.class);
 		}
 
-		public Intent buildDeckEditingIntent(Uri deckUri) {
+		public Intent buildDeckEditingIntent(Deck deck) {
 			Intent intent = new Intent(context, DeckEditingActivity.class);
-			intent.putExtra(Extras.URI, deckUri);
+			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardsListIntent(Uri deckUri) {
+		public Intent buildCardsListIntent(Deck deck) {
 			Intent intent = new Intent(context, CardsListActivity.class);
-			intent.putExtra(Extras.URI, deckUri);
+			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardsPagerIntent(Uri deckUri) {
+		public Intent buildCardsPagerIntent(Deck deck) {
 			Intent intent = new Intent(context, CardsPagerActivity.class);
-			intent.putExtra(Extras.URI, deckUri);
+			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardCreationIntent(Uri cardsUri) {
+		public Intent buildCardCreationIntent(Deck deck) {
 			Intent intent = new Intent(context, CardCreationActivity.class);
-			intent.putExtra(Extras.URI, cardsUri);
+			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardEditingIntent(Uri cardUri) {
+		public Intent buildCardEditingIntent(Deck deck, Card card) {
 			Intent intent = new Intent(context, CardEditingActivity.class);
-			intent.putExtra(Extras.URI, cardUri);
+			intent.putExtra(Extras.DECK, deck);
+			intent.putExtra(Extras.CARD, card);
 
 			return intent;
 		}

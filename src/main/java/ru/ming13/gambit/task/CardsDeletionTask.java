@@ -26,20 +26,24 @@ import android.os.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 public class CardsDeletionTask extends AsyncTask<Void, Void, Void>
 {
 	private final ContentResolver contentResolver;
-	private final List<Uri> cardUris;
+	private final Deck deck;
+	private final List<Card> cards;
 
-	public static void execute(ContentResolver contentResolver, List<Uri> cardUris) {
-		new CardsDeletionTask(contentResolver, cardUris).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck, List<Card> cards) {
+		new CardsDeletionTask(contentResolver, deck, cards).execute();
 	}
 
-	private CardsDeletionTask(ContentResolver contentResolver, List<Uri> cardUris) {
+	private CardsDeletionTask(ContentResolver contentResolver, Deck deck, List<Card> cards) {
 		this.contentResolver = contentResolver;
-		this.cardUris = cardUris;
+		this.deck = deck;
+		this.cards = cards;
 	}
 
 	@Override
@@ -51,7 +55,7 @@ public class CardsDeletionTask extends AsyncTask<Void, Void, Void>
 
 	private void deleteCards() {
 		try {
-			contentResolver.applyBatch(GambitContract.AUTHORITY, buildDeletionOperations());
+			contentResolver.applyBatch(GambitContract.AUTHORITY, buildCardsDeletionOperations());
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
 		} catch (OperationApplicationException e) {
@@ -59,13 +63,17 @@ public class CardsDeletionTask extends AsyncTask<Void, Void, Void>
 		}
 	}
 
-	private ArrayList<ContentProviderOperation> buildDeletionOperations() {
+	private ArrayList<ContentProviderOperation> buildCardsDeletionOperations() {
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 
-		for (Uri cardUri : cardUris) {
-			operations.add(ContentProviderOperation.newDelete(cardUri).build());
+		for (Card card : cards) {
+			operations.add(ContentProviderOperation.newDelete(buildCardUri(card)).build());
 		}
 
 		return operations;
+	}
+
+	private Uri buildCardUri(Card card) {
+		return GambitContract.Cards.getCardUri(deck.getId(), card.getId());
 	}
 }

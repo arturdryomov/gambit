@@ -38,15 +38,14 @@ import ru.ming13.gambit.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardCreationCalledEvent;
 import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
-import ru.ming13.gambit.bus.DeckCurrentCardLoadedEvent;
 import ru.ming13.gambit.bus.DeviceShakedEvent;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DeckCardsFlippingTask;
 import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
 import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
-import ru.ming13.gambit.task.DeckCurrentCardLoadingTask;
-import ru.ming13.gambit.task.DeckCurrentCardSavingTask;
+import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
 import ru.ming13.gambit.util.Seismometer;
@@ -82,7 +81,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void setUpCardsAdapter() {
-		getCardsPager().setAdapter(new CardsPagerAdapter(getFragmentManager(), null));
+		getCardsPager().setAdapter(new CardsPagerAdapter(getFragmentManager()));
 	}
 
 	private ViewPager getCardsPager() {
@@ -109,11 +108,11 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private Uri getCardsUri() {
-		return GambitContract.Cards.getCardsUri(getDeckUri());
+		return GambitContract.Cards.getCardsUri(getDeck().getId());
 	}
 
-	private Uri getDeckUri() {
-		return getIntent().getParcelableExtra(Intents.Extras.URI);
+	private Deck getDeck() {
+		return getIntent().getParcelableExtra(Intents.Extras.DECK);
 	}
 
 	@Override
@@ -130,17 +129,12 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 
 	private void setUpCurrentCard() {
 		if (shouldCurrentCardBeSet()) {
-			DeckCurrentCardLoadingTask.execute(getContentResolver(), getDeckUri());
+			setUpCurrentCard(getDeck().getCurrentCardPosition());
 		}
 	}
 
 	private boolean shouldCurrentCardBeSet() {
 		return (currentCardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
-	}
-
-	@Subscribe
-	public void onCurrentCardLoaded(DeckCurrentCardLoadedEvent event) {
-		setUpCurrentCard(event.getCurrentCardIndex());
 	}
 
 	private void setUpCurrentCard(int currentCard) {
@@ -149,7 +143,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 
 	private void setUpCurrentCardsOrder() {
 		if (shouldCurrentCardsOrderBeSet()) {
-			DeckCardsOrderLoadingTask.execute(getContentResolver(), getCardsUri());
+			DeckCardsOrderLoadingTask.execute(getContentResolver(), getDeck());
 		}
 	}
 
@@ -191,8 +185,8 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 
 	private void startCardCreationStack() {
 		startActivities(new Intent[]{
-			Intents.Builder.with(this).buildCardsListIntent(getDeckUri()),
-			Intents.Builder.with(this).buildCardCreationIntent(getCardsUri())});
+			Intents.Builder.with(this).buildCardsListIntent(getDeck()),
+			Intents.Builder.with(this).buildCardCreationIntent(getDeck())});
 	}
 
 	@Override
@@ -276,7 +270,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void shuffleCards() {
-		DeckCardsOrderShufflingTask.execute(getContentResolver(), getCardsUri());
+		DeckCardsOrderShufflingTask.execute(getContentResolver(), getDeck());
 
 		switchCardsOrder(CardsOrder.SHUFFLE);
 	}
@@ -294,7 +288,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void orderCards() {
-		DeckCardsOrderResettingTask.execute(getContentResolver(), getCardsUri());
+		DeckCardsOrderResettingTask.execute(getContentResolver(), getDeck());
 
 		switchCardsOrder(CardsOrder.ORIGINAL);
 	}
@@ -305,7 +299,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void flipCards() {
-		DeckCardsFlippingTask.execute(getContentResolver(), getCardsUri());
+		DeckCardsFlippingTask.execute(getContentResolver(), getDeck());
 	}
 
 	@Override
@@ -334,6 +328,8 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void saveCurrentCard() {
-		DeckCurrentCardSavingTask.execute(getContentResolver(), getDeckUri(), getCardsPager().getCurrentItem());
+		Deck deck = new Deck(getDeck().getId(), getDeck().getTitle(), getCardsPager().getCurrentItem());
+
+		DeckEditingTask.execute(getContentResolver(), deck);
 	}
 }

@@ -61,10 +61,12 @@ public class CardsListAdapter extends CursorAdapter
 	}
 
 	private String getCardFrontSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
+		return cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 	}
 
 	private String getCardBackSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
+		return cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 	}
 }

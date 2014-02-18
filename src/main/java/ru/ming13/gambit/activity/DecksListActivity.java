@@ -60,12 +60,12 @@ public class DecksListActivity extends Activity
 				startDeckCreationActivity();
 				return true;
 
-			case R.id.menu_send_feedback:
-				startFeedbackSending();
-				return true;
-
 			case R.id.menu_rate_application:
 				startApplicationRating();
+				return true;
+
+			case R.id.menu_send_feedback:
+				startFeedbackSending();
 				return true;
 
 			case R.id.menu_licenses:
@@ -82,11 +82,6 @@ public class DecksListActivity extends Activity
 		startActivity(intent);
 	}
 
-	private void startFeedbackSending() {
-		Intent intent = Intents.Builder.with(this).buildFeedbackIntent();
-		startActivity(intent);
-	}
-
 	private void startApplicationRating() {
 		try {
 			Intent intent = Intents.Builder.with(this).buildGooglePlayAppIntent();
@@ -94,6 +89,16 @@ public class DecksListActivity extends Activity
 		} catch (ActivityNotFoundException e) {
 			Intent intent = Intents.Builder.with(this).buildGooglePlayWebIntent();
 			startActivity(intent);
+		}
+	}
+
+	private void startFeedbackSending() {
+		Intent intent = Intents.Builder.with(this).buildFeedbackIntent();
+
+		try {
+			startActivity(intent);
+		} catch (ActivityNotFoundException e) {
+			startActivity(Intent.createChooser(intent, null));
 		}
 	}
 

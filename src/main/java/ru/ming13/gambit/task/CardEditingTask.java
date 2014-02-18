@@ -25,21 +25,22 @@ import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final Uri cardUri;
+	private final Deck deck;
 	private final Card card;
 
-	public static void execute(ContentResolver contentResolver, Uri cardUri, Card card) {
-		new CardEditingTask(contentResolver, cardUri, card).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck, Card card) {
+		new CardEditingTask(contentResolver, deck, card).execute();
 	}
 
-	private CardEditingTask(ContentResolver contentResolver, Uri cardUri, Card card) {
+	private CardEditingTask(ContentResolver contentResolver, Deck deck, Card card) {
 		this.contentResolver = contentResolver;
-		this.cardUri = cardUri;
+		this.deck = deck;
 		this.card = card;
 	}
 
@@ -51,7 +52,11 @@ public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 	}
 
 	private void editCard() {
-		contentResolver.update(cardUri, buildCardValues(), null, null);
+		contentResolver.update(buildCardUri(), buildCardValues(), null, null);
+	}
+
+	private Uri buildCardUri() {
+		return GambitContract.Cards.getCardUri(deck.getId(), card.getId());
 	}
 
 	private ContentValues buildCardValues() {

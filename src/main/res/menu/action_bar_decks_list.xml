@@ -24,13 +24,13 @@
 		android:showAsAction="always"/>
 
 	<item
-		android:id="@+id/menu_send_feedback"
-		android:title="@string/menu_send_feedback"
+		android:id="@+id/menu_rate_application"
+		android:title="@string/menu_rate_application"
 		android:showAsAction="never"/>
 
 	<item
-		android:id="@+id/menu_rate_application"
-		android:title="@string/menu_rate_application"
+		android:id="@+id/menu_send_feedback"
+		android:title="@string/menu_send_feedback"
 		android:showAsAction="never"/>
 
 	<item

@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.transition.TransitionManager;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +40,8 @@ import java.util.List;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsListAdapter;
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.CardsDeletionTask;
 import ru.ming13.gambit.util.Fragments;
@@ -47,18 +50,18 @@ import ru.ming13.gambit.util.Loaders;
 
 public class CardsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
 {
-	public static CardsListFragment newInstance(Uri cardsUri) {
+	public static CardsListFragment newInstance(Deck deck) {
 		CardsListFragment cardsFragment = new CardsListFragment();
 
-		cardsFragment.setArguments(buildArguments(cardsUri));
+		cardsFragment.setArguments(buildArguments(deck));
 
 		return cardsFragment;
 	}
 
-	private static Bundle buildArguments(Uri cardsUri) {
+	private static Bundle buildArguments(Deck deck) {
 		Bundle bundle = new Bundle();
 
-		bundle.putParcelable(Fragments.Arguments.URI, cardsUri);
+		bundle.putParcelable(Fragments.Arguments.DECK, deck);
 
 		return bundle;
 	}
@@ -93,14 +96,17 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
 		Uri uri = getCardsUri();
 
-		String[] projection = {GambitContract.Cards._ID, GambitContract.Cards.BACK_SIDE_TEXT, GambitContract.Cards.FRONT_SIDE_TEXT};
 		String sort = GambitContract.Cards.FRONT_SIDE_TEXT;
 
-		return new CursorLoader(getActivity(), uri, projection, null, null, sort);
+		return new CursorLoader(getActivity(), uri, null, null, null, sort);
 	}
 
 	private Uri getCardsUri() {
-		return getArguments().getParcelable(Fragments.Arguments.URI);
+		return GambitContract.Cards.getCardsUri(getDeck().getId());
+	}
+
+	private Deck getDeck() {
+		return getArguments().getParcelable(Fragments.Arguments.DECK);
 	}
 
 	@Override
@@ -173,7 +179,7 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 	public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_delete:
-				startCardsDeletion();
+				startCardsDeletion(getCheckedCards());
 				break;
 
 			default:
@@ -185,18 +191,43 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 		return true;
 	}
 
-	private void startCardsDeletion() {
-		CardsDeletionTask.execute(getActivity().getContentResolver(), getCheckedCardUris());
+	private void startCardsDeletion(List<Card> cards) {
+		CardsDeletionTask.execute(getActivity().getContentResolver(), getDeck(), cards);
 	}
 
-	private List<Uri> getCheckedCardUris() {
-		List<Uri> checkedCardUris = new ArrayList<Uri>();
+	private List<Card> getCheckedCards() {
+		List<Card> cards = new ArrayList<Card>();
 
-		for (long checkedCardId : getListView().getCheckedItemIds()) {
-			checkedCardUris.add(GambitContract.Cards.getCardUri(getCardsUri(), checkedCardId));
+		SparseBooleanArray checkedCardsPositions = getCheckedCardsPositions();
+
+		for (int cardPosition = 0; cardPosition < checkedCardsPositions.size(); cardPosition++) {
+			if (checkedCardsPositions.valueAt(cardPosition)) {
+				cards.add(getCard(checkedCardsPositions.keyAt(cardPosition)));
+			}
 		}
 
-		return checkedCardUris;
+		return cards;
+	}
+
+	private SparseBooleanArray getCheckedCardsPositions() {
+		return getListView().getCheckedItemPositions();
+	}
+
+	private Card getCard(int cardPosition) {
+		Cursor cardsCursor = getCardsCursor(cardPosition);
+
+		long cardId = cardsCursor.getLong(
+			cardsCursor.getColumnIndex(GambitContract.Cards._ID));
+		String cardFrontSideText = cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
+		String cardBackSideText = cardsCursor.getString(
+			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
+
+		return new Card(cardId, cardFrontSideText, cardBackSideText);
+	}
+
+	private Cursor getCardsCursor(int cardPosition) {
+		return (Cursor) getCardsAdapter().getItem(cardPosition);
 	}
 
 	@Override
@@ -205,11 +236,11 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		startCardEditingActivity(GambitContract.Cards.getCardUri(getCardsUri(), id));
+		startCardEditingActivity(getCard(position));
 	}
 
-	private void startCardEditingActivity(Uri cardUri) {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(cardUri);
+	private void startCardEditingActivity(Card card) {
+		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(getDeck(), card);
 		startActivity(intent);
 	}
 }

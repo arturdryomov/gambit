@@ -23,7 +23,7 @@ import android.os.AsyncTask;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckExistsEvent;
+import ru.ming13.gambit.bus.DeckNotSavedEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
@@ -31,16 +31,14 @@ import ru.ming13.gambit.provider.GambitContract;
 public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
-	private final Uri deckUri;
 	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, Uri deckUri, Deck deck) {
-		new DeckEditingTask(contentResolver, deckUri, deck).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckEditingTask(contentResolver, deck).execute();
 	}
 
-	private DeckEditingTask(ContentResolver contentResolver, Uri deckUri, Deck deck) {
+	private DeckEditingTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
-		this.deckUri = deckUri;
 		this.deck = deck;
 	}
 
@@ -49,20 +47,25 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 		try {
 			editDeck();
 
-			return new DeckSavedEvent(deckUri);
+			return new DeckSavedEvent(deck);
 		} catch (RuntimeException e) {
-			return new DeckExistsEvent();
+			return new DeckNotSavedEvent();
 		}
 	}
 
 	private void editDeck() {
-		contentResolver.update(deckUri, buildDeckValues(), null, null);
+		contentResolver.update(buildDeckUri(), buildDeckValues(), null, null);
+	}
+
+	private Uri buildDeckUri() {
+		return GambitContract.Decks.getDeckUri(deck.getId());
 	}
 
 	private ContentValues buildDeckValues() {
 		ContentValues deckValues = new ContentValues();
 
 		deckValues.put(GambitContract.Decks.TITLE, deck.getTitle());
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, deck.getCurrentCardPosition());
 
 		return deckValues;
 	}

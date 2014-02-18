@@ -21,12 +21,22 @@ import android.os.Parcelable;
 
 public class Card implements Parcelable
 {
+	private final long id;
 	private final String frontSideText;
 	private final String backSideText;
 
 	public Card(String frontSideText, String backSideText) {
+		this(Long.MIN_VALUE, frontSideText, backSideText);
+	}
+
+	public Card(long id, String frontSideText, String backSideText) {
+		this.id = id;
 		this.frontSideText = frontSideText;
 		this.backSideText = backSideText;
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public String getFrontSideText() {
@@ -50,12 +60,14 @@ public class Card implements Parcelable
 	};
 
 	private Card(Parcel parcel) {
+		this.id = parcel.readLong();
 		this.frontSideText = parcel.readString();
 		this.backSideText = parcel.readString();
 	}
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeLong(id);
 		parcel.writeString(frontSideText);
 		parcel.writeString(backSideText);
 	}

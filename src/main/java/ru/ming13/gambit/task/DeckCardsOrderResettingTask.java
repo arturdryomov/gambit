@@ -17,21 +17,21 @@
 package ru.ming13.gambit.task;
 
 import android.content.ContentResolver;
-import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 public class DeckCardsOrderResettingTask extends DeckCardsOrderChangingTask
 {
-	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
-		new DeckCardsOrderResettingTask(contentResolver, cardsUri).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckCardsOrderResettingTask(contentResolver, deck).execute();
 	}
 
-	private DeckCardsOrderResettingTask(ContentResolver contentResolver, Uri cardsUri) {
-		super(contentResolver, cardsUri);
+	private DeckCardsOrderResettingTask(ContentResolver contentResolver, Deck deck) {
+		super(contentResolver, deck);
 	}
 
 	@Override

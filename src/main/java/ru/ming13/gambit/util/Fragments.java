@@ -29,8 +29,8 @@ public final class Fragments
 		private Arguments() {
 		}
 
+		public static final String DECK = "deck";
 		public static final String CARD = "card";
-		public static final String URI = "uri";
 	}
 
 	public static final class Operator

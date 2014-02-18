@@ -16,15 +16,6 @@
 
 package ru.ming13.gambit.bus;
 
-public class DeckCurrentCardLoadedEvent implements BusEvent
+public class DeckNotSavedEvent implements BusEvent
 {
-	private final int currentCardIndex;
-
-	public DeckCurrentCardLoadedEvent(int currentCardIndex) {
-		this.currentCardIndex = currentCardIndex;
-	}
-
-	public int getCurrentCardIndex() {
-		return currentCardIndex;
-	}
 }

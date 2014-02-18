@@ -19,7 +19,6 @@ package ru.ming13.gambit.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -27,7 +26,7 @@ import android.view.MenuItem;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.fragment.CardsListFragment;
-import ru.ming13.gambit.provider.GambitContract;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
@@ -37,7 +36,16 @@ public class CardsListActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setUpTitle();
 		setUpFragment();
+	}
+
+	private void setUpTitle() {
+		getActionBar().setSubtitle(getDeck().getTitle());
+	}
+
+	private Deck getDeck() {
+		return getIntent().getParcelableExtra(Intents.Extras.DECK);
 	}
 
 	private void setUpFragment() {
@@ -45,15 +53,7 @@ public class CardsListActivity extends Activity
 	}
 
 	private Fragment buildFragment() {
-		return CardsListFragment.newInstance(getCardsUri());
-	}
-
-	private Uri getCardsUri() {
-		return GambitContract.Cards.getCardsUri(getDeckUri());
-	}
-
-	private Uri getDeckUri() {
-		return getIntent().getParcelableExtra(Intents.Extras.URI);
+		return CardsListFragment.newInstance(getDeck());
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class CardsListActivity extends Activity
 	}
 
 	private void startCardCreationActivity() {
-		Intent intent = Intents.Builder.with(this).buildCardCreationIntent(getCardsUri());
+		Intent intent = Intents.Builder.with(this).buildCardCreationIntent(getDeck());
 		startActivity(intent);
 	}
 }

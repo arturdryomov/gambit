@@ -83,15 +83,11 @@ public final class GambitContract
 			public static final int ORDER_INDEX = 0;
 		}
 
-		public static Uri getCardsUri(Uri deckUri) {
-			long deckId = Decks.getDeckId(deckUri);
-
+		public static Uri getCardsUri(long deckId) {
 			return buildContentUri(getPathsBuilder().buildCardsPath(String.valueOf(deckId)));
 		}
 
-		public static Uri getCardUri(Uri cardsUri, long cardId) {
-			long deckId = getDeckId(cardsUri);
-
+		public static Uri getCardUri(long deckId, long cardId) {
 			return buildContentUri(getPathsBuilder().buildCardPath(String.valueOf(deckId), String.valueOf(cardId)));
 		}
 

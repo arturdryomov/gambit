@@ -27,26 +27,37 @@ import android.os.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 
 abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 {
 	private final ContentResolver contentResolver;
-	private final Uri cardsUri;
+	private final Deck deck;
 
-	protected DeckCardsOrderChangingTask(ContentResolver contentResolver, Uri cardsUri) {
+	protected DeckCardsOrderChangingTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
-		this.cardsUri = cardsUri;
+		this.deck = deck;
 	}
 
 	@Override
 	protected Void doInBackground(Void... parameters) {
-		List<Uri> cardsUris = getCardsUris();
-		List<Integer> cardsOrderIndices = buildCardsOrderIndices(cardsUris.size());
-
-		applyOperations(buildChangingOrderOperations(cardsUris, cardsOrderIndices));
+		changeCardsOrder();
 
 		return null;
+	}
+
+	private void changeCardsOrder() {
+		try {
+			List<Uri> cardsUris = getCardsUris();
+			List<Integer> cardsOrderIndices = buildCardsOrderIndices(cardsUris.size());
+
+			contentResolver.applyBatch(GambitContract.AUTHORITY, buildChangingOrderOperations(cardsUris, cardsOrderIndices));
+		} catch (RemoteException e) {
+			throw new RuntimeException(e);
+		} catch (OperationApplicationException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private List<Uri> getCardsUris() {
@@ -66,11 +77,15 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	private Cursor loadCards() {
 		String[] projection = {GambitContract.Cards._ID};
 
-		return contentResolver.query(cardsUri, projection, null, null, null);
+		return contentResolver.query(buildCardsUri(), projection, null, null, null);
+	}
+
+	private Uri buildCardsUri() {
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	private Uri buildCardUri(long cardId) {
-		return GambitContract.Cards.getCardUri(cardsUri, cardId);
+		return GambitContract.Cards.getCardUri(deck.getId(), cardId);
 	}
 
 	private long getCardId(Cursor cardsCursor) {
@@ -96,15 +111,5 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 		return ContentProviderOperation.newUpdate(cardUri)
 			.withValue(GambitContract.Cards.ORDER_INDEX, cardOrderIndex)
 			.build();
-	}
-
-	private void applyOperations(ArrayList<ContentProviderOperation> operations) {
-		try {
-			contentResolver.applyBatch(GambitContract.AUTHORITY, operations);
-		} catch (RemoteException e) {
-			throw new RuntimeException(e);
-		} catch (OperationApplicationException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

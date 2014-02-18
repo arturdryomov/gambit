@@ -16,21 +16,22 @@
 
 package ru.ming13.gambit.task;
 
+import android.content.ContentResolver;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.content.ContentResolver;
-import android.net.Uri;
+import ru.ming13.gambit.model.Deck;
 
 public class DeckCardsOrderShufflingTask extends DeckCardsOrderChangingTask
 {
-	public static void execute(ContentResolver contentResolver, Uri cardsUri) {
-		new DeckCardsOrderShufflingTask(contentResolver, cardsUri).execute();
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckCardsOrderShufflingTask(contentResolver, deck).execute();
 	}
 
-	private DeckCardsOrderShufflingTask(ContentResolver contentResolver, Uri cardsUri) {
-		super(contentResolver, cardsUri);
+	private DeckCardsOrderShufflingTask(ContentResolver contentResolver, Deck deck) {
+		super(contentResolver, deck);
 	}
 
 	@Override

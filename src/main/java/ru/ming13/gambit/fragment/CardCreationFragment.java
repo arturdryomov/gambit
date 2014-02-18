@@ -17,7 +17,6 @@
 package ru.ming13.gambit.fragment;
 
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,76 +28,18 @@ import com.squareup.otto.Subscribe;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardAssembledEvent;
-import ru.ming13.gambit.bus.CardLoadedEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Card;
-import ru.ming13.gambit.task.CardLoadingTask;
-import ru.ming13.gambit.util.Fragments;
 
-public class CardOperationFragment extends Fragment
+public class CardCreationFragment extends Fragment
 {
-	public static CardOperationFragment newInstance() {
-		return newInstance(null);
-	}
-
-	public static CardOperationFragment newInstance(Uri cardUri) {
-		CardOperationFragment fragment = new CardOperationFragment();
-
-		fragment.setArguments(buildArguments(cardUri));
-
-		return fragment;
-	}
-
-	private static Bundle buildArguments(Uri cardUri) {
-		Bundle arguments = new Bundle();
-
-		arguments.putParcelable(Fragments.Arguments.URI, cardUri);
-
-		return arguments;
+	public static CardCreationFragment newInstance() {
+		return new CardCreationFragment();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_card_operation, fragmentContainer, false);
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
-		setUpCard();
-	}
-
-	private void setUpCard() {
-		if (isCardUriCorrect()) {
-			CardLoadingTask.execute(getActivity().getContentResolver(), getCardUri());
-		}
-	}
-
-	private boolean isCardUriCorrect() {
-		return getCardUri() != null;
-	}
-
-	private Uri getCardUri() {
-		return getArguments().getParcelable(Fragments.Arguments.URI);
-	}
-
-	@Subscribe
-	public void onCardLoaded(CardLoadedEvent event) {
-		setUpCard(event.getCard());
-	}
-
-	private void setUpCard(Card card) {
-		getCardFrontSideTextView().append(card.getFrontSideText());
-		getCardBackSideTextView().append(card.getBackSideText());
-	}
-
-	private TextView getCardFrontSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_front_side_text);
-	}
-
-	private TextView getCardBackSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_back_side_text);
 	}
 
 	@Subscribe
@@ -122,8 +63,16 @@ public class CardOperationFragment extends Fragment
 		return getCardFrontSideTextView().getText().toString().trim();
 	}
 
+	private TextView getCardFrontSideTextView() {
+		return (TextView) getView().findViewById(R.id.edit_front_side_text);
+	}
+
 	private String getCardBackSideText() {
 		return getCardBackSideTextView().getText().toString().trim();
+	}
+
+	private TextView getCardBackSideTextView() {
+		return (TextView) getView().findViewById(R.id.edit_back_side_text);
 	}
 
 	private void assembleCard() {

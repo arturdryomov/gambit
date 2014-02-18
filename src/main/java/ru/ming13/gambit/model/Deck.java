@@ -21,14 +21,34 @@ import android.os.Parcelable;
 
 public class Deck implements Parcelable
 {
+	private final long id;
 	private final String title;
+	private final int currentCardPosition;
 
 	public Deck(String title) {
+		this(Long.MIN_VALUE, title, Integer.MIN_VALUE);
+	}
+
+	public Deck(long id, String title) {
+		this(id, title, Integer.MIN_VALUE);
+	}
+
+	public Deck(long id, String title, int currentCardPosition) {
+		this.id = id;
 		this.title = title;
+		this.currentCardPosition = currentCardPosition;
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public String getTitle() {
 		return title;
+	}
+
+	public int getCurrentCardPosition() {
+		return currentCardPosition;
 	}
 
 	public static final Creator<Deck> CREATOR = new Creator<Deck>()
@@ -45,12 +65,16 @@ public class Deck implements Parcelable
 	};
 
 	private Deck(Parcel parcel) {
+		this.id = parcel.readLong();
 		this.title = parcel.readString();
+		this.currentCardPosition = parcel.readInt();
 	}
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeLong(id);
 		parcel.writeString(title);
+		parcel.writeInt(currentCardPosition);
 	}
 
 	@Override

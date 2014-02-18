@@ -18,7 +18,6 @@ package ru.ming13.gambit.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
@@ -27,8 +26,9 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
-import ru.ming13.gambit.fragment.CardOperationFragment;
+import ru.ming13.gambit.fragment.CardCreationFragment;
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.task.CardCreationTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
@@ -53,7 +53,7 @@ public class CardCreationActivity extends Activity
 	}
 
 	private Fragment buildFragment() {
-		return CardOperationFragment.newInstance();
+		return CardCreationFragment.newInstance();
 	}
 
 	@Subscribe
@@ -67,11 +67,11 @@ public class CardCreationActivity extends Activity
 	}
 
 	private void saveCard(Card card) {
-		CardCreationTask.execute(getContentResolver(), getCardsUri(), card);
+		CardCreationTask.execute(getContentResolver(), getDeck(), card);
 	}
 
-	private Uri getCardsUri() {
-		return getIntent().getParcelableExtra(Intents.Extras.URI);
+	private Deck getDeck() {
+		return getIntent().getParcelableExtra(Intents.Extras.DECK);
 	}
 
 	@Subscribe

@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.transition.TransitionManager;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,6 +40,7 @@ import java.util.List;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
+import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
 import ru.ming13.gambit.util.Intents;
@@ -80,10 +82,9 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
 		Uri uri = getDecksUri();
 
-		String[] projection = {GambitContract.Decks._ID, GambitContract.Decks.TITLE};
 		String sort = GambitContract.Decks.TITLE;
 
-		return new CursorLoader(getActivity(), uri, projection, null, null, sort);
+		return new CursorLoader(getActivity(), uri, null, null, null, sort);
 	}
 
 	private Uri getDecksUri() {
@@ -175,15 +176,15 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case R.id.menu_edit:
-				startDeckEditingActivity();
+				startDeckEditingActivity(getCheckedDeck());
 				break;
 
 			case R.id.menu_edit_cards:
-				startCardsListActivity();
+				startCardsListActivity(getCheckedDeck());
 				break;
 
 			case R.id.menu_delete:
-				startDecksDeletion();
+				startDecksDeletion(getCheckedDecks());
 				break;
 
 			default:
@@ -195,32 +196,57 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		return true;
 	}
 
-	private void startDeckEditingActivity() {
-		Intent intent = Intents.Builder.with(getActivity()).buildDeckEditingIntent(getCheckedDeckUri());
+	private void startDeckEditingActivity(Deck deck) {
+		Intent intent = Intents.Builder.with(getActivity()).buildDeckEditingIntent(deck);
 		startActivity(intent);
 	}
 
-	private Uri getCheckedDeckUri() {
-		return getCheckedDeckUris().get(0);
+	private Deck getCheckedDeck() {
+		return getCheckedDecks().get(0);
 	}
 
-	private List<Uri> getCheckedDeckUris() {
-		List<Uri> checkedDeckUris = new ArrayList<Uri>();
+	private List<Deck> getCheckedDecks() {
+		List<Deck> decks = new ArrayList<Deck>();
 
-		for (long checkedDeckId : getListView().getCheckedItemIds()) {
-			checkedDeckUris.add(GambitContract.Decks.getDeckUri(checkedDeckId));
+		SparseBooleanArray checkedDecksPositions = getCheckedDecksPositions();
+
+		for (int deckPosition = 0; deckPosition < checkedDecksPositions.size(); deckPosition++) {
+			if (checkedDecksPositions.valueAt(deckPosition)) {
+				decks.add(getDeck(checkedDecksPositions.keyAt(deckPosition)));
+			}
 		}
 
-		return checkedDeckUris;
+		return decks;
 	}
 
-	private void startCardsListActivity() {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardsListIntent(getCheckedDeckUri());
+	private SparseBooleanArray getCheckedDecksPositions() {
+		return getListView().getCheckedItemPositions();
+	}
+
+	private Deck getDeck(int deckPosition) {
+		Cursor decksCursor = getDecksCursor(deckPosition);
+
+		long deckId = decksCursor.getLong(
+			decksCursor.getColumnIndex(GambitContract.Decks._ID));
+		String deckTitle = decksCursor.getString(
+			decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
+		int currentCardPosition = decksCursor.getInt(
+			decksCursor.getColumnIndex(GambitContract.Decks.CURRENT_CARD_INDEX));
+
+		return new Deck(deckId, deckTitle, currentCardPosition);
+	}
+
+	private Cursor getDecksCursor(int deckPosition) {
+		return (Cursor) getDecksAdapter().getItem(deckPosition);
+	}
+
+	private void startCardsListActivity(Deck deck) {
+		Intent intent = Intents.Builder.with(getActivity()).buildCardsListIntent(deck);
 		startActivity(intent);
 	}
 
-	private void startDecksDeletion() {
-		DecksDeletionTask.execute(getActivity().getContentResolver(), getCheckedDeckUris());
+	private void startDecksDeletion(List<Deck> decks) {
+		DecksDeletionTask.execute(getActivity().getContentResolver(), decks);
 	}
 
 	@Override
@@ -229,11 +255,11 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		startCardsPagerActivity(GambitContract.Decks.getDeckUri(id));
+		startCardsPagerActivity(getDeck(position));
 	}
 
-	private void startCardsPagerActivity(Uri deckUri) {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardsPagerIntent(deckUri);
+	private void startCardsPagerActivity(Deck deck) {
+		Intent intent = Intents.Builder.with(getActivity()).buildCardsPagerIntent(deck);
 		startActivity(intent);
 	}
 }

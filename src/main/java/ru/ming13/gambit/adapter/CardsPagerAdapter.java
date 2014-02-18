@@ -30,10 +30,8 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 {
 	private Cursor cardsCursor;
 
-	public CardsPagerAdapter(FragmentManager fragmentManager, Cursor cardsCursor) {
+	public CardsPagerAdapter(FragmentManager fragmentManager) {
 		super(fragmentManager);
-
-		this.cardsCursor = cardsCursor;
 	}
 
 	@Override

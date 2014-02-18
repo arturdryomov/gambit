@@ -16,17 +16,17 @@
 
 package ru.ming13.gambit.bus;
 
-import android.net.Uri;
+import ru.ming13.gambit.model.Deck;
 
 public class DeckSavedEvent implements BusEvent
 {
-	private final Uri deckUri;
+	private final Deck deck;
 
-	public DeckSavedEvent(Uri deckUri) {
-		this.deckUri = deckUri;
+	public DeckSavedEvent(Deck deck) {
+		this.deck = deck;
 	}
 
-	public Uri getDeckUri() {
-		return deckUri;
+	public Deck getDeck() {
+		return deck;
 	}
 }
