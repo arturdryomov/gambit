@@ -28,7 +28,6 @@
 
 	<TextView
 		android:text="@string/message_backup"
-		android:fontFamily="sans-serif-light"
 		android:gravity="center"
 		android:paddingTop="@dimen/padding_backup_message_vertical"
 		android:paddingBottom="@dimen/padding_backup_message_vertical"
