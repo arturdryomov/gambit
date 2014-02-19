@@ -46,6 +46,17 @@ public final class Intents
 		public static final String CARD = "card";
 	}
 
+	public static final class Requests
+	{
+		private Requests() {
+		}
+
+		public static final int GOOGLE_CONNECTION = 1;
+
+		public static final int DRIVE_FILE_CREATE = 2;
+		public static final int DRIVE_FILE_OPEN = 3;
+	}
+
 	private static final class UriMasks
 	{
 		private UriMasks() {

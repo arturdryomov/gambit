@@ -23,6 +23,22 @@ public class SqlBuilder
 	private SqlBuilder() {
 	}
 
+	public static String buildAttachingClause(String file, String alias) {
+		return String.format("attach '%s' as %s", file, alias);
+	}
+
+	public static String buildDetachingClause(String alias) {
+		return String.format("detach %s", alias);
+	}
+
+	public static String buildDeletionClause(String table) {
+		return String.format("delete from %s", table);
+	}
+
+	public static String buildInsertionClause(String table, String alias) {
+		return String.format("insert into %s select * from %s.%s", table, alias, table);
+	}
+
 	public static String buildSelectionClause(String field, long id) {
 		return String.format("%s = %d", field, id);
 	}
