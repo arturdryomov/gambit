@@ -60,6 +60,10 @@ public class DecksListActivity extends Activity
 				startDeckCreationActivity();
 				return true;
 
+			case R.id.menu_backup:
+				startBackupActivity();
+				return true;
+
 			case R.id.menu_rate_application:
 				startApplicationRating();
 				return true;
@@ -79,6 +83,11 @@ public class DecksListActivity extends Activity
 
 	private void startDeckCreationActivity() {
 		Intent intent = Intents.Builder.with(this).buildDeckCreationIntent();
+		startActivity(intent);
+	}
+
+	private void startBackupActivity() {
+		Intent intent = Intents.Builder.with(this).buildBackupIntent();
 		startActivity(intent);
 	}
 

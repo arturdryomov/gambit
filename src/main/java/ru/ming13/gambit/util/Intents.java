@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.activity.BackupActivity;
 import ru.ming13.gambit.activity.CardCreationActivity;
 import ru.ming13.gambit.activity.CardEditingActivity;
 import ru.ming13.gambit.activity.CardsListActivity;
@@ -43,6 +44,17 @@ public final class Intents
 
 		public static final String DECK = "deck";
 		public static final String CARD = "card";
+	}
+
+	public static final class Requests
+	{
+		private Requests() {
+		}
+
+		public static final int GOOGLE_CONNECTION = 1;
+
+		public static final int DRIVE_FILE_CREATE = 2;
+		public static final int DRIVE_FILE_OPEN = 3;
 	}
 
 	private static final class UriMasks
@@ -106,6 +118,10 @@ public final class Intents
 			intent.putExtra(Extras.CARD, card);
 
 			return intent;
+		}
+
+		public Intent buildBackupIntent() {
+			return new Intent(context, BackupActivity.class);
 		}
 
 		public Intent buildLicensesIntent() {

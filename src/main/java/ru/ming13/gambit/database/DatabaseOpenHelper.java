@@ -28,7 +28,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	private final Context context;
 
 	public DatabaseOpenHelper(Context context) {
-		super(context, DatabaseSchema.DATABASE_NAME, null, DatabaseSchema.Versions.CURRENT);
+		this(context, DatabaseSchema.DATABASE_NAME);
+	}
+
+	public DatabaseOpenHelper(Context context, String databasePath) {
+		super(context, databasePath, null, DatabaseSchema.Versions.CURRENT);
 
 		this.context = context.getApplicationContext();
 	}
