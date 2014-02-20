@@ -30,6 +30,10 @@
 		android:label="@string/application_name"
 		android:theme="@style/Theme.Gambit">
 
+		<meta-data
+			android:name="com.google.android.gms.version"
+			android:value="@integer/google_play_services_version"/>
+
 		<activity
 			android:name=".activity.DecksListActivity"
 			android:theme="@style/Theme.Gambit.DecksList">

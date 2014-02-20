@@ -26,7 +26,7 @@ public final class BackupOperator
 	}
 
 	private BackupOperator(Context context, GoogleApiClient driveApiClient) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 		this.driveApiClient = driveApiClient;
 	}
 

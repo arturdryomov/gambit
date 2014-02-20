@@ -36,36 +36,54 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"/>
 
-	<LinearLayout
-		android:orientation="horizontal"
+	<ViewAnimator
+		android:id="@+id/animator"
+		android:inAnimation="@android:anim/fade_in"
+		android:outAnimation="@android:anim/fade_out"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content">
 
-		<Button
-			android:text="@string/button_export"
-			android:textAllCaps="true"
-			android:textColor="@android:color/white"
-			android:textSize="@dimen/text_small"
-			android:textStyle="bold"
-			android:background="@drawable/bg_button"
-			android:paddingRight="@dimen/padding_button"
-			android:paddingLeft="@dimen/padding_button"
+		<LinearLayout
+			android:id="@+id/layout_buttons"
+			android:orientation="horizontal"
 			android:layout_width="wrap_content"
-			android:layout_height="@dimen/height_button"/>
+			android:layout_height="wrap_content">
 
-		<Button
-			android:text="@string/button_import"
-			android:textAllCaps="true"
-			android:textColor="@android:color/white"
-			android:textSize="@dimen/text_small"
-			android:textStyle="bold"
-			android:background="@drawable/bg_button"
-			android:layout_marginLeft="@dimen/margin_button"
-			android:paddingRight="@dimen/padding_button"
-			android:paddingLeft="@dimen/padding_button"
+			<Button
+				android:id="@+id/button_export"
+				android:text="@string/button_export"
+				android:textAllCaps="true"
+				android:textColor="@android:color/white"
+				android:textSize="@dimen/text_small"
+				android:textStyle="bold"
+				android:background="@drawable/bg_button"
+				android:paddingRight="@dimen/padding_button"
+				android:paddingLeft="@dimen/padding_button"
+				android:layout_width="wrap_content"
+				android:layout_height="@dimen/height_button"/>
+
+			<Button
+				android:id="@+id/button_import"
+				android:text="@string/button_import"
+				android:textAllCaps="true"
+				android:textColor="@android:color/white"
+				android:textSize="@dimen/text_small"
+				android:textStyle="bold"
+				android:background="@drawable/bg_button"
+				android:layout_marginLeft="@dimen/margin_button"
+				android:paddingRight="@dimen/padding_button"
+				android:paddingLeft="@dimen/padding_button"
+				android:layout_width="wrap_content"
+				android:layout_height="@dimen/height_button"/>
+
+		</LinearLayout>
+
+		<ProgressBar
+			android:id="@+id/progress"
+			android:layout_gravity="center"
 			android:layout_width="wrap_content"
-			android:layout_height="@dimen/height_button"/>
+			android:layout_height="wrap_content"/>
 
-	</LinearLayout>
+	</ViewAnimator>
 
 </LinearLayout>
