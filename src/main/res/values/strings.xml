@@ -57,6 +57,8 @@
 
 	<string name="message_backup">You can easily backup your decks and cards to Google Drive.</string>
 
+	<string name="name_backup">Gambit Backup</string>
+
 	<string name="mask_card_list_item" translatable="false">%1$s → %2$s</string>
 
 </resources>

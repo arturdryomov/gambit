@@ -8,6 +8,7 @@ import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.MetadataChangeSet;
 
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.util.Intents;
 
 public final class BackupFilePicker
@@ -35,7 +36,7 @@ public final class BackupFilePicker
 
 	private IntentSender buildBackupFileCreationIntentSender(Contents fileContents) {
 		MetadataChangeSet fileMetadata = new MetadataChangeSet.Builder()
-			.setTitle(BackupOperator.BACKUP_NAME)
+			.setTitle(activity.getString(R.string.name_backup))
 			.setMimeType(BackupOperator.BACKUP_MIME_TYPE)
 			.build();
 
