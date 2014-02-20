@@ -15,8 +15,6 @@ import ru.ming13.gambit.database.DatabaseOperator;
 
 public final class BackupOperator
 {
-	public static final String BACKUP_MIME_TYPE = "application/x-sqlite3";
-
 	private final Context context;
 	private final GoogleApiClient driveApiClient;
 

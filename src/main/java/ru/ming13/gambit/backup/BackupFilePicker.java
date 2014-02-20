@@ -13,6 +13,8 @@ import ru.ming13.gambit.util.Intents;
 
 public final class BackupFilePicker
 {
+	private static final String BACKUP_MIME_TYPE = "application/vnd.gambit.backup";
+
 	private final Activity activity;
 	private final GoogleApiClient driveApiClient;
 
@@ -36,14 +38,18 @@ public final class BackupFilePicker
 
 	private IntentSender buildBackupFileCreationIntentSender(Contents fileContents) {
 		MetadataChangeSet fileMetadata = new MetadataChangeSet.Builder()
-			.setTitle(activity.getString(R.string.name_backup))
-			.setMimeType(BackupOperator.BACKUP_MIME_TYPE)
+			.setTitle(buildBackupTitle())
+			.setMimeType(BACKUP_MIME_TYPE)
 			.build();
 
 		return Drive.DriveApi.newCreateFileActivityBuilder()
 			.setInitialMetadata(fileMetadata)
 			.setInitialContents(fileContents)
 			.build(driveApiClient);
+	}
+
+	private String buildBackupTitle() {
+		return activity.getString(R.string.name_backup);
 	}
 
 	public void startBackupFileOpening() {
@@ -57,7 +63,7 @@ public final class BackupFilePicker
 
 	private IntentSender buildBackupFileOpeningIntentSender() {
 		return Drive.DriveApi.newOpenFileActivityBuilder()
-			.setMimeType(new String[]{BackupOperator.BACKUP_MIME_TYPE})
+			.setMimeType(new String[]{BACKUP_MIME_TYPE})
 			.build(driveApiClient);
 	}
 }
