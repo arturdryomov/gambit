@@ -20,17 +20,18 @@ import android.app.Activity;
 import android.content.IntentSender;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
-public final class GooglePlayUtil
+import ru.ming13.gambit.fragment.GoogleServicesErrorDialog;
+
+public final class GoogleServicesUtil
 {
 	private final Activity activity;
 
-	public static GooglePlayUtil with(Activity activity) {
-		return new GooglePlayUtil(activity);
+	public static GoogleServicesUtil with(Activity activity) {
+		return new GoogleServicesUtil(activity);
 	}
 
-	private GooglePlayUtil(Activity activity) {
+	private GoogleServicesUtil(Activity activity) {
 		this.activity = activity;
 	}
 
@@ -51,6 +52,10 @@ public final class GooglePlayUtil
 	}
 
 	private void showResolutionError(ConnectionResult connectionResult) {
-		GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, Intents.Requests.GOOGLE_CONNECTION);
+		int errorCode = connectionResult.getErrorCode();
+		int requestCode = Intents.Requests.GOOGLE_CONNECTION;
+
+		GoogleServicesErrorDialog errorDialog = GoogleServicesErrorDialog.newInstance(errorCode, requestCode);
+		errorDialog.show(activity.getFragmentManager(), GoogleServicesErrorDialog.TAG);
 	}
 }

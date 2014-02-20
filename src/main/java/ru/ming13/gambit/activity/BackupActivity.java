@@ -42,7 +42,7 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.BackupExportingTask;
 import ru.ming13.gambit.task.BackupImportingTask;
-import ru.ming13.gambit.util.GooglePlayUtil;
+import ru.ming13.gambit.util.GoogleServicesUtil;
 import ru.ming13.gambit.util.Intents;
 
 public class BackupActivity extends Activity implements View.OnClickListener,
@@ -227,7 +227,7 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
-		GooglePlayUtil.with(this).resolve(connectionResult);
+		GoogleServicesUtil.with(this).resolve(connectionResult);
 	}
 
 	@Override

@@ -31,6 +31,9 @@ public final class Fragments
 
 		public static final String DECK = "deck";
 		public static final String CARD = "card";
+
+		public static final String ERROR_CODE = "error_code";
+		public static final String REQUEST_CODE = "request_code";
 	}
 
 	public static final class Operator
