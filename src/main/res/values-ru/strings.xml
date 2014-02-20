@@ -19,6 +19,7 @@
 
 	<string name="title_cards">Карточки</string>
 	<string name="title_licenses">Open source лицензии</string>
+	<string name="title_backup">Резервная копия</string>
 
 	<string name="empty_cards_title">Карточек нет</string>
 	<string name="empty_cards_subtitle">Попробуйте их создать</string>
@@ -29,11 +30,14 @@
 
 	<string name="error_deck_already_exists">Стопка с таким названием уже существует.</string>
 	<string name="error_empty_field">Не может быть пустым.</string>
+	<string name="button_export">Экспорт</string>
+	<string name="button_import">Импорт</string>
 
 	<string name="hint_card_back_text">Текст обратной стороны</string>
 	<string name="hint_card_front_text">Текст лицевой стороны</string>
 	<string name="hint_deck_name">Название стопки</string>
 
+	<string name="menu_backup">Резервная копия</string>
 	<string name="menu_cancel">Отменить</string>
 	<string name="menu_create_card">Создать карточку</string>
 	<string name="menu_create_deck">Создать стопку</string>
@@ -48,5 +52,9 @@
 	<string name="menu_send_feedback">Написать разработчику</string>
 	<string name="menu_shuffle_disable">Выключить перемешивание</string>
 	<string name="menu_shuffle_enable">Включить перемешивание</string>
+
+	<string name="message_backup">Вы можете сделать резервную копию ваших стопок и карточек в Google Диск.</string>
+
+	<string name="name_backup">Gambit: резервная копия</string>
 
 </resources>
