@@ -33,6 +33,7 @@ You will need JDK 1.6, Android SDK 22 and Gradle 1.10 installed.
 
 Gambit uses some open source libraries and tools:
 
+* [Commons IO][Commons IO link]
 * [Otto][Otto link]
 * [Seismic][Seismic link]
 * [TransitionsBackport][TransitionsBackport link]
@@ -44,6 +45,7 @@ Gambit uses some open source libraries and tools:
 
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
+  [Commons IO link]: http://commons.apache.org/proper/commons-io
   [Otto link]: http://square.github.com/otto
   [Seismic link]: https://github.com/square/seismic
   [TransitionsBackport link]: https://github.com/guerwan/TransitionsBackport
