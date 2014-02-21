@@ -38,9 +38,4 @@
 		android:title="@string/menu_send_feedback"
 		android:showAsAction="never"/>
 
-	<item
-		android:id="@+id/menu_licenses"
-		android:title="@string/menu_licenses"
-		android:showAsAction="never"/>
-
 </menu>

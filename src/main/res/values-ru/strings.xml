@@ -18,7 +18,6 @@
 <resources>
 
 	<string name="title_cards">Карточки</string>
-	<string name="title_licenses">Open source лицензии</string>
 	<string name="title_backup">Резервная копия</string>
 
 	<string name="empty_cards_title">Карточек нет</string>
@@ -45,7 +44,6 @@
 	<string name="menu_edit">Редактировать</string>
 	<string name="menu_edit_cards">Редактировать карточки</string>
 	<string name="menu_flip">Перевернуть</string>
-	<string name="menu_licenses">Open source лицензии</string>
 	<string name="menu_rate_application">Оценить приложение</string>
 	<string name="menu_replay">Пересмотреть</string>
 	<string name="menu_save">Сохранить</string>

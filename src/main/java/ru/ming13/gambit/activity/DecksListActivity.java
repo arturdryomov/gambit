@@ -72,10 +72,6 @@ public class DecksListActivity extends Activity
 				startFeedbackSending();
 				return true;
 
-			case R.id.menu_licenses:
-				startLicensesActivity();
-				return true;
-
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
@@ -109,10 +105,5 @@ public class DecksListActivity extends Activity
 		} catch (ActivityNotFoundException e) {
 			startActivity(Intent.createChooser(intent, null));
 		}
-	}
-
-	private void startLicensesActivity() {
-		Intent intent = Intents.Builder.with(this).buildLicensesIntent();
-		startActivity(intent);
 	}
 }

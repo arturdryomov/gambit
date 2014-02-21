@@ -20,7 +20,6 @@
 	<string name="application_name" translatable="false">Gambit</string>
 
 	<string name="title_cards">Flashcards</string>
-	<string name="title_licenses">Open source licenses</string>
 	<string name="title_backup">Backup</string>
 
 	<string name="empty_cards_title">No flashcards</string>
@@ -47,7 +46,6 @@
 	<string name="menu_edit">Edit</string>
 	<string name="menu_edit_cards">Edit flashcards</string>
 	<string name="menu_flip">Flip</string>
-	<string name="menu_licenses">Open source licenses</string>
 	<string name="menu_rate_application">Rate the application</string>
 	<string name="menu_replay">Replay</string>
 	<string name="menu_save">Save</string>

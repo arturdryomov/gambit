@@ -28,7 +28,6 @@ import ru.ming13.gambit.activity.CardsListActivity;
 import ru.ming13.gambit.activity.CardsPagerActivity;
 import ru.ming13.gambit.activity.DeckCreationActivity;
 import ru.ming13.gambit.activity.DeckEditingActivity;
-import ru.ming13.gambit.activity.LicensesActivity;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.model.Deck;
 
@@ -122,10 +121,6 @@ public final class Intents
 
 		public Intent buildBackupIntent() {
 			return new Intent(context, BackupActivity.class);
-		}
-
-		public Intent buildLicensesIntent() {
-			return new Intent(context, LicensesActivity.class);
 		}
 
 		public Intent buildFeedbackIntent() {
