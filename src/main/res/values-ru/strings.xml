@@ -51,7 +51,7 @@
 	<string name="menu_shuffle_disable">Выключить перемешивание</string>
 	<string name="menu_shuffle_enable">Включить перемешивание</string>
 
-	<string name="message_backup">Вы можете сделать резервную копию ваших стопок и карточек в Google Диск.</string>
+	<string name="message_backup">Вы можете сделать резервную копию ваших стопок и карточек на Google Диск.</string>
 
 	<string name="name_backup">Gambit: резервная копия</string>
 
