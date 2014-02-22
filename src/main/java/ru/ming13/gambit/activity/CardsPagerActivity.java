@@ -41,7 +41,6 @@ import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
 import ru.ming13.gambit.bus.DeviceShakedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
-import ru.ming13.gambit.task.DeckCardsFlippingTask;
 import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
 import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
@@ -299,7 +298,8 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void flipCards() {
-		DeckCardsFlippingTask.execute(getContentResolver(), getDeck());
+		getCardsAdapter().switchDefaultCardSide();
+		getCardsAdapter().notifyDataSetChanged();
 	}
 
 	@Override

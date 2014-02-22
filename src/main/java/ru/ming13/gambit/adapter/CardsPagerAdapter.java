@@ -21,17 +21,31 @@ import android.app.FragmentManager;
 import android.database.Cursor;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
-import ru.ming13.gambit.model.Card;
-import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.fragment.CardEmptyFragment;
 import ru.ming13.gambit.fragment.CardFragment;
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.provider.GambitContract;
 
 public class CardsPagerAdapter extends FragmentStatePagerAdapter
 {
+	public static enum CardSide
+	{
+		FRONT, BACK
+	}
+
 	private Cursor cardsCursor;
+	private CardSide defaultCardSide = CardSide.FRONT;
 
 	public CardsPagerAdapter(FragmentManager fragmentManager) {
 		super(fragmentManager);
+	}
+
+	public void switchDefaultCardSide() {
+		if (defaultCardSide == CardSide.FRONT) {
+			defaultCardSide = CardSide.BACK;
+		} else {
+			defaultCardSide = CardSide.FRONT;
+		}
 	}
 
 	@Override
@@ -68,7 +82,11 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 		String cardBackSideText = cardsCursor.getString(
 			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 
-		return new Card(cardFrontSideText, cardBackSideText);
+		if (defaultCardSide == CardSide.FRONT) {
+			return new Card(cardFrontSideText, cardBackSideText);
+		} else {
+			return new Card(cardBackSideText, cardFrontSideText);
+		}
 	}
 
 	public void swapCursor(Cursor cardsCursor) {
