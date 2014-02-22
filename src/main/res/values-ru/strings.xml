@@ -26,11 +26,11 @@
 	<string name="empty_decks_subtitle">Попробуйте их создать</string>
 
 	<string name="button_create_cards">Создать</string>
+	<string name="button_export">Экспорт</string>
+	<string name="button_import">Импорт</string>
 
 	<string name="error_deck_already_exists">Стопка с таким названием уже существует.</string>
 	<string name="error_empty_field">Не может быть пустым.</string>
-	<string name="button_export">Экспорт</string>
-	<string name="button_import">Импорт</string>
 
 	<string name="hint_card_back_text">Текст обратной стороны</string>
 	<string name="hint_card_front_text">Текст лицевой стороны</string>

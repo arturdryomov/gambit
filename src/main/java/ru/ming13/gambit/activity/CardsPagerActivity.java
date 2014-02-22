@@ -166,10 +166,10 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 				break;
 		}
 
-		changeAvailableActions();
+		setUpCurrentActionBar();
 	}
 
-	private void changeAvailableActions() {
+	private void setUpCurrentActionBar() {
 		invalidateOptionsMenu();
 	}
 
@@ -280,7 +280,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 
 		animateCardsShaking();
 
-		changeAvailableActions();
+		setUpCurrentActionBar();
 	}
 
 	private void animateCardsShaking() {
