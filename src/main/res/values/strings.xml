@@ -31,7 +31,7 @@
 	<string name="button_export">Export</string>
 	<string name="button_import">Import</string>
 
-	<string name="error_deck_already_exists">Deck with such name already exists.</string>
+	<string name="error_deck_already_exists">Deck with this name already exists.</string>
 	<string name="error_empty_field">Should not be empty.</string>
 
 	<string name="hint_card_back_text">Back side text</string>
