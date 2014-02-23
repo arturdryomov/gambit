@@ -54,25 +54,25 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 
 	private String buildDecksTableDescription() {
 		return SqlBuilder.buildTableDescription(
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.DecksColumns._ID, DatabaseSchema.DecksColumnsParameters._ID),
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.DecksColumns.TITLE, DatabaseSchema.DecksColumnsParameters.TITLE),
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.DecksColumns.CURRENT_CARD_INDEX, DatabaseSchema.DecksColumnsParameters.CURRENT_CARD_INDEX));
 	}
 
 	private String buildCardsTableDescription() {
 		return SqlBuilder.buildTableDescription(
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.CardsColumns._ID, DatabaseSchema.CardsColumnsParameters._ID),
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.CardsColumns.DECK_ID, DatabaseSchema.CardsColumnsParameters.DECK_ID),
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.CardsColumns.FRONT_SIDE_TEXT, DatabaseSchema.CardsColumnsParameters.FRONT_SIDE_TEXT),
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.CardsColumns.BACK_SIDE_TEXT, DatabaseSchema.CardsColumnsParameters.BACK_SIDE_TEXT),
-			SqlBuilder.buildTableColumnDescription(
+			SqlBuilder.buildColumnDescription(
 				DatabaseSchema.CardsColumns.ORDER_INDEX, DatabaseSchema.CardsColumnsParameters.ORDER_INDEX));
 	}
 

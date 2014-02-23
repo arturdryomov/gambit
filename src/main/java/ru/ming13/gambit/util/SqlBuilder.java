@@ -47,11 +47,11 @@ public class SqlBuilder
 		return String.format("create table %s (%s)", table, description);
 	}
 
-	public static String buildTableDescription(String... columnDescriptions) {
-		return TextUtils.join(",", columnDescriptions);
+	public static String buildColumnDescription(String columnName, String columnParameters) {
+		return String.format("%s %s", columnName, columnParameters);
 	}
 
-	public static String buildTableColumnDescription(String columnName, String columnParameters) {
-		return String.format("%s %s", columnName, columnParameters);
+	public static String buildTableDescription(String... columnDescriptions) {
+		return TextUtils.join(",", columnDescriptions);
 	}
 }
