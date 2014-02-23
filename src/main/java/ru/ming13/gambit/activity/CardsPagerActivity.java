@@ -38,7 +38,7 @@ import ru.ming13.gambit.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardCreationCalledEvent;
 import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
-import ru.ming13.gambit.bus.DeviceShakedEvent;
+import ru.ming13.gambit.bus.DeviceShakenEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
@@ -293,7 +293,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	@Subscribe
-	public void onDeviceShaked(DeviceShakedEvent event) {
+	public void onDeviceShaken(DeviceShakenEvent event) {
 		shuffleCards();
 	}
 

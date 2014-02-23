@@ -22,7 +22,7 @@ import android.hardware.SensorManager;
 import com.squareup.seismic.ShakeDetector;
 
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeviceShakedEvent;
+import ru.ming13.gambit.bus.DeviceShakenEvent;
 
 public final class Seismometer implements ShakeDetector.Listener
 {
@@ -36,7 +36,7 @@ public final class Seismometer implements ShakeDetector.Listener
 
 	@Override
 	public void hearShake() {
-		BusProvider.getBus().post(new DeviceShakedEvent());
+		BusProvider.getBus().post(new DeviceShakenEvent());
 	}
 
 	public void enable() {
