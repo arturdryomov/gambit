@@ -90,12 +90,13 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	private void startBackupAction(BackupAction backupAction) {
 		this.backupAction = backupAction;
 
-		setUpGoogleApiClient();
 		setUpGoogleApiConnection();
 	}
 
-	private void setUpGoogleApiClient() {
+	private void setUpGoogleApiConnection() {
 		this.googleApiClient = buildGoogleApiClient();
+
+		googleApiClient.connect();
 	}
 
 	private GoogleApiClient buildGoogleApiClient() {
@@ -105,10 +106,6 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 			.addConnectionCallbacks(this)
 			.addOnConnectionFailedListener(this)
 			.build();
-	}
-
-	private void setUpGoogleApiConnection() {
-		googleApiClient.connect();
 	}
 
 	@Override
@@ -129,7 +126,7 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 				break;
 
 			default:
-				break;
+				throw new RuntimeException();
 		}
 	}
 
@@ -199,13 +196,13 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	}
 
 	private void tearDownGoogleApiConnection() {
-		if (isGoogleApiClientSet() && (googleApiClient.isConnecting() || googleApiClient.isConnected())) {
+		if (isGoogleApiClientConnected()) {
 			googleApiClient.disconnect();
 		}
 	}
 
-	private boolean isGoogleApiClientSet() {
-		return googleApiClient != null;
+	private boolean isGoogleApiClientConnected() {
+		return (googleApiClient != null) && (googleApiClient.isConnecting() || googleApiClient.isConnected());
 	}
 
 	private void startBackupExporting(DriveId backupFileId) {
