@@ -180,12 +180,16 @@ public final class DefaultDeckWriter
 		if (isCurrentLocaleSupported()) {
 			return getDeckTitle();
 		} else {
-			return String.format("%s (%s)", getDeckTitle(), getDeckTitleLanguage(localeForBackText));
+			return getDeckTitle(getDeckTitleLanguage(localeForBackText));
 		}
 	}
 
 	private String getDeckTitle() {
 		return context.getString(R.string.default_deck_title);
+	}
+
+	private String getDeckTitle(String deckTitleLanguage) {
+		return context.getString(R.string.default_deck_title_mask, getDeckTitle(), deckTitleLanguage);
 	}
 
 	private String getDeckTitleLanguage(Locale locale) {

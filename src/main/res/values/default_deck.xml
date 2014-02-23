@@ -19,6 +19,7 @@
 
 	<string name="default_deck_title">Android Versions</string>
 	<string name="default_deck_title_language">English</string>
+	<string name="default_deck_title_mask" translatable="false">%1$s (%2$s)</string>
 
 	<string name="android_version_cupcake">Cupcake</string>
 	<string name="android_version_donut">Donut</string>
