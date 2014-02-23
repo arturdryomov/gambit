@@ -129,7 +129,7 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 				break;
 
 			default:
-				throw new RuntimeException();
+				break;
 		}
 	}
 
