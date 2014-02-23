@@ -127,12 +127,12 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void setUpCurrentCard() {
-		if (shouldCurrentCardBeSet()) {
+		if (shouldSetCurrentCard()) {
 			setUpCurrentCard(getDeck().getCurrentCardPosition());
 		}
 	}
 
-	private boolean shouldCurrentCardBeSet() {
+	private boolean shouldSetCurrentCard() {
 		return (currentCardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
 	}
 
@@ -141,12 +141,12 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 	}
 
 	private void setUpCurrentCardsOrder() {
-		if (shouldCurrentCardsOrderBeSet()) {
+		if (shouldSetCurrentCardsOrder()) {
 			DeckCardsOrderLoadingTask.execute(getContentResolver(), getDeck());
 		}
 	}
 
-	private boolean shouldCurrentCardsOrderBeSet() {
+	private boolean shouldSetCurrentCardsOrder() {
 		return currentCardsOrder == CardsOrder.DEFAULT;
 	}
 
@@ -162,7 +162,7 @@ public class CardsPagerActivity extends Activity implements LoaderManager.Loader
 				break;
 
 			default:
-				break;
+				throw new RuntimeException();
 		}
 
 		setUpCurrentActionBar();
