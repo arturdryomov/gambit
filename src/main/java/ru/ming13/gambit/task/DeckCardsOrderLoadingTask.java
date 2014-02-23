@@ -51,19 +51,19 @@ public class DeckCardsOrderLoadingTask extends AsyncTask<Void, Void, BusEvent>
 	}
 
 	private boolean areCardsShuffled() {
-		boolean cardsShuffled = false;
-
 		Cursor cardsCursor = loadCards();
 
-		while (cardsCursor.moveToNext()) {
-			if (getCardOrderIndex(cardsCursor) != GambitContract.Cards.Defaults.ORDER_INDEX) {
-				cardsShuffled = true;
+		try {
+			while (cardsCursor.moveToNext()) {
+				if (getCardOrderIndex(cardsCursor) != GambitContract.Cards.Defaults.ORDER_INDEX) {
+					return true;
+				}
 			}
+
+			return false;
+		} finally {
+			cardsCursor.close();
 		}
-
-		cardsCursor.close();
-
-		return cardsShuffled;
 	}
 
 	private Cursor loadCards() {
