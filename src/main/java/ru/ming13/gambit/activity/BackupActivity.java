@@ -90,13 +90,12 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	private void startBackupAction(BackupAction backupAction) {
 		this.backupAction = backupAction;
 
+		setUpGoogleApiClient();
 		setUpGoogleApiConnection();
 	}
 
-	private void setUpGoogleApiConnection() {
+	private void setUpGoogleApiClient() {
 		this.googleApiClient = buildGoogleApiClient();
-
-		googleApiClient.connect();
 	}
 
 	private GoogleApiClient buildGoogleApiClient() {
@@ -106,6 +105,10 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 			.addConnectionCallbacks(this)
 			.addOnConnectionFailedListener(this)
 			.build();
+	}
+
+	private void setUpGoogleApiConnection() {
+		googleApiClient.connect();
 	}
 
 	@Override
