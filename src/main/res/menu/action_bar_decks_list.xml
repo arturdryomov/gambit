@@ -25,7 +25,7 @@
 
 	<item
 		android:id="@+id/menu_backup"
-		android:title="@string/title_backup"
+		android:title="@string/menu_backup"
 		android:showAsAction="never"/>
 
 	<item
