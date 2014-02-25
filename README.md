@@ -13,27 +13,32 @@ Gambit is a really simple flashcards viewer and manager for Android.
 
 ## Building
 
-The build requires Maven and the Android SDK to be installed.
+You will need JDK 1.6, Android SDK 22 and Gradle 1.10 installed.
 
-The building process is very simple.
+1. Install required Android components.
 
-* Run `mvn -f application/pom.xml clean package` to build the application.
-* Run `mvn clean integration-test` to build the application and run tests.
-* Run `mvn -f application/pom.xml clean package site` to build the application and generate reports site.
+  ```
+  $ android update sdk --no-ui --force --all --filter build-tools-19.0.1
+  $ android update sdk --no-ui --force --all --filter android-19
+  $ android update sdk --no-ui --force --all --filter extra-android-m2repository
+  $ android update sdk --no-ui --force --all --filter extra-google-m2repository
+  ```
 
-For correct building you should set up API keys.
-Look at `application/res/xml/apis.template.xml` for details.
+2. Build application.
+
+  ```
+  $ gradle clean assembleDebug
+  ```
 
 ## Acknowledgements
 
 Gambit uses some open source libraries and tools:
 
-* [Android Maven plugin][Android Maven plugin link]
-* [ActionBarSherlock][ActionBarSherlock link]
-* [ViewPagerIndicator][ViewPagerIndicator link]
-* [Apache Commons Lang][Apache Commons Lang link]
-* [Seismic][Seismic link]
+* [Commons IO][Commons IO link]
 * [Otto][Otto link]
+* [Seismic][Seismic link]
+* [TransitionsBackport][TransitionsBackport link]
+* [ViewPagerIndicator][ViewPagerIndicator link]
 
 
   [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
@@ -41,9 +46,8 @@ Gambit uses some open source libraries and tools:
 
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
-  [Android Maven plugin link]: https://code.google.com/p/maven-android-plugin
-  [ActionBarSherlock link]: http://actionbarsherlock.com
-  [ViewPagerIndicator link]: http://viewpagerindicator.com
-  [Apache Commons Lang link]: http://commons.apache.org/lang
-  [Seismic link]: https://github.com/square/seismic
+  [Commons IO link]: http://commons.apache.org/proper/commons-io
   [Otto link]: http://square.github.com/otto
+  [Seismic link]: https://github.com/square/seismic
+  [TransitionsBackport link]: https://github.com/guerwan/TransitionsBackport
+  [ViewPagerIndicator link]: http://viewpagerindicator.com

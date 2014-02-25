@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2012 Artur Dryomov
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+	<!-- Default metrics and typography style. -->
+
+	<dimen name="space_ui_element">8dp</dimen>
+	<dimen name="space_ui_element_double">16dp</dimen>
+
+	<dimen name="text_micro">12dp</dimen>
+	<dimen name="text_small">14sp</dimen>
+	<dimen name="text_medium">18sp</dimen>
+	<dimen name="text_large">22sp</dimen>
+
+	<!-- Actual dimensions. -->
+
+	<dimen name="height_button">40dp</dimen>
+	<dimen name="height_indicator_cards">2dp</dimen>
+
+	<dimen name="margin_button">@dimen/space_ui_element_double</dimen>
+	<dimen name="margin_card">@dimen/space_ui_element</dimen>
+
+	<dimen name="padding_button">48dp</dimen>
+	<dimen name="padding_backup_message_horizontal">48dp</dimen>
+	<dimen name="padding_backup_message_vertical">24dp</dimen>
+	<dimen name="padding_list">@dimen/space_ui_element_double</dimen>
+	<dimen name="padding_list_item">@dimen/space_ui_element</dimen>
+	<dimen name="padding_list_message">40dp</dimen>
+	<dimen name="padding_list_message_summary">@dimen/space_ui_element</dimen>
+	<dimen name="padding_operation">@dimen/space_ui_element_double</dimen>
+	<dimen name="padding_operation_item">@dimen/space_ui_element_double</dimen>
+	<dimen name="padding_operation_bar_divider">12dp</dimen>
+	<dimen name="padding_operation_bar_drawable">@dimen/space_ui_element</dimen>
+
+	<dimen name="size_logo_google_drive">120dp</dimen>
+
+	<dimen name="text_card">30sp</dimen>
+	<dimen name="text_list_item">@dimen/text_medium</dimen>
+	<dimen name="text_message_title">@dimen/text_large</dimen>
+	<dimen name="text_message_summary">@dimen/text_medium</dimen>
+
+</resources>

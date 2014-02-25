@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2012 Artur Dryomov
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+	<string name="title_cards">Eine Flashkarte</string>
+	<string name="title_backup">Sicherheitskopie</string>
+
+	<string name="empty_cards_title">Keine Flaschkarten</string>
+	<string name="empty_cards_subtitle">Versuche etwas zu erstellen</string>
+	<string name="empty_decks_title">Keine Stöße</string>
+	<string name="empty_decks_subtitle">Versuche etwas zu erstellen</string>
+
+	<string name="button_create_cards">Erstelle etwas</string>
+	<string name="button_export">Export</string>
+	<string name="button_import">Import</string>
+
+	<string name="error_deck_already_exists">Ein Stoß mit diesem Namen existiert schon.</string>
+	<string name="error_empty_field">Es sollte nicht leer sein.</string>
+
+	<string name="hint_card_back_text">Text der Rückseite</string>
+	<string name="hint_card_front_text">Text der Vorderseite</string>
+	<string name="hint_deck_name">Stoß Name</string>
+
+	<string name="menu_backup">Sicherheitskopie</string>
+	<string name="menu_cancel">Abbrechen</string>
+	<string name="menu_create_card">Eine neue Flashkarte</string>
+	<string name="menu_create_deck">Ein neuer Stoß</string>
+	<string name="menu_delete">Löschen</string>
+	<string name="menu_edit">Bearbeiten</string>
+	<string name="menu_edit_cards">Flashkarte bearbeiten</string>
+	<string name="menu_flip">Drehen</string>
+	<string name="menu_rate_application">Die Applikation bewerten</string>
+	<string name="menu_replay">Wiedergabe</string>
+	<string name="menu_save">Sparen</string>
+	<string name="menu_send_feedback">Das feedback schicken</string>
+	<string name="menu_shuffle_disable">Mischen ausschalten</string>
+	<string name="menu_shuffle_enable">Mischen einschalten</string>
+
+	<string name="message_backup">Sie können ganz einfach eine Sicherheitskopie Ihrer Stößen und Karten an Google Drive machen.</string>
+
+	<string name="name_backup">Gambit Sicherheitskopie</string>
+
+</resources>
