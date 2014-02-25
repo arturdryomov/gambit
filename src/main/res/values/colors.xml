@@ -18,7 +18,7 @@
 <resources>
 
 	<color name="background_action_bar">#0099cc</color>
-	<color name="background_button">#24adde</color>
+	<color name="background_button">#0099cc</color>
 	<color name="background_button_focused">#4d000000</color>
 	<color name="background_button_pressed">#1a000000</color>
 	<color name="background_card_container">#e5e5e5</color>
