@@ -1,10 +1,7 @@
 # Gambit
 
-This repository contains the source code for the Gambit Android app.
+This repository contains the source code for the Gambit Android app [available on Google Play][Google Play link]. Gambit is a really simple flashcards viewer and manager for Android.
 
-Gambit is a really simple flashcards viewer and manager for Android.
-
-[![Google Play Badge][Google Play badge image]][Google Play link]
 [![Screenshot][Screenshot image]][Google Play link]
 
 ## License
@@ -42,7 +39,7 @@ Gambit uses some open source libraries and tools:
 
 
   [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
-  [Screenshot image]: http://img826.imageshack.us/img826/3525/nexusy.png
+  [Screenshot image]: https://f.cloud.github.com/assets/200401/2264233/a10084aa-9e6f-11e3-90f7-f4bd5dcceb14.png
 
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
   [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
