@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2012 Artur Dryomov
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+	<string name="title_cards">Карточки</string>
+	<string name="title_backup">Резервная копия</string>
+
+	<string name="empty_cards_title">Карточек нет</string>
+	<string name="empty_cards_subtitle">Попробуйте их создать</string>
+	<string name="empty_decks_title">Стопок нет</string>
+	<string name="empty_decks_subtitle">Попробуйте их создать</string>
+
+	<string name="button_create_cards">Создать</string>
+	<string name="button_export">Экспорт</string>
+	<string name="button_import">Импорт</string>
+
+	<string name="error_deck_already_exists">Стопка с таким названием уже существует.</string>
+	<string name="error_empty_field">Не может быть пустым.</string>
+
+	<string name="hint_card_back_text">Текст обратной стороны</string>
+	<string name="hint_card_front_text">Текст лицевой стороны</string>
+	<string name="hint_deck_name">Название стопки</string>
+
+	<string name="menu_backup">Резервная копия</string>
+	<string name="menu_cancel">Отменить</string>
+	<string name="menu_create_card">Создать карточку</string>
+	<string name="menu_create_deck">Создать стопку</string>
+	<string name="menu_delete">Удалить</string>
+	<string name="menu_edit">Редактировать</string>
+	<string name="menu_edit_cards">Редактировать карточки</string>
+	<string name="menu_flip">Перевернуть</string>
+	<string name="menu_rate_application">Оценить приложение</string>
+	<string name="menu_replay">Пересмотреть</string>
+	<string name="menu_save">Сохранить</string>
+	<string name="menu_send_feedback">Написать разработчику</string>
+	<string name="menu_shuffle_disable">Выключить перемешивание</string>
+	<string name="menu_shuffle_enable">Включить перемешивание</string>
+
+	<string name="message_backup">Вы можете сделать резервную копию ваших стопок и карточек на Google Диск.</string>
+
+	<string name="name_backup">Gambit: резервная копия</string>
+
+</resources>
