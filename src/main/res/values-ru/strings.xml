@@ -53,6 +53,6 @@
 
 	<string name="message_backup">Вы можете сделать резервную копию ваших стопок и карточек на Google Диск.</string>
 
-	<string name="name_backup">Gambit: резервная копия</string>
+	<string name="name_backup">Gambit Backup</string>
 
 </resources>
