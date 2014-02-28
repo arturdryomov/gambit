@@ -27,25 +27,25 @@ import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardCreationCalledEvent;
 
-public class CardEmptyFragment extends Fragment implements View.OnClickListener
+public class CardsPagerEmptyFragment extends Fragment implements View.OnClickListener
 {
-	public static CardEmptyFragment newInstance() {
-		return new CardEmptyFragment();
+	public static CardsPagerEmptyFragment newInstance() {
+		return new CardsPagerEmptyFragment();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
-		return layoutInflater.inflate(R.layout.fragment_card_empty, fragmentContainer, false);
+		return layoutInflater.inflate(R.layout.fragment_cards_pager_empty, fragmentContainer, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		setUpCardListener();
+		setUpCardCreationListener();
 	}
 
-	private void setUpCardListener() {
+	private void setUpCardCreationListener() {
 		getCreateCardsButton().setOnClickListener(this);
 	}
 

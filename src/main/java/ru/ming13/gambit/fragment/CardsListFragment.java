@@ -51,19 +51,19 @@ import ru.ming13.gambit.util.Loaders;
 public class CardsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
 {
 	public static CardsListFragment newInstance(Deck deck) {
-		CardsListFragment cardsFragment = new CardsListFragment();
+		CardsListFragment fragment = new CardsListFragment();
 
-		cardsFragment.setArguments(buildArguments(deck));
+		fragment.setArguments(buildArguments(deck));
 
-		return cardsFragment;
+		return fragment;
 	}
 
 	private static Bundle buildArguments(Deck deck) {
-		Bundle bundle = new Bundle();
+		Bundle arguments = new Bundle();
 
-		bundle.putParcelable(Fragments.Arguments.DECK, deck);
+		arguments.putParcelable(Fragments.Arguments.DECK, deck);
 
-		return bundle;
+		return arguments;
 	}
 
 	@Override
@@ -94,11 +94,9 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		Uri uri = getCardsUri();
-
 		String sort = GambitContract.Cards.FRONT_SIDE_TEXT;
 
-		return new CursorLoader(getActivity(), uri, null, null, null, sort);
+		return new CursorLoader(getActivity(), getCardsUri(), null, null, null, sort);
 	}
 
 	private Uri getCardsUri() {
