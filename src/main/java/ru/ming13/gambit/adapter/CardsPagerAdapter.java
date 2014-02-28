@@ -64,7 +64,7 @@ public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListe
 	}
 
 	private View getCardView(ViewPager cardsPager) {
-		return layoutInflater.inflate(R.layout.view_card, cardsPager, false);
+		return layoutInflater.inflate(R.layout.view_card_pager, cardsPager, false);
 	}
 
 	private void setUpCardInformation(View cardView, Card card, CardSide cardSide) {
