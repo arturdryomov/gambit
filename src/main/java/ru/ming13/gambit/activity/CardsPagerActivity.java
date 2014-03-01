@@ -37,7 +37,7 @@ public class CardsPagerActivity extends Activity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.set(this, buildFragment());
+		Fragments.Operator.at(this).set(buildFragment(), android.R.id.content);
 	}
 
 	private Fragment buildFragment() {

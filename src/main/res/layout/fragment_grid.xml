@@ -21,7 +21,7 @@
 
 	<GridView
 		android:id="@android:id/list"
-		android:numColumns="auto_fit"
+		android:numColumns="@integer/count_cards_grid_columns"
 		android:choiceMode="multipleChoiceModal"
 		android:fastScrollEnabled="true"
 		android:scrollbarStyle="outsideOverlay"
@@ -31,7 +31,7 @@
 		android:horizontalSpacing="@dimen/size_grid_spacing"
 		android:verticalSpacing="@dimen/size_grid_spacing"
 		android:clipToPadding="false"
-		android:background="@color/background_card_container"
+		android:background="@color/background_cards_pager"
 		android:paddingTop="@dimen/padding_grid_vertical"
 		android:paddingBottom="@dimen/padding_grid_vertical"
 		android:paddingLeft="@dimen/padding_grid_horizontal"

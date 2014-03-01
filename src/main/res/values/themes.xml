@@ -42,10 +42,7 @@
 
 	<style name="Theme.Gambit.CardsPager" parent="Theme.Gambit">
 		<item name="android:actionBarStyle">@style/Theme.Gambit.CardsPager.ActionBar</item>
-
-		<item name="android:colorBackground">@color/background_card_container</item>
-		<item name="android:colorBackgroundCacheHint">@color/background_card_container</item>
-		<item name="android:windowBackground">@color/background_card_container</item>
+		<item name="android:windowBackground">@color/background_cards_pager</item>
 	</style>
 
 	<style name="Theme.Gambit.CardsPager.ActionBar" parent="Theme.Gambit.ActionBar">

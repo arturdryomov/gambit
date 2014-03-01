@@ -17,15 +17,14 @@
 
 <resources>
 
-	<color name="background_action_bar">#0099cc</color>
-	<color name="background_button">#0099cc</color>
-	<color name="background_button_focused">#4d000000</color>
-	<color name="background_button_pressed">#1a000000</color>
-	<color name="background_cards_pager">#e8e8e8</color>
-	<color name="background_operation">#e8e8e8</color>
+	<style name="Theme.Gambit.DecksList" parent="Theme.Gambit">
+		<item name="android:actionBarStyle">@style/Theme.Gambit.DecksList.ActionBar</item>
+		<item name="android:windowBackground">@color/background_cards_pager</item>
+	</style>
 
-	<color name="mask_shuffle_enabled">#d6a042</color>
-
-	<color name="text_application_name">#dfffffff</color>
+	<style name="Theme.Gambit.Operation" parent="Theme.Gambit">
+		<item name="android:actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
+		<item name="android:windowBackground">@color/background_operation</item>
+	</style>
 
 </resources>

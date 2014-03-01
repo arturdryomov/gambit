@@ -22,6 +22,7 @@ import android.os.Bundle;
 
 import com.squareup.otto.Subscribe;
 
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
@@ -38,6 +39,7 @@ public class DeckEditingActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_operation);
 
 		setUpBar();
 		setUpFragment();
@@ -48,7 +50,7 @@ public class DeckEditingActivity extends Activity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.set(this, buildFragment());
+		Fragments.Operator.at(this).set(buildFragment(), R.id.container_operation);
 	}
 
 	private Fragment buildFragment() {

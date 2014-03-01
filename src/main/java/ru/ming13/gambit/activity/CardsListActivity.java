@@ -25,8 +25,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.ming13.gambit.R;
+import ru.ming13.gambit.fragment.CardsGridFragment;
 import ru.ming13.gambit.fragment.CardsListFragment;
 import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
@@ -49,11 +51,15 @@ public class CardsListActivity extends Activity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.set(this, buildFragment());
+		Fragments.Operator.at(this).set(buildFragment(), android.R.id.content);
 	}
 
 	private Fragment buildFragment() {
-		return CardsListFragment.newInstance(getDeck());
+		if (Android.with(this).isTablet()) {
+			return CardsGridFragment.newInstance(getDeck());
+		} else {
+			return CardsListFragment.newInstance(getDeck());
+		}
 	}
 
 	@Override

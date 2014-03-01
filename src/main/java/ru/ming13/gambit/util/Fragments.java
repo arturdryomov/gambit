@@ -18,6 +18,7 @@ package ru.ming13.gambit.util;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 
 public final class Fragments
 {
@@ -38,22 +39,35 @@ public final class Fragments
 
 	public static final class Operator
 	{
-		private Operator() {
+		private final FragmentManager fragmentManager;
+
+		public static Operator at(Activity activity) {
+			return new Operator(activity);
 		}
 
-		public static void set(Activity activity, Fragment fragment) {
-			if (isSet(activity)) {
-				return;
-			}
+		private Operator(Activity activity) {
+			this.fragmentManager = activity.getFragmentManager();
+		}
 
-			activity.getFragmentManager()
+		public void reset(Fragment fragment, int fragmentContainerId) {
+			fragmentManager
 				.beginTransaction()
-				.add(android.R.id.content, fragment)
+				.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+				.replace(fragmentContainerId, fragment)
 				.commit();
 		}
 
-		private static boolean isSet(Activity activity) {
-			return activity.getFragmentManager().findFragmentById(android.R.id.content) != null;
+		public void set(Fragment fragment, int fragmentContainerId) {
+			if (!isSet(fragmentContainerId)) {
+				fragmentManager
+					.beginTransaction()
+					.add(fragmentContainerId, fragment)
+					.commit();
+			}
+		}
+
+		private boolean isSet(int fragmentContainerId) {
+			return fragmentManager.findFragmentById(fragmentContainerId) != null;
 		}
 	}
 }

@@ -40,6 +40,8 @@ import java.util.List;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
+import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.DeckSelectedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
@@ -255,11 +257,6 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		startCardsPagerActivity(getDeck(position));
-	}
-
-	private void startCardsPagerActivity(Deck deck) {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardsPagerIntent(deck);
-		startActivity(intent);
+		BusProvider.getBus().post(new DeckSelectedEvent(getDeck(position)));
 	}
 }
