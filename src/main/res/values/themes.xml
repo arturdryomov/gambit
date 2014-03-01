@@ -40,6 +40,9 @@
 		<item name="android:textStyle">bold</item>
 	</style>
 
+	<style name="Theme.Gambit.CardsList" parent="Theme.Gambit">
+	</style>
+
 	<style name="Theme.Gambit.CardsPager" parent="Theme.Gambit">
 		<item name="android:actionBarStyle">@style/Theme.Gambit.CardsPager.ActionBar</item>
 		<item name="android:windowBackground">@color/background_cards_pager</item>

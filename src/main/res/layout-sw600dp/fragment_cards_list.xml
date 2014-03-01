@@ -31,7 +31,6 @@
 		android:horizontalSpacing="@dimen/size_grid_spacing"
 		android:verticalSpacing="@dimen/size_grid_spacing"
 		android:clipToPadding="false"
-		android:background="@color/background_cards_pager"
 		android:paddingTop="@dimen/padding_grid_vertical"
 		android:paddingBottom="@dimen/padding_grid_vertical"
 		android:paddingLeft="@dimen/padding_grid_horizontal"
