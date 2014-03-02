@@ -28,8 +28,10 @@ import com.squareup.otto.Subscribe;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.DeckDeletedEvent;
 import ru.ming13.gambit.bus.DeckSelectedEvent;
 import ru.ming13.gambit.fragment.CardsPagerFragment;
+import ru.ming13.gambit.fragment.MessageFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Fragments;
@@ -41,19 +43,40 @@ public class DecksListActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_decks);
+
+		setUpCardsPagerMessageFragment();
+	}
+
+	private void setUpCardsPagerMessageFragment() {
+		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
+			Fragments.Operator.at(this).reset(buildCardsPagerMessageFragment(), R.id.container_cards_pager);
+		}
+	}
+
+	private Fragment buildCardsPagerMessageFragment() {
+		return MessageFragment.newInstance(getString(R.string.empty_deck_selection));
+	}
+
+	@Subscribe
+	public void onDeckDeleted(DeckDeletedEvent event) {
+		setUpCardsPagerMessageFragment();
 	}
 
 	@Subscribe
 	public void onDeckSelected(DeckSelectedEvent event) {
+		setUpCardsPager(event.getDeck());
+	}
+
+	private void setUpCardsPager(Deck deck) {
 		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
-			setUpCardsPagerFragment(event.getDeck());
+			setUpCardsPagerFragment(deck);
 		} else {
-			startCardsPagerActivity(event.getDeck());
+			startCardsPagerActivity(deck);
 		}
 	}
 
 	private void setUpCardsPagerFragment(Deck deck) {
-		Fragments.Operator.at(this).reset(buildCardsPagerFragment(deck), R.id.container_decks_pager);
+		Fragments.Operator.at(this).reset(buildCardsPagerFragment(deck), R.id.container_cards_pager);
 	}
 
 	private Fragment buildCardsPagerFragment(Deck deck) {

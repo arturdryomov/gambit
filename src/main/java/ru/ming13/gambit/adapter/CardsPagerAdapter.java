@@ -151,6 +151,10 @@ public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListe
 		}
 	}
 
+	public boolean isEmpty() {
+		return getCount() == 0;
+	}
+
 	public void swapCursor(Cursor cardsCursor) {
 		if (this.cardsCursor == cardsCursor) {
 			return;

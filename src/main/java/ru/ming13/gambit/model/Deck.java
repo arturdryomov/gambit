@@ -81,4 +81,19 @@ public class Deck implements Parcelable
 	public int describeContents() {
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Object deckObject) {
+		if (this == deckObject) {
+			return true;
+		}
+
+		if ((deckObject == null) || (getClass() != deckObject.getClass())) {
+			return false;
+		}
+
+		Deck deck = (Deck) deckObject;
+
+		return this.id == deck.id;
+	}
 }

@@ -19,6 +19,7 @@ package ru.ming13.gambit.fragment;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ViewAnimator;
 
 import com.squareup.otto.Subscribe;
 import com.viewpagerindicator.UnderlinePageIndicator;
@@ -47,10 +49,11 @@ import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
 import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Fragments;
+import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
 import ru.ming13.gambit.util.Seismometer;
 
-public class CardsPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
+public class CardsPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener
 {
 	public static CardsPagerFragment newInstance(Deck deck) {
 		CardsPagerFragment fragment = new CardsPagerFragment();
@@ -141,12 +144,43 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		getCardsAdapter().swapCursor(cardsCursor);
 
-		setUpCurrentCard();
-		setUpCurrentCardsOrder();
+		if (getCardsAdapter().isEmpty()) {
+			showMessage();
+			setUpCardsCreationListener();
+		} else {
+			hideMessage();
+			setUpCurrentCard();
+			setUpCurrentCardsOrder();
+		}
 	}
 
 	private CardsPagerAdapter getCardsAdapter() {
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
+	}
+
+	private void showMessage() {
+		ViewAnimator animator = (ViewAnimator) getView().findViewById(R.id.animator);
+		animator.setDisplayedChild(animator.indexOfChild(getView().findViewById(R.id.layout_message)));
+	}
+
+	private void setUpCardsCreationListener() {
+		getView().findViewById(R.id.button_create_cards).setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View button) {
+		startCardCreationStack();
+	}
+
+	private void startCardCreationStack() {
+		getActivity().startActivities(new Intent[]{
+			Intents.Builder.with(getActivity()).buildCardsListIntent(getDeck()),
+			Intents.Builder.with(getActivity()).buildCardCreationIntent(getDeck())});
+	}
+
+	private void hideMessage() {
+		ViewAnimator animator = (ViewAnimator) getView().findViewById(R.id.animator);
+		animator.setDisplayedChild(animator.indexOfChild(getView().findViewById(R.id.layout_pager)));
 	}
 
 	private void setUpCurrentCard() {
@@ -333,6 +367,6 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	private void saveCurrentCard() {
 		Deck deck = new Deck(getDeck().getId(), getDeck().getTitle(), getCardsPager().getCurrentItem());
 
-		DeckEditingTask.execute(getActivity().getContentResolver(), deck);
+		DeckEditingTask.executeSilently(getActivity().getContentResolver(), deck);
 	}
 }
