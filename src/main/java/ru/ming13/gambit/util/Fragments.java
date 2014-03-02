@@ -69,7 +69,20 @@ public final class Fragments
 		}
 
 		private boolean isSet(int fragmentContainerId) {
-			return fragmentManager.findFragmentById(fragmentContainerId) != null;
+			return get(fragmentContainerId) != null;
+		}
+
+		private Fragment get(int fragmentContainerId) {
+			return fragmentManager.findFragmentById(fragmentContainerId);
+		}
+
+		public void remove(int fragmentContainerId) {
+			if (isSet(fragmentContainerId)) {
+				fragmentManager
+					.beginTransaction()
+					.remove(get(fragmentContainerId))
+					.commit();
+			}
 		}
 	}
 }

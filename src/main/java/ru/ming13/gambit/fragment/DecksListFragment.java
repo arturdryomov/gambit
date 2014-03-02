@@ -49,6 +49,7 @@ import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
 import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Intents;
+import ru.ming13.gambit.util.ListUtil;
 import ru.ming13.gambit.util.Loaders;
 
 public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, ListView.OnItemLongClickListener
@@ -80,7 +81,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		if (isTabletLayout()) {
 			getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		} else {
-			getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			ListUtil.at(getListView()).switchChoiceModeToMultipleModal();
 		}
 	}
 

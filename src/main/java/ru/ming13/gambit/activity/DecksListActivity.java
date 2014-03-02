@@ -45,6 +45,7 @@ public class DecksListActivity extends Activity
 		setContentView(R.layout.activity_decks);
 
 		setUpCardsPagerMessageFragment();
+		tearDownCardsPagerFragment();
 	}
 
 	private void setUpCardsPagerMessageFragment() {
@@ -55,6 +56,12 @@ public class DecksListActivity extends Activity
 
 	private Fragment buildCardsPagerMessageFragment() {
 		return MessageFragment.newInstance(getString(R.string.empty_deck_selection));
+	}
+
+	private void tearDownCardsPagerFragment() {
+		if (!Android.with(this).isLandscape()) {
+			Fragments.Operator.at(this).remove(R.id.container_cards_pager);
+		}
 	}
 
 	@Subscribe
