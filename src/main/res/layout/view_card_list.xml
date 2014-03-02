@@ -15,5 +15,11 @@
   ~ limitations under the License.
   -->
 
-<include
-	layout="@layout/view_list_item"/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<include
+		layout="@layout/view_list_item"/>
+
+</FrameLayout>
