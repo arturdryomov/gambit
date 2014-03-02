@@ -180,7 +180,10 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	private void hideMessage() {
 		ViewAnimator animator = (ViewAnimator) getView().findViewById(R.id.animator);
-		animator.setDisplayedChild(animator.indexOfChild(getView().findViewById(R.id.layout_pager)));
+
+		if (animator.getCurrentView().getId() != R.id.layout_pager) {
+			animator.setDisplayedChild(animator.indexOfChild(getView().findViewById(R.id.layout_pager)));
+		}
 	}
 
 	private void setUpCurrentCard() {
