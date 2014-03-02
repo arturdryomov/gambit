@@ -63,10 +63,10 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_backup);
 
-		setUpButtons();
+		setUpBackupActionsListener();
 	}
 
-	private void setUpButtons() {
+	private void setUpBackupActionsListener() {
 		findViewById(R.id.button_export).setOnClickListener(this);
 		findViewById(R.id.button_import).setOnClickListener(this);
 	}
@@ -147,8 +147,8 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 		continueBackupFileCreation(contentsResult.getContents());
 	}
 
-	private void continueBackupFileCreation(Contents backupContents) {
-		BackupFilePicker.with(this, googleApiClient).startBackupFileCreation(backupContents);
+	private void continueBackupFileCreation(Contents backupFileContents) {
+		BackupFilePicker.with(this, googleApiClient).startBackupFileCreation(backupFileContents);
 	}
 
 	private void startBackupFileOpening() {

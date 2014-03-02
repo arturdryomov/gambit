@@ -76,4 +76,19 @@ public class Card implements Parcelable
 	public int describeContents() {
 		return 0;
 	}
+
+	@Override
+	public boolean equals(Object cardObject) {
+		if (this == cardObject) {
+			return true;
+		}
+
+		if ((cardObject == null) || (getClass() != cardObject.getClass())) {
+			return false;
+		}
+
+		Card card = (Card) cardObject;
+
+		return this.id == card.id;
+	}
 }
