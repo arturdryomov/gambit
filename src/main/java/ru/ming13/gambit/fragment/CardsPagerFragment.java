@@ -370,6 +370,8 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	private void saveCurrentCard() {
 		Deck deck = new Deck(getDeck().getId(), getDeck().getTitle(), getCardsPager().getCurrentItem());
 
+		getArguments().putParcelable(Fragments.Arguments.DECK, deck);
+
 		DeckEditingTask.executeSilently(getActivity().getContentResolver(), deck);
 	}
 }
