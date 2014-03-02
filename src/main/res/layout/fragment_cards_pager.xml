@@ -44,7 +44,7 @@
 	<LinearLayout
 		android:id="@+id/layout_message"
 		android:orientation="vertical"
-		android:background="@android:color/white"
+		android:background="@color/background_cards_pager_message"
 		android:gravity="center"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
