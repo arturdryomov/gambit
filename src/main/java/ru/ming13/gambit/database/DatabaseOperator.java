@@ -40,7 +40,7 @@ public class DatabaseOperator
 	}
 
 	private DatabaseOperator(Context context) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 	}
 
 	public void writeDatabaseContents(OutputStream databaseContentsStream) {

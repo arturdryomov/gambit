@@ -169,7 +169,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	@Override
 	public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-		actionMode.getMenuInflater().inflate(R.menu.context_cards_list, menu);
+		actionMode.getMenuInflater().inflate(R.menu.action_mode_cards_list, menu);
 
 		return true;
 	}

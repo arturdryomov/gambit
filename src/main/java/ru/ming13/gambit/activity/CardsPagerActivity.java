@@ -54,9 +54,10 @@ public class CardsPagerActivity extends Activity
 			case android.R.id.home:
 				navigateUp();
 				return true;
-		}
 
-		return super.onOptionsItemSelected(menuItem);
+			default:
+				return super.onOptionsItemSelected(menuItem);
+		}
 	}
 
 	private void navigateUp() {
