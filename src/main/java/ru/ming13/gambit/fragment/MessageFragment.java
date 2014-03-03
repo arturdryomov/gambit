@@ -21,40 +21,47 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardCreationCalledEvent;
+import ru.ming13.gambit.util.Fragments;
 
-public class CardEmptyFragment extends Fragment implements View.OnClickListener
+public class MessageFragment extends Fragment
 {
-	public static CardEmptyFragment newInstance() {
-		return new CardEmptyFragment();
+	public static MessageFragment newInstance(String message) {
+		MessageFragment fragment = new MessageFragment();
+
+		fragment.setArguments(buildArguments(message));
+
+		return fragment;
+	}
+
+	private static Bundle buildArguments(String message) {
+		Bundle arguments = new Bundle();
+
+		arguments.putString(Fragments.Arguments.MESSAGE, message);
+
+		return arguments;
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
-		return layoutInflater.inflate(R.layout.fragment_card_empty, fragmentContainer, false);
+	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+		return layoutInflater.inflate(R.layout.fragment_message, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		setUpCardListener();
+		setUpMessage();
 	}
 
-	private void setUpCardListener() {
-		getCreateCardsButton().setOnClickListener(this);
+	private void setUpMessage() {
+		TextView messageView = (TextView) getView().findViewById(R.id.text_message);
+		messageView.setText(getMessage());
 	}
 
-	private Button getCreateCardsButton() {
-		return (Button) getView().findViewById(R.id.button_create_cards);
-	}
-
-	@Override
-	public void onClick(View view) {
-		BusProvider.getBus().post(new CardCreationCalledEvent());
+	private String getMessage() {
+		return getArguments().getString(Fragments.Arguments.MESSAGE);
 	}
 }

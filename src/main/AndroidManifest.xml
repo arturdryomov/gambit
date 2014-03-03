@@ -17,8 +17,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="ru.ming13.gambit"
-	android:versionCode="100"
-	android:versionName="1.0.0"
+	android:versionCode="110"
+	android:versionName="1.1.0"
 	android:installLocation="auto">
 
 	<uses-sdk
@@ -57,8 +57,9 @@
 		</activity>
 
 		<activity
+			android:label="@string/title_cards"
 			android:name=".activity.CardsListActivity"
-			android:label="@string/title_cards">
+			android:theme="@style/Theme.Gambit.CardsList">
 
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
@@ -87,8 +88,8 @@
 		</activity>
 
 		<activity
-			android:name=".activity.BackupActivity"
-			android:label="@string/title_backup">
+			android:label="@string/title_backup"
+			android:name=".activity.BackupActivity">
 
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"

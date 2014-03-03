@@ -29,7 +29,7 @@ You will need JDK 1.6, Android SDK 22 and Gradle 1.10 installed.
 
 ## Acknowledgements
 
-Gambit uses some open source libraries and tools:
+Gambit uses some open source libraries.
 
 * [Commons IO][Commons IO link]
 * [Otto][Otto link]

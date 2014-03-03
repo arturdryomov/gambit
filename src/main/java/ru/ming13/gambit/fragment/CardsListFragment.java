@@ -16,7 +16,7 @@
 
 package ru.ming13.gambit.fragment;
 
-import android.app.ListFragment;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -32,6 +32,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -48,27 +50,27 @@ import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
 
-public class CardsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
+public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, AdapterView.OnItemClickListener
 {
 	public static CardsListFragment newInstance(Deck deck) {
-		CardsListFragment cardsFragment = new CardsListFragment();
+		CardsListFragment fragment = new CardsListFragment();
 
-		cardsFragment.setArguments(buildArguments(deck));
+		fragment.setArguments(buildArguments(deck));
 
-		return cardsFragment;
+		return fragment;
 	}
 
 	private static Bundle buildArguments(Deck deck) {
-		Bundle bundle = new Bundle();
+		Bundle arguments = new Bundle();
 
-		bundle.putParcelable(Fragments.Arguments.DECK, deck);
+		arguments.putParcelable(Fragments.Arguments.DECK, deck);
 
-		return bundle;
+		return arguments;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
-		return layoutInflater.inflate(R.layout.fragment_list, container, false);
+		return layoutInflater.inflate(R.layout.fragment_cards_list, container, false);
 	}
 
 	@Override
@@ -82,10 +84,15 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 		setUpCardsAdapter();
 		setUpCardsContent();
 		setUpCardsActions();
+		setUpCardsListener();
 	}
 
 	private void setUpCardsAdapter() {
-		setListAdapter(new CardsListAdapter(getActivity()));
+		getCardsList().setAdapter(new CardsListAdapter(getActivity()));
+	}
+
+	private AbsListView getCardsList() {
+		return (AbsListView) getView().findViewById(android.R.id.list);
 	}
 
 	private void setUpCardsContent() {
@@ -94,11 +101,9 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		Uri uri = getCardsUri();
-
 		String sort = GambitContract.Cards.FRONT_SIDE_TEXT;
 
-		return new CursorLoader(getActivity(), uri, null, null, null, sort);
+		return new CursorLoader(getActivity(), getCardsUri(), null, null, null, sort);
 	}
 
 	private Uri getCardsUri() {
@@ -120,12 +125,12 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	private void setUpCardsAnimations() {
 		if (!getCardsAdapter().isEmpty()) {
-			TransitionManager.beginDelayedTransition(getListView());
+			TransitionManager.beginDelayedTransition(getCardsList());
 		}
 	}
 
 	private CardsListAdapter getCardsAdapter() {
-		return (CardsListAdapter) getListAdapter();
+		return (CardsListAdapter) getCardsList().getAdapter();
 	}
 
 	private void setUpCardsMessage() {
@@ -152,11 +157,10 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> cardsLoader) {
-		getCardsAdapter().swapCursor(null);
 	}
 
 	private void setUpCardsActions() {
-		getListView().setMultiChoiceModeListener(this);
+		getCardsList().setMultiChoiceModeListener(this);
 	}
 
 	@Override
@@ -165,7 +169,7 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-		actionMode.getMenuInflater().inflate(R.menu.context_cards_list, menu);
+		actionMode.getMenuInflater().inflate(R.menu.action_mode_cards_list, menu);
 
 		return true;
 	}
@@ -210,7 +214,7 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private SparseBooleanArray getCheckedCardsPositions() {
-		return getListView().getCheckedItemPositions();
+		return getCardsList().getCheckedItemPositions();
 	}
 
 	private Card getCard(int cardPosition) {
@@ -234,9 +238,13 @@ public class CardsListFragment extends ListFragment implements LoaderManager.Loa
 	public void onDestroyActionMode(ActionMode actionMode) {
 	}
 
+	private void setUpCardsListener() {
+		getCardsList().setOnItemClickListener(this);
+	}
+
 	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id) {
-		startCardEditingActivity(getCard(position));
+	public void onItemClick(AdapterView<?> cardsListView, View cardView, int cardPosition, long cardId) {
+		startCardEditingActivity(getCard(cardPosition));
 	}
 
 	private void startCardEditingActivity(Card card) {

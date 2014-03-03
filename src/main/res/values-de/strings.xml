@@ -22,6 +22,7 @@
 
 	<string name="empty_cards_title">Keine Flaschkarten</string>
 	<string name="empty_cards_subtitle">Versuche etwas zu erstellen</string>
+	<string name="empty_deck_selection">Stöße ist nicht ausgewählt</string>
 	<string name="empty_decks_title">Keine Stöße</string>
 	<string name="empty_decks_subtitle">Versuche etwas zu erstellen</string>
 

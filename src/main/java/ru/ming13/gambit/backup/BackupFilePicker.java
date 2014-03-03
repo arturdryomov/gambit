@@ -54,7 +54,7 @@ public final class BackupFilePicker
 
 	private IntentSender buildBackupFileCreationIntentSender(Contents fileContents) {
 		MetadataChangeSet fileMetadata = new MetadataChangeSet.Builder()
-			.setTitle(buildBackupTitle())
+			.setTitle(activity.getString(R.string.name_backup))
 			.setMimeType(BACKUP_MIME_TYPE)
 			.build();
 
@@ -62,10 +62,6 @@ public final class BackupFilePicker
 			.setInitialMetadata(fileMetadata)
 			.setInitialContents(fileContents)
 			.build(driveApiClient);
-	}
-
-	private String buildBackupTitle() {
-		return activity.getString(R.string.name_backup);
 	}
 
 	public void startBackupFileOpening() {

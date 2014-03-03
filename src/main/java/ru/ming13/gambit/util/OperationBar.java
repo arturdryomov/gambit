@@ -65,8 +65,8 @@ public final class OperationBar implements View.OnClickListener
 	}
 
 	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
+	public void onClick(View button) {
+		switch (button.getId()) {
 			case R.id.button_cancel:
 				BusProvider.getBus().post(new OperationCancelledEvent());
 				break;

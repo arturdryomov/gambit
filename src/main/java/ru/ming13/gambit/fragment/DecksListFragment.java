@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,13 +41,18 @@ import java.util.List;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
+import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.DeckDeletedEvent;
+import ru.ming13.gambit.bus.DeckSelectedEvent;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
+import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Intents;
+import ru.ming13.gambit.util.ListUtil;
 import ru.ming13.gambit.util.Loaders;
 
-public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener
+public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, ListView.OnItemLongClickListener
 {
 	public static DecksListFragment newInstance() {
 		return new DecksListFragment();
@@ -65,9 +71,22 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void setUpDecks() {
+		setUpDecksList();
 		setUpDecksAdapter();
 		setUpDecksContent();
 		setUpDecksActions();
+	}
+
+	private void setUpDecksList() {
+		if (isTabletLayout()) {
+			getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		} else {
+			ListUtil.at(getListView()).switchChoiceModeToMultipleModal();
+		}
+	}
+
+	private boolean isTabletLayout() {
+		return Android.with(getActivity()).isTablet() && Android.with(getActivity()).isLandscape();
 	}
 
 	private void setUpDecksAdapter() {
@@ -80,11 +99,9 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArguments) {
-		Uri uri = getDecksUri();
-
 		String sort = GambitContract.Decks.TITLE;
 
-		return new CursorLoader(getActivity(), uri, null, null, null, sort);
+		return new CursorLoader(getActivity(), getDecksUri(), null, null, null, sort);
 	}
 
 	private Uri getDecksUri() {
@@ -138,11 +155,25 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void setUpDecksActions() {
-		getListView().setMultiChoiceModeListener(this);
+		if (isTabletLayout()) {
+			getListView().setOnItemLongClickListener(this);
+		} else {
+			getListView().setMultiChoiceModeListener(this);
+		}
 	}
 
 	@Override
-	public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
+	public boolean onItemLongClick(AdapterView<?> decksListView, View deckView, int deckPosition, long deckId) {
+		getListView().clearChoices();
+		getListView().setItemChecked(deckPosition, true);
+
+		getListView().startActionMode(this);
+
+		return true;
+	}
+
+	@Override
+	public void onItemCheckedStateChanged(ActionMode actionMode, int deckPosition, long deckId, boolean deckChecked) {
 		changeDecksActions(actionMode);
 	}
 
@@ -160,7 +191,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-		actionMode.getMenuInflater().inflate(R.menu.context_decks_list, menu);
+		actionMode.getMenuInflater().inflate(R.menu.action_mode_decks_list, menu);
 
 		return true;
 	}
@@ -247,6 +278,10 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	private void startDecksDeletion(List<Deck> decks) {
 		DecksDeletionTask.execute(getActivity().getContentResolver(), decks);
+
+		if (decks.contains(getCheckedDeck())) {
+			BusProvider.getBus().post(new DeckDeletedEvent());
+		}
 	}
 
 	@Override
@@ -254,12 +289,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id) {
-		startCardsPagerActivity(getDeck(position));
-	}
-
-	private void startCardsPagerActivity(Deck deck) {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardsPagerIntent(deck);
-		startActivity(intent);
+	public void onListItemClick(ListView decksListView, View deckView, int deckPosition, long deckId) {
+		BusProvider.getBus().post(new DeckSelectedEvent(getDeck(deckPosition)));
 	}
 }
