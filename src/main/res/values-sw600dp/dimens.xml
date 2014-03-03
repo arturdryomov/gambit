@@ -15,12 +15,11 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:singleLine="true"
-	android:textSize="@dimen/text_list_item"
-	android:background="?android:attr/activatedBackgroundIndicator"
-	android:gravity="center_vertical"
-	android:padding="@dimen/padding_list_item"
-	android:layout_width="match_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight" />
+<resources>
+
+	<dimen name="padding_operation">32dp</dimen>
+	<dimen name="padding_operation_item">@dimen/space_ui_element_double</dimen>
+
+	<dimen name="size_logo_google_drive">160dp</dimen>
+
+</resources>

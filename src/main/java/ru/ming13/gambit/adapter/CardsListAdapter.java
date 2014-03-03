@@ -43,7 +43,7 @@ public class CardsListAdapter extends CursorAdapter
 	}
 
 	private View buildCardView(ViewGroup viewGroup) {
-		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
+		return layoutInflater.inflate(R.layout.view_card_list, viewGroup, false);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class CardsListAdapter extends CursorAdapter
 	}
 
 	private void setUpCardInformation(Context context, Cursor cardsCursor, View cardView) {
-		TextView cardTextView = (TextView) cardView;
+		TextView cardTextView = (TextView) cardView.findViewById(R.id.text);
 
 		String cardFrontSideText = getCardFrontSideText(cardsCursor);
 		String cardBackSideText = getCardBackSideText(cardsCursor);

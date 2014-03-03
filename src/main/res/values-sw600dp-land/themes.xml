@@ -15,12 +15,16 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:singleLine="true"
-	android:textSize="@dimen/text_list_item"
-	android:background="?android:attr/activatedBackgroundIndicator"
-	android:gravity="center_vertical"
-	android:padding="@dimen/padding_list_item"
-	android:layout_width="match_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight" />
+<resources>
+
+	<style name="Theme.Gambit.DecksList" parent="Theme.Gambit">
+		<item name="android:actionBarStyle">@style/Theme.Gambit.DecksList.ActionBar</item>
+		<item name="android:windowBackground">@color/background_cards_pager</item>
+	</style>
+
+	<style name="Theme.Gambit.Operation" parent="Theme.Gambit">
+		<item name="android:actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
+		<item name="android:windowBackground">@color/background_operation</item>
+	</style>
+
+</resources>

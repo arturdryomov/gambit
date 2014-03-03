@@ -15,12 +15,19 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:singleLine="true"
-	android:textSize="@dimen/text_list_item"
-	android:background="?android:attr/activatedBackgroundIndicator"
-	android:gravity="center_vertical"
-	android:padding="@dimen/padding_list_item"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:foreground="?android:attr/activatedBackgroundIndicator"
 	android:layout_width="match_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight" />
+	android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/text"
+		android:textSize="@dimen/text_list_item"
+		android:singleLine="true"
+		android:background="@drawable/bg_card"
+		android:gravity="center_vertical"
+		android:padding="@dimen/padding_list_item"
+		android:layout_width="match_parent"
+		android:layout_height="?android:attr/listPreferredItemHeight"/>
+
+</FrameLayout>

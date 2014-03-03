@@ -16,11 +16,10 @@
   -->
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:singleLine="true"
-	android:textSize="@dimen/text_list_item"
-	android:background="?android:attr/activatedBackgroundIndicator"
-	android:gravity="center_vertical"
-	android:padding="@dimen/padding_list_item"
+	android:id="@+id/text_message"
+	android:textStyle="italic"
+	android:textSize="@dimen/text_message_summary"
+	android:background="@android:color/white"
+	android:gravity="center"
 	android:layout_width="match_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight" />
+	android:layout_height="match_parent"/>

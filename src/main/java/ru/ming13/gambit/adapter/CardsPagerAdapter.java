@@ -16,77 +16,143 @@
 
 package ru.ming13.gambit.adapter;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.content.Context;
 import android.database.Cursor;
-import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-import ru.ming13.gambit.fragment.CardEmptyFragment;
-import ru.ming13.gambit.fragment.CardFragment;
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
 
-public class CardsPagerAdapter extends FragmentStatePagerAdapter
+public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListener
 {
-	public static enum CardSide
+	private static enum CardSide
 	{
 		FRONT, BACK
 	}
 
+	private final LayoutInflater layoutInflater;
+
 	private Cursor cardsCursor;
 	private CardSide defaultCardSide = CardSide.FRONT;
 
-	public CardsPagerAdapter(FragmentManager fragmentManager) {
-		super(fragmentManager);
-	}
-
-	public void switchDefaultCardSide() {
-		if (defaultCardSide == CardSide.FRONT) {
-			defaultCardSide = CardSide.BACK;
-		} else {
-			defaultCardSide = CardSide.FRONT;
-		}
+	public CardsPagerAdapter(Context context) {
+		this.layoutInflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public int getCount() {
-		if (cardsCursor == null) {
-			return 0;
-		}
+	public Object instantiateItem(ViewGroup cardsPagerContainer, int cardPosition) {
+		ViewPager cardsPager = getCardsPager(cardsPagerContainer);
+		View cardView = getCardView(cardsPager);
 
-		if (cardsCursor.getCount() == 0) {
-			return 1;
-		}
+		setUpCardInformation(cardView, getCard(cardPosition), defaultCardSide);
+		setUpCardText(cardView);
+		setUpCardListener(cardView);
 
-		return cardsCursor.getCount();
+		cardsPager.addView(cardView);
+		return cardView;
 	}
 
-	@Override
-	public Fragment getItem(int position) {
-		if (cardsCursor == null) {
-			return null;
-		}
-
-		if (cardsCursor.getCount() == 0) {
-			return CardEmptyFragment.newInstance();
-		}
-
-		return CardFragment.newInstance(getCard(position));
+	private ViewPager getCardsPager(ViewGroup cardsPagerContainer) {
+		return (ViewPager) cardsPagerContainer;
 	}
 
-	private Card getCard(int position) {
-		cardsCursor.moveToPosition(position);
+	private View getCardView(ViewPager cardsPager) {
+		return layoutInflater.inflate(R.layout.view_card_pager, cardsPager, false);
+	}
+
+	private void setUpCardInformation(View cardView, Card card, CardSide cardSide) {
+		cardView.setTag(Pair.create(card, cardSide));
+	}
+
+	private Card getCard(int cardPosition) {
+		cardsCursor.moveToPosition(cardPosition);
 
 		String cardFrontSideText = cardsCursor.getString(
 			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
 		String cardBackSideText = cardsCursor.getString(
 			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
 
-		if (defaultCardSide == CardSide.FRONT) {
-			return new Card(cardFrontSideText, cardBackSideText);
+		return new Card(cardFrontSideText, cardBackSideText);
+	}
+
+	private void setUpCardText(View cardView) {
+		if (getCardSide(cardView) == CardSide.FRONT) {
+			getCardTextView(cardView).setText(getCard(cardView).getFrontSideText());
 		} else {
-			return new Card(cardBackSideText, cardFrontSideText);
+			getCardTextView(cardView).setText(getCard(cardView).getBackSideText());
 		}
+	}
+
+	private CardSide getCardSide(View cardView) {
+		return getCardInformation(cardView).second;
+	}
+
+	private Pair<Card, CardSide> getCardInformation(View cardView) {
+		return (Pair<Card, CardSide>) cardView.getTag();
+	}
+
+	private TextView getCardTextView(View cardView) {
+		return (TextView) cardView.findViewById(R.id.text);
+	}
+
+	private Card getCard(View cardView) {
+		return getCardInformation(cardView).first;
+	}
+
+	private void setUpCardListener(View cardView) {
+		cardView.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View cardView) {
+		Card card = getCard(cardView);
+		CardSide cardSide = getFlippedCardSide(getCardSide(cardView));
+
+		setUpCardInformation(cardView, card, cardSide);
+		setUpCardText(cardView);
+	}
+
+	private CardSide getFlippedCardSide(CardSide cardSide) {
+		if (cardSide == CardSide.FRONT) {
+			return CardSide.BACK;
+		} else {
+			return CardSide.FRONT;
+		}
+	}
+
+	@Override
+	public void destroyItem(ViewGroup cardsPagerContainer, int cardPosition, Object cardViewObject) {
+		getCardsPager(cardsPagerContainer).removeView((View) cardViewObject);
+	}
+
+	@Override
+	public boolean isViewFromObject(View cardView, Object cardViewObject) {
+		return cardView.equals(cardViewObject);
+	}
+
+	@Override
+	public int getItemPosition(Object cardViewObject) {
+		return PagerAdapter.POSITION_NONE;
+	}
+
+	@Override
+	public int getCount() {
+		if (cardsCursor == null) {
+			return 0;
+		} else {
+			return cardsCursor.getCount();
+		}
+	}
+
+	public boolean isEmpty() {
+		return getCount() == 0;
 	}
 
 	public void swapCursor(Cursor cardsCursor) {
@@ -101,8 +167,7 @@ public class CardsPagerAdapter extends FragmentStatePagerAdapter
 		}
 	}
 
-	@Override
-	public int getItemPosition(Object object) {
-		return POSITION_NONE;
+	public void switchDefaultCardSide() {
+		defaultCardSide = getFlippedCardSide(defaultCardSide);
 	}
 }

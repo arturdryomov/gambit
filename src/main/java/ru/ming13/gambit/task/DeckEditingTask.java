@@ -30,16 +30,27 @@ import ru.ming13.gambit.provider.GambitContract;
 
 public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
-	private final ContentResolver contentResolver;
-	private final Deck deck;
-
-	public static void execute(ContentResolver contentResolver, Deck deck) {
-		new DeckEditingTask(contentResolver, deck).execute();
+	private static enum SilentMode
+	{
+		ENABLED, DISABLED
 	}
 
-	private DeckEditingTask(ContentResolver contentResolver, Deck deck) {
+	private final ContentResolver contentResolver;
+	private final Deck deck;
+	private final SilentMode silentMode;
+
+	public static void execute(ContentResolver contentResolver, Deck deck) {
+		new DeckEditingTask(contentResolver, deck, SilentMode.DISABLED).execute();
+	}
+
+	public static void executeSilently(ContentResolver contentResolver, Deck deck) {
+		new DeckEditingTask(contentResolver, deck, SilentMode.ENABLED).execute();
+	}
+
+	private DeckEditingTask(ContentResolver contentResolver, Deck deck, SilentMode silentMode) {
 		this.contentResolver = contentResolver;
 		this.deck = deck;
+		this.silentMode = silentMode;
 	}
 
 	@Override
@@ -74,6 +85,8 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 	protected void onPostExecute(BusEvent busEvent) {
 		super.onPostExecute(busEvent);
 
-		BusProvider.getBus().post(busEvent);
+		if (silentMode == SilentMode.DISABLED) {
+			BusProvider.getBus().post(busEvent);
+		}
 	}
 }

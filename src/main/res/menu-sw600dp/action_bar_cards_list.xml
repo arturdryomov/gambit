@@ -15,12 +15,12 @@
   ~ limitations under the License.
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/text"
-	android:singleLine="true"
-	android:textSize="@dimen/text_list_item"
-	android:background="?android:attr/activatedBackgroundIndicator"
-	android:gravity="center_vertical"
-	android:padding="@dimen/padding_list_item"
-	android:layout_width="match_parent"
-	android:layout_height="?android:attr/listPreferredItemHeight" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/menu_create"
+		android:icon="@drawable/ic_menu_create_card"
+		android:title="@string/menu_create_card"
+		android:showAsAction="always"/>
+
+</menu>

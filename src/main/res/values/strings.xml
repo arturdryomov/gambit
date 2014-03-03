@@ -24,6 +24,7 @@
 
 	<string name="empty_cards_title">No flashcards</string>
 	<string name="empty_cards_subtitle">Try to create some</string>
+	<string name="empty_deck_selection">Deck is not selected</string>
 	<string name="empty_decks_title">No decks</string>
 	<string name="empty_decks_subtitle">Try to create some</string>
 

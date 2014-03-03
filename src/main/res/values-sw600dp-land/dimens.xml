@@ -15,20 +15,8 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+<resources>
 
-	<android.support.v4.view.ViewPager
-		android:id="@+id/pager_cards"
-		android:layout_alignParentTop="true"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"/>
+	<integer name="count_cards_grid_columns">3</integer>
 
-	<com.viewpagerindicator.UnderlinePageIndicator
-		android:id="@+id/indicator_cards"
-		android:layout_alignParentBottom="true"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/height_indicator_cards"/>
-
-</RelativeLayout>
+</resources>

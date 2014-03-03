@@ -24,8 +24,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.squareup.otto.Subscribe;
+
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.fragment.DecksListFragment;
+import ru.ming13.gambit.bus.BusProvider;
+import ru.ming13.gambit.bus.DeckDeletedEvent;
+import ru.ming13.gambit.bus.DeckSelectedEvent;
+import ru.ming13.gambit.fragment.CardsPagerFragment;
+import ru.ming13.gambit.fragment.MessageFragment;
+import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
@@ -34,16 +42,57 @@ public class DecksListActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_decks);
 
-		setUpFragment();
+		setUpCardsPagerMessageFragment();
+		tearDownCardsPagerFragment();
 	}
 
-	private void setUpFragment() {
-		Fragments.Operator.set(this, buildFragment());
+	private void setUpCardsPagerMessageFragment() {
+		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
+			Fragments.Operator.at(this).reset(buildCardsPagerMessageFragment(), R.id.container_cards_pager);
+		}
 	}
 
-	private Fragment buildFragment() {
-		return DecksListFragment.newInstance();
+	private Fragment buildCardsPagerMessageFragment() {
+		return MessageFragment.newInstance(getString(R.string.empty_deck_selection));
+	}
+
+	private void tearDownCardsPagerFragment() {
+		if (!Android.with(this).isLandscape()) {
+			Fragments.Operator.at(this).remove(R.id.container_cards_pager);
+		}
+	}
+
+	@Subscribe
+	public void onDeckDeleted(DeckDeletedEvent event) {
+		setUpCardsPagerMessageFragment();
+	}
+
+	@Subscribe
+	public void onDeckSelected(DeckSelectedEvent event) {
+		setUpCardsPager(event.getDeck());
+	}
+
+	private void setUpCardsPager(Deck deck) {
+		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
+			setUpCardsPagerFragment(deck);
+		} else {
+			startCardsPagerActivity(deck);
+		}
+	}
+
+	private void setUpCardsPagerFragment(Deck deck) {
+		Fragments.Operator.at(this).reset(buildCardsPagerFragment(deck), R.id.container_cards_pager);
+	}
+
+	private Fragment buildCardsPagerFragment(Deck deck) {
+		return CardsPagerFragment.newInstance(deck);
+	}
+
+	private void startCardsPagerActivity(Deck deck) {
+		Intent intent = Intents.Builder.with(this).buildCardsPagerIntent(deck);
+		startActivity(intent);
 	}
 
 	@Override
@@ -105,5 +154,19 @@ public class DecksListActivity extends Activity
 		} catch (ActivityNotFoundException e) {
 			startActivity(Intent.createChooser(intent, null));
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		BusProvider.getBus().register(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		BusProvider.getBus().unregister(this);
 	}
 }
