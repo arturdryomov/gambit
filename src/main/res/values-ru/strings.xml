@@ -22,6 +22,7 @@
 
 	<string name="empty_cards_title">Карточек нет</string>
 	<string name="empty_cards_subtitle">Попробуйте их создать</string>
+	<string name="empty_deck_selection">Стопка не выбрана</string>
 	<string name="empty_decks_title">Стопок нет</string>
 	<string name="empty_decks_subtitle">Попробуйте их создать</string>
 
