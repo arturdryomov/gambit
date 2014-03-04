@@ -144,6 +144,8 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		getCardsAdapter().swapCursor(cardsCursor);
 
+		setUpCurrentActionBar();
+
 		if (getCardsAdapter().isEmpty()) {
 			showMessage();
 			setUpCardsCreationListener();
@@ -156,6 +158,10 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	private CardsPagerAdapter getCardsAdapter() {
 		return (CardsPagerAdapter) getCardsPager().getAdapter();
+	}
+
+	private void setUpCurrentActionBar() {
+		getActivity().invalidateOptionsMenu();
 	}
 
 	private void showMessage() {
@@ -228,10 +234,6 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 		setUpCurrentActionBar();
 	}
 
-	private void setUpCurrentActionBar() {
-		getActivity().invalidateOptionsMenu();
-	}
-
 	@Override
 	public void onLoaderReset(Loader<Cursor> cardsLoader) {
 	}
@@ -249,7 +251,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private boolean shouldActionsBeShown() {
-		return getCardsAdapter().getCount() > 1;
+		return (getCardsAdapter() != null) && (getCardsAdapter().getCount() > 1);
 	}
 
 	private int getShuffleActionIconResource() {
