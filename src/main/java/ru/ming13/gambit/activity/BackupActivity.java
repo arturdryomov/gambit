@@ -119,6 +119,8 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	private void startBackupAction() {
 		showProgress();
 
+		startFilesSync();
+
 		switch (backupAction) {
 			case EXPORT:
 				startBackupFileCreation();
@@ -131,6 +133,10 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 			default:
 				break;
 		}
+	}
+
+	private void startFilesSync() {
+		Drive.DriveApi.requestSync(googleApiClient).setResultCallback(null);
 	}
 
 	private void showProgress() {
