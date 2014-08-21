@@ -94,6 +94,7 @@ public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListe
 		return getCardInformation(cardView).second;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Pair<Card, CardSide> getCardInformation(View cardView) {
 		return (Pair<Card, CardSide>) cardView.getTag();
 	}
