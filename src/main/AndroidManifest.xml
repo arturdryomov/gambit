@@ -17,13 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="ru.ming13.gambit"
-	android:versionCode="111"
-	android:versionName="1.1.1"
 	android:installLocation="auto">
-
-	<uses-sdk
-		android:minSdkVersion="14"
-		android:targetSdkVersion="19"/>
 
 	<application
 		android:icon="@drawable/ic_launcher"
