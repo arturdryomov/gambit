@@ -31,7 +31,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ViewAnimator;
 
 import com.squareup.otto.Subscribe;
@@ -48,6 +47,7 @@ import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
 import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
 import ru.ming13.gambit.task.DeckEditingTask;
+import ru.ming13.gambit.util.Animations;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
@@ -325,7 +325,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void animateCardsShaking() {
-		getCardsPager().startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.shake));
+		Animations.shake(getCardsPager());
 	}
 
 	private void orderCards() {
