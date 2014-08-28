@@ -1,16 +1,9 @@
 # Android
 
-bin/
-gen*/
+local.properties
 
-project.properties
+# Keys
 
-# Maven
-
-target/
-
-# API information
-
-apis.xml
+signing.properties
 
 # Use global .gitignore for your IDE
