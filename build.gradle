@@ -26,6 +26,9 @@ android {
 
         minSdkVersion 14
         targetSdkVersion 19
+
+        resConfigs "nodpi", "hdpi", "xhdpi", "xxhdpi"
+        resConfigs "en", "ru", "de"
     }
 
     signingConfigs {
