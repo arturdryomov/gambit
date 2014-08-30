@@ -39,8 +39,8 @@ android {
             if (signingFile.exists()) {
                 signingProperties.load(signingFile.newInputStream())
 
-                storeFile file(signingProperties["store.file"])
-                storePassword signingProperties["store.password"]
+                storeFile file(signingProperties["keystore.file"])
+                storePassword signingProperties["keystore.password"]
                 keyAlias signingProperties["key.alias"]
                 keyPassword signingProperties["key.password"]
             }
