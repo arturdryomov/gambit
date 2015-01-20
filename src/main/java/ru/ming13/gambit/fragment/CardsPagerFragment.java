@@ -31,11 +31,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ViewAnimator;
 
 import com.squareup.otto.Subscribe;
-import com.viewpagerindicator.UnderlinePageIndicator;
+import com.viewpagerindicator.PageIndicator;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.bus.BusProvider;
@@ -52,8 +54,9 @@ import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
 import ru.ming13.gambit.util.Seismometer;
+import ru.ming13.gambit.util.ViewDirector;
 
-public class CardsPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener
+public class CardsPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
 	public static CardsPagerFragment newInstance(Deck deck) {
 		CardsPagerFragment fragment = new CardsPagerFragment();
@@ -76,6 +79,12 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 		DEFAULT, SHUFFLE, ORIGINAL
 	}
 
+	@InjectView(R.id.pager_cards)
+	ViewPager cardsPager;
+
+	@InjectView(R.id.indicator_cards)
+	PageIndicator cardsPagerIndicator;
+
 	private CardsOrder currentCardsOrder = CardsOrder.DEFAULT;
 
 	private Seismometer seismometer;
@@ -89,9 +98,15 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpSeismometer();
 		setUpActionBar();
 		setUpCards();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	private void setUpSeismometer() {
@@ -109,16 +124,11 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void setUpCardsAdapter() {
-		getCardsPager().setAdapter(new CardsPagerAdapter(getActivity()));
-	}
-
-	private ViewPager getCardsPager() {
-		return (ViewPager) getView().findViewById(R.id.pager_cards);
+		cardsPager.setAdapter(new CardsPagerAdapter(getActivity()));
 	}
 
 	private void setUpCardsIndicator() {
-		UnderlinePageIndicator cardsIndicator = (UnderlinePageIndicator) getView().findViewById(R.id.indicator_cards);
-		cardsIndicator.setViewPager(getCardsPager());
+		cardsPagerIndicator.setViewPager(cardsPager);
 	}
 
 	private void setUpCardsContent() {
@@ -148,7 +158,6 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 		if (getCardsAdapter().isEmpty()) {
 			showMessage();
-			setUpCardsCreationListener();
 		} else {
 			hideMessage();
 			setUpCurrentCard();
@@ -157,7 +166,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private CardsPagerAdapter getCardsAdapter() {
-		return (CardsPagerAdapter) getCardsPager().getAdapter();
+		return (CardsPagerAdapter) cardsPager.getAdapter();
 	}
 
 	private void setUpCurrentActionBar() {
@@ -165,16 +174,11 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void showMessage() {
-		ViewAnimator animator = (ViewAnimator) getView().findViewById(R.id.animator);
-		animator.setDisplayedChild(animator.indexOfChild(getView().findViewById(R.id.layout_message)));
+		ViewDirector.of(this, R.id.animator).show(R.id.layout_message);
 	}
 
-	private void setUpCardsCreationListener() {
-		getView().findViewById(R.id.button_create_cards).setOnClickListener(this);
-	}
-
-	@Override
-	public void onClick(View button) {
+	@OnClick(R.id.button_create_cards)
+	public void setUpCardCreation() {
 		startCardCreationStack();
 	}
 
@@ -185,11 +189,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void hideMessage() {
-		ViewAnimator animator = (ViewAnimator) getView().findViewById(R.id.animator);
-
-		if (animator.getCurrentView().getId() != R.id.layout_pager) {
-			animator.setDisplayedChild(animator.indexOfChild(getView().findViewById(R.id.layout_pager)));
-		}
+		ViewDirector.of(this, R.id.animator).show(R.id.layout_pager);
 	}
 
 	private void setUpCurrentCard() {
@@ -199,11 +199,11 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private boolean shouldSetCurrentCard() {
-		return (currentCardsOrder == CardsOrder.DEFAULT) && (getCardsPager().getCurrentItem() == 0);
+		return (currentCardsOrder == CardsOrder.DEFAULT) && (cardsPager.getCurrentItem() == 0);
 	}
 
 	private void setUpCurrentCard(int currentCard) {
-		getCardsPager().setCurrentItem(currentCard);
+		cardsPager.setCurrentItem(currentCard);
 	}
 
 	private void setUpCurrentCardsOrder() {
@@ -295,7 +295,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void replayCards() {
-		getCardsPager().setCurrentItem(0);
+		cardsPager.setCurrentItem(0);
 	}
 
 	private void switchCardsOrder() {
@@ -325,7 +325,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void animateCardsShaking() {
-		Animations.shake(getCardsPager());
+		Animations.shake(cardsPager);
 	}
 
 	private void orderCards() {
@@ -370,10 +370,21 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void saveCurrentCard() {
-		Deck deck = new Deck(getDeck().getId(), getDeck().getTitle(), getCardsPager().getCurrentItem());
+		Deck deck = new Deck(getDeck().getId(), getDeck().getTitle(), cardsPager.getCurrentItem());
 
 		getArguments().putParcelable(Fragments.Arguments.DECK, deck);
 
 		DeckEditingTask.executeSilently(getActivity().getContentResolver(), deck);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

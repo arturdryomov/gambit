@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.provider.GambitContract;
@@ -100,7 +101,7 @@ public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListe
 	}
 
 	private TextView getCardTextView(View cardView) {
-		return (TextView) cardView.findViewById(R.id.text);
+		return ButterKnife.findById(cardView, R.id.text);
 	}
 
 	private Card getCard(View cardView) {

@@ -22,12 +22,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 
-public final class OperationBar implements View.OnClickListener
+public final class OperationBar
 {
 	private final ActionBar actionBar;
 
@@ -41,17 +43,18 @@ public final class OperationBar implements View.OnClickListener
 
 	public void show() {
 		setUpBarView();
-		setUpBarListener();
 	}
 
 	private void setUpBarView() {
 		actionBar.setCustomView(buildBarView(), buildBarParams());
+
+		ButterKnife.inject(this, actionBar.getCustomView());
 	}
 
 	private View buildBarView() {
 		LayoutInflater layoutInflater = LayoutInflater.from(actionBar.getThemedContext());
 
-		return layoutInflater.inflate(R.layout.view_bar_operation, null);
+		return layoutInflater.inflate(R.layout.view_bar_operation, null, false);
 	}
 
 	private ActionBar.LayoutParams buildBarParams() {
@@ -59,24 +62,13 @@ public final class OperationBar implements View.OnClickListener
 			ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 	}
 
-	private void setUpBarListener() {
-		actionBar.getCustomView().findViewById(R.id.button_cancel).setOnClickListener(this);
-		actionBar.getCustomView().findViewById(R.id.button_save).setOnClickListener(this);
+	@OnClick(R.id.button_cancel)
+	public void onCancelButton() {
+		BusProvider.getBus().post(new OperationCancelledEvent());
 	}
 
-	@Override
-	public void onClick(View button) {
-		switch (button.getId()) {
-			case R.id.button_cancel:
-				BusProvider.getBus().post(new OperationCancelledEvent());
-				break;
-
-			case R.id.button_save:
-				BusProvider.getBus().post(new OperationSavedEvent());
-				break;
-
-			default:
-				break;
-		}
+	@OnClick(R.id.button_save)
+	public void onSaveButton() {
+		BusProvider.getBus().post(new OperationSavedEvent());
 	}
 }

@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckAssembledEvent;
@@ -38,9 +40,23 @@ public class DeckCreationFragment extends Fragment
 		return new DeckCreationFragment();
 	}
 
+	@InjectView(R.id.edit_deck_title)
+	TextView deckTitle;
+
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_deck_operation, fragmentContainer, false);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpInjections();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	@Subscribe
@@ -61,11 +77,7 @@ public class DeckCreationFragment extends Fragment
 	}
 
 	private String getDeckTitle() {
-		return getDeckTitleView().getText().toString().trim();
-	}
-
-	private TextView getDeckTitleView() {
-		return (TextView) getView().findViewById(R.id.edit_deck_title);
+		return deckTitle.getText().toString().trim();
 	}
 
 	private void assembleDeck() {
@@ -76,9 +88,9 @@ public class DeckCreationFragment extends Fragment
 
 	private void showErrorMessage() {
 		if (getDeckTitle().isEmpty()) {
-			getDeckTitleView().setError(getString(R.string.error_empty_field));
+			deckTitle.setError(getString(R.string.error_empty_field));
 		} else {
-			getDeckTitleView().setError(getString(R.string.error_deck_already_exists));
+			deckTitle.setError(getString(R.string.error_deck_already_exists));
 		}
 	}
 
@@ -99,5 +111,16 @@ public class DeckCreationFragment extends Fragment
 		super.onPause();
 
 		BusProvider.getBus().unregister(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

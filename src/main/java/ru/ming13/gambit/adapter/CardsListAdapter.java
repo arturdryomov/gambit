@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.provider.GambitContract;
 
@@ -39,20 +40,12 @@ public class CardsListAdapter extends CursorAdapter
 
 	@Override
 	public View newView(Context context, Cursor cardsCursor, ViewGroup viewGroup) {
-		return buildCardView(viewGroup);
-	}
-
-	private View buildCardView(ViewGroup viewGroup) {
 		return layoutInflater.inflate(R.layout.view_card_list, viewGroup, false);
 	}
 
 	@Override
 	public void bindView(View cardView, Context context, Cursor cardsCursor) {
-		setUpCardInformation(context, cardsCursor, cardView);
-	}
-
-	private void setUpCardInformation(Context context, Cursor cardsCursor, View cardView) {
-		TextView cardTextView = (TextView) cardView.findViewById(R.id.text);
+		TextView cardTextView = ButterKnife.findById(cardView, R.id.text);
 
 		String cardFrontSideText = getCardFrontSideText(cardsCursor);
 		String cardBackSideText = getCardBackSideText(cardsCursor);

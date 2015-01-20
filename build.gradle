@@ -72,6 +72,8 @@ dependencies {
     }
 
     compile "com.android.support:support-v4:21.0.+"
+    compile "com.android.support:support-annotations:21.0.+"
+    compile "com.jakewharton:butterknife:6.0.+"
     compile "com.github.andkulikov:transitions-everywhere:1.2.+"
     compile "com.google.android.gms:play-services-drive:6.5.+"
     compile "com.squareup:otto:1.3.+"

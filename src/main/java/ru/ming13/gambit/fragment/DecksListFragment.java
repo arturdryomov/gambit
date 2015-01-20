@@ -39,6 +39,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
 import ru.ming13.gambit.bus.BusProvider;
@@ -58,6 +60,15 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		return new DecksListFragment();
 	}
 
+	@InjectView(R.id.layout_message)
+	ViewGroup messageLayout;
+
+	@InjectView(R.id.text_message_title)
+	TextView messageTitle;
+
+	@InjectView(R.id.text_message_summary)
+	TextView messageSummary;
+
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_list, container, false);
@@ -67,7 +78,13 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpDecks();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	private void setUpDecks() {
@@ -136,17 +153,14 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void showDecksMessage() {
-		TextView messageTitleTextView = (TextView) getView().findViewById(R.id.text_message_title);
-		TextView messageSummaryTextView = (TextView) getView().findViewById(R.id.text_message_summary);
+		messageTitle.setText(R.string.empty_decks_title);
+		messageSummary.setText(R.string.empty_decks_subtitle);
 
-		messageTitleTextView.setText(R.string.empty_decks_title);
-		messageSummaryTextView.setText(R.string.empty_decks_subtitle);
-
-		getView().findViewById(R.id.layout_message).setVisibility(View.VISIBLE);
+		messageLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void hideDecksMessage() {
-		getView().findViewById(R.id.layout_message).setVisibility(View.GONE);
+		messageLayout.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -291,5 +305,16 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	@Override
 	public void onListItemClick(ListView decksListView, View deckView, int deckPosition, long deckId) {
 		BusProvider.getBus().post(new DeckSelectedEvent(getDeck(deckPosition)));
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

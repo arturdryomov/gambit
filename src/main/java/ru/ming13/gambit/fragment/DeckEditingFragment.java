@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckAssembledEvent;
@@ -51,6 +53,9 @@ public class DeckEditingFragment extends Fragment
 		return arguments;
 	}
 
+	@InjectView(R.id.edit_deck_title)
+	TextView deckTitle;
+
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_deck_operation, fragmentContainer, false);
@@ -60,15 +65,17 @@ public class DeckEditingFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpDeck();
 	}
 
-	private void setUpDeck() {
-		getDeckTitleView().append(getDeck().getTitle());
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
-	private TextView getDeckTitleView() {
-		return (TextView) getView().findViewById(R.id.edit_deck_title);
+	private void setUpDeck() {
+		deckTitle.append(getDeck().getTitle());
 	}
 
 	private Deck getDeck() {
@@ -93,7 +100,7 @@ public class DeckEditingFragment extends Fragment
 	}
 
 	private String getDeckTitle() {
-		return getDeckTitleView().getText().toString().trim();
+		return deckTitle.getText().toString().trim();
 	}
 
 	private void assembleDeck() {
@@ -104,9 +111,9 @@ public class DeckEditingFragment extends Fragment
 
 	private void showErrorMessage() {
 		if (getDeckTitle().isEmpty()) {
-			getDeckTitleView().setError(getString(R.string.error_empty_field));
+			deckTitle.setError(getString(R.string.error_empty_field));
 		} else {
-			getDeckTitleView().setError(getString(R.string.error_deck_already_exists));
+			deckTitle.setError(getString(R.string.error_deck_already_exists));
 		}
 	}
 
@@ -127,5 +134,16 @@ public class DeckEditingFragment extends Fragment
 		super.onPause();
 
 		BusProvider.getBus().unregister(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

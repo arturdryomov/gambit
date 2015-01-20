@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.util.Fragments;
 
@@ -44,6 +46,9 @@ public class MessageFragment extends Fragment
 		return arguments;
 	}
 
+	@InjectView(R.id.text_message)
+	TextView message;
+
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_message, container, false);
@@ -53,15 +58,31 @@ public class MessageFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpMessage();
 	}
 
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
+	}
+
 	private void setUpMessage() {
-		TextView messageView = (TextView) getView().findViewById(R.id.text_message);
-		messageView.setText(getMessage());
+		message.setText(getMessage());
 	}
 
 	private String getMessage() {
 		return getArguments().getString(Fragments.Arguments.MESSAGE);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

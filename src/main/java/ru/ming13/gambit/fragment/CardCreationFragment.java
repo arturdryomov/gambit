@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.CardAssembledEvent;
@@ -37,9 +39,26 @@ public class CardCreationFragment extends Fragment
 		return new CardCreationFragment();
 	}
 
+	@InjectView(R.id.edit_front_side_text)
+	TextView frontSide;
+
+	@InjectView(R.id.edit_back_side_text)
+	TextView backSide;
+
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_card_operation, fragmentContainer, false);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpInjections();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	@Subscribe
@@ -60,19 +79,11 @@ public class CardCreationFragment extends Fragment
 	}
 
 	private String getCardFrontSideText() {
-		return getCardFrontSideTextView().getText().toString().trim();
-	}
-
-	private TextView getCardFrontSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_front_side_text);
+		return frontSide.getText().toString().trim();
 	}
 
 	private String getCardBackSideText() {
-		return getCardBackSideTextView().getText().toString().trim();
-	}
-
-	private TextView getCardBackSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_back_side_text);
+		return backSide.getText().toString().trim();
 	}
 
 	private void assembleCard() {
@@ -83,11 +94,11 @@ public class CardCreationFragment extends Fragment
 
 	private void showErrorMessage() {
 		if (getCardFrontSideText().isEmpty()) {
-			getCardFrontSideTextView().setError(getString(R.string.error_empty_field));
+			frontSide.setError(getString(R.string.error_empty_field));
 		}
 
 		if (getCardBackSideText().isEmpty()) {
-			getCardBackSideTextView().setError(getString(R.string.error_empty_field));
+			backSide.setError(getString(R.string.error_empty_field));
 		}
 	}
 
@@ -103,5 +114,16 @@ public class CardCreationFragment extends Fragment
 		super.onPause();
 
 		BusProvider.getBus().unregister(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

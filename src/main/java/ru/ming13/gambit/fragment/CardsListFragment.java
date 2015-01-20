@@ -40,6 +40,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsListAdapter;
 import ru.ming13.gambit.model.Card;
@@ -68,6 +70,18 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 		return arguments;
 	}
 
+	@InjectView(android.R.id.list)
+	AbsListView cardsList;
+
+	@InjectView(R.id.layout_message)
+	ViewGroup messageLayout;
+
+	@InjectView(R.id.text_message_title)
+	TextView messageTitle;
+
+	@InjectView(R.id.text_message_summary)
+	TextView messageSummary;
+
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_cards_list, container, false);
@@ -77,7 +91,13 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpCards();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	private void setUpCards() {
@@ -88,11 +108,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsAdapter() {
-		getCardsList().setAdapter(new CardsListAdapter(getActivity()));
-	}
-
-	private AbsListView getCardsList() {
-		return (AbsListView) getView().findViewById(android.R.id.list);
+		cardsList.setAdapter(new CardsListAdapter(getActivity()));
 	}
 
 	private void setUpCardsContent() {
@@ -125,12 +141,12 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	private void setUpCardsAnimations() {
 		if (!getCardsAdapter().isEmpty()) {
-			TransitionManager.beginDelayedTransition(getCardsList());
+			TransitionManager.beginDelayedTransition(cardsList);
 		}
 	}
 
 	private CardsListAdapter getCardsAdapter() {
-		return (CardsListAdapter) getCardsList().getAdapter();
+		return (CardsListAdapter) cardsList.getAdapter();
 	}
 
 	private void setUpCardsMessage() {
@@ -142,17 +158,14 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void showCardsMessage() {
-		TextView messageTitleTextView = (TextView) getView().findViewById(R.id.text_message_title);
-		TextView messageSummaryTextView = (TextView) getView().findViewById(R.id.text_message_summary);
+		messageTitle.setText(R.string.empty_cards_title);
+		messageSummary.setText(R.string.empty_cards_subtitle);
 
-		messageTitleTextView.setText(R.string.empty_cards_title);
-		messageSummaryTextView.setText(R.string.empty_cards_subtitle);
-
-		getView().findViewById(R.id.layout_message).setVisibility(View.VISIBLE);
+		messageLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void hideCardsMessage() {
-		getView().findViewById(R.id.layout_message).setVisibility(View.GONE);
+		messageLayout.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -160,7 +173,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsActions() {
-		getCardsList().setMultiChoiceModeListener(this);
+		cardsList.setMultiChoiceModeListener(this);
 	}
 
 	@Override
@@ -214,7 +227,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private SparseBooleanArray getCheckedCardsPositions() {
-		return getCardsList().getCheckedItemPositions();
+		return cardsList.getCheckedItemPositions();
 	}
 
 	private Card getCard(int cardPosition) {
@@ -239,7 +252,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsListener() {
-		getCardsList().setOnItemClickListener(this);
+		cardsList.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -250,5 +263,16 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	private void startCardEditingActivity(Card card) {
 		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(getDeck(), card);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

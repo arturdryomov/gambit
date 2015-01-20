@@ -39,19 +39,11 @@ public class DecksListAdapter extends CursorAdapter
 
 	@Override
 	public View newView(Context context, Cursor decksCursor, ViewGroup viewGroup) {
-		return buildDeckView(viewGroup);
-	}
-
-	private View buildDeckView(ViewGroup viewGroup) {
 		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
 	}
 
 	@Override
 	public void bindView(View deckView, Context context, Cursor decksCursor) {
-		setUpDeckInformation(decksCursor, deckView);
-	}
-
-	private void setUpDeckInformation(Cursor decksCursor, View deckView) {
 		TextView deckTextView = (TextView) deckView;
 
 		String deckTitle = getDeckTitle(decksCursor);
