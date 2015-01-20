@@ -103,7 +103,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private boolean isTabletLayout() {
-		return Android.with(getActivity()).isTablet() && Android.with(getActivity()).isLandscape();
+		return Android.isTablet(getActivity()) && Android.isLandscape(getActivity());
 	}
 
 	private void setUpDecksAdapter() {

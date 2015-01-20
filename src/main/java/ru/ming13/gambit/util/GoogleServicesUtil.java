@@ -18,6 +18,7 @@ package ru.ming13.gambit.util;
 
 import android.app.Activity;
 import android.content.IntentSender;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 
@@ -27,7 +28,7 @@ public final class GoogleServicesUtil
 {
 	private final Activity activity;
 
-	public static GoogleServicesUtil with(Activity activity) {
+	public static GoogleServicesUtil with(@NonNull Activity activity) {
 		return new GoogleServicesUtil(activity);
 	}
 
@@ -35,7 +36,7 @@ public final class GoogleServicesUtil
 		this.activity = activity;
 	}
 
-	public void resolve(ConnectionResult connectionResult) {
+	public void resolve(@NonNull ConnectionResult connectionResult) {
 		if (connectionResult.hasResolution()) {
 			showResolutionAction(connectionResult);
 		} else {

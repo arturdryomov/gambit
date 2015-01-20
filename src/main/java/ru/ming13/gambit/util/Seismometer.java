@@ -18,6 +18,7 @@ package ru.ming13.gambit.util;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
 
 import com.squareup.seismic.ShakeDetector;
 
@@ -29,7 +30,7 @@ public final class Seismometer implements ShakeDetector.Listener
 	private final ShakeDetector shakeDetector;
 	private final SensorManager sensorManager;
 
-	public Seismometer(Context context) {
+	public Seismometer(@NonNull Context context) {
 		this.shakeDetector = new ShakeDetector(this);
 		this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 	}

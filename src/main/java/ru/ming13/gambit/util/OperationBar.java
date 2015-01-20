@@ -18,6 +18,7 @@ package ru.ming13.gambit.util;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public final class OperationBar
 {
 	private final ActionBar actionBar;
 
-	public static OperationBar at(Activity activity) {
+	public static OperationBar at(@NonNull Activity activity) {
 		return new OperationBar(activity);
 	}
 
@@ -42,10 +43,10 @@ public final class OperationBar
 	}
 
 	public void show() {
-		setUpBarView();
+		setUpBar();
 	}
 
-	private void setUpBarView() {
+	private void setUpBar() {
 		actionBar.setCustomView(buildBarView(), buildBarParams());
 
 		ButterKnife.inject(this, actionBar.getCustomView());

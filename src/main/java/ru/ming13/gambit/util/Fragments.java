@@ -19,6 +19,8 @@ package ru.ming13.gambit.util;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 
 public final class Fragments
 {
@@ -43,7 +45,7 @@ public final class Fragments
 	{
 		private final FragmentManager fragmentManager;
 
-		public static Operator at(Activity activity) {
+		public static Operator at(@NonNull Activity activity) {
 			return new Operator(activity);
 		}
 
@@ -51,7 +53,7 @@ public final class Fragments
 			this.fragmentManager = activity.getFragmentManager();
 		}
 
-		public void reset(Fragment fragment, int fragmentContainerId) {
+		public void reset(@NonNull Fragment fragment, @IdRes int fragmentContainerId) {
 			fragmentManager
 				.beginTransaction()
 				.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
@@ -59,7 +61,7 @@ public final class Fragments
 				.commit();
 		}
 
-		public void set(Fragment fragment, int fragmentContainerId) {
+		public void set(@NonNull Fragment fragment, @IdRes int fragmentContainerId) {
 			if (!isSet(fragmentContainerId)) {
 				fragmentManager
 					.beginTransaction()
@@ -68,15 +70,15 @@ public final class Fragments
 			}
 		}
 
-		private boolean isSet(int fragmentContainerId) {
+		private boolean isSet(@IdRes int fragmentContainerId) {
 			return get(fragmentContainerId) != null;
 		}
 
-		private Fragment get(int fragmentContainerId) {
+		private Fragment get(@IdRes int fragmentContainerId) {
 			return fragmentManager.findFragmentById(fragmentContainerId);
 		}
 
-		public void remove(int fragmentContainerId) {
+		public void remove(@IdRes int fragmentContainerId) {
 			if (isSet(fragmentContainerId)) {
 				fragmentManager
 					.beginTransaction()

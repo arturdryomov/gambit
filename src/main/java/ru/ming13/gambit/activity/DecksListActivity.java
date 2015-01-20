@@ -49,7 +49,7 @@ public class DecksListActivity extends Activity
 	}
 
 	private void setUpCardsPagerMessageFragment() {
-		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
+		if (Android.isTablet(this) && Android.isLandscape(this)) {
 			Fragments.Operator.at(this).reset(buildCardsPagerMessageFragment(), R.id.container_cards_pager);
 		}
 	}
@@ -59,7 +59,7 @@ public class DecksListActivity extends Activity
 	}
 
 	private void tearDownCardsPagerFragment() {
-		if (!Android.with(this).isLandscape()) {
+		if (!Android.isLandscape(this)) {
 			Fragments.Operator.at(this).remove(R.id.container_cards_pager);
 		}
 	}
@@ -75,7 +75,7 @@ public class DecksListActivity extends Activity
 	}
 
 	private void setUpCardsPager(Deck deck) {
-		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
+		if (Android.isTablet(this) && Android.isLandscape(this)) {
 			setUpCardsPagerFragment(deck);
 		} else {
 			startCardsPagerActivity(deck);

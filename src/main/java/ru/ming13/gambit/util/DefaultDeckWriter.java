@@ -22,6 +22,7 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
@@ -58,12 +59,12 @@ public final class DefaultDeckWriter
 	private final Locale localeForFrontText;
 	private final Locale localeForBackText;
 
-	public static void writeDeck(Context context, SQLiteDatabase database) {
+	public static void writeDeck(@NonNull Context context, @NonNull SQLiteDatabase database) {
 		new DefaultDeckWriter(context, database).writeDeck();
 	}
 
 	private DefaultDeckWriter(Context context, SQLiteDatabase database) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 		this.database = database;
 
 		localeForFrontText = getLocaleForFrontText();
