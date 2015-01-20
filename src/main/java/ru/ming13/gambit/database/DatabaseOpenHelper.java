@@ -19,6 +19,7 @@ package ru.ming13.gambit.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 
 import ru.ming13.gambit.util.DefaultDeckWriter;
 import ru.ming13.gambit.util.SqlBuilder;
@@ -27,11 +28,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 {
 	private final Context context;
 
-	public DatabaseOpenHelper(Context context) {
+	public DatabaseOpenHelper(@NonNull Context context) {
 		this(context, DatabaseSchema.DATABASE_NAME);
 	}
 
-	public DatabaseOpenHelper(Context context, String databasePath) {
+	public DatabaseOpenHelper(@NonNull Context context, @NonNull String databasePath) {
 		super(context, databasePath, null, DatabaseSchema.Versions.CURRENT);
 
 		this.context = context.getApplicationContext();

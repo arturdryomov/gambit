@@ -17,6 +17,7 @@
 package ru.ming13.gambit.backup;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
@@ -34,7 +35,7 @@ public final class BackupOperator
 	private final Context context;
 	private final GoogleApiClient driveApiClient;
 
-	public static BackupOperator with(Context context, GoogleApiClient driveApiClient) {
+	public static BackupOperator with(@NonNull Context context, @NonNull GoogleApiClient driveApiClient) {
 		return new BackupOperator(context, driveApiClient);
 	}
 
@@ -43,7 +44,7 @@ public final class BackupOperator
 		this.driveApiClient = driveApiClient;
 	}
 
-	public void exportBackup(DriveId backupFileId) {
+	public void exportBackup(@NonNull DriveId backupFileId) {
 		DriveFile backupFile = Drive.DriveApi.getFile(driveApiClient, backupFileId);
 		DriveContents backupFileContents = backupFile.open(driveApiClient, DriveFile.MODE_WRITE_ONLY, null).await().getDriveContents();
 
@@ -53,7 +54,7 @@ public final class BackupOperator
 		backupFileContents.commit(driveApiClient, null).await();
 	}
 
-	public void importBackup(DriveId backupFileId) {
+	public void importBackup(@NonNull DriveId backupFileId) {
 		DriveFile backupFile = Drive.DriveApi.getFile(driveApiClient, backupFileId);
 		DriveContents backupFileContents = backupFile.open(driveApiClient, DriveFile.MODE_READ_ONLY, null).await().getDriveContents();
 

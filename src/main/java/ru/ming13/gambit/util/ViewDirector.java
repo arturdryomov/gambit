@@ -14,7 +14,6 @@ public final class ViewDirector
 	private final Activity activity;
 	private final Fragment fragment;
 
-	@IdRes
 	private final int animatorId;
 
 	public static ViewDirector of(@NonNull Activity activity, @IdRes int animatorId) {

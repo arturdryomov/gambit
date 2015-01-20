@@ -18,6 +18,7 @@ package ru.ming13.gambit.backup;
 
 import android.app.Activity;
 import android.content.IntentSender;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
@@ -34,7 +35,7 @@ public final class BackupFilePicker
 	private final Activity activity;
 	private final GoogleApiClient driveApiClient;
 
-	public static BackupFilePicker with(Activity activity, GoogleApiClient driveApiClient) {
+	public static BackupFilePicker with(@NonNull Activity activity, @NonNull GoogleApiClient driveApiClient) {
 		return new BackupFilePicker(activity, driveApiClient);
 	}
 
@@ -43,9 +44,10 @@ public final class BackupFilePicker
 		this.driveApiClient = driveApiClient;
 	}
 
-	public void startBackupFileCreation(DriveContents fileContents) {
+	public void startBackupFileCreation(@NonNull DriveContents fileContents) {
 		try {
 			IntentSender intentSender = buildBackupFileCreationIntentSender(fileContents);
+
 			activity.startIntentSenderForResult(intentSender, Intents.Requests.DRIVE_FILE_CREATE, null, 0, 0, 0);
 		} catch (IntentSender.SendIntentException e) {
 			throw new RuntimeException(e);
@@ -67,6 +69,7 @@ public final class BackupFilePicker
 	public void startBackupFileOpening() {
 		try {
 			IntentSender intentSender = buildBackupFileOpeningIntentSender();
+
 			activity.startIntentSenderForResult(intentSender, Intents.Requests.DRIVE_FILE_OPEN, null, 0, 0, 0);
 		} catch (IntentSender.SendIntentException e) {
 			throw new RuntimeException(e);

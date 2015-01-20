@@ -60,7 +60,8 @@ public final class OperationBar
 
 	private ActionBar.LayoutParams buildBarParams() {
 		return new ActionBar.LayoutParams(
-			ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+			ViewGroup.LayoutParams.MATCH_PARENT,
+			ViewGroup.LayoutParams.MATCH_PARENT);
 	}
 
 	@OnClick(R.id.button_cancel)
