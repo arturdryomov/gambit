@@ -27,9 +27,9 @@ import android.widget.ViewAnimator;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.squareup.otto.Subscribe;
@@ -48,7 +48,7 @@ import ru.ming13.gambit.util.Intents;
 public class BackupActivity extends Activity implements View.OnClickListener,
 	GoogleApiClient.ConnectionCallbacks,
 	GoogleApiClient.OnConnectionFailedListener,
-	ResultCallback<DriveApi.ContentsResult>
+	ResultCallback<DriveApi.DriveContentsResult>
 {
 	private static enum BackupAction
 	{
@@ -145,15 +145,15 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	}
 
 	private void startBackupFileCreation() {
-		Drive.DriveApi.newContents(googleApiClient).setResultCallback(this);
+		Drive.DriveApi.newDriveContents(googleApiClient).setResultCallback(this);
 	}
 
 	@Override
-	public void onResult(DriveApi.ContentsResult contentsResult) {
-		continueBackupFileCreation(contentsResult.getContents());
+	public void onResult(DriveApi.DriveContentsResult contentsResult) {
+		continueBackupFileCreation(contentsResult.getDriveContents());
 	}
 
-	private void continueBackupFileCreation(Contents backupFileContents) {
+	private void continueBackupFileCreation(DriveContents backupFileContents) {
 		BackupFilePicker.with(this, googleApiClient).startBackupFileCreation(backupFileContents);
 	}
 

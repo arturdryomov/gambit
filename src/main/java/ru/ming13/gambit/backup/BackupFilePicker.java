@@ -20,8 +20,8 @@ import android.app.Activity;
 import android.content.IntentSender;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 import ru.ming13.gambit.R;
@@ -43,7 +43,7 @@ public final class BackupFilePicker
 		this.driveApiClient = driveApiClient;
 	}
 
-	public void startBackupFileCreation(Contents fileContents) {
+	public void startBackupFileCreation(DriveContents fileContents) {
 		try {
 			IntentSender intentSender = buildBackupFileCreationIntentSender(fileContents);
 			activity.startIntentSenderForResult(intentSender, Intents.Requests.DRIVE_FILE_CREATE, null, 0, 0, 0);
@@ -52,7 +52,7 @@ public final class BackupFilePicker
 		}
 	}
 
-	private IntentSender buildBackupFileCreationIntentSender(Contents fileContents) {
+	private IntentSender buildBackupFileCreationIntentSender(DriveContents fileContents) {
 		MetadataChangeSet fileMetadata = new MetadataChangeSet.Builder()
 			.setTitle(activity.getString(R.string.name_backup))
 			.setMimeType(BACKUP_MIME_TYPE)
@@ -60,7 +60,7 @@ public final class BackupFilePicker
 
 		return Drive.DriveApi.newCreateFileActivityBuilder()
 			.setInitialMetadata(fileMetadata)
-			.setInitialContents(fileContents)
+			.setInitialDriveContents(fileContents)
 			.build(driveApiClient);
 	}
 
