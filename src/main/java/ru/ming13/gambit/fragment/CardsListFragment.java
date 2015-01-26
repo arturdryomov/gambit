@@ -44,6 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsListAdapter;
+import ru.ming13.gambit.cursor.CardsCursor;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
@@ -134,7 +135,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsAnimations();
 
-		getCardsAdapter().swapCursor(cardsCursor);
+		getCardsAdapter().swapCursor(new CardsCursor(cardsCursor));
 
 		setUpCardsMessage();
 	}
@@ -231,20 +232,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private Card getCard(int cardPosition) {
-		Cursor cardsCursor = getCardsCursor(cardPosition);
-
-		long cardId = cardsCursor.getLong(
-			cardsCursor.getColumnIndex(GambitContract.Cards._ID));
-		String cardFrontSideText = cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
-		String cardBackSideText = cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
-
-		return new Card(cardId, cardFrontSideText, cardBackSideText);
-	}
-
-	private Cursor getCardsCursor(int cardPosition) {
-		return (Cursor) getCardsAdapter().getItem(cardPosition);
+		return getCardsAdapter().getItem(cardPosition);
 	}
 
 	@Override

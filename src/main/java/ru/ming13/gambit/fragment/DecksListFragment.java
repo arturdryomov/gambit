@@ -24,6 +24,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.transitions.everywhere.TransitionManager;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -46,6 +47,7 @@ import ru.ming13.gambit.adapter.DecksListAdapter;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckDeletedEvent;
 import ru.ming13.gambit.bus.DeckSelectedEvent;
+import ru.ming13.gambit.cursor.DecksCursor;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
@@ -70,7 +72,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	TextView messageSummary;
 
 	@Override
-	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_list, container, false);
 	}
 
@@ -129,7 +131,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	public void onLoadFinished(Loader<Cursor> decksLoader, Cursor decksCursor) {
 		setUpDecksAnimations();
 
-		getDecksAdapter().swapCursor(decksCursor);
+		getDecksAdapter().swapCursor(new DecksCursor(decksCursor));
 
 		setUpDecksMessage();
 	}
@@ -269,20 +271,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private Deck getDeck(int deckPosition) {
-		Cursor decksCursor = getDecksCursor(deckPosition);
-
-		long deckId = decksCursor.getLong(
-			decksCursor.getColumnIndex(GambitContract.Decks._ID));
-		String deckTitle = decksCursor.getString(
-			decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
-		int currentCardPosition = decksCursor.getInt(
-			decksCursor.getColumnIndex(GambitContract.Decks.CURRENT_CARD_INDEX));
-
-		return new Deck(deckId, deckTitle, currentCardPosition);
-	}
-
-	private Cursor getDecksCursor(int deckPosition) {
-		return (Cursor) getDecksAdapter().getItem(deckPosition);
+		return getDecksAdapter().getItem(deckPosition);
 	}
 
 	private void startCardsListActivity(Deck deck) {
