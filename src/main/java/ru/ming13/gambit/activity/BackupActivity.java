@@ -42,7 +42,7 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.BackupExportingTask;
 import ru.ming13.gambit.task.BackupImportingTask;
-import ru.ming13.gambit.util.GoogleServicesUtil;
+import ru.ming13.gambit.util.GoogleServices;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.ViewDirector;
 
@@ -224,7 +224,7 @@ public class BackupActivity extends Activity implements ResultCallback<DriveApi.
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
-		GoogleServicesUtil.with(this).resolve(connectionResult);
+		GoogleServices.with(this).resolve(connectionResult);
 	}
 
 	@Override

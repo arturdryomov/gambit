@@ -24,15 +24,15 @@ import com.google.android.gms.common.ConnectionResult;
 
 import ru.ming13.gambit.fragment.GoogleServicesErrorDialog;
 
-public final class GoogleServicesUtil
+public final class GoogleServices
 {
 	private final Activity activity;
 
-	public static GoogleServicesUtil with(@NonNull Activity activity) {
-		return new GoogleServicesUtil(activity);
+	public static GoogleServices with(@NonNull Activity activity) {
+		return new GoogleServices(activity);
 	}
 
-	private GoogleServicesUtil(Activity activity) {
+	private GoogleServices(Activity activity) {
 		this.activity = activity;
 	}
 

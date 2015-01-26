@@ -3,15 +3,15 @@ package ru.ming13.gambit.util;
 import android.support.annotation.NonNull;
 import android.widget.ListView;
 
-public final class ListUtil implements Runnable
+public final class ListSwitcher implements Runnable
 {
 	private final ListView list;
 
-	public static ListUtil at(@NonNull ListView list) {
-		return new ListUtil(list);
+	public static ListSwitcher at(@NonNull ListView list) {
+		return new ListSwitcher(list);
 	}
 
-	private ListUtil(ListView list) {
+	private ListSwitcher(ListView list) {
 		this.list = list;
 	}
 
