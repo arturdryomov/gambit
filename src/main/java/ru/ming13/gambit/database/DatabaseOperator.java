@@ -36,7 +36,7 @@ public class DatabaseOperator
 
 	private final Context context;
 
-	public static DatabaseOperator with(@NonNull Context context) {
+	public static DatabaseOperator of(@NonNull Context context) {
 		return new DatabaseOperator(context);
 	}
 

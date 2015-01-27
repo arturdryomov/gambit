@@ -21,7 +21,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
-import ru.ming13.gambit.util.DefaultDeckWriter;
 import ru.ming13.gambit.util.SqlBuilder;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper
@@ -78,7 +77,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	}
 
 	private void createDefaultDeck(SQLiteDatabase database) {
-		DefaultDeckWriter.writeDeck(context, database);
+		DatabaseDefaults.at(context, database).writeDeck();
 	}
 
 	@Override

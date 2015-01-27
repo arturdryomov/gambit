@@ -49,7 +49,7 @@ public final class BackupOperator
 		DriveContents backupFileContents = backupFile.open(driveApiClient, DriveFile.MODE_WRITE_ONLY, null).await().getDriveContents();
 
 		OutputStream backupFileStream = backupFileContents.getOutputStream();
-		DatabaseOperator.with(context).writeDatabaseContents(backupFileStream);
+		DatabaseOperator.of(context).writeDatabaseContents(backupFileStream);
 
 		backupFileContents.commit(driveApiClient, null).await();
 	}
@@ -59,7 +59,7 @@ public final class BackupOperator
 		DriveContents backupFileContents = backupFile.open(driveApiClient, DriveFile.MODE_READ_ONLY, null).await().getDriveContents();
 
 		InputStream backupFileStream = backupFileContents.getInputStream();
-		DatabaseOperator.with(context).readDatabaseContents(backupFileStream);
+		DatabaseOperator.of(context).readDatabaseContents(backupFileStream);
 
 		backupFileContents.discard(driveApiClient);
 	}

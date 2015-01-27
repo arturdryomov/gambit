@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.ming13.gambit.util;
+package ru.ming13.gambit.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -32,11 +32,10 @@ import java.util.Locale;
 import java.util.Random;
 
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.database.DatabaseSchema;
 
-public final class DefaultDeckWriter
+public final class DatabaseDefaults
 {
-	private static final int[] ANDROID_VERSIONS_RESOURCES = {
+	private static final int[] ANDROID_VERSION_RESOURCES = {
 		R.string.android_version_cupcake,
 		R.string.android_version_donut,
 		R.string.android_version_eclair,
@@ -59,11 +58,11 @@ public final class DefaultDeckWriter
 	private final Locale localeForFrontText;
 	private final Locale localeForBackText;
 
-	public static void writeDeck(@NonNull Context context, @NonNull SQLiteDatabase database) {
-		new DefaultDeckWriter(context, database).writeDeck();
+	public static DatabaseDefaults at(@NonNull Context context, @NonNull SQLiteDatabase database) {
+		return new DatabaseDefaults(context, database);
 	}
 
-	private DefaultDeckWriter(Context context, SQLiteDatabase database) {
+	private DatabaseDefaults(Context context, SQLiteDatabase database) {
 		this.context = context.getApplicationContext();
 		this.database = database;
 
@@ -94,12 +93,12 @@ public final class DefaultDeckWriter
 	}
 
 	private Locale getRandomSupportedLocale() {
-		int languageIndex = new Random().nextInt(SUPPORTED_LANGUAGE_CODES.length);
+		int localePosition = new Random().nextInt(SUPPORTED_LANGUAGE_CODES.length);
 
-		return new Locale(SUPPORTED_LANGUAGE_CODES[languageIndex]);
+		return new Locale(SUPPORTED_LANGUAGE_CODES[localePosition]);
 	}
 
-	private void writeDeck() {
+	public void writeDeck() {
 		try {
 			database.beginTransaction();
 
@@ -112,35 +111,35 @@ public final class DefaultDeckWriter
 	}
 
 	private void createCards(long deckId) {
-		List<String> frontSideTexts = buildTexts(localeForFrontText);
-		List<String> backSideTexts = buildTexts(localeForBackText);
+		List<String> frontSideTexts = getCardTexts(localeForFrontText);
+		List<String> backSideTexts = getCardTexts(localeForBackText);
 
 		for (int cardPosition = 0; cardPosition < frontSideTexts.size(); cardPosition++) {
 			createCard(deckId, frontSideTexts.get(cardPosition), backSideTexts.get(cardPosition));
 		}
 	}
 
-	private List<String> buildTexts(Locale locale) {
+	private List<String> getCardTexts(Locale locale) {
 		Locale originalLocale = getCurrentLocale();
 
 		try {
-			return buildTexts(buildResources(locale));
+			return getCardTexts(getResources(locale));
 		} finally {
 			restoreLocale(originalLocale);
 		}
 	}
 
-	private List<String> buildTexts(Resources resources) {
-		List<String> texts = new ArrayList<String>();
+	private List<String> getCardTexts(Resources resources) {
+		List<String> texts = new ArrayList<>();
 
-		for (int androidVersionResource : ANDROID_VERSIONS_RESOURCES) {
+		for (int androidVersionResource : ANDROID_VERSION_RESOURCES) {
 			texts.add(resources.getString(androidVersionResource));
 		}
 
 		return texts;
 	}
 
-	private Resources buildResources(Locale locale) {
+	private Resources getResources(Locale locale) {
 		AssetManager assetManager = context.getResources().getAssets();
 		DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 		Configuration configuration = new Configuration(context.getResources().getConfiguration());
@@ -150,9 +149,9 @@ public final class DefaultDeckWriter
 	}
 
 	private void restoreLocale(Locale locale) {
-		// Recreate Resources with original locale to avoid weird things
+		// Recreate Resources of original locale to avoid weird things
 
-		buildResources(locale);
+		getResources(locale);
 	}
 
 	private void createCard(long deckId, String frontSideText, String backSideText) {
@@ -160,36 +159,32 @@ public final class DefaultDeckWriter
 		cardValues.put(DatabaseSchema.CardsColumns.DECK_ID, deckId);
 		cardValues.put(DatabaseSchema.CardsColumns.FRONT_SIDE_TEXT, frontSideText);
 		cardValues.put(DatabaseSchema.CardsColumns.BACK_SIDE_TEXT, backSideText);
-		cardValues.put(
-			DatabaseSchema.CardsColumns.ORDER_INDEX,
-			DatabaseSchema.CardsColumnsDefaultValues.ORDER_INDEX);
+		cardValues.put(DatabaseSchema.CardsColumns.ORDER_INDEX, DatabaseSchema.CardsColumnsDefaultValues.ORDER_INDEX);
 
 		database.insert(DatabaseSchema.Tables.CARDS, null, cardValues);
 	}
 
 	private long createDeck() {
 		ContentValues deckValues = new ContentValues();
-		deckValues.put(DatabaseSchema.DecksColumns.TITLE, buildDeckTitle());
-		deckValues.put(
-			DatabaseSchema.DecksColumns.CURRENT_CARD_INDEX,
-			DatabaseSchema.DecksColumnsDefaultValues.CURRENT_CARD_INDEX);
+		deckValues.put(DatabaseSchema.DecksColumns.TITLE, getDeckTitle());
+		deckValues.put(DatabaseSchema.DecksColumns.CURRENT_CARD_INDEX, DatabaseSchema.DecksColumnsDefaultValues.CURRENT_CARD_INDEX);
 
 		return database.insert(DatabaseSchema.Tables.DECKS, null, deckValues);
 	}
 
-	private String buildDeckTitle() {
+	private String getDeckTitle() {
 		if (isCurrentLocaleSupported()) {
-			return getDeckTitle();
+			return getCurrentDeckTitle();
 		} else {
-			return getDeckTitle(getDeckTitleLanguage(localeForBackText));
+			return getSupportedDeckTitle(getDeckTitleLanguage(localeForBackText));
 		}
 	}
 
-	private String getDeckTitle() {
+	private String getCurrentDeckTitle() {
 		return context.getString(R.string.default_deck_title);
 	}
 
-	private String getDeckTitle(String deckTitleLanguage) {
+	private String getSupportedDeckTitle(String deckTitleLanguage) {
 		return context.getString(R.string.default_deck_title_mask, getDeckTitle(), deckTitleLanguage);
 	}
 
@@ -197,7 +192,7 @@ public final class DefaultDeckWriter
 		Locale originalLocale = getCurrentLocale();
 
 		try {
-			return buildResources(locale).getString(R.string.default_deck_title_language);
+			return getResources(locale).getString(R.string.default_deck_title_language);
 		} finally {
 			restoreLocale(originalLocale);
 		}
