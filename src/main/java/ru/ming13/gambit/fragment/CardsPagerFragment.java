@@ -33,7 +33,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.squareup.otto.Subscribe;
-import com.viewpagerindicator.PageIndicator;
+import com.venmo.cursor.CursorList;
+import com.viewpagerindicator.UnderlinePageIndicator;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,6 +44,7 @@ import ru.ming13.gambit.adapter.CardsPagerAdapter;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckCardsOrderLoadedEvent;
 import ru.ming13.gambit.bus.DeviceShakenEvent;
+import ru.ming13.gambit.cursor.CardsCursor;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DeckCardsOrderLoadingTask;
@@ -83,7 +85,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	ViewPager cardsPager;
 
 	@InjectView(R.id.indicator_cards)
-	PageIndicator cardsPagerIndicator;
+	UnderlinePageIndicator cardsPagerIndicator;
 
 	private CardsOrder currentCardsOrder = CardsOrder.DEFAULT;
 
@@ -152,7 +154,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
-		getCardsAdapter().swapCursor(cardsCursor);
+		getCardsAdapter().refill(new CursorList<>(new CardsCursor(cardsCursor)));
 
 		setUpCurrentActionBar();
 

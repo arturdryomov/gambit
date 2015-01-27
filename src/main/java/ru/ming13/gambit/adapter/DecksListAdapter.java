@@ -17,6 +17,7 @@
 package ru.ming13.gambit.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class DecksListAdapter extends IterableCursorAdapter<Deck>
 	static final class DeckViewHolder
 	{
 		@InjectView(R.id.text)
-		public TextView deckTitle;
+		public TextView deckText;
 
 		public DeckViewHolder(View deckView) {
 			ButterKnife.inject(this, deckView);
@@ -43,7 +44,7 @@ public class DecksListAdapter extends IterableCursorAdapter<Deck>
 
 	private final LayoutInflater layoutInflater;
 
-	public DecksListAdapter(Context context) {
+	public DecksListAdapter(@NonNull Context context) {
 		super(context, null, 0);
 
 		this.layoutInflater = LayoutInflater.from(context);
@@ -62,6 +63,6 @@ public class DecksListAdapter extends IterableCursorAdapter<Deck>
 	public void bindView(View deckView, Context context, Deck deck) {
 		DeckViewHolder deckViewHolder = (DeckViewHolder) deckView.getTag();
 
-		deckViewHolder.deckTitle.setText(deck.getTitle());
+		deckViewHolder.deckText.setText(deck.getTitle());
 	}
 }

@@ -17,46 +17,98 @@
 package ru.ming13.gambit.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.model.Card;
-import ru.ming13.gambit.provider.GambitContract;
 
-public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListener
+public class CardsPagerAdapter extends PagerAdapter
 {
+	static final class CardViewHolder
+	{
+		@InjectView(R.id.text)
+		public TextView cardText;
+
+		public Card card;
+		public CardSide cardSide;
+
+		@OnClick(R.id.container_card)
+		public void setUpCardSide() {
+			cardSide = cardSide.flip();
+
+			if (cardSide == CardSide.FRONT) {
+				cardText.setText(card.getFrontSideText());
+			} else {
+				cardText.setText(card.getBackSideText());
+			}
+		}
+
+		public CardViewHolder(View cardView, Card card, CardSide cardSide) {
+			this.card = card;
+			this.cardSide = cardSide;
+
+			ButterKnife.inject(this, cardView);
+		}
+	}
+
 	private static enum CardSide
 	{
-		FRONT, BACK
+		FRONT, BACK;
+
+		public CardSide flip() {
+			if (this == FRONT) {
+				return BACK;
+			} else {
+				return FRONT;
+			}
+		}
 	}
 
 	private final LayoutInflater layoutInflater;
 
-	private Cursor cardsCursor;
-	private CardSide defaultCardSide = CardSide.FRONT;
+	private CardSide defaultCardSide;
 
-	public CardsPagerAdapter(Context context) {
+	private List<Card> cards;
+
+	public CardsPagerAdapter(@NonNull Context context) {
 		this.layoutInflater = LayoutInflater.from(context);
+
+		this.defaultCardSide = CardSide.FRONT;
+
+		this.cards = Collections.emptyList();
+	}
+
+	public void refill(@NonNull List<Card> cards) {
+		this.cards = cards;
+
+		notifyDataSetChanged();
+	}
+
+	public void switchDefaultCardSide() {
+		defaultCardSide = defaultCardSide.flip();
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup cardsPagerContainer, int cardPosition) {
 		ViewPager cardsPager = getCardsPager(cardsPagerContainer);
-		View cardView = getCardView(cardsPager);
 
-		setUpCardInformation(cardView, getCard(cardPosition), defaultCardSide);
-		setUpCardText(cardView);
-		setUpCardListener(cardView);
+		View cardView = newCardView(cardsPager, cardPosition);
+		bindCardView(cardView);
 
 		cardsPager.addView(cardView);
+
 		return cardView;
 	}
 
@@ -64,68 +116,21 @@ public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListe
 		return (ViewPager) cardsPagerContainer;
 	}
 
-	private View getCardView(ViewPager cardsPager) {
-		return layoutInflater.inflate(R.layout.view_card_pager, cardsPager, false);
+	private View newCardView(ViewPager cardsPager, int cardPosition) {
+		View cardView = layoutInflater.inflate(R.layout.view_card_pager, cardsPager, false);
+
+		cardView.setTag(new CardViewHolder(cardView, cards.get(cardPosition), defaultCardSide));
+
+		return cardView;
 	}
 
-	private void setUpCardInformation(View cardView, Card card, CardSide cardSide) {
-		cardView.setTag(Pair.create(card, cardSide));
-	}
+	private void bindCardView(View cardView) {
+		CardViewHolder cardViewHolder = (CardViewHolder) cardView.getTag();
 
-	private Card getCard(int cardPosition) {
-		cardsCursor.moveToPosition(cardPosition);
-
-		String cardFrontSideText = cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
-		String cardBackSideText = cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
-
-		return new Card(cardFrontSideText, cardBackSideText);
-	}
-
-	private void setUpCardText(View cardView) {
-		if (getCardSide(cardView) == CardSide.FRONT) {
-			getCardTextView(cardView).setText(getCard(cardView).getFrontSideText());
+		if (cardViewHolder.cardSide == CardSide.FRONT) {
+			cardViewHolder.cardText.setText(cardViewHolder.card.getFrontSideText());
 		} else {
-			getCardTextView(cardView).setText(getCard(cardView).getBackSideText());
-		}
-	}
-
-	private CardSide getCardSide(View cardView) {
-		return getCardInformation(cardView).second;
-	}
-
-	@SuppressWarnings("unchecked")
-	private Pair<Card, CardSide> getCardInformation(View cardView) {
-		return (Pair<Card, CardSide>) cardView.getTag();
-	}
-
-	private TextView getCardTextView(View cardView) {
-		return ButterKnife.findById(cardView, R.id.text);
-	}
-
-	private Card getCard(View cardView) {
-		return getCardInformation(cardView).first;
-	}
-
-	private void setUpCardListener(View cardView) {
-		cardView.setOnClickListener(this);
-	}
-
-	@Override
-	public void onClick(View cardView) {
-		Card card = getCard(cardView);
-		CardSide cardSide = getFlippedCardSide(getCardSide(cardView));
-
-		setUpCardInformation(cardView, card, cardSide);
-		setUpCardText(cardView);
-	}
-
-	private CardSide getFlippedCardSide(CardSide cardSide) {
-		if (cardSide == CardSide.FRONT) {
-			return CardSide.BACK;
-		} else {
-			return CardSide.FRONT;
+			cardViewHolder.cardText.setText(cardViewHolder.card.getBackSideText());
 		}
 	}
 
@@ -140,36 +145,16 @@ public class CardsPagerAdapter extends PagerAdapter implements View.OnClickListe
 	}
 
 	@Override
-	public int getItemPosition(Object cardViewObject) {
+	public int getItemPosition(Object object) {
 		return PagerAdapter.POSITION_NONE;
 	}
 
 	@Override
 	public int getCount() {
-		if (cardsCursor == null) {
-			return 0;
-		} else {
-			return cardsCursor.getCount();
-		}
+		return cards.size();
 	}
 
 	public boolean isEmpty() {
-		return getCount() == 0;
-	}
-
-	public void swapCursor(Cursor cardsCursor) {
-		if (this.cardsCursor == cardsCursor) {
-			return;
-		}
-
-		this.cardsCursor = cardsCursor;
-
-		if (this.cardsCursor != null) {
-			notifyDataSetChanged();
-		}
-	}
-
-	public void switchDefaultCardSide() {
-		defaultCardSide = getFlippedCardSide(defaultCardSide);
+		return cards.isEmpty();
 	}
 }

@@ -17,6 +17,7 @@
 package ru.ming13.gambit.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class CardsListAdapter extends IterableCursorAdapter<Card>
 
 	private final LayoutInflater layoutInflater;
 
-	public CardsListAdapter(Context context) {
+	public CardsListAdapter(@NonNull Context context) {
 		super(context, null, 0);
 
 		this.layoutInflater = LayoutInflater.from(context);

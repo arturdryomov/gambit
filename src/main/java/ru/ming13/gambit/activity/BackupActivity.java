@@ -71,7 +71,7 @@ public class BackupActivity extends Activity implements ResultCallback<DriveApi.
 	}
 
 	@OnClick(R.id.button_export)
-	private void setUpBackupExport() {
+	public void setUpBackupExport() {
 		startBackupAction(BackupAction.EXPORT);
 	}
 
