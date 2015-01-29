@@ -17,22 +17,15 @@ public final class ViewDirector
 	private final int animatorId;
 
 	public static ViewDirector of(@NonNull Activity activity, @IdRes int animatorId) {
-		return new ViewDirector(activity, animatorId);
+		return new ViewDirector(activity, null, animatorId);
 	}
 
 	public static ViewDirector of(@NonNull Fragment fragment, @IdRes int animatorId) {
-		return new ViewDirector(fragment, animatorId);
+		return new ViewDirector(null, fragment, animatorId);
 	}
 
-	private ViewDirector(Activity activity, int animatorId) {
+	private ViewDirector(Activity activity, Fragment fragment, int animatorId) {
 		this.activity = activity;
-		this.fragment = null;
-
-		this.animatorId = animatorId;
-	}
-
-	private ViewDirector(Fragment fragment, int animatorId) {
-		this.activity = null;
 		this.fragment = fragment;
 
 		this.animatorId = animatorId;

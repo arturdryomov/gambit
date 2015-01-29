@@ -27,7 +27,7 @@ public final class Animations
 	}
 
 	public static void shake(@NonNull View view) {
-		Animator shakeAnimator = ObjectAnimator.ofFloat(view, "translationX", 0, 25, -25, 25, -25, 15, -15, 6, -6, 0);
+		Animator shakeAnimator = ObjectAnimator.ofFloat(view, View.TRANSLATION_X, 0, 25, -25, 25, -25, 15, -15, 6, -6, 0);
 		shakeAnimator.setDuration(700);
 
 		shakeAnimator.start();

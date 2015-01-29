@@ -17,6 +17,7 @@
 package ru.ming13.gambit.task;
 
 import android.content.ContentResolver;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import ru.ming13.gambit.provider.GambitContract;
 
 public class DeckCardsOrderResettingTask extends DeckCardsOrderChangingTask
 {
-	public static void execute(ContentResolver contentResolver, Deck deck) {
+	public static void execute(@NonNull ContentResolver contentResolver, @NonNull Deck deck) {
 		new DeckCardsOrderResettingTask(contentResolver, deck).execute();
 	}
 
@@ -35,7 +36,7 @@ public class DeckCardsOrderResettingTask extends DeckCardsOrderChangingTask
 	}
 
 	@Override
-	protected List<Integer> buildCardsOrderIndices(int indicesCount) {
+	protected List<Integer> buildCardOrderIndices(int indicesCount) {
 		return generateDefaultCardsIndices(indicesCount);
 	}
 

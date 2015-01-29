@@ -60,10 +60,10 @@ public class CardsPagerActivity extends ActionBarActivity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(getCardsPagerActivity(), R.id.container_fragment);
+		Fragments.Operator.at(this).set(getCardsPagerFragment(), R.id.container_fragment);
 	}
 
-	private Fragment getCardsPagerActivity() {
+	private Fragment getCardsPagerFragment() {
 		return CardsPagerFragment.newInstance(getDeck());
 	}
 

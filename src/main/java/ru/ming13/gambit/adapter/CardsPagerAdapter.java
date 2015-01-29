@@ -44,22 +44,22 @@ public class CardsPagerAdapter extends PagerAdapter
 		public Card card;
 		public CardSide cardSide;
 
+		public CardViewHolder(View cardView, Card card, CardSide cardSide) {
+			this.card = card;
+			this.cardSide = cardSide;
+
+			ButterKnife.inject(this, cardView);
+		}
+
 		@OnClick(R.id.container_card)
 		public void setUpCardSide() {
-			cardSide = cardSide.flip();
+			this.cardSide = cardSide.flip();
 
 			if (cardSide == CardSide.FRONT) {
 				cardText.setText(card.getFrontSideText());
 			} else {
 				cardText.setText(card.getBackSideText());
 			}
-		}
-
-		public CardViewHolder(View cardView, Card card, CardSide cardSide) {
-			this.card = card;
-			this.cardSide = cardSide;
-
-			ButterKnife.inject(this, cardView);
 		}
 	}
 

@@ -33,10 +33,12 @@ import ru.ming13.gambit.provider.GambitContract;
 abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 {
 	private final ContentResolver contentResolver;
+
 	private final Deck deck;
 
 	protected DeckCardsOrderChangingTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
+
 		this.deck = deck;
 	}
 
@@ -49,10 +51,10 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 
 	private void changeCardsOrder() {
 		try {
-			List<Uri> cardsUris = getCardsUris();
-			List<Integer> cardsOrderIndices = buildCardsOrderIndices(cardsUris.size());
+			List<Uri> cardUris = getCardUris();
+			List<Integer> cardOrderIndices = buildCardOrderIndices(cardUris.size());
 
-			contentResolver.applyBatch(GambitContract.AUTHORITY, buildChangingOrderOperations(cardsUris, cardsOrderIndices));
+			contentResolver.applyBatch(GambitContract.AUTHORITY, buildChangingOrderOperations(cardUris, cardOrderIndices));
 		} catch (RemoteException e) {
 			throw new RuntimeException(e);
 		} catch (OperationApplicationException e) {
@@ -60,18 +62,18 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 		}
 	}
 
-	private List<Uri> getCardsUris() {
-		List<Uri> cardsUris = new ArrayList<>();
+	private List<Uri> getCardUris() {
+		List<Uri> cardUris = new ArrayList<>();
 
 		Cursor cardsCursor = loadCards();
 
 		while (cardsCursor.moveToNext()) {
-			cardsUris.add(buildCardUri(getCardId(cardsCursor)));
+			cardUris.add(buildCardUri(getCardId(cardsCursor)));
 		}
 
 		cardsCursor.close();
 
-		return cardsUris;
+		return cardUris;
 	}
 
 	private Cursor loadCards() {
@@ -92,7 +94,7 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 		return cardsCursor.getLong(cardsCursor.getColumnIndex(GambitContract.Cards._ID));
 	}
 
-	protected abstract List<Integer> buildCardsOrderIndices(int indicesCount);
+	protected abstract List<Integer> buildCardOrderIndices(int indicesCount);
 
 	private ArrayList<ContentProviderOperation> buildChangingOrderOperations(List<Uri> cardsUris, List<Integer> cardsOrderIndices) {
 		ArrayList<ContentProviderOperation> operations = new ArrayList<>();

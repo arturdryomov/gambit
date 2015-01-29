@@ -40,7 +40,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		createTables(database);
-		createDefaultDeck(database);
+
+		createDefaults(database);
 	}
 
 	private void createTables(SQLiteDatabase database) {
@@ -76,7 +77,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper
 				DatabaseSchema.CardsColumns.ORDER_INDEX, DatabaseSchema.CardsColumnsParameters.ORDER_INDEX));
 	}
 
-	private void createDefaultDeck(SQLiteDatabase database) {
+	private void createDefaults(SQLiteDatabase database) {
 		DatabaseDefaults.at(context, database).writeDeck();
 	}
 

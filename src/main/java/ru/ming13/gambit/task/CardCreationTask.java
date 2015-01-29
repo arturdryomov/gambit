@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
@@ -31,15 +32,17 @@ import ru.ming13.gambit.provider.GambitContract;
 public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
+
 	private final Deck deck;
 	private final Card card;
 
-	public static void execute(ContentResolver contentResolver, Deck deck, Card card) {
+	public static void execute(@NonNull ContentResolver contentResolver, @NonNull Deck deck, @NonNull Card card) {
 		new CardCreationTask(contentResolver, deck, card).execute();
 	}
 
 	private CardCreationTask(ContentResolver contentResolver, Deck deck, Card card) {
 		this.contentResolver = contentResolver;
+
 		this.deck = deck;
 		this.card = card;
 	}
@@ -65,13 +68,9 @@ public class CardCreationTask extends AsyncTask<Void, Void, BusEvent>
 		cardValues.put(GambitContract.Cards.FRONT_SIDE_TEXT, card.getFrontSideText());
 		cardValues.put(GambitContract.Cards.BACK_SIDE_TEXT, card.getBackSideText());
 		cardValues.put(GambitContract.Cards.DECK_ID, deck.getId());
-		cardValues.put(GambitContract.Cards.ORDER_INDEX, getCardOrderIndex());
+		cardValues.put(GambitContract.Cards.ORDER_INDEX, GambitContract.Cards.Defaults.ORDER_INDEX);
 
 		return cardValues;
-	}
-
-	private int getCardOrderIndex() {
-		return GambitContract.Cards.Defaults.ORDER_INDEX;
 	}
 
 	@Override

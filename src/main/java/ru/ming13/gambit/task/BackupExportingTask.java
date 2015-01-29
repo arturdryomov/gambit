@@ -17,6 +17,7 @@
 package ru.ming13.gambit.task;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.drive.DriveId;
 
@@ -30,7 +31,7 @@ public class BackupExportingTask extends AsyncTask<Void, Void, BusEvent>
 	private final BackupOperator backupOperator;
 	private final DriveId backupFileId;
 
-	public static void execute(BackupOperator backupOperator, DriveId backupFileId) {
+	public static void execute(@NonNull BackupOperator backupOperator, @NonNull DriveId backupFileId) {
 		new BackupExportingTask(backupOperator, backupFileId).execute();
 	}
 

@@ -53,8 +53,8 @@ public final class DatabaseDefaults
 		this.context = context.getApplicationContext();
 		this.database = database;
 
-		localeForFrontText = getLocaleForFrontText();
-		localeForBackText = getLocaleForBackText();
+		this.localeForFrontText = getLocaleForFrontText();
+		this.localeForBackText = getLocaleForBackText();
 	}
 
 	private Locale getLocaleForFrontText() {
@@ -166,7 +166,7 @@ public final class DatabaseDefaults
 	}
 
 	private String getSupportedDeckTitle(String deckTitleLanguage) {
-		return context.getString(R.string.default_deck_title_mask, getDeckTitle(), deckTitleLanguage);
+		return context.getString(R.string.default_deck_title_mask, getCurrentDeckTitle(), deckTitleLanguage);
 	}
 
 	private String getDeckTitleLanguage(Locale locale) {
