@@ -16,10 +16,11 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +34,7 @@ import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.backup.BackupFilePicker;
@@ -46,7 +48,7 @@ import ru.ming13.gambit.util.GoogleServices;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.ViewDirector;
 
-public class BackupActivity extends Activity implements ResultCallback<DriveApi.DriveContentsResult>,
+public class BackupActivity extends ActionBarActivity implements ResultCallback<DriveApi.DriveContentsResult>,
 	GoogleApiClient.ConnectionCallbacks,
 	GoogleApiClient.OnConnectionFailedListener
 {
@@ -54,6 +56,9 @@ public class BackupActivity extends Activity implements ResultCallback<DriveApi.
 	{
 		EXPORT, IMPORT, NONE
 	}
+
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
 
 	private GoogleApiClient googleApiClient;
 	private BackupAction backupAction;
@@ -64,10 +69,18 @@ public class BackupActivity extends Activity implements ResultCallback<DriveApi.
 		setContentView(R.layout.activity_backup);
 
 		setUpInjections();
+
+		setUpToolbar();
 	}
 
 	private void setUpInjections() {
 		ButterKnife.inject(this);
+	}
+
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@OnClick(R.id.button_export)

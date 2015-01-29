@@ -25,7 +25,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -35,18 +34,6 @@ import ru.ming13.gambit.R;
 
 public final class DatabaseDefaults
 {
-	private static final int[] ANDROID_VERSION_RESOURCES = {
-		R.string.android_version_cupcake,
-		R.string.android_version_donut,
-		R.string.android_version_eclair,
-		R.string.android_version_froyo,
-		R.string.android_version_gingerbread,
-		R.string.android_version_honeycomb,
-		R.string.android_version_ice_cream_sandwich,
-		R.string.android_version_jelly_bean,
-		R.string.android_version_kitkat
-	};
-
 	private static final String[] SUPPORTED_LANGUAGE_CODES = {
 		"de",
 		"ru"
@@ -130,13 +117,7 @@ public final class DatabaseDefaults
 	}
 
 	private List<String> getCardTexts(Resources resources) {
-		List<String> texts = new ArrayList<>();
-
-		for (int androidVersionResource : ANDROID_VERSION_RESOURCES) {
-			texts.add(resources.getString(androidVersionResource));
-		}
-
-		return texts;
+		return Arrays.asList(resources.getStringArray(R.array.default_cards));
 	}
 
 	private Resources getResources(Locale locale) {

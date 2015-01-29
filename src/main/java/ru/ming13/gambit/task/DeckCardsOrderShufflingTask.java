@@ -48,7 +48,7 @@ public class DeckCardsOrderShufflingTask extends DeckCardsOrderChangingTask
 	}
 
 	private List<Integer> generateNaturalNumbers(int numbersCount) {
-		List<Integer> naturalNumbersList = new ArrayList<Integer>();
+		List<Integer> naturalNumbersList = new ArrayList<>();
 
 		for (Integer naturalNumber = 0; naturalNumber < numbersCount; naturalNumber++) {
 			naturalNumbersList.add(naturalNumber);

@@ -40,7 +40,7 @@ public class DeckCardsOrderResettingTask extends DeckCardsOrderChangingTask
 	}
 
 	private List<Integer> generateDefaultCardsIndices(int indicesCount) {
-		List<Integer> cardIndices = new ArrayList<Integer>();
+		List<Integer> cardIndices = new ArrayList<>();
 
 		for (int index = 0; index < indicesCount; index++) {
 			cardIndices.add(GambitContract.Cards.Defaults.ORDER_INDEX);

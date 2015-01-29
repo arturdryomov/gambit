@@ -53,15 +53,13 @@ public class DecksDeletionTask extends AsyncTask<Void, Void, Void>
 	private void deleteDecks() {
 		try {
 			contentResolver.applyBatch(GambitContract.AUTHORITY, buildDecksDeletionOperations());
-		} catch (RemoteException e) {
-			throw new RuntimeException(e);
-		} catch (OperationApplicationException e) {
+		} catch (RemoteException | OperationApplicationException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private ArrayList<ContentProviderOperation> buildDecksDeletionOperations() {
-		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+		ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
 		for (Deck deck : decks) {
 			operations.add(ContentProviderOperation.newDelete(buildDeckUri(deck)).build());

@@ -61,7 +61,7 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	}
 
 	private List<Uri> getCardsUris() {
-		List<Uri> cardsUris = new ArrayList<Uri>();
+		List<Uri> cardsUris = new ArrayList<>();
 
 		Cursor cardsCursor = loadCards();
 
@@ -95,7 +95,7 @@ abstract class DeckCardsOrderChangingTask extends AsyncTask<Void, Void, Void>
 	protected abstract List<Integer> buildCardsOrderIndices(int indicesCount);
 
 	private ArrayList<ContentProviderOperation> buildChangingOrderOperations(List<Uri> cardsUris, List<Integer> cardsOrderIndices) {
-		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+		ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
 		for (int cardIndex = 0; cardIndex < cardsUris.size(); cardIndex++) {
 			Uri cardUri = cardsUris.get(cardIndex);

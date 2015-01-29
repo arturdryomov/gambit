@@ -22,11 +22,10 @@
 
 	<TextView
 		android:id="@+id/text"
-		android:textSize="@dimen/text_list_item"
+		android:textSize="@dimen/text_primary"
 		android:singleLine="true"
-		android:background="@drawable/bg_card"
 		android:gravity="center_vertical"
-		android:padding="@dimen/padding_list_item"
+		android:padding="8dp"
 		android:layout_width="match_parent"
 		android:layout_height="?android:attr/listPreferredItemHeight"/>
 

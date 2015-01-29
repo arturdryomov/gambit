@@ -15,24 +15,25 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:auto="http://schemas.android.com/apk/res-auto">
 
 	<item
 		android:id="@+id/menu_replay"
-		android:icon="@drawable/ic_menu_replay"
+		android:icon="@drawable/ic_action_replay"
 		android:title="@string/menu_replay"
-		android:showAsAction="always"/>
+		auto:showAsAction="always"/>
 
 	<item
 		android:id="@+id/menu_shuffle"
-		android:icon="@drawable/ic_menu_shuffle_disabled"
+		android:icon="@drawable/ic_action_shuffle"
 		android:title="@string/menu_shuffle_enable"
-		android:showAsAction="always"/>
+		auto:showAsAction="always"/>
 
 	<item
 		android:id="@+id/menu_flip"
-		android:icon="@drawable/ic_menu_flip"
+		android:icon="@drawable/ic_action_flip"
 		android:title="@string/menu_flip"
-		android:showAsAction="always"/>
+		auto:showAsAction="always"/>
 
 </menu>

@@ -37,11 +37,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
 import ru.ming13.gambit.bus.BusProvider;
@@ -56,11 +59,16 @@ import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.ListSwitcher;
 import ru.ming13.gambit.util.Loaders;
 
-public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, ListView.OnItemLongClickListener
+public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+	ListView.MultiChoiceModeListener,
+	ListView.OnItemLongClickListener
 {
 	public static DecksListFragment newInstance() {
 		return new DecksListFragment();
 	}
+
+	@InjectView(R.id.button_action)
+	FloatingActionButton actionButton;
 
 	@InjectView(R.id.layout_message)
 	ViewGroup messageLayout;
@@ -73,7 +81,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
-		return layoutInflater.inflate(R.layout.fragment_list, container, false);
+		return layoutInflater.inflate(R.layout.fragment_decks_list, container, false);
 	}
 
 	@Override
@@ -167,10 +175,11 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> decksLoader) {
-		getDecksAdapter().swapCursor(null);
 	}
 
 	private void setUpDecksActions() {
+		actionButton.attachToListView(getListView());
+
 		if (isTabletLayout()) {
 			getListView().setOnItemLongClickListener(this);
 		} else {
@@ -253,7 +262,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private List<Deck> getCheckedDecks() {
-		List<Deck> decks = new ArrayList<Deck>();
+		List<Deck> decks = new ArrayList<>();
 
 		SparseBooleanArray checkedDecksPositions = getCheckedDecksPositions();
 
@@ -294,6 +303,12 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	@Override
 	public void onListItemClick(ListView decksListView, View deckView, int deckPosition, long deckId) {
 		BusProvider.getBus().post(new DeckSelectedEvent(getDeck(deckPosition)));
+	}
+
+	@OnClick(R.id.button_action)
+	public void startDeckCreation() {
+		Intent intent = Intents.Builder.with(getActivity()).buildDeckCreationIntent();
+		startActivity(intent);
 	}
 
 	@Override

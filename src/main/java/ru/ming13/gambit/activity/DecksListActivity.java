@@ -16,51 +16,87 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckDeletedEvent;
 import ru.ming13.gambit.bus.DeckSelectedEvent;
 import ru.ming13.gambit.fragment.CardsPagerFragment;
+import ru.ming13.gambit.fragment.DecksListFragment;
 import ru.ming13.gambit.fragment.MessageFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
-public class DecksListActivity extends Activity
+public class DecksListActivity extends ActionBarActivity
 {
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_decks);
+		setContentView(R.layout.activity_container);
 
-		setUpCardsPagerMessageFragment();
-		tearDownCardsPagerFragment();
+		setUpInjections();
+
+		setUpToolbar();
+
+		setUpFragments();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this);
+	}
+
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
+	}
+
+	private void setUpFragments() {
+		if (!Android.isTablet(this)) {
+			setUpDecksFragment();
+		} else {
+			setUpCardsPagerMessageFragment();
+
+			tearDownCardsPagerFragment();
+		}
+	}
+
+	private void setUpDecksFragment() {
+		Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_fragment);
+	}
+
+	private Fragment getDecksListFragment() {
+		return new DecksListFragment();
 	}
 
 	private void setUpCardsPagerMessageFragment() {
 		if (Android.isTablet(this) && Android.isLandscape(this)) {
-			Fragments.Operator.at(this).reset(buildCardsPagerMessageFragment(), R.id.container_cards_pager);
+			//Fragments.Operator.at(this).reset(getCardsPagerMessageFragment(), R.id.container_cards_pager);
 		}
 	}
 
-	private Fragment buildCardsPagerMessageFragment() {
+	private Fragment getCardsPagerMessageFragment() {
 		return MessageFragment.newInstance(getString(R.string.empty_deck_selection));
 	}
 
 	private void tearDownCardsPagerFragment() {
 		if (!Android.isLandscape(this)) {
-			Fragments.Operator.at(this).remove(R.id.container_cards_pager);
+			//Fragments.Operator.at(this).remove(R.id.container_cards_pager);
 		}
 	}
 
@@ -83,10 +119,10 @@ public class DecksListActivity extends Activity
 	}
 
 	private void setUpCardsPagerFragment(Deck deck) {
-		Fragments.Operator.at(this).reset(buildCardsPagerFragment(deck), R.id.container_cards_pager);
+		Fragments.Operator.at(this).reset(getCardsPagerFragment(deck), R.id.container_fragment);
 	}
 
-	private Fragment buildCardsPagerFragment(Deck deck) {
+	private Fragment getCardsPagerFragment(Deck deck) {
 		return CardsPagerFragment.newInstance(deck);
 	}
 
@@ -105,10 +141,6 @@ public class DecksListActivity extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_create:
-				startDeckCreationActivity();
-				return true;
-
 			case R.id.menu_backup:
 				startBackupActivity();
 				return true;
@@ -124,11 +156,6 @@ public class DecksListActivity extends Activity
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
-	}
-
-	private void startDeckCreationActivity() {
-		Intent intent = Intents.Builder.with(this).buildDeckCreationIntent();
-		startActivity(intent);
 	}
 
 	private void startBackupActivity() {

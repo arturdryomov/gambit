@@ -29,6 +29,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -236,7 +237,7 @@ public class GambitProvider extends ContentProvider
 	}
 
 	@Override
-	public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+	public ContentProviderResult[] applyBatch(@NonNull ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
 		SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
 		try {

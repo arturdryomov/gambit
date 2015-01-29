@@ -16,31 +16,54 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import ru.ming13.gambit.R;
 import ru.ming13.gambit.fragment.CardsPagerFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
-public class CardsPagerActivity extends Activity
+public class CardsPagerActivity extends ActionBarActivity
 {
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_container);
+
+		setUpInjections();
+
+		setUpToolbar();
 
 		setUpFragment();
 	}
 
-	private void setUpFragment() {
-		Fragments.Operator.at(this).set(buildFragment(), android.R.id.content);
+	private void setUpInjections() {
+		ButterKnife.inject(this);
 	}
 
-	private Fragment buildFragment() {
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+	}
+
+	private void setUpFragment() {
+		Fragments.Operator.at(this).set(getCardsPagerActivity(), R.id.container_fragment);
+	}
+
+	private Fragment getCardsPagerActivity() {
 		return CardsPagerFragment.newInstance(getDeck());
 	}
 

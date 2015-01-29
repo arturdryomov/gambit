@@ -22,6 +22,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -52,6 +53,7 @@ import ru.ming13.gambit.task.DeckCardsOrderResettingTask;
 import ru.ming13.gambit.task.DeckCardsOrderShufflingTask;
 import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Animations;
+import ru.ming13.gambit.util.Drawables;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
@@ -256,13 +258,13 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 		return (getCardsAdapter() != null) && (getCardsAdapter().getCount() > 1);
 	}
 
-	private int getShuffleActionIconResource() {
+	private Drawable getShuffleActionIconResource() {
 		switch (currentCardsOrder) {
 			case SHUFFLE:
-				return R.drawable.ic_menu_shuffle_enabled;
+				return Drawables.of(getActivity()).getTinted(R.drawable.ic_action_shuffle, android.R.color.holo_orange_light);
 
 			default:
-				return R.drawable.ic_menu_shuffle_disabled;
+				return Drawables.of(getActivity()).getNormal(R.drawable.ic_action_shuffle);
 		}
 	}
 

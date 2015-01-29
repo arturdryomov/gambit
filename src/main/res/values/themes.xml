@@ -17,47 +17,19 @@
 
 <resources>
 
-	<style name="Theme.Gambit" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-		<item name="android:actionBarStyle">@style/Theme.Gambit.ActionBar</item>
-	</style>
+	<style name="Theme.Gambit" parent="@style/Theme.AppCompat.Light">
+		<item name="colorPrimary">@color/background_primary</item>
+		<item name="colorPrimaryDark">@color/background_primary_dark</item>
+		<item name="colorAccent">@color/background_accent</item>
 
-	<style name="Theme.Gambit.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-		<item name="android:background">@drawable/bg_action_bar</item>
-		<item name="android:displayOptions">showTitle|showHome|homeAsUp|useLogo</item>
-	</style>
+		<item name="android:textColor">@color/text_primary</item>
 
-	<style name="Theme.Gambit.DecksList" parent="Theme.Gambit">
-		<item name="android:actionBarStyle">@style/Theme.Gambit.DecksList.ActionBar</item>
-	</style>
+		<item name="windowActionBar">false</item>
 
-	<style name="Theme.Gambit.DecksList.ActionBar" parent="Theme.Gambit.ActionBar">
-		<item name="android:displayOptions">showTitle</item>
-		<item name="android:titleTextStyle">@style/Theme.Gambit.DecksList.ActionBar.Title</item>
-	</style>
+		<item name="windowActionModeOverlay">true</item>
+		<item name="actionModeBackground">@color/background_primary</item>
 
-	<style name="Theme.Gambit.DecksList.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title.Inverse">
-		<item name="android:textColor">@color/text_application_name</item>
-		<item name="android:textStyle">bold</item>
-	</style>
-
-	<style name="Theme.Gambit.CardsList" parent="Theme.Gambit">
-	</style>
-
-	<style name="Theme.Gambit.CardsPager" parent="Theme.Gambit">
-		<item name="android:actionBarStyle">@style/Theme.Gambit.CardsPager.ActionBar</item>
-		<item name="android:windowBackground">@color/background_cards_pager</item>
-	</style>
-
-	<style name="Theme.Gambit.CardsPager.ActionBar" parent="Theme.Gambit.ActionBar">
-		<item name="android:displayOptions">showHome|homeAsUp|useLogo</item>
-	</style>
-
-	<style name="Theme.Gambit.Operation" parent="Theme.Gambit">
-		<item name="android:actionBarStyle">@style/Theme.Gambit.Operation.ActionBar</item>
-	</style>
-
-	<style name="Theme.Gambit.Operation.ActionBar" parent="Theme.Gambit.ActionBar">
-		<item name="android:displayOptions">showCustom</item>
+		<item name="android:windowBackground">@color/background_window</item>
 	</style>
 
 </resources>

@@ -37,11 +37,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsListAdapter;
 import ru.ming13.gambit.cursor.CardsCursor;
@@ -73,6 +76,9 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	@InjectView(android.R.id.list)
 	AbsListView cardsList;
+
+	@InjectView(R.id.button_action)
+	FloatingActionButton actionButton;
 
 	@InjectView(R.id.layout_message)
 	ViewGroup messageLayout;
@@ -174,6 +180,8 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsActions() {
+		actionButton.attachToListView(cardsList);
+
 		cardsList.setMultiChoiceModeListener(this);
 	}
 
@@ -214,7 +222,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private List<Card> getCheckedCards() {
-		List<Card> cards = new ArrayList<Card>();
+		List<Card> cards = new ArrayList<>();
 
 		SparseBooleanArray checkedCardsPositions = getCheckedCardsPositions();
 
@@ -250,6 +258,12 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	private void startCardEditingActivity(Card card) {
 		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(getDeck(), card);
+		startActivity(intent);
+	}
+
+	@OnClick(R.id.button_action)
+	public void startCardCreation() {
+		Intent intent = Intents.Builder.with(getActivity()).buildCardCreationIntent(getDeck());
 		startActivity(intent);
 	}
 
