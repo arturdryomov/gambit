@@ -39,7 +39,6 @@ import android.widget.TextView;
 
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +61,6 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 {
 	@InjectView(android.R.id.list)
 	AbsListView cardsList;
-
-	@InjectView(R.id.button_action)
-	FloatingActionButton actionButton;
 
 	@InjectView(R.id.layout_message)
 	ViewGroup messageLayout;
@@ -167,8 +163,6 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsActions() {
-		actionButton.attachToListView(cardsList);
-
 		cardsList.setMultiChoiceModeListener(this);
 	}
 

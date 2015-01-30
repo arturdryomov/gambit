@@ -32,7 +32,7 @@ public final class ViewDirector
 	}
 
 	public void show(@IdRes int viewId) {
-		ViewAnimator animator = (ViewAnimator) findView(animatorId);
+		ViewAnimator animator = findView(animatorId);
 		View view = findView(viewId);
 
 		if (animator.getDisplayedChild() != animator.indexOfChild(view)) {
@@ -40,7 +40,7 @@ public final class ViewDirector
 		}
 	}
 
-	private View findView(int viewId) {
+	private <T extends View> T findView(int viewId) {
 		if (activity != null) {
 			return ButterKnife.findById(activity, viewId);
 		} else {

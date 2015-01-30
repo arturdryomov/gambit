@@ -37,8 +37,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.melnykov.fab.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +61,6 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	ListView.MultiChoiceModeListener,
 	ListView.OnItemLongClickListener
 {
-	@InjectView(R.id.button_action)
-	FloatingActionButton actionButton;
-
 	@InjectView(R.id.layout_message)
 	ViewGroup messageLayout;
 
@@ -174,8 +169,6 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void setUpDecksActions() {
-		actionButton.attachToListView(getListView());
-
 		if (isTabletLayout()) {
 			getListView().setOnItemLongClickListener(this);
 		} else {

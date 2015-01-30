@@ -23,7 +23,8 @@
 
 	<color name="background_active">#33000000</color>
 	<color name="background_divider">#1e000000</color>
-	<color name="background_frame">#ffffff</color>
+	<color name="background_frame">#EEEEEE</color>
+	<color name="background_switch">#ffd180</color>
 	<color name="background_window">#f9f9f9</color>
 
 	<color name="background_button_normal">@color/background_primary</color>
@@ -31,6 +32,5 @@
 	<color name="background_button_pressed">#1a000000</color>
 
 	<color name="text_primary">#dd000000</color>
-	<color name="text_secondary">#89000000</color>
 
 </resources>

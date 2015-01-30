@@ -97,7 +97,7 @@ public class CardsPagerAdapter extends PagerAdapter
 	}
 
 	public void switchDefaultCardSide() {
-		defaultCardSide = defaultCardSide.flip();
+		this.defaultCardSide = defaultCardSide.flip();
 	}
 
 	@Override

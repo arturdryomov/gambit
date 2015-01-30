@@ -1,6 +1,7 @@
 package ru.ming13.gambit.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
@@ -9,23 +10,23 @@ import android.support.annotation.NonNull;
 
 public final class Drawables
 {
-	private final Context context;
+	private final Resources resources;
 
 	public static Drawables of(@NonNull Context context) {
 		return new Drawables(context);
 	}
 
 	private Drawables(Context context) {
-		this.context = context.getApplicationContext();
+		this.resources = context.getResources();
 	}
 
 	public Drawable getNormal(@DrawableRes int drawableId) {
-		return context.getResources().getDrawable(drawableId).mutate();
+		return resources.getDrawable(drawableId).mutate();
 	}
 
 	public Drawable getTinted(@DrawableRes int drawableId, @ColorRes int colorId) {
-		Drawable drawable = context.getResources().getDrawable(drawableId).mutate();
-		int color = context.getResources().getColor(colorId);
+		Drawable drawable = resources.getDrawable(drawableId).mutate();
+		int color = resources.getColor(colorId);
 
 		drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
 

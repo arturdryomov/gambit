@@ -24,6 +24,7 @@ import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+import butterknife.ButterKnife;
 import ru.ming13.gambit.util.Fragments;
 
 public class GoogleServicesErrorDialog extends DialogFragment
@@ -37,10 +38,10 @@ public class GoogleServicesErrorDialog extends DialogFragment
 	int requestCode;
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		setUpInjections();
+
+		return GooglePlayServicesUtil.getErrorDialog(errorCode, getActivity(), requestCode);
 	}
 
 	private void setUpInjections() {
@@ -48,7 +49,13 @@ public class GoogleServicesErrorDialog extends DialogFragment
 	}
 
 	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return GooglePlayServicesUtil.getErrorDialog(errorCode, getActivity(), requestCode);
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

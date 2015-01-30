@@ -25,6 +25,7 @@
 
 	<RelativeLayout
 		android:id="@+id/layout_pager"
+		android:background="@color/background_frame"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
@@ -45,7 +46,6 @@
 	<LinearLayout
 		android:id="@+id/layout_message"
 		android:orientation="vertical"
-		android:background="@color/background_frame"
 		android:gravity="center"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">

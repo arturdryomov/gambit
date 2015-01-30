@@ -107,7 +107,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void setUpSeismometer() {
-		seismometer = new Seismometer(getActivity());
+		this.seismometer = new Seismometer(getActivity());
 	}
 
 	private void setUpActionBar() {
@@ -251,7 +251,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	private Drawable getShuffleActionIconResource() {
 		switch (currentCardsOrder) {
 			case SHUFFLE:
-				return Drawables.of(getActivity()).getTinted(R.drawable.ic_action_shuffle, android.R.color.holo_orange_light);
+				return Drawables.of(getActivity()).getTinted(R.drawable.ic_action_shuffle, R.color.background_switch);
 
 			default:
 				return Drawables.of(getActivity()).getNormal(R.drawable.ic_action_shuffle);
@@ -311,7 +311,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void switchCardsOrder(CardsOrder cardsOrder) {
-		currentCardsOrder = cardsOrder;
+		this.currentCardsOrder = cardsOrder;
 
 		animateCardsShaking();
 
@@ -334,8 +334,10 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void flipCards() {
-		getCardsAdapter().switchDefaultCardSide();
-		getCardsAdapter().notifyDataSetChanged();
+		CardsPagerAdapter cardsAdapter = getCardsAdapter();
+
+		cardsAdapter.switchDefaultCardSide();
+		cardsAdapter.notifyDataSetChanged();
 	}
 
 	@Override
