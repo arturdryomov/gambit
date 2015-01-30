@@ -16,6 +16,7 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:auto="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
@@ -66,5 +67,15 @@
 			android:layout_height="wrap_content"/>
 
 	</LinearLayout>
+
+	<com.melnykov.fab.FloatingActionButton
+		android:id="@+id/button_action"
+		android:src="@drawable/ic_action_add"
+		auto:fab_colorNormal="@color/background_primary"
+		auto:fab_colorPressed="@color/background_primary"
+		android:layout_gravity="bottom|right"
+		android:layout_margin="16dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
 
 </FrameLayout>

@@ -45,7 +45,7 @@ public class DecksListActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_container);
+		setContentView(R.layout.activity_decks);
 
 		setUpInjections();
 
@@ -63,15 +63,21 @@ public class DecksListActivity extends ActionBarActivity
 	}
 
 	private void setUpFragments() {
-		setUpDecksFragment();
-	}
+		if (Android.isTablet(this) && Android.isLandscape(this)) {
+			Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_decks);
 
-	private void setUpDecksFragment() {
-		Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_fragment);
+			Fragments.Operator.at(this).reset(getMessageFragment(), R.id.container_cards);
+		} else {
+			Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_fragment);
+		}
 	}
 
 	private Fragment getDecksListFragment() {
 		return Fragments.Builder.buildDecksListFragment();
+	}
+
+	private Fragment getMessageFragment() {
+		return Fragments.Builder.buildMessageFragment(getString(R.string.empty_deck_selection));
 	}
 
 	@Subscribe
@@ -88,7 +94,7 @@ public class DecksListActivity extends ActionBarActivity
 	}
 
 	private void setUpCardsPagerFragment(Deck deck) {
-		Fragments.Operator.at(this).reset(getCardsPagerFragment(deck), R.id.container_fragment);
+		Fragments.Operator.at(this).reset(getCardsPagerFragment(deck), R.id.container_cards);
 	}
 
 	private Fragment getCardsPagerFragment(Deck deck) {

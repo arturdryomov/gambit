@@ -23,7 +23,7 @@
 
 	<color name="background_active">#33000000</color>
 	<color name="background_divider">#1e000000</color>
-	<color name="background_frame">#EEEEEE</color>
+	<color name="background_frame">#eeeeee</color>
 	<color name="background_switch">#ffd180</color>
 	<color name="background_window">#f9f9f9</color>
 

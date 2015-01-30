@@ -49,7 +49,7 @@ public class CardCreationActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_container);
+		setContentView(R.layout.activity_operation);
 
 		setUpInjections();
 

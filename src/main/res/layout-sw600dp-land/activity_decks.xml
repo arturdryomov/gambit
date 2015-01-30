@@ -15,28 +15,41 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:auto="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<android.support.v7.widget.CardView
-		android:id="@+id/container_card"
-		auto:cardCornerRadius="8dp"
-		auto:cardElevation="4dp"
-		android:layout_gravity="center"
-		android:layout_margin="16dp"
+	<include
+		layout="@layout/view_toolbar"/>
+
+	<FrameLayout
+		android:foreground="?android:windowContentOverlay"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<TextView
-			android:id="@+id/text"
-			android:textSize="30sp"
-			android:gravity="center"
-			android:layout_margin="8dp"
+		<LinearLayout
+			android:orientation="horizontal"
+			android:baselineAligned="false"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"/>
+			android:layout_height="match_parent">
 
-	</android.support.v7.widget.CardView>
+			<FrameLayout
+				android:id="@+id/container_decks"
+				android:layout_weight="1"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"/>
 
-</RelativeLayout>
+			<FrameLayout
+				android:id="@+id/container_cards"
+				android:background="@color/background_frame"
+				android:elevation="4dp"
+				android:layout_weight="2"
+				android:layout_width="0dp"
+				android:layout_height="match_parent"/>
+
+		</LinearLayout>
+
+	</FrameLayout>
+
+</LinearLayout>

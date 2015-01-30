@@ -18,7 +18,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/text_message"
 	android:textSize="@dimen/text_subhead"
-	android:background="@android:color/white"
+	android:background="@color/background_frame"
 	android:gravity="center"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"/>
