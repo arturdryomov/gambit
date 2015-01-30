@@ -37,6 +37,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -58,22 +60,6 @@ import ru.ming13.gambit.util.Loaders;
 
 public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, AdapterView.OnItemClickListener
 {
-	public static CardsListFragment newInstance(Deck deck) {
-		CardsListFragment fragment = new CardsListFragment();
-
-		fragment.setArguments(buildArguments(deck));
-
-		return fragment;
-	}
-
-	private static Bundle buildArguments(Deck deck) {
-		Bundle arguments = new Bundle();
-
-		arguments.putParcelable(Fragments.Arguments.DECK, deck);
-
-		return arguments;
-	}
-
 	@InjectView(android.R.id.list)
 	AbsListView cardsList;
 
@@ -88,6 +74,9 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	@InjectView(R.id.text_message_summary)
 	TextView messageSummary;
+
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,6 +94,8 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	private void setUpInjections() {
 		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
 	}
 
 	private void setUpCards() {
@@ -130,11 +121,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private Uri getCardsUri() {
-		return GambitContract.Cards.getCardsUri(getDeck().getId());
-	}
-
-	private Deck getDeck() {
-		return getArguments().getParcelable(Fragments.Arguments.DECK);
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	@Override
@@ -218,7 +205,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void startCardsDeletion(List<Card> cards) {
-		CardsDeletionTask.execute(getActivity().getContentResolver(), getDeck(), cards);
+		CardsDeletionTask.execute(getActivity().getContentResolver(), deck, cards);
 	}
 
 	private List<Card> getCheckedCards() {
@@ -257,13 +244,13 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void startCardEditingActivity(Card card) {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(getDeck(), card);
+		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(deck, card);
 		startActivity(intent);
 	}
 
 	@OnClick(R.id.button_action)
 	public void startCardCreation() {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardCreationIntent(getDeck());
+		Intent intent = Intents.Builder.with(getActivity()).buildCardCreationIntent(deck);
 		startActivity(intent);
 	}
 

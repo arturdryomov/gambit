@@ -30,13 +30,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
-import ru.ming13.gambit.fragment.DeckCreationFragment;
 import ru.ming13.gambit.model.Deck;
-import ru.ming13.gambit.task.DeckCreationTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
@@ -75,7 +72,7 @@ public class DeckCreationActivity extends ActionBarActivity
 	}
 
 	private Fragment getDeckCreationFragment() {
-		return DeckCreationFragment.newInstance();
+		return Fragments.Builder.buildDeckCreationFragment();
 	}
 
 	@Override
@@ -104,15 +101,6 @@ public class DeckCreationActivity extends ActionBarActivity
 	@Subscribe
 	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
-	}
-
-	@Subscribe
-	public void onDeckAssembled(DeckAssembledEvent event) {
-		saveDeck(event.getDeck());
-	}
-
-	private void saveDeck(Deck deck) {
-		DeckCreationTask.execute(getContentResolver(), deck);
 	}
 
 	@Subscribe

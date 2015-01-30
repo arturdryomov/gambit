@@ -17,6 +17,7 @@
 package ru.ming13.gambit.util;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.IntentSender;
 import android.support.annotation.NonNull;
 
@@ -56,7 +57,7 @@ public final class GoogleServices
 		int errorCode = connectionResult.getErrorCode();
 		int requestCode = Intents.Requests.GOOGLE_CONNECTION;
 
-		GoogleServicesErrorDialog errorDialog = GoogleServicesErrorDialog.newInstance(errorCode, requestCode);
+		DialogFragment errorDialog = Fragments.Builder.buildGoogleServicesErrorDialog(errorCode, requestCode);
 		errorDialog.show(activity.getFragmentManager(), GoogleServicesErrorDialog.TAG);
 	}
 }

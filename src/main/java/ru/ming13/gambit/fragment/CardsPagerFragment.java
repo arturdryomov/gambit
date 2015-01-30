@@ -33,6 +33,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 import com.venmo.cursor.CursorList;
 import com.viewpagerindicator.UnderlinePageIndicator;
@@ -62,22 +64,6 @@ import ru.ming13.gambit.util.ViewDirector;
 
 public class CardsPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
-	public static CardsPagerFragment newInstance(Deck deck) {
-		CardsPagerFragment fragment = new CardsPagerFragment();
-
-		fragment.setArguments(buildArguments(deck));
-
-		return fragment;
-	}
-
-	private static Bundle buildArguments(Deck deck) {
-		Bundle arguments = new Bundle();
-
-		arguments.putParcelable(Fragments.Arguments.DECK, deck);
-
-		return arguments;
-	}
-
 	private static enum CardsOrder
 	{
 		DEFAULT, SHUFFLE, ORIGINAL
@@ -88,6 +74,9 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	@InjectView(R.id.indicator_cards)
 	UnderlinePageIndicator cardsPagerIndicator;
+
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	private CardsOrder currentCardsOrder = CardsOrder.DEFAULT;
 
@@ -105,12 +94,16 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 		setUpInjections();
 
 		setUpSeismometer();
+
 		setUpActionBar();
+
 		setUpCards();
 	}
 
 	private void setUpInjections() {
 		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
 	}
 
 	private void setUpSeismometer() {
@@ -147,11 +140,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private Uri getCardsUri() {
-		return GambitContract.Cards.getCardsUri(getDeck().getId());
-	}
-
-	private Deck getDeck() {
-		return getArguments().getParcelable(Fragments.Arguments.DECK);
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	@Override
@@ -164,6 +153,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 			showMessage();
 		} else {
 			hideMessage();
+
 			setUpCurrentCard();
 			setUpCurrentCardsOrder();
 		}
@@ -188,8 +178,8 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	private void startCardCreationStack() {
 		getActivity().startActivities(new Intent[]{
-			Intents.Builder.with(getActivity()).buildCardsListIntent(getDeck()),
-			Intents.Builder.with(getActivity()).buildCardCreationIntent(getDeck())});
+			Intents.Builder.with(getActivity()).buildCardsListIntent(deck),
+			Intents.Builder.with(getActivity()).buildCardCreationIntent(deck)});
 	}
 
 	private void hideMessage() {
@@ -198,7 +188,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	private void setUpCurrentCard() {
 		if (shouldSetCurrentCard()) {
-			setUpCurrentCard(getDeck().getCurrentCardPosition());
+			setUpCurrentCard(deck.getCurrentCardPosition());
 		}
 	}
 
@@ -212,7 +202,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 
 	private void setUpCurrentCardsOrder() {
 		if (shouldSetCurrentCardsOrder()) {
-			DeckCardsOrderLoadingTask.execute(getActivity().getContentResolver(), getDeck());
+			DeckCardsOrderLoadingTask.execute(getActivity().getContentResolver(), deck);
 		}
 	}
 
@@ -315,7 +305,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void shuffleCards() {
-		DeckCardsOrderShufflingTask.execute(getActivity().getContentResolver(), getDeck());
+		DeckCardsOrderShufflingTask.execute(getActivity().getContentResolver(), deck);
 
 		switchCardsOrder(CardsOrder.SHUFFLE);
 	}
@@ -333,7 +323,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void orderCards() {
-		DeckCardsOrderResettingTask.execute(getActivity().getContentResolver(), getDeck());
+		DeckCardsOrderResettingTask.execute(getActivity().getContentResolver(), deck);
 
 		switchCardsOrder(CardsOrder.ORIGINAL);
 	}
@@ -374,7 +364,7 @@ public class CardsPagerFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	private void saveCurrentCard() {
-		Deck deck = new Deck(getDeck().getId(), getDeck().getTitle(), cardsPager.getCurrentItem());
+		Deck deck = new Deck(this.deck.getId(), this.deck.getTitle(), cardsPager.getCurrentItem());
 
 		getArguments().putParcelable(Fragments.Arguments.DECK, deck);
 

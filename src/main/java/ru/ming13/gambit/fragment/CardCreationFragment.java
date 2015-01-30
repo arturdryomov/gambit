@@ -23,27 +23,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.task.CardCreationTask;
+import ru.ming13.gambit.util.Fragments;
 
 public class CardCreationFragment extends Fragment
 {
-	public static CardCreationFragment newInstance() {
-		return new CardCreationFragment();
-	}
-
 	@InjectView(R.id.edit_front_side_text)
 	TextView frontSide;
 
 	@InjectView(R.id.edit_back_side_text)
 	TextView backSide;
+
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class CardCreationFragment extends Fragment
 
 	private void setUpInjections() {
 		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
 	}
 
 	@Subscribe
@@ -67,15 +72,17 @@ public class CardCreationFragment extends Fragment
 	}
 
 	private void saveCard() {
-		if (isCardCorrect()) {
-			assembleCard();
+		Card card = assembleCard();
+
+		if (isCardCorrect(card)) {
+			saveCard(card);
 		} else {
-			showErrorMessage();
+			showErrorMessage(card);
 		}
 	}
 
-	private boolean isCardCorrect() {
-		return !getCardFrontSideText().isEmpty() && !getCardBackSideText().isEmpty();
+	private Card assembleCard() {
+		return new Card(getCardFrontSideText(), getCardBackSideText());
 	}
 
 	private String getCardFrontSideText() {
@@ -86,18 +93,20 @@ public class CardCreationFragment extends Fragment
 		return backSide.getText().toString().trim();
 	}
 
-	private void assembleCard() {
-		Card card = new Card(getCardFrontSideText(), getCardBackSideText());
-
-		BusProvider.getBus().post(new CardAssembledEvent(card));
+	private boolean isCardCorrect(Card card) {
+		return !card.getFrontSideText().isEmpty() && !card.getBackSideText().isEmpty();
 	}
 
-	private void showErrorMessage() {
-		if (getCardFrontSideText().isEmpty()) {
+	private void saveCard(Card card) {
+		CardCreationTask.execute(getActivity().getContentResolver(), deck, card);
+	}
+
+	private void showErrorMessage(Card card) {
+		if (card.getFrontSideText().isEmpty()) {
 			frontSide.setError(getString(R.string.error_empty_field));
 		}
 
-		if (getCardBackSideText().isEmpty()) {
+		if (card.getBackSideText().isEmpty()) {
 			backSide.setError(getString(R.string.error_empty_field));
 		}
 	}

@@ -71,6 +71,8 @@ dependencies {
     compile "com.android.support:cardview-v7:21.0.3"
     compile "com.android.support:support-v4:21.0.3"
     compile "com.android.support:support-annotations:21.0.3"
+    compile "com.f2prateek.bundler:bundler:1.0.0"
+    compile "com.f2prateek.dart:dart:1.1.0"
     compile "com.jakewharton:butterknife:6.0.0"
     compile "com.github.andkulikov:transitions-everywhere:1.2.2"
     compile "com.google.android.gms:play-services-drive:6.5.87"

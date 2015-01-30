@@ -31,11 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckDeletedEvent;
 import ru.ming13.gambit.bus.DeckSelectedEvent;
-import ru.ming13.gambit.fragment.CardsPagerFragment;
-import ru.ming13.gambit.fragment.DecksListFragment;
-import ru.ming13.gambit.fragment.MessageFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Fragments;
@@ -67,13 +63,7 @@ public class DecksListActivity extends ActionBarActivity
 	}
 
 	private void setUpFragments() {
-		if (!Android.isTablet(this)) {
-			setUpDecksFragment();
-		} else {
-			setUpCardsPagerMessageFragment();
-
-			tearDownCardsPagerFragment();
-		}
+		setUpDecksFragment();
 	}
 
 	private void setUpDecksFragment() {
@@ -81,28 +71,7 @@ public class DecksListActivity extends ActionBarActivity
 	}
 
 	private Fragment getDecksListFragment() {
-		return new DecksListFragment();
-	}
-
-	private void setUpCardsPagerMessageFragment() {
-		if (Android.isTablet(this) && Android.isLandscape(this)) {
-			//Fragments.Operator.at(this).reset(getCardsPagerMessageFragment(), R.id.container_cards_pager);
-		}
-	}
-
-	private Fragment getCardsPagerMessageFragment() {
-		return MessageFragment.newInstance(getString(R.string.empty_deck_selection));
-	}
-
-	private void tearDownCardsPagerFragment() {
-		if (!Android.isLandscape(this)) {
-			//Fragments.Operator.at(this).remove(R.id.container_cards_pager);
-		}
-	}
-
-	@Subscribe
-	public void onDeckDeleted(DeckDeletedEvent event) {
-		setUpCardsPagerMessageFragment();
+		return Fragments.Builder.buildDecksListFragment();
 	}
 
 	@Subscribe
@@ -123,7 +92,7 @@ public class DecksListActivity extends ActionBarActivity
 	}
 
 	private Fragment getCardsPagerFragment(Deck deck) {
-		return CardsPagerFragment.newInstance(deck);
+		return Fragments.Builder.buildCardsPagerFragment(deck);
 	}
 
 	private void startCardsPagerActivity(Deck deck) {

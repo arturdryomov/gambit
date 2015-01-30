@@ -23,6 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
@@ -30,24 +33,11 @@ import ru.ming13.gambit.util.Fragments;
 
 public class MessageFragment extends Fragment
 {
-	public static MessageFragment newInstance(String message) {
-		MessageFragment fragment = new MessageFragment();
-
-		fragment.setArguments(buildArguments(message));
-
-		return fragment;
-	}
-
-	private static Bundle buildArguments(String message) {
-		Bundle arguments = new Bundle();
-
-		arguments.putString(Fragments.Arguments.MESSAGE, message);
-
-		return arguments;
-	}
-
 	@InjectView(R.id.text_message)
 	TextView message;
+
+	@InjectExtra(Fragments.Arguments.MESSAGE)
+	String messageText;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +55,12 @@ public class MessageFragment extends Fragment
 
 	private void setUpInjections() {
 		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
 	}
 
 	private void setUpMessage() {
-		message.setText(getMessage());
-	}
-
-	private String getMessage() {
-		return getArguments().getString(Fragments.Arguments.MESSAGE);
+		message.setText(messageText);
 	}
 
 	@Override

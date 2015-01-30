@@ -23,26 +23,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
-import ru.ming13.gambit.fragment.DeckEditingFragment;
 import ru.ming13.gambit.model.Deck;
-import ru.ming13.gambit.task.DeckEditingTask;
 import ru.ming13.gambit.util.Fragments;
-import ru.ming13.gambit.util.Intents;
 
 public class DeckEditingActivity extends ActionBarActivity
 {
 	@InjectView(R.id.toolbar)
 	Toolbar toolbar;
+
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class DeckEditingActivity extends ActionBarActivity
 
 	private void setUpInjections() {
 		ButterKnife.inject(this);
+
+		Dart.inject(this);
 	}
 
 	private void setUpToolbar() {
@@ -74,11 +77,7 @@ public class DeckEditingActivity extends ActionBarActivity
 	}
 
 	private Fragment getDeckEditingFragment() {
-		return DeckEditingFragment.newInstance(getDeck());
-	}
-
-	private Deck getDeck() {
-		return getIntent().getParcelableExtra(Intents.Extras.DECK);
+		return Fragments.Builder.buildDeckEditingFragment(deck);
 	}
 
 	@Override
@@ -107,15 +106,6 @@ public class DeckEditingActivity extends ActionBarActivity
 	@Subscribe
 	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
-	}
-
-	@Subscribe
-	public void onDeckAssembled(DeckAssembledEvent event) {
-		saveDeck(event.getDeck());
-	}
-
-	private void saveDeck(Deck deck) {
-		DeckEditingTask.execute(getContentResolver(), deck);
 	}
 
 	@Subscribe

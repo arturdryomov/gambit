@@ -29,17 +29,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckNotSavedEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.task.DeckCreationTask;
 
 public class DeckCreationFragment extends Fragment
 {
-	public static DeckCreationFragment newInstance() {
-		return new DeckCreationFragment();
-	}
-
 	@InjectView(R.id.edit_deck_title)
 	TextView deckTitle;
 
@@ -65,29 +61,33 @@ public class DeckCreationFragment extends Fragment
 	}
 
 	private void saveDeck() {
-		if (isDeckCorrect()) {
-			assembleDeck();
+		Deck deck = assembleDeck();
+
+		if (isDeckCorrect(deck)) {
+			saveDeck(deck);
 		} else {
-			showErrorMessage();
+			showErrorMessage(deck);
 		}
 	}
 
-	private boolean isDeckCorrect() {
-		return !getDeckTitle().isEmpty();
+	private Deck assembleDeck() {
+		return new Deck(getDeckTitle());
 	}
 
 	private String getDeckTitle() {
 		return deckTitle.getText().toString().trim();
 	}
 
-	private void assembleDeck() {
-		Deck deck = new Deck(getDeckTitle());
-
-		BusProvider.getBus().post(new DeckAssembledEvent(deck));
+	private boolean isDeckCorrect(Deck deck) {
+		return !deck.getTitle().isEmpty();
 	}
 
-	private void showErrorMessage() {
-		if (getDeckTitle().isEmpty()) {
+	private void saveDeck(Deck deck) {
+		DeckCreationTask.execute(getActivity().getContentResolver(), deck);
+	}
+
+	private void showErrorMessage(Deck deck) {
+		if (deck.getTitle().isEmpty()) {
 			deckTitle.setError(getString(R.string.error_empty_field));
 		} else {
 			deckTitle.setError(getString(R.string.error_deck_already_exists));
@@ -96,7 +96,7 @@ public class DeckCreationFragment extends Fragment
 
 	@Subscribe
 	public void onDeckNotSaved(DeckNotSavedEvent event) {
-		showErrorMessage();
+		showErrorMessage(assembleDeck());
 	}
 
 	@Override

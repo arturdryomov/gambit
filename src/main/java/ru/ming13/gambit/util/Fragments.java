@@ -17,10 +17,25 @@
 package ru.ming13.gambit.util;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+
+import com.f2prateek.bundler.Bundler;
+
+import ru.ming13.gambit.fragment.CardCreationFragment;
+import ru.ming13.gambit.fragment.CardEditingFragment;
+import ru.ming13.gambit.fragment.CardsListFragment;
+import ru.ming13.gambit.fragment.CardsPagerFragment;
+import ru.ming13.gambit.fragment.DeckCreationFragment;
+import ru.ming13.gambit.fragment.DeckEditingFragment;
+import ru.ming13.gambit.fragment.DecksListFragment;
+import ru.ming13.gambit.fragment.GoogleServicesErrorDialog;
+import ru.ming13.gambit.fragment.MessageFragment;
+import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
 
 public final class Fragments
 {
@@ -39,6 +54,92 @@ public final class Fragments
 
 		public static final String ERROR_CODE = "error_code";
 		public static final String REQUEST_CODE = "request_code";
+	}
+
+	public static final class Builder
+	{
+		private Builder() {
+		}
+
+		public static Fragment buildDecksListFragment() {
+			return new DecksListFragment();
+		}
+
+		public static Fragment buildDeckCreationFragment() {
+			return new DeckCreationFragment();
+		}
+
+		public static Fragment buildDeckEditingFragment(@NonNull Deck deck) {
+			Fragment fragment = new DeckEditingFragment();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.DECK, deck)
+				.get());
+
+			return fragment;
+		}
+
+		public static Fragment buildCardsListFragment(@NonNull Deck deck) {
+			Fragment fragment = new CardsListFragment();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.DECK, deck)
+				.get());
+
+			return fragment;
+		}
+
+		public static Fragment buildCardsPagerFragment(@NonNull Deck deck) {
+			Fragment fragment = new CardsPagerFragment();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.DECK, deck)
+				.get());
+
+			return fragment;
+		}
+
+		public static Fragment buildCardCreationFragment(@NonNull Deck deck) {
+			Fragment fragment = new CardCreationFragment();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.DECK, deck)
+				.get());
+
+			return fragment;
+		}
+
+		public static Fragment buildCardEditingFragment(@NonNull Deck deck, @NonNull Card card) {
+			Fragment fragment = new CardEditingFragment();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.DECK, deck)
+				.put(Arguments.CARD, card)
+				.get());
+
+			return fragment;
+		}
+
+		public static Fragment buildMessageFragment(@NonNull String message) {
+			Fragment fragment = new MessageFragment();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.MESSAGE, message)
+				.get());
+
+			return fragment;
+		}
+
+		public static DialogFragment buildGoogleServicesErrorDialog(int errorCode, int requestCode) {
+			DialogFragment fragment = new GoogleServicesErrorDialog();
+
+			fragment.setArguments(Bundler.create()
+				.put(Arguments.ERROR_CODE, errorCode)
+				.put(Arguments.REQUEST_CODE, requestCode)
+				.get());
+
+			return fragment;
+		}
 	}
 
 	public static final class Operator

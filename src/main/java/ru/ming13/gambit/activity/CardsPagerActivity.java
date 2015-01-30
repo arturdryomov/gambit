@@ -23,18 +23,22 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.fragment.CardsPagerFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Fragments;
-import ru.ming13.gambit.util.Intents;
 
 public class CardsPagerActivity extends ActionBarActivity
 {
 	@InjectView(R.id.toolbar)
 	Toolbar toolbar;
+
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class CardsPagerActivity extends ActionBarActivity
 
 	private void setUpInjections() {
 		ButterKnife.inject(this);
+
+		Dart.inject(this);
 	}
 
 	private void setUpToolbar() {
@@ -64,11 +70,7 @@ public class CardsPagerActivity extends ActionBarActivity
 	}
 
 	private Fragment getCardsPagerFragment() {
-		return CardsPagerFragment.newInstance(getDeck());
-	}
-
-	private Deck getDeck() {
-		return getIntent().getParcelableExtra(Intents.Extras.DECK);
+		return Fragments.Builder.buildCardsPagerFragment(deck);
 	}
 
 	@Override

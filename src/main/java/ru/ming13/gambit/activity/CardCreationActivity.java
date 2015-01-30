@@ -23,20 +23,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
-import ru.ming13.gambit.fragment.CardCreationFragment;
-import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.model.Deck;
-import ru.ming13.gambit.task.CardCreationTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
@@ -44,6 +42,9 @@ public class CardCreationActivity extends ActionBarActivity
 {
 	@InjectView(R.id.toolbar)
 	Toolbar toolbar;
+
+	@InjectExtra(Intents.Extras.DECK)
+	Deck deck;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class CardCreationActivity extends ActionBarActivity
 
 	private void setUpInjections() {
 		ButterKnife.inject(this);
+
+		Dart.inject(this);
 	}
 
 	private void setUpToolbar() {
@@ -75,7 +78,7 @@ public class CardCreationActivity extends ActionBarActivity
 	}
 
 	private Fragment getCardCreationFragment() {
-		return CardCreationFragment.newInstance();
+		return Fragments.Builder.buildCardCreationFragment(deck);
 	}
 
 	@Override
@@ -104,19 +107,6 @@ public class CardCreationActivity extends ActionBarActivity
 	@Subscribe
 	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
-	}
-
-	@Subscribe
-	public void onCardAssembled(CardAssembledEvent event) {
-		saveCard(event.getCard());
-	}
-
-	private void saveCard(Card card) {
-		CardCreationTask.execute(getContentResolver(), getDeck(), card);
-	}
-
-	private Deck getDeck() {
-		return getIntent().getParcelableExtra(Intents.Extras.DECK);
 	}
 
 	@Subscribe

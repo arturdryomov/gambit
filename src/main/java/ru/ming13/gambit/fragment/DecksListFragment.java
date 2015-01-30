@@ -63,10 +63,6 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	ListView.MultiChoiceModeListener,
 	ListView.OnItemLongClickListener
 {
-	public static DecksListFragment newInstance() {
-		return new DecksListFragment();
-	}
-
 	@InjectView(R.id.button_action)
 	FloatingActionButton actionButton;
 

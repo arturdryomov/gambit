@@ -23,10 +23,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.fragment.CardsListFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
@@ -35,6 +37,9 @@ public class CardsListActivity extends ActionBarActivity
 {
 	@InjectView(R.id.toolbar)
 	Toolbar toolbar;
+
+	@InjectExtra(Intents.Extras.DECK)
+	Deck deck;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class CardsListActivity extends ActionBarActivity
 
 	private void setUpInjections() {
 		ButterKnife.inject(this);
+
+		Dart.inject(this);
 	}
 
 	private void setUpToolbar() {
@@ -57,11 +64,7 @@ public class CardsListActivity extends ActionBarActivity
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		getSupportActionBar().setSubtitle(getDeck().getTitle());
-	}
-
-	private Deck getDeck() {
-		return getIntent().getParcelableExtra(Intents.Extras.DECK);
+		getSupportActionBar().setSubtitle(deck.getTitle());
 	}
 
 	private void setUpFragment() {
@@ -69,7 +72,7 @@ public class CardsListActivity extends ActionBarActivity
 	}
 
 	private Fragment getCardsListFragment() {
-		return CardsListFragment.newInstance(getDeck());
+		return Fragments.Builder.buildCardsListFragment(deck);
 	}
 
 	@Override
