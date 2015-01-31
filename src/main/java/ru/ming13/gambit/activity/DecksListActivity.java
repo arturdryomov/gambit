@@ -66,7 +66,7 @@ public class DecksListActivity extends ActionBarActivity
 		if (Android.isTablet(this) && Android.isLandscape(this)) {
 			Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_decks);
 
-			Fragments.Operator.at(this).reset(getMessageFragment(), R.id.container_cards);
+			Fragments.Operator.at(this).set(getMessageFragment(), R.id.container_cards);
 		} else {
 			Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_fragment);
 		}

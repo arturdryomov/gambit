@@ -57,7 +57,9 @@ import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
 
-public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, AdapterView.OnItemClickListener
+public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+	ListView.MultiChoiceModeListener,
+	AdapterView.OnItemClickListener
 {
 	@InjectView(android.R.id.list)
 	AbsListView cardsList;
