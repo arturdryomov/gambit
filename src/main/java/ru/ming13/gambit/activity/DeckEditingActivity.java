@@ -73,7 +73,7 @@ public class DeckEditingActivity extends ActionBarActivity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(getDeckEditingFragment(), R.id.container_fragment);
+		Fragments.Operator.at(this).set(R.id.container_fragment, getDeckEditingFragment());
 	}
 
 	private Fragment getDeckEditingFragment() {

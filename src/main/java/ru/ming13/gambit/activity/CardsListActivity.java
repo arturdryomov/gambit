@@ -68,7 +68,7 @@ public class CardsListActivity extends ActionBarActivity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(getCardsListFragment(), R.id.container_fragment);
+		Fragments.Operator.at(this).set(R.id.container_fragment, getCardsListFragment());
 	}
 
 	private Fragment getCardsListFragment() {

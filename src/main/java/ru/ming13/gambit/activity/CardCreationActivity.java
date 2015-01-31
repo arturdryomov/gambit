@@ -74,7 +74,7 @@ public class CardCreationActivity extends ActionBarActivity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(getCardCreationFragment(), R.id.container_fragment);
+		Fragments.Operator.at(this).set(R.id.container_fragment, getCardCreationFragment());
 	}
 
 	private Fragment getCardCreationFragment() {

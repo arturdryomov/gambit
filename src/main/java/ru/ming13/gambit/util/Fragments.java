@@ -154,7 +154,11 @@ public final class Fragments
 			this.fragmentManager = activity.getFragmentManager();
 		}
 
-		public void reset(@NonNull Fragment fragment, @IdRes int fragmentContainerId) {
+		private boolean isSet(@IdRes int fragmentContainerId) {
+			return fragmentManager.findFragmentById(fragmentContainerId) != null;
+		}
+
+		public void reset(@IdRes int fragmentContainerId, @NonNull Fragment fragment) {
 			fragmentManager
 				.beginTransaction()
 				.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
@@ -162,30 +166,15 @@ public final class Fragments
 				.commit();
 		}
 
-		public void set(@NonNull Fragment fragment, @IdRes int fragmentContainerId) {
-			if (!isSet(fragmentContainerId)) {
-				fragmentManager
-					.beginTransaction()
-					.add(fragmentContainerId, fragment)
-					.commit();
-			}
-		}
-
-		private boolean isSet(@IdRes int fragmentContainerId) {
-			return get(fragmentContainerId) != null;
-		}
-
-		private Fragment get(@IdRes int fragmentContainerId) {
-			return fragmentManager.findFragmentById(fragmentContainerId);
-		}
-
-		public void remove(@IdRes int fragmentContainerId) {
+		public void set(@IdRes int fragmentContainerId, @NonNull Fragment fragment) {
 			if (isSet(fragmentContainerId)) {
-				fragmentManager
-					.beginTransaction()
-					.remove(get(fragmentContainerId))
-					.commit();
+				return;
 			}
+
+			fragmentManager
+				.beginTransaction()
+				.add(fragmentContainerId, fragment)
+				.commit();
 		}
 	}
 }

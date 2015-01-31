@@ -68,7 +68,7 @@ public class DeckCreationActivity extends ActionBarActivity
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(getDeckCreationFragment(), R.id.container_fragment);
+		Fragments.Operator.at(this).set(R.id.container_fragment, getDeckCreationFragment());
 	}
 
 	private Fragment getDeckCreationFragment() {

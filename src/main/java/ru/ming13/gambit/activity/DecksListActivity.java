@@ -64,11 +64,11 @@ public class DecksListActivity extends ActionBarActivity
 
 	private void setUpFragments() {
 		if (Android.isTablet(this) && Android.isLandscape(this)) {
-			Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_decks);
+			Fragments.Operator.at(this).set(R.id.container_decks, getDecksListFragment());
 
-			Fragments.Operator.at(this).set(getMessageFragment(), R.id.container_cards);
+			Fragments.Operator.at(this).set(R.id.container_cards, getMessageFragment());
 		} else {
-			Fragments.Operator.at(this).set(getDecksListFragment(), R.id.container_fragment);
+			Fragments.Operator.at(this).set(R.id.container_fragment, getDecksListFragment());
 		}
 	}
 
@@ -94,7 +94,7 @@ public class DecksListActivity extends ActionBarActivity
 	}
 
 	private void setUpCardsPagerFragment(Deck deck) {
-		Fragments.Operator.at(this).reset(getCardsPagerFragment(deck), R.id.container_cards);
+		Fragments.Operator.at(this).reset(R.id.container_cards, getCardsPagerFragment(deck));
 	}
 
 	private Fragment getCardsPagerFragment(Deck deck) {
