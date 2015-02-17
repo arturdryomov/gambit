@@ -19,19 +19,17 @@ package ru.ming13.gambit;
 import android.app.Application;
 import android.os.StrictMode;
 
+import ru.ming13.gambit.util.Android;
+
 public class GambitApplication extends Application
 {
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		if (isDebugging()) {
+		if (Android.isDebugging()) {
 			setUpDetecting();
 		}
-	}
-
-	private boolean isDebugging() {
-		return BuildConfig.DEBUG;
 	}
 
 	private void setUpDetecting() {

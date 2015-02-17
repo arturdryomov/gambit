@@ -28,15 +28,19 @@ public final class Android
 	private Android() {
 	}
 
-	public static String getApplicationId() {
-		return BuildConfig.APPLICATION_ID;
+	public static boolean isDebugging() {
+		return BuildConfig.DEBUG;
+	}
+
+	public static boolean isLandscape(@NonNull Context context) {
+		return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 	}
 
 	public static boolean isTablet(@NonNull Context context) {
 		return context.getResources().getBoolean(R.bool.tablet);
 	}
 
-	public static boolean isLandscape(@NonNull Context context) {
-		return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+	public static String getApplicationId() {
+		return BuildConfig.APPLICATION_ID;
 	}
 }

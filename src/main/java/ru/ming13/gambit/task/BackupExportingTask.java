@@ -29,6 +29,7 @@ import ru.ming13.gambit.bus.BusProvider;
 public class BackupExportingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final BackupOperator backupOperator;
+
 	private final DriveId backupFileId;
 
 	public static void execute(@NonNull BackupOperator backupOperator, @NonNull DriveId backupFileId) {
@@ -37,6 +38,7 @@ public class BackupExportingTask extends AsyncTask<Void, Void, BusEvent>
 
 	private BackupExportingTask(BackupOperator backupOperator, DriveId backupFileId) {
 		this.backupOperator = backupOperator;
+
 		this.backupFileId = backupFileId;
 	}
 
