@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.squareup.otto.Subscribe;
 
@@ -37,7 +37,7 @@ import ru.ming13.gambit.task.DeckCreationTask;
 public class DeckCreationFragment extends Fragment
 {
 	@InjectView(R.id.edit_deck_title)
-	TextView deckTitle;
+	EditText deckTitle;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {

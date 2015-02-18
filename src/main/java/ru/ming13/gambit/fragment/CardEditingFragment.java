@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
@@ -40,10 +40,10 @@ import ru.ming13.gambit.util.Fragments;
 public class CardEditingFragment extends Fragment
 {
 	@InjectView(R.id.edit_front_side_text)
-	TextView frontSide;
+	EditText frontSide;
 
 	@InjectView(R.id.edit_back_side_text)
-	TextView backSide;
+	EditText backSide;
 
 	@InjectExtra(Fragments.Arguments.DECK)
 	Deck deck;
