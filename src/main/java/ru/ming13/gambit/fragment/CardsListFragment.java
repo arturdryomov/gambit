@@ -24,7 +24,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.transitions.everywhere.TransitionManager;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -56,6 +55,7 @@ import ru.ming13.gambit.task.CardsDeletionTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
+import ru.ming13.gambit.util.Transitions;
 
 public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
 	ListView.MultiChoiceModeListener,
@@ -133,7 +133,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 
 	private void setUpCardsAnimations() {
 		if (!getCardsAdapter().isEmpty()) {
-			TransitionManager.beginDelayedTransition(cardsList);
+			Transitions.of(cardsList).start();
 		}
 	}
 

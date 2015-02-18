@@ -25,7 +25,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.transitions.everywhere.TransitionManager;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -56,6 +55,7 @@ import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.ListSwitcher;
 import ru.ming13.gambit.util.Loaders;
+import ru.ming13.gambit.util.Transitions;
 
 public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
 	ListView.MultiChoiceModeListener,
@@ -137,7 +137,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 
 	private void setUpDecksAnimations() {
 		if (!getDecksAdapter().isEmpty()) {
-			TransitionManager.beginDelayedTransition(getListView());
+			Transitions.of(getListView()).start();
 		}
 	}
 

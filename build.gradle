@@ -78,8 +78,8 @@ dependencies {
     compile "com.f2prateek.bundler:bundler:1.0.0"
     compile "com.f2prateek.dart:dart:1.1.0"
     compile "com.jakewharton:butterknife:6.1.0"
-    compile "com.github.andkulikov:transitions-everywhere:1.2.2"
     compile "com.google.android.gms:play-services-drive:6.5.87"
+    compile "com.guerwan:transitionbackport:1.1"
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile "com.mcxiaoke.viewpagerindicator:library:2.4.1"
     compile "com.rengwuxian.materialedittext:library:1.8.2"

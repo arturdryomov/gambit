@@ -34,7 +34,7 @@ Gambit uses some open source libraries.
 * [Material EditText][Material EditText link]
 * [Otto][Otto link]
 * [Seismic][Seismic link]
-* [Transitions Everywhere][Transitions Everywhere link]
+* [Transitions Backport][Transitions Backport link]
 * [ViewPager Indicator][ViewPager Indicator link]
 
 
@@ -51,7 +51,7 @@ Gambit uses some open source libraries.
   [Material EditText link]: https://github.com/rengwuxian/MaterialEditText
   [Otto link]: http://square.github.com/otto
   [Seismic link]: https://github.com/square/seismic
-  [Transitions Everywhere link]: https://github.com/andkulikov/transitions-everywhere
+  [Transitions Backport link]: https://github.com/guerwan/TransitionsBackport
   [ViewPager Indicator link]: https://github.com/JakeWharton/ViewPagerIndicator
 
   [Screenshot image]: https://f.cloud.github.com/assets/200401/2264233/a10084aa-9e6f-11e3-90f7-f4bd5dcceb14.png
