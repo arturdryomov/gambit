@@ -25,22 +25,34 @@ $ ./gradle clean assembleDebug
 
 Gambit uses some open source libraries.
 
+* [Bundler][Bundler link]
+* [Butter Knife][Butter Knife link]
 * [Commons IO][Commons IO link]
+* [Cursor Utils][Cursor Utils link]
+* [Dart][Dart link]
+* [Floating Action Button][Floating Action Button link]
+* [Material EditText][Material EditText link]
 * [Otto][Otto link]
 * [Seismic][Seismic link]
-* [TransitionsBackport][TransitionsBackport link]
-* [ViewPagerIndicator][ViewPagerIndicator link]
+* [Transitions Everywhere][Transitions Everywhere link]
+* [ViewPager Indicator][ViewPager Indicator link]
 
 
   [Apache link]: http://www.apache.org/licenses/LICENSE-2.0.html
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
   [Travis link]: https://travis-ci.org/ming13/to-the-moon
 
+  [Bundler link]: https://github.com/f2prateek/bundler
+  [Butter Knife link]: https://github.com/JakeWharton/butterknife
   [Commons IO link]: http://commons.apache.org/proper/commons-io
+  [Cursor Utils link]: https://github.com/venmo/cursor-utils
+  [Dart link]: https://github.com/f2prateek/dart
+  [Floating Action Button link]: https://github.com/makovkastar/FloatingActionButton
+  [Material EditText link]: https://github.com/rengwuxian/MaterialEditText
   [Otto link]: http://square.github.com/otto
   [Seismic link]: https://github.com/square/seismic
-  [TransitionsBackport link]: https://github.com/guerwan/TransitionsBackport
-  [ViewPagerIndicator link]: http://viewpagerindicator.com
+  [Transitions Everywhere link]: https://github.com/andkulikov/transitions-everywhere
+  [ViewPager Indicator link]: https://github.com/JakeWharton/ViewPagerIndicator
 
   [Screenshot image]: https://f.cloud.github.com/assets/200401/2264233/a10084aa-9e6f-11e3-90f7-f4bd5dcceb14.png
   [Travis image]: https://travis-ci.org/ming13/gambit.svg?branch=master
