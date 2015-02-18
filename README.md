@@ -18,7 +18,7 @@ You will need JDK 1.7+ installed.
 Gradle, Android SDK and all dependencies will be downloaded automatically.
 
 ```
-$ ./gradle clean assembleDebug
+$ ./gradlew clean assembleDebug
 ```
 
 ## Acknowledgements
