@@ -54,5 +54,5 @@ Gambit uses some open source libraries.
   [Transitions Backport link]: https://github.com/guerwan/TransitionsBackport
   [ViewPager Indicator link]: https://github.com/JakeWharton/ViewPagerIndicator
 
-  [Screenshot image]: https://f.cloud.github.com/assets/200401/2264233/a10084aa-9e6f-11e3-90f7-f4bd5dcceb14.png
+  [Screenshot image]: https://cloud.githubusercontent.com/assets/200401/6249966/cfe27878-b79b-11e4-8ddc-93c927d65a8c.png
   [Travis image]: https://travis-ci.org/ming13/gambit.svg?branch=master
