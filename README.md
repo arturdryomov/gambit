@@ -40,7 +40,7 @@ Gambit uses some open source libraries.
 
   [Apache link]: http://www.apache.org/licenses/LICENSE-2.0.html
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
-  [Travis link]: https://travis-ci.org/ming13/to-the-moon
+  [Travis link]: https://travis-ci.org/ming13/gambit
 
   [Bundler link]: https://github.com/f2prateek/bundler
   [Butter Knife link]: https://github.com/JakeWharton/butterknife
