@@ -21,25 +21,49 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.task.CardCreationTask;
+import ru.ming13.gambit.util.Fragments;
 
 public class CardCreationFragment extends Fragment
 {
-	public static CardCreationFragment newInstance() {
-		return new CardCreationFragment();
-	}
+	@InjectView(R.id.edit_front_side_text)
+	EditText frontSide;
+
+	@InjectView(R.id.edit_back_side_text)
+	EditText backSide;
+
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_card_operation, fragmentContainer, false);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpInjections();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
 	}
 
 	@Subscribe
@@ -48,46 +72,42 @@ public class CardCreationFragment extends Fragment
 	}
 
 	private void saveCard() {
-		if (isCardCorrect()) {
-			assembleCard();
+		Card card = assembleCard();
+
+		if (isCardCorrect(card)) {
+			saveCard(card);
 		} else {
-			showErrorMessage();
+			showErrorMessage(card);
 		}
 	}
 
-	private boolean isCardCorrect() {
-		return !getCardFrontSideText().isEmpty() && !getCardBackSideText().isEmpty();
+	private Card assembleCard() {
+		return new Card(getCardFrontSideText(), getCardBackSideText());
 	}
 
 	private String getCardFrontSideText() {
-		return getCardFrontSideTextView().getText().toString().trim();
-	}
-
-	private TextView getCardFrontSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_front_side_text);
+		return frontSide.getText().toString().trim();
 	}
 
 	private String getCardBackSideText() {
-		return getCardBackSideTextView().getText().toString().trim();
+		return backSide.getText().toString().trim();
 	}
 
-	private TextView getCardBackSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_back_side_text);
+	private boolean isCardCorrect(Card card) {
+		return !card.getFrontSideText().isEmpty() && !card.getBackSideText().isEmpty();
 	}
 
-	private void assembleCard() {
-		Card card = new Card(getCardFrontSideText(), getCardBackSideText());
-
-		BusProvider.getBus().post(new CardAssembledEvent(card));
+	private void saveCard(Card card) {
+		CardCreationTask.execute(getActivity().getContentResolver(), deck, card);
 	}
 
-	private void showErrorMessage() {
-		if (getCardFrontSideText().isEmpty()) {
-			getCardFrontSideTextView().setError(getString(R.string.error_empty_field));
+	private void showErrorMessage(Card card) {
+		if (card.getFrontSideText().isEmpty()) {
+			frontSide.setError(getString(R.string.error_empty_field));
 		}
 
-		if (getCardBackSideText().isEmpty()) {
-			getCardBackSideTextView().setError(getString(R.string.error_empty_field));
+		if (card.getBackSideText().isEmpty()) {
+			backSide.setError(getString(R.string.error_empty_field));
 		}
 	}
 
@@ -103,5 +123,16 @@ public class CardCreationFragment extends Fragment
 		super.onPause();
 
 		BusProvider.getBus().unregister(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
@@ -31,14 +32,16 @@ import ru.ming13.gambit.provider.GambitContract;
 public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
+
 	private final Deck deck;
 
-	public static void execute(ContentResolver contentResolver, Deck deck) {
+	public static void execute(@NonNull ContentResolver contentResolver, @NonNull Deck deck) {
 		new DeckCreationTask(contentResolver, deck).execute();
 	}
 
 	private DeckCreationTask(ContentResolver contentResolver, Deck deck) {
 		this.contentResolver = contentResolver;
+
 		this.deck = deck;
 	}
 
@@ -69,13 +72,9 @@ public class DeckCreationTask extends AsyncTask<Void, Void, BusEvent>
 		ContentValues deckValues = new ContentValues();
 
 		deckValues.put(GambitContract.Decks.TITLE, deck.getTitle());
-		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, getDeckCurrentCardIndex());
+		deckValues.put(GambitContract.Decks.CURRENT_CARD_INDEX, GambitContract.Decks.Defaults.CURRENT_CARD_INDEX);
 
 		return deckValues;
-	}
-
-	private int getDeckCurrentCardIndex() {
-		return GambitContract.Decks.Defaults.CURRENT_CARD_INDEX;
 	}
 
 	private boolean isDeckCorrect(long deckId) {

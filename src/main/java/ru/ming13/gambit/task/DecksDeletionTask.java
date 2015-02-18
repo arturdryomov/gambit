@@ -22,6 +22,7 @@ import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +33,16 @@ import ru.ming13.gambit.provider.GambitContract;
 public class DecksDeletionTask extends AsyncTask<Void, Void, Void>
 {
 	private final ContentResolver contentResolver;
+
 	private final List<Deck> decks;
 
-	public static void execute(ContentResolver contentResolver, List<Deck> decks) {
+	public static void execute(@NonNull ContentResolver contentResolver, @NonNull List<Deck> decks) {
 		new DecksDeletionTask(contentResolver, decks).execute();
 	}
 
 	private DecksDeletionTask(ContentResolver contentResolver, List<Deck> decks) {
 		this.contentResolver = contentResolver;
+
 		this.decks = decks;
 	}
 
@@ -53,15 +56,13 @@ public class DecksDeletionTask extends AsyncTask<Void, Void, Void>
 	private void deleteDecks() {
 		try {
 			contentResolver.applyBatch(GambitContract.AUTHORITY, buildDecksDeletionOperations());
-		} catch (RemoteException e) {
-			throw new RuntimeException(e);
-		} catch (OperationApplicationException e) {
+		} catch (RemoteException | OperationApplicationException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private ArrayList<ContentProviderOperation> buildDecksDeletionOperations() {
-		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+		ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
 		for (Deck deck : decks) {
 			operations.add(ContentProviderOperation.newDelete(buildDeckUri(deck)).build());

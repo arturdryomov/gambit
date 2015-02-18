@@ -16,51 +16,63 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Menu;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
-import ru.ming13.gambit.fragment.CardsListFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
-public class CardsListActivity extends Activity
+public class CardsListActivity extends ActionBarActivity
 {
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
+
+	@InjectExtra(Intents.Extras.DECK)
+	Deck deck;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_container);
 
-		setUpTitle();
+		setUpInjections();
+
+		setUpToolbar();
+
 		setUpFragment();
 	}
 
-	private void setUpTitle() {
-		getActionBar().setSubtitle(getDeck().getTitle());
+	private void setUpInjections() {
+		ButterKnife.inject(this);
+
+		Dart.inject(this);
 	}
 
-	private Deck getDeck() {
-		return getIntent().getParcelableExtra(Intents.Extras.DECK);
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		getSupportActionBar().setSubtitle(deck.getTitle());
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(buildFragment(), android.R.id.content);
+		Fragments.Operator.at(this).set(R.id.container_fragment, getCardsListFragment());
 	}
 
-	private Fragment buildFragment() {
-		return CardsListFragment.newInstance(getDeck());
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.action_bar_cards_list, menu);
-
-		return super.onCreateOptionsMenu(menu);
+	private Fragment getCardsListFragment() {
+		return Fragments.Builder.buildCardsListFragment(deck);
 	}
 
 	@Override
@@ -70,10 +82,6 @@ public class CardsListActivity extends Activity
 				navigateUp();
 				return true;
 
-			case R.id.menu_create:
-				startCardCreationActivity();
-				return true;
-
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
@@ -81,10 +89,5 @@ public class CardsListActivity extends Activity
 
 	private void navigateUp() {
 		NavUtils.navigateUpFromSameTask(this);
-	}
-
-	private void startCardCreationActivity() {
-		Intent intent = Intents.Builder.with(this).buildCardCreationIntent(getDeck());
-		startActivity(intent);
 	}
 }

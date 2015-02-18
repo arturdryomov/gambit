@@ -17,56 +17,52 @@
 package ru.ming13.gambit.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import ru.ming13.gambit.R;
-import ru.ming13.gambit.provider.GambitContract;
+import com.venmo.cursor.IterableCursorAdapter;
 
-public class CardsListAdapter extends CursorAdapter
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import ru.ming13.gambit.R;
+import ru.ming13.gambit.model.Card;
+
+public class CardsListAdapter extends IterableCursorAdapter<Card>
 {
+	static final class CardViewHolder
+	{
+		@InjectView(R.id.text)
+		public TextView cardText;
+
+		public CardViewHolder(View cardView) {
+			ButterKnife.inject(this, cardView);
+		}
+	}
+
 	private final LayoutInflater layoutInflater;
 
-	public CardsListAdapter(Context context) {
+	public CardsListAdapter(@NonNull Context context) {
 		super(context, null, 0);
 
-		layoutInflater = LayoutInflater.from(context);
+		this.layoutInflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public View newView(Context context, Cursor cardsCursor, ViewGroup viewGroup) {
-		return buildCardView(viewGroup);
-	}
+	public View newView(Context context, Card card, ViewGroup cardViewContainer) {
+		View cardView = layoutInflater.inflate(R.layout.view_card_list, cardViewContainer, false);
 
-	private View buildCardView(ViewGroup viewGroup) {
-		return layoutInflater.inflate(R.layout.view_card_list, viewGroup, false);
+		cardView.setTag(new CardViewHolder(cardView));
+
+		return cardView;
 	}
 
 	@Override
-	public void bindView(View cardView, Context context, Cursor cardsCursor) {
-		setUpCardInformation(context, cardsCursor, cardView);
-	}
+	public void bindView(View cardView, Context context, Card card) {
+		CardViewHolder cardViewHolder = (CardViewHolder) cardView.getTag();
 
-	private void setUpCardInformation(Context context, Cursor cardsCursor, View cardView) {
-		TextView cardTextView = (TextView) cardView.findViewById(R.id.text);
-
-		String cardFrontSideText = getCardFrontSideText(cardsCursor);
-		String cardBackSideText = getCardBackSideText(cardsCursor);
-
-		cardTextView.setText(context.getString(R.string.mask_card_list_item, cardFrontSideText, cardBackSideText));
-	}
-
-	private String getCardFrontSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
-	}
-
-	private String getCardBackSideText(Cursor cardsCursor) {
-		return cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
+		cardViewHolder.cardText.setText(context.getString(R.string.mask_card_list_item, card.getFrontSideText(), card.getBackSideText()));
 	}
 }

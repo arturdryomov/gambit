@@ -21,34 +21,35 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Card;
+import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.task.CardEditingTask;
 import ru.ming13.gambit.util.Fragments;
 
 public class CardEditingFragment extends Fragment
 {
-	public static CardEditingFragment newInstance(Card card) {
-		CardEditingFragment fragment = new CardEditingFragment();
+	@InjectView(R.id.edit_front_side_text)
+	EditText frontSide;
 
-		fragment.setArguments(buildArguments(card));
+	@InjectView(R.id.edit_back_side_text)
+	EditText backSide;
 
-		return fragment;
-	}
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
-	private static Bundle buildArguments(Card card) {
-		Bundle arguments = new Bundle();
-
-		arguments.putParcelable(Fragments.Arguments.CARD, card);
-
-		return arguments;
-	}
+	@InjectExtra(Fragments.Arguments.CARD)
+	Card card;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
@@ -59,24 +60,20 @@ public class CardEditingFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpCard();
 	}
 
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
+	}
+
 	private void setUpCard() {
-		getCardFrontSideTextView().append(getCard().getFrontSideText());
-		getCardBackSideTextView().append(getCard().getBackSideText());
-	}
-
-	private TextView getCardFrontSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_front_side_text);
-	}
-
-	private Card getCard() {
-		return getArguments().getParcelable(Fragments.Arguments.CARD);
-	}
-
-	private TextView getCardBackSideTextView() {
-		return (TextView) getView().findViewById(R.id.edit_back_side_text);
+		frontSide.append(card.getFrontSideText());
+		backSide.append(card.getBackSideText());
 	}
 
 	@Subscribe
@@ -85,38 +82,42 @@ public class CardEditingFragment extends Fragment
 	}
 
 	private void saveCard() {
-		if (isCardCorrect()) {
-			assembleCard();
+		Card card = assembleCard();
+
+		if (isCardCorrect(card)) {
+			saveCard(card);
 		} else {
-			showErrorMessage();
+			showErrorMessage(card);
 		}
 	}
 
-	private boolean isCardCorrect() {
-		return !getCardFrontSideText().isEmpty() && !getCardBackSideText().isEmpty();
+	private Card assembleCard() {
+		return new Card(card.getId(), getCardFrontSideText(), getCardBackSideText());
 	}
 
 	private String getCardFrontSideText() {
-		return getCardFrontSideTextView().getText().toString().trim();
+		return frontSide.getText().toString().trim();
 	}
 
 	private String getCardBackSideText() {
-		return getCardBackSideTextView().getText().toString().trim();
+		return backSide.getText().toString().trim();
 	}
 
-	private void assembleCard() {
-		Card card = new Card(getCard().getId(), getCardFrontSideText(), getCardBackSideText());
-
-		BusProvider.getBus().post(new CardAssembledEvent(card));
+	private boolean isCardCorrect(Card card) {
+		return !card.getFrontSideText().isEmpty() && !card.getBackSideText().isEmpty();
 	}
 
-	private void showErrorMessage() {
-		if (getCardFrontSideText().isEmpty()) {
-			getCardFrontSideTextView().setError(getString(R.string.error_empty_field));
+	private void saveCard(Card card) {
+		CardEditingTask.execute(getActivity().getContentResolver(), deck, card);
+	}
+
+	private void showErrorMessage(Card card) {
+		if (card.getFrontSideText().isEmpty()) {
+			frontSide.setError(getString(R.string.error_empty_field));
 		}
 
-		if (getCardBackSideText().isEmpty()) {
-			getCardBackSideTextView().setError(getString(R.string.error_empty_field));
+		if (card.getBackSideText().isEmpty()) {
+			backSide.setError(getString(R.string.error_empty_field));
 		}
 	}
 
@@ -132,5 +133,16 @@ public class CardEditingFragment extends Fragment
 		super.onPause();
 
 		BusProvider.getBus().unregister(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

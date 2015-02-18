@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
@@ -36,19 +37,21 @@ public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 	}
 
 	private final ContentResolver contentResolver;
+
 	private final Deck deck;
 	private final SilentMode silentMode;
 
-	public static void execute(ContentResolver contentResolver, Deck deck) {
+	public static void execute(@NonNull ContentResolver contentResolver, @NonNull Deck deck) {
 		new DeckEditingTask(contentResolver, deck, SilentMode.DISABLED).execute();
 	}
 
-	public static void executeSilently(ContentResolver contentResolver, Deck deck) {
+	public static void executeSilently(@NonNull ContentResolver contentResolver, @NonNull Deck deck) {
 		new DeckEditingTask(contentResolver, deck, SilentMode.ENABLED).execute();
 	}
 
 	private DeckEditingTask(ContentResolver contentResolver, Deck deck, SilentMode silentMode) {
 		this.contentResolver = contentResolver;
+
 		this.deck = deck;
 		this.silentMode = silentMode;
 	}

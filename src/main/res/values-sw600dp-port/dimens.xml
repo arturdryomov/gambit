@@ -17,8 +17,6 @@
 
 <resources>
 
-	<dimen name="padding_list">24dp</dimen>
-
 	<integer name="count_cards_grid_columns">2</integer>
 
 </resources>

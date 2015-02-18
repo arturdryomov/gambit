@@ -18,10 +18,11 @@ package ru.ming13.gambit.backup;
 
 import android.app.Activity;
 import android.content.IntentSender;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.MetadataChangeSet;
 
 import ru.ming13.gambit.R;
@@ -34,7 +35,7 @@ public final class BackupFilePicker
 	private final Activity activity;
 	private final GoogleApiClient driveApiClient;
 
-	public static BackupFilePicker with(Activity activity, GoogleApiClient driveApiClient) {
+	public static BackupFilePicker with(@NonNull Activity activity, @NonNull GoogleApiClient driveApiClient) {
 		return new BackupFilePicker(activity, driveApiClient);
 	}
 
@@ -43,16 +44,17 @@ public final class BackupFilePicker
 		this.driveApiClient = driveApiClient;
 	}
 
-	public void startBackupFileCreation(Contents fileContents) {
+	public void startBackupFileCreation(@NonNull DriveContents fileContents) {
 		try {
 			IntentSender intentSender = buildBackupFileCreationIntentSender(fileContents);
+
 			activity.startIntentSenderForResult(intentSender, Intents.Requests.DRIVE_FILE_CREATE, null, 0, 0, 0);
 		} catch (IntentSender.SendIntentException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private IntentSender buildBackupFileCreationIntentSender(Contents fileContents) {
+	private IntentSender buildBackupFileCreationIntentSender(DriveContents fileContents) {
 		MetadataChangeSet fileMetadata = new MetadataChangeSet.Builder()
 			.setTitle(activity.getString(R.string.name_backup))
 			.setMimeType(BACKUP_MIME_TYPE)
@@ -60,13 +62,14 @@ public final class BackupFilePicker
 
 		return Drive.DriveApi.newCreateFileActivityBuilder()
 			.setInitialMetadata(fileMetadata)
-			.setInitialContents(fileContents)
+			.setInitialDriveContents(fileContents)
 			.build(driveApiClient);
 	}
 
 	public void startBackupFileOpening() {
 		try {
 			IntentSender intentSender = buildBackupFileOpeningIntentSender();
+
 			activity.startIntentSenderForResult(intentSender, Intents.Requests.DRIVE_FILE_OPEN, null, 0, 0, 0);
 		} catch (IntentSender.SendIntentException e) {
 			throw new RuntimeException(e);

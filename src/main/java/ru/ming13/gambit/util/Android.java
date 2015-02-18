@@ -18,26 +18,29 @@ package ru.ming13.gambit.util;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 
+import ru.ming13.gambit.BuildConfig;
 import ru.ming13.gambit.R;
 
 public final class Android
 {
-	private final Context context;
-
-	public static Android with(Context context) {
-		return new Android(context);
+	private Android() {
 	}
 
-	private Android(Context context) {
-		this.context = context;
+	public static boolean isDebugging() {
+		return BuildConfig.DEBUG;
 	}
 
-	public boolean isTablet() {
+	public static boolean isLandscape(@NonNull Context context) {
+		return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+	}
+
+	public static boolean isTablet(@NonNull Context context) {
 		return context.getResources().getBoolean(R.bool.tablet);
 	}
 
-	public boolean isLandscape() {
-		return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+	public static String getApplicationId() {
+		return BuildConfig.APPLICATION_ID;
 	}
 }

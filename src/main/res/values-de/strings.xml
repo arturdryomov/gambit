@@ -38,9 +38,6 @@
 	<string name="hint_deck_name">Stoß Name</string>
 
 	<string name="menu_backup">Sicherheitskopie</string>
-	<string name="menu_cancel">Abbrechen</string>
-	<string name="menu_create_card">Eine neue Flashkarte</string>
-	<string name="menu_create_deck">Ein neuer Stoß</string>
 	<string name="menu_delete">Löschen</string>
 	<string name="menu_edit">Bearbeiten</string>
 	<string name="menu_edit_cards">Flashkarte bearbeiten</string>

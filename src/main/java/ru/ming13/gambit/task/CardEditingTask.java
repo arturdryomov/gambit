@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import ru.ming13.gambit.bus.BusEvent;
 import ru.ming13.gambit.bus.BusProvider;
@@ -31,15 +32,17 @@ import ru.ming13.gambit.provider.GambitContract;
 public class CardEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
 	private final ContentResolver contentResolver;
+
 	private final Deck deck;
 	private final Card card;
 
-	public static void execute(ContentResolver contentResolver, Deck deck, Card card) {
+	public static void execute(@NonNull ContentResolver contentResolver, @NonNull Deck deck, @NonNull Card card) {
 		new CardEditingTask(contentResolver, deck, card).execute();
 	}
 
 	private CardEditingTask(ContentResolver contentResolver, Deck deck, Card card) {
 		this.contentResolver = contentResolver;
+
 		this.deck = deck;
 		this.card = card;
 	}

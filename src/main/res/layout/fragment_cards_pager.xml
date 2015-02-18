@@ -25,6 +25,7 @@
 
 	<RelativeLayout
 		android:id="@+id/layout_pager"
+		android:background="@color/background_frame"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
@@ -38,14 +39,13 @@
 			android:id="@+id/indicator_cards"
 			android:layout_alignParentBottom="true"
 			android:layout_width="match_parent"
-			android:layout_height="@dimen/height_indicator_cards"/>
+			android:layout_height="2dp"/>
 
 	</RelativeLayout>
 
 	<LinearLayout
 		android:id="@+id/layout_message"
 		android:orientation="vertical"
-		android:background="@color/background_cards_pager_message"
 		android:gravity="center"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
@@ -53,25 +53,28 @@
 		<TextView
 			android:id="@+id/text_title"
 			android:text="@string/empty_cards_title"
-			android:textSize="@dimen/text_message_title"
+			android:textSize="@dimen/text_head"
 			android:textStyle="bold"
 			android:gravity="center_horizontal"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
+
+		<Space
+			android:layout_width="match_parent"
+			android:layout_height="16dp"/>
 
 		<Button
 			android:id="@+id/button_create_cards"
 			android:text="@string/button_create_cards"
 			android:textAllCaps="true"
 			android:textColor="@android:color/white"
-			android:textSize="@dimen/text_small"
 			android:textStyle="bold"
 			android:background="@drawable/bg_button"
-			android:layout_marginTop="@dimen/margin_button"
-			android:paddingRight="@dimen/padding_button"
-			android:paddingLeft="@dimen/padding_button"
+			android:paddingRight="48dp"
+			android:paddingLeft="48dp"
+			android:layout_marginBottom="16dp"
 			android:layout_width="wrap_content"
-			android:layout_height="@dimen/height_button"/>
+			android:layout_height="36dp"/>
 
 	</LinearLayout>
 

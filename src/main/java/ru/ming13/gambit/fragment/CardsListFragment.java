@@ -24,7 +24,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.transition.TransitionManager;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -37,11 +36,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.CardsListAdapter;
+import ru.ming13.gambit.cursor.CardsCursor;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
@@ -49,24 +55,26 @@ import ru.ming13.gambit.task.CardsDeletionTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 import ru.ming13.gambit.util.Loaders;
+import ru.ming13.gambit.util.Transitions;
 
-public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, AdapterView.OnItemClickListener
+public class CardsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+	ListView.MultiChoiceModeListener,
+	AdapterView.OnItemClickListener
 {
-	public static CardsListFragment newInstance(Deck deck) {
-		CardsListFragment fragment = new CardsListFragment();
+	@InjectView(android.R.id.list)
+	AbsListView cardsList;
 
-		fragment.setArguments(buildArguments(deck));
+	@InjectView(R.id.layout_message)
+	ViewGroup messageLayout;
 
-		return fragment;
-	}
+	@InjectView(R.id.text_message_title)
+	TextView messageTitle;
 
-	private static Bundle buildArguments(Deck deck) {
-		Bundle arguments = new Bundle();
+	@InjectView(R.id.text_message_summary)
+	TextView messageSummary;
 
-		arguments.putParcelable(Fragments.Arguments.DECK, deck);
-
-		return arguments;
-	}
+	@InjectExtra(Fragments.Arguments.DECK)
+	Deck deck;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +85,15 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpCards();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
+
+		Dart.inject(this);
 	}
 
 	private void setUpCards() {
@@ -88,11 +104,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsAdapter() {
-		getCardsList().setAdapter(new CardsListAdapter(getActivity()));
-	}
-
-	private AbsListView getCardsList() {
-		return (AbsListView) getView().findViewById(android.R.id.list);
+		cardsList.setAdapter(new CardsListAdapter(getActivity()));
 	}
 
 	private void setUpCardsContent() {
@@ -107,30 +119,26 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private Uri getCardsUri() {
-		return GambitContract.Cards.getCardsUri(getDeck().getId());
-	}
-
-	private Deck getDeck() {
-		return getArguments().getParcelable(Fragments.Arguments.DECK);
+		return GambitContract.Cards.getCardsUri(deck.getId());
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> cardsLoader, Cursor cardsCursor) {
 		setUpCardsAnimations();
 
-		getCardsAdapter().swapCursor(cardsCursor);
+		getCardsAdapter().swapCursor(new CardsCursor(cardsCursor));
 
 		setUpCardsMessage();
 	}
 
 	private void setUpCardsAnimations() {
 		if (!getCardsAdapter().isEmpty()) {
-			TransitionManager.beginDelayedTransition(getCardsList());
+			Transitions.of(cardsList).start();
 		}
 	}
 
 	private CardsListAdapter getCardsAdapter() {
-		return (CardsListAdapter) getCardsList().getAdapter();
+		return (CardsListAdapter) cardsList.getAdapter();
 	}
 
 	private void setUpCardsMessage() {
@@ -142,17 +150,14 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void showCardsMessage() {
-		TextView messageTitleTextView = (TextView) getView().findViewById(R.id.text_message_title);
-		TextView messageSummaryTextView = (TextView) getView().findViewById(R.id.text_message_summary);
+		messageTitle.setText(R.string.empty_cards_title);
+		messageSummary.setText(R.string.empty_cards_subtitle);
 
-		messageTitleTextView.setText(R.string.empty_cards_title);
-		messageSummaryTextView.setText(R.string.empty_cards_subtitle);
-
-		getView().findViewById(R.id.layout_message).setVisibility(View.VISIBLE);
+		messageLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void hideCardsMessage() {
-		getView().findViewById(R.id.layout_message).setVisibility(View.GONE);
+		messageLayout.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -160,7 +165,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsActions() {
-		getCardsList().setMultiChoiceModeListener(this);
+		cardsList.setMultiChoiceModeListener(this);
 	}
 
 	@Override
@@ -196,11 +201,11 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void startCardsDeletion(List<Card> cards) {
-		CardsDeletionTask.execute(getActivity().getContentResolver(), getDeck(), cards);
+		CardsDeletionTask.execute(getActivity().getContentResolver(), deck, cards);
 	}
 
 	private List<Card> getCheckedCards() {
-		List<Card> cards = new ArrayList<Card>();
+		List<Card> cards = new ArrayList<>();
 
 		SparseBooleanArray checkedCardsPositions = getCheckedCardsPositions();
 
@@ -214,24 +219,11 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private SparseBooleanArray getCheckedCardsPositions() {
-		return getCardsList().getCheckedItemPositions();
+		return cardsList.getCheckedItemPositions();
 	}
 
 	private Card getCard(int cardPosition) {
-		Cursor cardsCursor = getCardsCursor(cardPosition);
-
-		long cardId = cardsCursor.getLong(
-			cardsCursor.getColumnIndex(GambitContract.Cards._ID));
-		String cardFrontSideText = cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.FRONT_SIDE_TEXT));
-		String cardBackSideText = cardsCursor.getString(
-			cardsCursor.getColumnIndex(GambitContract.Cards.BACK_SIDE_TEXT));
-
-		return new Card(cardId, cardFrontSideText, cardBackSideText);
-	}
-
-	private Cursor getCardsCursor(int cardPosition) {
-		return (Cursor) getCardsAdapter().getItem(cardPosition);
+		return getCardsAdapter().getItem(cardPosition);
 	}
 
 	@Override
@@ -239,7 +231,7 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void setUpCardsListener() {
-		getCardsList().setOnItemClickListener(this);
+		cardsList.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -248,7 +240,24 @@ public class CardsListFragment extends Fragment implements LoaderManager.LoaderC
 	}
 
 	private void startCardEditingActivity(Card card) {
-		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(getDeck(), card);
+		Intent intent = Intents.Builder.with(getActivity()).buildCardEditingIntent(deck, card);
 		startActivity(intent);
+	}
+
+	@OnClick(R.id.button_action)
+	public void startCardCreation() {
+		Intent intent = Intents.Builder.with(getActivity()).buildCardCreationIntent(deck);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

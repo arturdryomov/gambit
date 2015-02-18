@@ -17,17 +17,20 @@
 
 <resources>
 
-	<color name="background_action_bar">#0099cc</color>
-	<color name="background_button">#0099cc</color>
+	<color name="background_primary">#0099cc</color>
+	<color name="background_primary_dark">#0086b3</color>
+	<color name="background_accent">@color/background_primary</color>
+
+	<color name="background_active">#33000000</color>
+	<color name="background_divider">#1e000000</color>
+	<color name="background_frame">#eeeeee</color>
+	<color name="background_switch">#ffd180</color>
+	<color name="background_window">#f9f9f9</color>
+
+	<color name="background_button_normal">@color/background_primary</color>
 	<color name="background_button_focused">#4d000000</color>
 	<color name="background_button_pressed">#1a000000</color>
-	<color name="background_cards_list">#e8e8e8</color>
-	<color name="background_cards_pager">#e8e8e8</color>
-	<color name="background_cards_pager_message">@android:color/transparent</color>
-	<color name="background_operation">#e8e8e8</color>
 
-	<color name="mask_shuffle_enabled">#d6a042</color>
-
-	<color name="text_application_name">#dfffffff</color>
+	<color name="text_primary">#dd000000</color>
 
 </resources>

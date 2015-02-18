@@ -40,9 +40,6 @@
 	<string name="hint_deck_name">Deck name</string>
 
 	<string name="menu_backup">Backup</string>
-	<string name="menu_cancel">Cancel</string>
-	<string name="menu_create_card">Create flashcard</string>
-	<string name="menu_create_deck">Create deck</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_edit">Edit</string>
 	<string name="menu_edit_cards">Edit flashcards</string>

@@ -20,6 +20,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import ru.ming13.gambit.util.Fragments;
@@ -28,33 +30,20 @@ public class GoogleServicesErrorDialog extends DialogFragment
 {
 	public static final String TAG = "google_services_error_dialog";
 
-	public static GoogleServicesErrorDialog newInstance(int errorCode, int requestCode) {
-		GoogleServicesErrorDialog dialog = new GoogleServicesErrorDialog();
+	@InjectExtra(Fragments.Arguments.ERROR_CODE)
+	int errorCode;
 
-		dialog.setArguments(buildArguments(errorCode, requestCode));
-
-		return dialog;
-	}
-
-	private static Bundle buildArguments(int errorCode, int requestCode) {
-		Bundle arguments = new Bundle();
-
-		arguments.putInt(Fragments.Arguments.ERROR_CODE, errorCode);
-		arguments.putInt(Fragments.Arguments.REQUEST_CODE, requestCode);
-
-		return arguments;
-	}
+	@InjectExtra(Fragments.Arguments.REQUEST_CODE)
+	int requestCode;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return GooglePlayServicesUtil.getErrorDialog(getErrorCode(), getActivity(), getRequestCode());
+		setUpInjections();
+
+		return GooglePlayServicesUtil.getErrorDialog(errorCode, getActivity(), requestCode);
 	}
 
-	private int getErrorCode() {
-		return getArguments().getInt(Fragments.Arguments.ERROR_CODE);
-	}
-
-	private int getRequestCode() {
-		return getArguments().getInt(Fragments.Arguments.REQUEST_CODE);
+	private void setUpInjections() {
+		Dart.inject(this);
 	}
 }

@@ -21,26 +21,38 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckAssembledEvent;
 import ru.ming13.gambit.bus.DeckNotSavedEvent;
 import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Deck;
+import ru.ming13.gambit.task.DeckCreationTask;
 
 public class DeckCreationFragment extends Fragment
 {
-	public static DeckCreationFragment newInstance() {
-		return new DeckCreationFragment();
-	}
+	@InjectView(R.id.edit_deck_title)
+	EditText deckTitle;
 
 	@Override
 	public View onCreateView(LayoutInflater layoutInflater, ViewGroup fragmentContainer, Bundle savedInstanceState) {
 		return layoutInflater.inflate(R.layout.fragment_deck_operation, fragmentContainer, false);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		setUpInjections();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	@Subscribe
@@ -49,42 +61,42 @@ public class DeckCreationFragment extends Fragment
 	}
 
 	private void saveDeck() {
-		if (isDeckCorrect()) {
-			assembleDeck();
+		Deck deck = assembleDeck();
+
+		if (isDeckCorrect(deck)) {
+			saveDeck(deck);
 		} else {
-			showErrorMessage();
+			showErrorMessage(deck);
 		}
 	}
 
-	private boolean isDeckCorrect() {
-		return !getDeckTitle().isEmpty();
+	private Deck assembleDeck() {
+		return new Deck(getDeckTitle());
 	}
 
 	private String getDeckTitle() {
-		return getDeckTitleView().getText().toString().trim();
+		return deckTitle.getText().toString().trim();
 	}
 
-	private TextView getDeckTitleView() {
-		return (TextView) getView().findViewById(R.id.edit_deck_title);
+	private boolean isDeckCorrect(Deck deck) {
+		return !deck.getTitle().isEmpty();
 	}
 
-	private void assembleDeck() {
-		Deck deck = new Deck(getDeckTitle());
-
-		BusProvider.getBus().post(new DeckAssembledEvent(deck));
+	private void saveDeck(Deck deck) {
+		DeckCreationTask.execute(getActivity().getContentResolver(), deck);
 	}
 
-	private void showErrorMessage() {
-		if (getDeckTitle().isEmpty()) {
-			getDeckTitleView().setError(getString(R.string.error_empty_field));
+	private void showErrorMessage(Deck deck) {
+		if (deck.getTitle().isEmpty()) {
+			deckTitle.setError(getString(R.string.error_empty_field));
 		} else {
-			getDeckTitleView().setError(getString(R.string.error_deck_already_exists));
+			deckTitle.setError(getString(R.string.error_deck_already_exists));
 		}
 	}
 
 	@Subscribe
 	public void onDeckNotSaved(DeckNotSavedEvent event) {
-		showErrorMessage();
+		showErrorMessage(assembleDeck());
 	}
 
 	@Override
@@ -99,5 +111,16 @@ public class DeckCreationFragment extends Fragment
 		super.onPause();
 
 		BusProvider.getBus().unregister(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

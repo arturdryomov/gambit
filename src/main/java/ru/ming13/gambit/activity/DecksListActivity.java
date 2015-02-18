@@ -16,57 +16,68 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.DeckDeletedEvent;
 import ru.ming13.gambit.bus.DeckSelectedEvent;
-import ru.ming13.gambit.fragment.CardsPagerFragment;
-import ru.ming13.gambit.fragment.MessageFragment;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
 
-public class DecksListActivity extends Activity
+public class DecksListActivity extends ActionBarActivity
 {
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_decks);
 
-		setUpCardsPagerMessageFragment();
-		tearDownCardsPagerFragment();
+		setUpInjections();
+
+		setUpToolbar();
+
+		setUpFragments();
 	}
 
-	private void setUpCardsPagerMessageFragment() {
-		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
-			Fragments.Operator.at(this).reset(buildCardsPagerMessageFragment(), R.id.container_cards_pager);
+	private void setUpInjections() {
+		ButterKnife.inject(this);
+	}
+
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
+	}
+
+	private void setUpFragments() {
+		if (Android.isTablet(this) && Android.isLandscape(this)) {
+			Fragments.Operator.at(this).set(R.id.container_decks, getDecksListFragment());
+
+			Fragments.Operator.at(this).set(R.id.container_cards, getMessageFragment());
+		} else {
+			Fragments.Operator.at(this).set(R.id.container_fragment, getDecksListFragment());
 		}
 	}
 
-	private Fragment buildCardsPagerMessageFragment() {
-		return MessageFragment.newInstance(getString(R.string.empty_deck_selection));
+	private Fragment getDecksListFragment() {
+		return Fragments.Builder.buildDecksListFragment();
 	}
 
-	private void tearDownCardsPagerFragment() {
-		if (!Android.with(this).isLandscape()) {
-			Fragments.Operator.at(this).remove(R.id.container_cards_pager);
-		}
-	}
-
-	@Subscribe
-	public void onDeckDeleted(DeckDeletedEvent event) {
-		setUpCardsPagerMessageFragment();
+	private Fragment getMessageFragment() {
+		return Fragments.Builder.buildMessageFragment(getString(R.string.empty_deck_selection));
 	}
 
 	@Subscribe
@@ -75,7 +86,7 @@ public class DecksListActivity extends Activity
 	}
 
 	private void setUpCardsPager(Deck deck) {
-		if (Android.with(this).isTablet() && Android.with(this).isLandscape()) {
+		if (Android.isTablet(this) && Android.isLandscape(this)) {
 			setUpCardsPagerFragment(deck);
 		} else {
 			startCardsPagerActivity(deck);
@@ -83,11 +94,11 @@ public class DecksListActivity extends Activity
 	}
 
 	private void setUpCardsPagerFragment(Deck deck) {
-		Fragments.Operator.at(this).reset(buildCardsPagerFragment(deck), R.id.container_cards_pager);
+		Fragments.Operator.at(this).reset(R.id.container_cards, getCardsPagerFragment(deck));
 	}
 
-	private Fragment buildCardsPagerFragment(Deck deck) {
-		return CardsPagerFragment.newInstance(deck);
+	private Fragment getCardsPagerFragment(Deck deck) {
+		return Fragments.Builder.buildCardsPagerFragment(deck);
 	}
 
 	private void startCardsPagerActivity(Deck deck) {
@@ -105,10 +116,6 @@ public class DecksListActivity extends Activity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case R.id.menu_create:
-				startDeckCreationActivity();
-				return true;
-
 			case R.id.menu_backup:
 				startBackupActivity();
 				return true;
@@ -124,11 +131,6 @@ public class DecksListActivity extends Activity
 			default:
 				return super.onOptionsItemSelected(menuItem);
 		}
-	}
-
-	private void startDeckCreationActivity() {
-		Intent intent = Intents.Builder.with(this).buildDeckCreationIntent();
-		startActivity(intent);
 	}
 
 	private void startBackupActivity() {

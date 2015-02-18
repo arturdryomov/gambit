@@ -1,50 +1,58 @@
 # Gambit
 
-This repository contains the source code for the Gambit Android app [available on Google Play][Google Play link]. Gambit is a really simple flashcards viewer and manager for Android.
+This repository contains the source code for the Gambit Android app
+[available on Google Play][Google Play link].
+Gambit is a really simple flashcards viewer and manager for Android.
 
 [![Screenshot][Screenshot image]][Google Play link]
 
 ## License
 
-* [Apache Version 2.0][Apache license link]
+* [Apache Version 2.0][Apache link]
 
 ## Building
 
-You will need JDK 1.6, Android SDK 22 and Gradle 1.10 installed.
+[![Travis Status][Travis image]][Travis link]
 
-1. Install required Android components.
+You will need JDK 1.7+ installed.
+Gradle, Android SDK and all dependencies will be downloaded automatically.
 
-  ```
-  $ android update sdk --no-ui --force --all --filter build-tools-19.0.1
-  $ android update sdk --no-ui --force --all --filter android-19
-  $ android update sdk --no-ui --force --all --filter extra-android-m2repository
-  $ android update sdk --no-ui --force --all --filter extra-google-m2repository
-  ```
-
-2. Build application.
-
-  ```
-  $ gradle clean assembleDebug
-  ```
+```
+$ ./gradlew clean assembleDebug
+```
 
 ## Acknowledgements
 
 Gambit uses some open source libraries.
 
+* [Bundler][Bundler link]
+* [Butter Knife][Butter Knife link]
 * [Commons IO][Commons IO link]
+* [Cursor Utils][Cursor Utils link]
+* [Dart][Dart link]
+* [Floating Action Button][Floating Action Button link]
+* [Material EditText][Material EditText link]
 * [Otto][Otto link]
 * [Seismic][Seismic link]
-* [TransitionsBackport][TransitionsBackport link]
-* [ViewPagerIndicator][ViewPagerIndicator link]
+* [Transitions Backport][Transitions Backport link]
+* [ViewPager Indicator][ViewPager Indicator link]
 
 
-  [Google Play badge image]: http://www.android.com/images/brand/get_it_on_play_logo_large.png
-  [Screenshot image]: https://f.cloud.github.com/assets/200401/2264233/a10084aa-9e6f-11e3-90f7-f4bd5dcceb14.png
-
+  [Apache link]: http://www.apache.org/licenses/LICENSE-2.0.html
   [Google Play link]: https://play.google.com/store/apps/details?id=ru.ming13.gambit
-  [Apache license link]: http://www.apache.org/licenses/LICENSE-2.0.html
+  [Travis link]: https://travis-ci.org/ming13/to-the-moon
+
+  [Bundler link]: https://github.com/f2prateek/bundler
+  [Butter Knife link]: https://github.com/JakeWharton/butterknife
   [Commons IO link]: http://commons.apache.org/proper/commons-io
+  [Cursor Utils link]: https://github.com/venmo/cursor-utils
+  [Dart link]: https://github.com/f2prateek/dart
+  [Floating Action Button link]: https://github.com/makovkastar/FloatingActionButton
+  [Material EditText link]: https://github.com/rengwuxian/MaterialEditText
   [Otto link]: http://square.github.com/otto
   [Seismic link]: https://github.com/square/seismic
-  [TransitionsBackport link]: https://github.com/guerwan/TransitionsBackport
-  [ViewPagerIndicator link]: http://viewpagerindicator.com
+  [Transitions Backport link]: https://github.com/guerwan/TransitionsBackport
+  [ViewPager Indicator link]: https://github.com/JakeWharton/ViewPagerIndicator
+
+  [Screenshot image]: https://cloud.githubusercontent.com/assets/200401/6249966/cfe27878-b79b-11e4-8ddc-93c927d65a8c.png
+  [Travis image]: https://travis-ci.org/ming13/gambit.svg?branch=master

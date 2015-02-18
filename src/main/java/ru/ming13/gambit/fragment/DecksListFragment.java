@@ -24,7 +24,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.transition.TransitionManager;
+import android.support.annotation.NonNull;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -39,35 +39,53 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.adapter.DecksListAdapter;
 import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.bus.DeckDeletedEvent;
 import ru.ming13.gambit.bus.DeckSelectedEvent;
+import ru.ming13.gambit.cursor.DecksCursor;
 import ru.ming13.gambit.model.Deck;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.DecksDeletionTask;
 import ru.ming13.gambit.util.Android;
 import ru.ming13.gambit.util.Intents;
-import ru.ming13.gambit.util.ListUtil;
+import ru.ming13.gambit.util.ListSwitcher;
 import ru.ming13.gambit.util.Loaders;
+import ru.ming13.gambit.util.Transitions;
 
-public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ListView.MultiChoiceModeListener, ListView.OnItemLongClickListener
+public class DecksListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+	ListView.MultiChoiceModeListener,
+	ListView.OnItemLongClickListener
 {
-	public static DecksListFragment newInstance() {
-		return new DecksListFragment();
-	}
+	@InjectView(R.id.layout_message)
+	ViewGroup messageLayout;
+
+	@InjectView(R.id.text_message_title)
+	TextView messageTitle;
+
+	@InjectView(R.id.text_message_summary)
+	TextView messageSummary;
 
 	@Override
-	public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
-		return layoutInflater.inflate(R.layout.fragment_list, container, false);
+	public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+		return layoutInflater.inflate(R.layout.fragment_decks_list, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		setUpInjections();
+
 		setUpDecks();
+	}
+
+	private void setUpInjections() {
+		ButterKnife.inject(this, getView());
 	}
 
 	private void setUpDecks() {
@@ -81,12 +99,12 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 		if (isTabletLayout()) {
 			getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		} else {
-			ListUtil.at(getListView()).switchChoiceModeToMultipleModal();
+			ListSwitcher.at(getListView()).switchChoiceModeToMultipleModal();
 		}
 	}
 
 	private boolean isTabletLayout() {
-		return Android.with(getActivity()).isTablet() && Android.with(getActivity()).isLandscape();
+		return Android.isTablet(getActivity()) && Android.isLandscape(getActivity());
 	}
 
 	private void setUpDecksAdapter() {
@@ -112,14 +130,14 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	public void onLoadFinished(Loader<Cursor> decksLoader, Cursor decksCursor) {
 		setUpDecksAnimations();
 
-		getDecksAdapter().swapCursor(decksCursor);
+		getDecksAdapter().swapCursor(new DecksCursor(decksCursor));
 
 		setUpDecksMessage();
 	}
 
 	private void setUpDecksAnimations() {
 		if (!getDecksAdapter().isEmpty()) {
-			TransitionManager.beginDelayedTransition(getListView());
+			Transitions.of(getListView()).start();
 		}
 	}
 
@@ -136,22 +154,18 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private void showDecksMessage() {
-		TextView messageTitleTextView = (TextView) getView().findViewById(R.id.text_message_title);
-		TextView messageSummaryTextView = (TextView) getView().findViewById(R.id.text_message_summary);
+		messageTitle.setText(R.string.empty_decks_title);
+		messageSummary.setText(R.string.empty_decks_subtitle);
 
-		messageTitleTextView.setText(R.string.empty_decks_title);
-		messageSummaryTextView.setText(R.string.empty_decks_subtitle);
-
-		getView().findViewById(R.id.layout_message).setVisibility(View.VISIBLE);
+		messageLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void hideDecksMessage() {
-		getView().findViewById(R.id.layout_message).setVisibility(View.GONE);
+		messageLayout.setVisibility(View.GONE);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> decksLoader) {
-		getDecksAdapter().swapCursor(null);
 	}
 
 	private void setUpDecksActions() {
@@ -237,7 +251,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private List<Deck> getCheckedDecks() {
-		List<Deck> decks = new ArrayList<Deck>();
+		List<Deck> decks = new ArrayList<>();
 
 		SparseBooleanArray checkedDecksPositions = getCheckedDecksPositions();
 
@@ -255,20 +269,7 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	}
 
 	private Deck getDeck(int deckPosition) {
-		Cursor decksCursor = getDecksCursor(deckPosition);
-
-		long deckId = decksCursor.getLong(
-			decksCursor.getColumnIndex(GambitContract.Decks._ID));
-		String deckTitle = decksCursor.getString(
-			decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
-		int currentCardPosition = decksCursor.getInt(
-			decksCursor.getColumnIndex(GambitContract.Decks.CURRENT_CARD_INDEX));
-
-		return new Deck(deckId, deckTitle, currentCardPosition);
-	}
-
-	private Cursor getDecksCursor(int deckPosition) {
-		return (Cursor) getDecksAdapter().getItem(deckPosition);
+		return getDecksAdapter().getItem(deckPosition);
 	}
 
 	private void startCardsListActivity(Deck deck) {
@@ -291,5 +292,22 @@ public class DecksListFragment extends ListFragment implements LoaderManager.Loa
 	@Override
 	public void onListItemClick(ListView decksListView, View deckView, int deckPosition, long deckId) {
 		BusProvider.getBus().post(new DeckSelectedEvent(getDeck(deckPosition)));
+	}
+
+	@OnClick(R.id.button_action)
+	public void startDeckCreation() {
+		Intent intent = Intents.Builder.with(getActivity()).buildDeckCreationIntent();
+		startActivity(intent);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+
+		tearDownInjections();
+	}
+
+	private void tearDownInjections() {
+		ButterKnife.reset(this);
 	}
 }

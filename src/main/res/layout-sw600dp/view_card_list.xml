@@ -15,19 +15,24 @@
   ~ limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:foreground="?android:attr/activatedBackgroundIndicator"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:auto="http://schemas.android.com/apk/res-auto"
+	auto:cardBackgroundColor="@android:color/white"
+	auto:cardCornerRadius="4dp"
+	auto:cardElevation="4dp"
+	android:foreground="@drawable/bg_list_item"
+	android:layout_gravity="center"
+	android:layout_margin="4dp"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
 	<TextView
 		android:id="@+id/text"
-		android:textSize="@dimen/text_list_item"
+		android:textSize="@dimen/text_primary"
 		android:singleLine="true"
-		android:background="@drawable/bg_card"
 		android:gravity="center_vertical"
-		android:padding="@dimen/padding_list_item"
+		android:padding="8dp"
 		android:layout_width="match_parent"
 		android:layout_height="?android:attr/listPreferredItemHeight"/>
 
-</FrameLayout>
+</android.support.v7.widget.CardView>

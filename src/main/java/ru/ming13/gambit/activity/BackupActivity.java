@@ -16,24 +16,26 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ViewAnimator;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.backup.BackupFilePicker;
 import ru.ming13.gambit.backup.BackupOperator;
@@ -42,18 +44,21 @@ import ru.ming13.gambit.bus.BusProvider;
 import ru.ming13.gambit.provider.GambitContract;
 import ru.ming13.gambit.task.BackupExportingTask;
 import ru.ming13.gambit.task.BackupImportingTask;
-import ru.ming13.gambit.util.GoogleServicesUtil;
+import ru.ming13.gambit.util.GoogleServices;
 import ru.ming13.gambit.util.Intents;
+import ru.ming13.gambit.util.ViewDirector;
 
-public class BackupActivity extends Activity implements View.OnClickListener,
+public class BackupActivity extends ActionBarActivity implements ResultCallback<DriveApi.DriveContentsResult>,
 	GoogleApiClient.ConnectionCallbacks,
-	GoogleApiClient.OnConnectionFailedListener,
-	ResultCallback<DriveApi.ContentsResult>
+	GoogleApiClient.OnConnectionFailedListener
 {
 	private static enum BackupAction
 	{
 		EXPORT, IMPORT, NONE
 	}
+
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
 
 	private GoogleApiClient googleApiClient;
 	private BackupAction backupAction;
@@ -63,28 +68,29 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_backup);
 
-		setUpBackupActionsListener();
+		setUpInjections();
+
+		setUpToolbar();
 	}
 
-	private void setUpBackupActionsListener() {
-		findViewById(R.id.button_export).setOnClickListener(this);
-		findViewById(R.id.button_import).setOnClickListener(this);
+	private void setUpInjections() {
+		ButterKnife.inject(this);
 	}
 
-	@Override
-	public void onClick(View button) {
-		switch (button.getId()) {
-			case R.id.button_export:
-				startBackupAction(BackupAction.EXPORT);
-				break;
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
 
-			case R.id.button_import:
-				startBackupAction(BackupAction.IMPORT);
-				break;
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	}
 
-			default:
-				break;
-		}
+	@OnClick(R.id.button_export)
+	public void setUpBackupExport() {
+		startBackupAction(BackupAction.EXPORT);
+	}
+
+	@OnClick(R.id.button_import)
+	public void setUpBackupImport() {
+		startBackupAction(BackupAction.IMPORT);
 	}
 
 	private void startBackupAction(BackupAction backupAction) {
@@ -119,6 +125,8 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	private void startBackupAction() {
 		showProgress();
 
+		startFilesSync();
+
 		switch (backupAction) {
 			case EXPORT:
 				startBackupFileCreation();
@@ -134,20 +142,23 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	}
 
 	private void showProgress() {
-		ViewAnimator animator = (ViewAnimator) findViewById(R.id.animator);
-		animator.setDisplayedChild(animator.indexOfChild(findViewById(R.id.progress)));
+		ViewDirector.of(this, R.id.animator).show(R.id.progress);
+	}
+
+	private void startFilesSync() {
+		Drive.DriveApi.requestSync(googleApiClient).setResultCallback(null);
 	}
 
 	private void startBackupFileCreation() {
-		Drive.DriveApi.newContents(googleApiClient).setResultCallback(this);
+		Drive.DriveApi.newDriveContents(googleApiClient).setResultCallback(this);
 	}
 
 	@Override
-	public void onResult(DriveApi.ContentsResult contentsResult) {
-		continueBackupFileCreation(contentsResult.getContents());
+	public void onResult(DriveApi.DriveContentsResult contentsResult) {
+		continueBackupFileCreation(contentsResult.getDriveContents());
 	}
 
-	private void continueBackupFileCreation(Contents backupFileContents) {
+	private void continueBackupFileCreation(DriveContents backupFileContents) {
 		BackupFilePicker.with(this, googleApiClient).startBackupFileCreation(backupFileContents);
 	}
 
@@ -190,8 +201,7 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 	}
 
 	private void hideProgress() {
-		ViewAnimator animator = (ViewAnimator) findViewById(R.id.animator);
-		animator.setDisplayedChild(animator.indexOfChild(findViewById(R.id.layout_buttons)));
+		ViewDirector.of(this, R.id.animator).show(R.id.layout_buttons);
 	}
 
 	private void showUpdatedContents() {
@@ -227,7 +237,7 @@ public class BackupActivity extends Activity implements View.OnClickListener,
 
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
-		GoogleServicesUtil.with(this).resolve(connectionResult);
+		GoogleServices.with(this).resolve(connectionResult);
 	}
 
 	@Override

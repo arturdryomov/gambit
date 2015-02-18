@@ -16,68 +16,101 @@
 
 package ru.ming13.gambit.activity;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.f2prateek.dart.Dart;
+import com.f2prateek.dart.InjectExtra;
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.bus.BusProvider;
-import ru.ming13.gambit.bus.CardAssembledEvent;
 import ru.ming13.gambit.bus.CardSavedEvent;
 import ru.ming13.gambit.bus.OperationCancelledEvent;
-import ru.ming13.gambit.fragment.CardEditingFragment;
+import ru.ming13.gambit.bus.OperationSavedEvent;
 import ru.ming13.gambit.model.Card;
 import ru.ming13.gambit.model.Deck;
-import ru.ming13.gambit.task.CardEditingTask;
 import ru.ming13.gambit.util.Fragments;
 import ru.ming13.gambit.util.Intents;
-import ru.ming13.gambit.util.OperationBar;
 
-public class CardEditingActivity extends Activity
+public class CardEditingActivity extends ActionBarActivity
 {
+	@InjectView(R.id.toolbar)
+	Toolbar toolbar;
+
+	@InjectExtra(Intents.Extras.DECK)
+	Deck deck;
+
+	@InjectExtra(Intents.Extras.CARD)
+	Card card;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_operation);
 
-		setUpBar();
+		setUpInjections();
+
+		setUpToolbar();
+
 		setUpFragment();
 	}
 
-	private void setUpBar() {
-		OperationBar.at(this).show();
+	private void setUpInjections() {
+		ButterKnife.inject(this);
+
+		Dart.inject(this);
+	}
+
+	private void setUpToolbar() {
+		setSupportActionBar(toolbar);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+		getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_cancel);
 	}
 
 	private void setUpFragment() {
-		Fragments.Operator.at(this).set(buildFragment(), R.id.container_operation);
+		Fragments.Operator.at(this).set(R.id.container_fragment, getCardEditingFragment());
 	}
 
-	private Fragment buildFragment() {
-		return CardEditingFragment.newInstance(getCard());
+	private Fragment getCardEditingFragment() {
+		return Fragments.Builder.buildCardEditingFragment(deck, card);
 	}
 
-	private Card getCard() {
-		return getIntent().getParcelableExtra(Intents.Extras.CARD);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.action_bar_operation, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				BusProvider.getBus().post(new OperationCancelledEvent());
+				return true;
+
+			case R.id.menu_save:
+				BusProvider.getBus().post(new OperationSavedEvent());
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(menuItem);
+		}
 	}
 
 	@Subscribe
 	public void onOperationCancelled(OperationCancelledEvent event) {
 		finish();
-	}
-
-	@Subscribe
-	public void onCardAssembled(CardAssembledEvent event) {
-		saveCard(event.getCard());
-	}
-
-	private void saveCard(Card card) {
-		CardEditingTask.execute(getContentResolver(), getDeck(), card);
-	}
-
-	private Deck getDeck() {
-		return getIntent().getParcelableExtra(Intents.Extras.DECK);
 	}
 
 	@Subscribe

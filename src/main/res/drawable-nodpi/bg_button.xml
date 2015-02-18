@@ -26,6 +26,6 @@
 		android:state_focused="true"/>
 
 	<item
-		android:drawable="@color/background_button"/>
+		android:drawable="@color/background_button_normal"/>
 
 </selector>

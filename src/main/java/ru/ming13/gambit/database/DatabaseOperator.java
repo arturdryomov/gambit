@@ -18,6 +18,7 @@ package ru.ming13.gambit.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import org.apache.commons.io.FileUtils;
 
@@ -35,7 +36,7 @@ public class DatabaseOperator
 
 	private final Context context;
 
-	public static DatabaseOperator with(Context context) {
+	public static DatabaseOperator of(@NonNull Context context) {
 		return new DatabaseOperator(context);
 	}
 
@@ -43,20 +44,20 @@ public class DatabaseOperator
 		this.context = context.getApplicationContext();
 	}
 
-	public void writeDatabaseContents(OutputStream databaseContentsStream) {
+	public void writeDatabaseContents(@NonNull OutputStream databaseContentsStream) {
 		try {
-			FileUtils.copyFile(buildDatabaseFile(), databaseContentsStream);
+			FileUtils.copyFile(getDatabaseFile(), databaseContentsStream);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private File buildDatabaseFile() {
+	private File getDatabaseFile() {
 		return context.getDatabasePath(DatabaseSchema.DATABASE_NAME).getAbsoluteFile();
 	}
 
-	public void readDatabaseContents(InputStream databaseContentsStream) {
-		File sourceDatabaseFile = buildDatabaseFile(databaseContentsStream);
+	public void readDatabaseContents(@NonNull InputStream databaseContentsStream) {
+		File sourceDatabaseFile = getDatabaseFile(databaseContentsStream);
 
 		SQLiteDatabase sourceDatabase = new DatabaseOpenHelper(context, sourceDatabaseFile.getAbsolutePath()).getReadableDatabase();
 		SQLiteDatabase destinationDatabase = new DatabaseOpenHelper(context).getWritableDatabase();
@@ -70,10 +71,12 @@ public class DatabaseOperator
 		sourceDatabaseFile.delete();
 	}
 
-	private File buildDatabaseFile(InputStream databaseContentsStream) {
+	private File getDatabaseFile(InputStream databaseContentsStream) {
 		try {
 			File databaseFile = File.createTempFile(DATABASE_PREFIX, null, context.getCacheDir());
+
 			FileUtils.copyInputStreamToFile(databaseContentsStream, databaseFile);
+
 			return databaseFile;
 		} catch (IOException e) {
 			throw new RuntimeException(e);

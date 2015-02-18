@@ -17,18 +17,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="ru.ming13.gambit"
-	android:versionCode="111"
-	android:versionName="1.1.1"
 	android:installLocation="auto">
 
-	<uses-sdk
-		android:minSdkVersion="14"
-		android:targetSdkVersion="19"/>
-
 	<application
-		android:icon="@drawable/ic_launcher"
+		android:icon="@mipmap/ic_launcher"
 		android:label="@string/application_name"
-		android:logo="@drawable/ic_logo"
+		android:name=".GambitApplication"
 		android:theme="@style/Theme.Gambit">
 
 		<meta-data
@@ -36,8 +30,7 @@
 			android:value="@integer/google_play_services_version"/>
 
 		<activity
-			android:name=".activity.DecksListActivity"
-			android:theme="@style/Theme.Gambit.DecksList">
+			android:name=".activity.DecksListActivity">
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -47,19 +40,16 @@
 		</activity>
 
 		<activity
-			android:name=".activity.DeckCreationActivity"
-			android:theme="@style/Theme.Gambit.Operation">
+			android:name=".activity.DeckCreationActivity">
 		</activity>
 
 		<activity
-			android:name=".activity.DeckEditingActivity"
-			android:theme="@style/Theme.Gambit.Operation">
+			android:name=".activity.DeckEditingActivity">
 		</activity>
 
 		<activity
 			android:label="@string/title_cards"
-			android:name=".activity.CardsListActivity"
-			android:theme="@style/Theme.Gambit.CardsList">
+			android:name=".activity.CardsListActivity">
 
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
@@ -68,8 +58,7 @@
 		</activity>
 
 		<activity
-			android:name=".activity.CardsPagerActivity"
-			android:theme="@style/Theme.Gambit.CardsPager">
+			android:name=".activity.CardsPagerActivity">
 
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
@@ -78,13 +67,11 @@
 		</activity>
 
 		<activity
-			android:name=".activity.CardCreationActivity"
-			android:theme="@style/Theme.Gambit.Operation">
+			android:name=".activity.CardCreationActivity">
 		</activity>
 
 		<activity
-			android:name=".activity.CardEditingActivity"
-			android:theme="@style/Theme.Gambit.Operation">
+			android:name=".activity.CardEditingActivity">
 		</activity>
 
 		<activity

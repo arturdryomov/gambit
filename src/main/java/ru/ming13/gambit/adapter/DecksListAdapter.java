@@ -17,50 +17,52 @@
 package ru.ming13.gambit.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import ru.ming13.gambit.R;
-import ru.ming13.gambit.provider.GambitContract;
+import com.venmo.cursor.IterableCursorAdapter;
 
-public class DecksListAdapter extends CursorAdapter
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import ru.ming13.gambit.R;
+import ru.ming13.gambit.model.Deck;
+
+public class DecksListAdapter extends IterableCursorAdapter<Deck>
 {
+	static final class DeckViewHolder
+	{
+		@InjectView(R.id.text)
+		public TextView deckText;
+
+		public DeckViewHolder(View deckView) {
+			ButterKnife.inject(this, deckView);
+		}
+	}
+
 	private final LayoutInflater layoutInflater;
 
-	public DecksListAdapter(Context context) {
+	public DecksListAdapter(@NonNull Context context) {
 		super(context, null, 0);
 
-		layoutInflater = LayoutInflater.from(context);
+		this.layoutInflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public View newView(Context context, Cursor decksCursor, ViewGroup viewGroup) {
-		return buildDeckView(viewGroup);
-	}
+	public View newView(Context context, Deck deck, ViewGroup deckViewContainer) {
+		View deckView = layoutInflater.inflate(R.layout.view_list_item, deckViewContainer, false);
 
-	private View buildDeckView(ViewGroup viewGroup) {
-		return layoutInflater.inflate(R.layout.view_list_item, viewGroup, false);
+		deckView.setTag(new DeckViewHolder(deckView));
+
+		return deckView;
 	}
 
 	@Override
-	public void bindView(View deckView, Context context, Cursor decksCursor) {
-		setUpDeckInformation(decksCursor, deckView);
-	}
+	public void bindView(View deckView, Context context, Deck deck) {
+		DeckViewHolder deckViewHolder = (DeckViewHolder) deckView.getTag();
 
-	private void setUpDeckInformation(Cursor decksCursor, View deckView) {
-		TextView deckTextView = (TextView) deckView;
-
-		String deckTitle = getDeckTitle(decksCursor);
-
-		deckTextView.setText(deckTitle);
-	}
-
-	private String getDeckTitle(Cursor decksCursor) {
-		return decksCursor.getString(
-			decksCursor.getColumnIndex(GambitContract.Decks.TITLE));
+		deckViewHolder.deckText.setText(deck.getTitle());
 	}
 }

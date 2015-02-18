@@ -19,6 +19,7 @@ package ru.ming13.gambit.util;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import ru.ming13.gambit.R;
 import ru.ming13.gambit.activity.BackupActivity;
@@ -71,47 +72,47 @@ public final class Intents
 	{
 		private final Context context;
 
-		public static Builder with(Context context) {
+		public static Builder with(@NonNull Context context) {
 			return new Builder(context);
 		}
 
 		private Builder(Context context) {
-			this.context = context;
+			this.context = context.getApplicationContext();
 		}
 
 		public Intent buildDeckCreationIntent() {
 			return new Intent(context, DeckCreationActivity.class);
 		}
 
-		public Intent buildDeckEditingIntent(Deck deck) {
+		public Intent buildDeckEditingIntent(@NonNull Deck deck) {
 			Intent intent = new Intent(context, DeckEditingActivity.class);
 			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardsListIntent(Deck deck) {
+		public Intent buildCardsListIntent(@NonNull Deck deck) {
 			Intent intent = new Intent(context, CardsListActivity.class);
 			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardsPagerIntent(Deck deck) {
+		public Intent buildCardsPagerIntent(@NonNull Deck deck) {
 			Intent intent = new Intent(context, CardsPagerActivity.class);
 			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardCreationIntent(Deck deck) {
+		public Intent buildCardCreationIntent(@NonNull Deck deck) {
 			Intent intent = new Intent(context, CardCreationActivity.class);
 			intent.putExtra(Extras.DECK, deck);
 
 			return intent;
 		}
 
-		public Intent buildCardEditingIntent(Deck deck, Card card) {
+		public Intent buildCardEditingIntent(@NonNull Deck deck, @NonNull Card card) {
 			Intent intent = new Intent(context, CardEditingActivity.class);
 			intent.putExtra(Extras.DECK, deck);
 			intent.putExtra(Extras.CARD, card);
@@ -133,17 +134,13 @@ public final class Intents
 		}
 
 		public Intent buildGooglePlayAppIntent() {
-			String packageName = context.getPackageName();
-
-			String googlePlayUri = String.format(UriMasks.GOOGLE_PLAY_APP, packageName);
+			String googlePlayUri = String.format(UriMasks.GOOGLE_PLAY_APP, Android.getApplicationId());
 
 			return new Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayUri));
 		}
 
 		public Intent buildGooglePlayWebIntent() {
-			String packageName = context.getPackageName();
-
-			String googlePlayUri = String.format(UriMasks.GOOGLE_PLAY_WEB, packageName);
+			String googlePlayUri = String.format(UriMasks.GOOGLE_PLAY_WEB, Android.getApplicationId());
 
 			return new Intent(Intent.ACTION_VIEW, Uri.parse(googlePlayUri));
 		}

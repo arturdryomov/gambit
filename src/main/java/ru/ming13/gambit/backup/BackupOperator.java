@@ -17,10 +17,11 @@
 package ru.ming13.gambit.backup;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Contents;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveId;
 
@@ -34,7 +35,7 @@ public final class BackupOperator
 	private final Context context;
 	private final GoogleApiClient driveApiClient;
 
-	public static BackupOperator with(Context context, GoogleApiClient driveApiClient) {
+	public static BackupOperator with(@NonNull Context context, @NonNull GoogleApiClient driveApiClient) {
 		return new BackupOperator(context, driveApiClient);
 	}
 
@@ -43,23 +44,23 @@ public final class BackupOperator
 		this.driveApiClient = driveApiClient;
 	}
 
-	public void exportBackup(DriveId backupFileId) {
+	public void exportBackup(@NonNull DriveId backupFileId) {
 		DriveFile backupFile = Drive.DriveApi.getFile(driveApiClient, backupFileId);
-		Contents backupFileContents = backupFile.openContents(driveApiClient, DriveFile.MODE_WRITE_ONLY, null).await().getContents();
+		DriveContents backupFileContents = backupFile.open(driveApiClient, DriveFile.MODE_WRITE_ONLY, null).await().getDriveContents();
 
 		OutputStream backupFileStream = backupFileContents.getOutputStream();
-		DatabaseOperator.with(context).writeDatabaseContents(backupFileStream);
+		DatabaseOperator.of(context).writeDatabaseContents(backupFileStream);
 
-		backupFile.commitAndCloseContents(driveApiClient, backupFileContents).await();
+		backupFileContents.commit(driveApiClient, null).await();
 	}
 
-	public void importBackup(DriveId backupFileId) {
+	public void importBackup(@NonNull DriveId backupFileId) {
 		DriveFile backupFile = Drive.DriveApi.getFile(driveApiClient, backupFileId);
-		Contents backupFileContents = backupFile.openContents(driveApiClient, DriveFile.MODE_READ_ONLY, null).await().getContents();
+		DriveContents backupFileContents = backupFile.open(driveApiClient, DriveFile.MODE_READ_ONLY, null).await().getDriveContents();
 
 		InputStream backupFileStream = backupFileContents.getInputStream();
-		DatabaseOperator.with(context).readDatabaseContents(backupFileStream);
+		DatabaseOperator.of(context).readDatabaseContents(backupFileStream);
 
-		backupFile.discardContents(driveApiClient, backupFileContents).await();
+		backupFileContents.discard(driveApiClient);
 	}
 }
