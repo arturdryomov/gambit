@@ -22,6 +22,7 @@
 
 	<android.support.v7.widget.CardView
 		android:id="@+id/container_card"
+		auto:cardBackgroundColor="@android:color/white"
 		auto:cardCornerRadius="8dp"
 		auto:cardElevation="4dp"
 		android:layout_gravity="center"
