@@ -40,6 +40,7 @@ public final class Android
 		return context.getResources().getBoolean(R.bool.tablet);
 	}
 
+
 	public static String getApplicationId() {
 		return BuildConfig.APPLICATION_ID;
 	}

@@ -31,7 +31,7 @@ import ru.ming13.gambit.provider.GambitContract;
 
 public class DeckEditingTask extends AsyncTask<Void, Void, BusEvent>
 {
-	private static enum SilentMode
+	private enum SilentMode
 	{
 		ENABLED, DISABLED
 	}

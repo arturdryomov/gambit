@@ -18,7 +18,7 @@ package ru.ming13.gambit.bus;
 
 public class DeckCardsOrderLoadedEvent implements BusEvent
 {
-	public static enum CardsOrder
+	public enum CardsOrder
 	{
 		SHUFFLE, ORIGINAL
 	}

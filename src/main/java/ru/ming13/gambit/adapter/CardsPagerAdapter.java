@@ -63,7 +63,7 @@ public class CardsPagerAdapter extends PagerAdapter
 		}
 	}
 
-	private static enum CardSide
+	private enum CardSide
 	{
 		FRONT, BACK;
 

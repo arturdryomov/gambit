@@ -64,7 +64,7 @@ import ru.ming13.gambit.util.ViewDirector;
 
 public class CardsPagerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
-	private static enum CardsOrder
+	private enum CardsOrder
 	{
 		DEFAULT, SHUFFLE, ORIGINAL
 	}

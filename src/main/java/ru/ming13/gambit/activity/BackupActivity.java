@@ -52,7 +52,7 @@ public class BackupActivity extends ActionBarActivity implements ResultCallback<
 	GoogleApiClient.ConnectionCallbacks,
 	GoogleApiClient.OnConnectionFailedListener
 {
-	private static enum BackupAction
+	private enum BackupAction
 	{
 		EXPORT, IMPORT, NONE
 	}
