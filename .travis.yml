@@ -5,5 +5,3 @@ jdk:
 
 script:
   - ./gradlew clean assembleDebug
-
-sudo: false
